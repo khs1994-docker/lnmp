@@ -1,8 +1,8 @@
 {
   "name": "deno",
   "description": "A secure runtime for JavaScript and TypeScript built with V8, Rust, and Tokio",
-  "version": "1.8.1",
-  "pre-version": "1.8.1",
+  "version": "1.8.2",
+  "pre-version": "1.8.2",
   "homepage": "https://deno.land/",
   "bug": "https://github.com/denoland/deno/issues",
   "github": "denoland/deno",
@@ -14,13 +14,10 @@
   "scripts": {
      "version": "(deno --version).split(' ')[1].trim()",
      "install": [
-       "_cleanup deno",
-       "_unzip $filename $unzipDesc",
-       "if($isWindows){Copy-item deno/deno.exe C:\\bin}else{sudo install -m755 $unzipDesc/deno /usr/local/bin/deno}",
-       "_cleanup deno"
+       "if($isWindows){_unzip $filename C:\\bin}else{_cleanup deno ; _unzip $filename $unzipDesc ; sudo install -m755 $unzipDesc/deno /usr/local/bin/deno ; _cleanup deno}"
      ],
      "test": "printInfo $(deno --version)[0] install success",
-     "uninstall": "Remove-item C:\\bin\\deno.exe"
+     "uninstall": "if($isWindows){Remove-item C:\\bin\\deno.exe}else{sudo rm -rf /usr/local/bin/deno}"
   },
   "path": [
     "C:\\bin"

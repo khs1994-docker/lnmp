@@ -4,7 +4,7 @@ url: https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}
 url-mirror: https://download.fastgit.org/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-amd64.tar.gz
 scripts:
   platform-reqs: if(!$_IsLinux){echo $false}
-  install: |
+  install: |-
      sudo tar -zxf $filename -C /
 platform:
   - architecture: amd64

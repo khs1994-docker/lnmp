@@ -15,7 +15,7 @@ path:
   - ${env:ProgramData}\Python\Scripts
 scripts:
   install:
-    - |
+    - |-
       # https://docs.python.org/3.7/using/windows.html#installing-without-ui
 
       Start-Process $filename -Wait `

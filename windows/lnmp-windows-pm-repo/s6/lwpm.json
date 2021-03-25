@@ -2,12 +2,12 @@
   "name": "s6",
   "platform": [
     {
-      "architecture": "amd64",
-      "os": "linux"
+      "os": "linux",
+      "architecture": "amd64"
     }
   ],
   "scripts": {
-    "install": "sudo tar -zxf $filename -C /\n",
+    "install": "sudo tar -zxf $filename -C /",
     "platform-reqs": "if(!$_IsLinux){echo $false}"
   },
   "url": "https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-amd64.tar.gz",

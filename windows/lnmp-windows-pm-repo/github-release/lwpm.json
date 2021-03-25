@@ -20,6 +20,6 @@
       "if(!$IsWindows){$bin_file=\"${env:lwpm_os}-${env:lwpm_architecture}-github-release\" ; sudo install -m755 $bin_file /usr/local/bin/github-release ; _cleanup $bin_file}",
       "_cleanup github-release"
     ],
-    "uninstall": "_cleanup C:\\bin\\github-release.exe"
+    "uninstall": "if($IsWindows){_cleanup C:\\bin\\github-release.exe}else{sudo rm -rf /usr/local/bin/github-release}"
   }
 }

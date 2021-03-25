@@ -17,12 +17,9 @@
     "test": "printInfo $(dive --version) install success",
     "version": "(dive --version).split(' ')[1]",
     "install": [
-      "_cleanup dive",
-      "if($IsWindows){_unzip $filename $unzipDesc}else{sudo tar -zxf $filename -C /usr/local/bin}",
-      "if($IsWindows){Copy-item dive\\dive.exe C:\\bin\\}",
-      "_cleanup dive"
+      "if($IsWindows){_unzip $filename C:\\bin\\}else{sudo tar -zxf $filename -C /usr/local/bin}"
     ],
-    "uninstall": "_cleanup C:\\bin\\dive.exe"
+    "uninstall": "if($IsWindows){_cleanup C:\\bin\\dive.exe}else{sudo rm -rf /usr/local/bin/dive}"
   },
   "path": [
     "C:\\bin"
