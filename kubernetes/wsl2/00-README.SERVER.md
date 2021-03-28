@@ -28,20 +28,17 @@ $ ./lnmp-k8s
 **必须** 使用 Powershell Core 6 以上版本，Windows 自带的 Powershell 无法使用以下方法。
 
 ```powershell
-# $ $env:REGISTRY_MIRROR="xxxx.mirror.aliyuncs.com"
-# $ $env:REGISTRY_MIRROR="mirror.baidubce.com"
-
 $ . ../windows/sdk/dockerhub/rootfs
 
 $ wsl --import wsl-k8s `
     $env:LOCALAPPDATA\wsl-k8s `
-    $(rootfs ubuntu 20.04) `
+    $(rootfs library-mirror/ubuntu 20.04 -registry ccr.ccs.tencentyun.com) `
     --version 2
 
 # 可选
 $ wsl --import wsl-k8s-data `
     $env:LOCALAPPDATA\wsl-k8s-data `
-    $(rootfs alpine) `
+    $(rootfs library-mirror/alpine -registry ccr.ccs.tencentyun.com) `
     --version 2
 
 # 测试，如果命令不能正确执行，请参考 README.CLEANUP.md 注销 wsl-k8s，重启机器之后再次尝试上面的步骤
@@ -68,7 +65,7 @@ $ wsl -d wsl-k8s -- apt update
 
 # ps 命令
 $ wsl -d wsl-k8s -- apt install procps bash-completion
-$ wsl -d wsl-k8s -- apt install iproute2
+$ wsl -d wsl-k8s -- apt install iproute2 jq
 ```
 
 ## WSL(wsl-k8s) 配置挂载路径
@@ -80,7 +77,7 @@ $ wsl -d wsl-k8s
 
 $ apt install curl vim
 
-$ curl -o /etc/wsl.conf https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/wsl.conf
+$ cp ../wsl/config/wsl.conf /etc/wsl.conf
 
 $ vim /etc/wsl.conf
 ```
@@ -186,11 +183,13 @@ $ wsl --shutdown
 
 ## `WSL2` 文件准备
 
-```bash
+```powershell
 $ ./wsl2/bin/kube-check
 
 $ wsl -d wsl-k8s
+```
 
+```bash
 $ set -x
 $ source wsl2/.env
 
@@ -200,6 +199,7 @@ $ cp -a wsl2/certs/. ${K8S_ROOT:?err}/etc/kubernetes/pki/
 $ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.yaml ${K8S_ROOT:?err}/etc/kubernetes
 $ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kubernetes
 
+# 请将 1.20.0 替换为实际的 k8s 版本号
 $ cp -a kubernetes-release/release/v1.20.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
 ```
 
