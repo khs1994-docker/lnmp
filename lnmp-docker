@@ -186,7 +186,7 @@ ClusterKit:
 
 Developer Tools:
   test                 Test LNMP
-
+  pwsh                 Print pwsh docs url
 Read './docs/*.md' for more information about CLI commands.
 
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
@@ -1838,6 +1838,10 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
     BRANCH=${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
     update
+    ;;
+
+  pwsh )
+    print_info "please open https://docs.microsoft.com/zh-cn/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7.1"
     ;;
 
   * )
