@@ -4,8 +4,6 @@
 
 ```bash
 $ kubectl apply -k addons/coredns
-
-$ kubectl get all -n kube-system
 ```
 
 ## Test

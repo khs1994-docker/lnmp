@@ -558,8 +558,12 @@ EOF
 }
 
 _crun_install(){
-  if [ `command -v crun` ];then print_info "crun already install";\
-    crun --version;return; fi
+  if [ `command -v crun` ];then
+    print_info "crun already install"
+    crun --version
+    _upload_to_coding /usr/bin/crun crun-${CRUN_VERSION}-linux-${GOARCH} ${CRUN_VERSION}
+    return
+  fi
 
   if ! [ "$GOARCH" = 'amd64' -o "$GOARCH" = 'arm64' ];then
     # print_info "install runc ..."

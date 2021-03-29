@@ -1,7 +1,7 @@
 [
   {
-    "source": "gcr.io/google-containers/coredns:1.7.0",
-    "dest": "gcr-mirror/coredns:1.7.0"
+    "source": "k8s.gcr.io/coredns/coredns:v1.8.0",
+    "dest": "gcr-mirror/coredns:v1.8.0"
   },
   {
     "source": "gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:e72593477e8cb09b718b9b0b38731de5b4cb7ef0c04712f7b97f51be5c5e06c7",
@@ -166,13 +166,6 @@
     "registry": "k8s.gcr.io",
     "image": "etcd",
     "ref": "3.4.15-0"
-  },
-  {
-    "source": "k8s.gcr.io/coredns:1.7.0",
-    "dest": "gcr-mirror/coredns:1.7.0",
-    "registry": "k8s.gcr.io",
-    "image": "coredns",
-    "ref": "1.7.0"
   },
   {
     "source": "k8s.gcr.io/pause:3.4.1",

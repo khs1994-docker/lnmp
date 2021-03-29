@@ -5,10 +5,10 @@ services:
     image: k8s.gcr.io/kube-apiserver:v1.20.0
 
   k8s_dashboard:
-    image: kubernetesui/dashboard:v2.1.0
+    image: kubernetesui/dashboard:v2.2.0
 
   coredns:
-    image: k8s.gcr.io/coredns:1.7.0
+    image: k8s.gcr.io/coredns/coredns:v1.8.0
 
   pause:
     # image: us.gcr.io/k8s-artifacts-prod/kubernetes/pause:TAG
