@@ -96,8 +96,7 @@ jobs:
           ls -la resources/views
 
           lnmp-npm i
-          lnmp-npm install vue --save
-          lnmp-npm install laravel-mix-versionhash --save
+          lnmp-npm install laravel-mix-versionhash --save-dev
           lnmp-npm run dev
       - name: Test Laravel
         run: |

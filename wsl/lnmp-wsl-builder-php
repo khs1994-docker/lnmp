@@ -59,7 +59,7 @@ fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=2.0.11
+export COMPOSER_VERSION=2.0.12
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai

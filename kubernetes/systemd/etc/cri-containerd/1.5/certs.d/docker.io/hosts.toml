@@ -1,0 +1,24 @@
+# Server specifies the default server. When `host` is also specified,
+# those hosts are tried first.
+server = "https://docker.io"
+# ca = "/etc/path/default"
+# [header]
+#   x-custom-1 = "custom header"
+# [host."https://registry-1.docker.io"]
+#   capabilities = ["pull", "resolve"]
+[host."https://mirror.baidubce.com"]
+  capabilities = ["pull", "resolve"]
+  # capabilities = ["pull", "resolve", "push"]
+  # ca = "/etc/certs/mirror.pem"
+  # client = ["/etc/certs/client-1.pem", "/etc/certs/client-2.pem"]
+  skip_verify = false
+  # [host."https://mirror.baidubce.com".header]
+  #   x-custom-2 = ["value1", "value2"]
+[host."https://hub-mirror.c.163.com"]
+  skip_verify = false
+[host."https://hub.baidubce.com"]
+  skip_verify = false
+[host."https://registry.baidubce.com"]
+  skip_verify = false
+[host."https://ccr.ccs.tencentyun.com"]
+  skip_verify = false

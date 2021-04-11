@@ -190,7 +190,7 @@ case "$1" in
     num=${2:-1}
     # https://ubuntu.com/server/docs/virtualization-virt-tools
 
-    # fcct $PWD/ignition/basic.fcc > $PWD/ignition/basic.ign
+    # butane $PWD/ignition/basic.bu > $PWD/ignition/basic.ign
 
     IGNITION_CONFIG=$PWD/ignition/ignition-${num}.ign
     # IMAGE="/path/to/image.qcow2"
