@@ -28,7 +28,7 @@ services:
     image: k8s.gcr.io/metrics-server/metrics-server:v0.4.2
 
   butane:
-    image: quay.io/coreos/butane:v0.10.0
+    image: quay.io/coreos/butane:v0.11.0
 
   php-fpm-exporter:
     image: bakins/php-fpm-exporter:v0.6.1

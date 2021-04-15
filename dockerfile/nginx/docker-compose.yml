@@ -6,10 +6,10 @@ services:
       context: ./alpine
       args:
         # OPENSSL_BRANCH: master
-        NGINX_VERSION: ${NGINX_VERSION:-1.19.9}
+        NGINX_VERSION: ${NGINX_VERSION:-1.19.10}
         ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
         OPENSSL_URL: https://github.com.cnpmjs.org/google/boringssl
-    image: khs1994/nginx:${NGINX_VERSION:-1.19.9}-alpine
+    image: khs1994/nginx:${NGINX_VERSION:-1.19.10}-alpine
     ports:
       - 443:443/tcp
       - 443:443/udp
@@ -22,11 +22,11 @@ services:
       context: ./buster
       args:
         # OPENSSL_BRANCH: master
-        NGINX_VERSION: ${NGINX_VERSION:-1.19.9}
+        NGINX_VERSION: ${NGINX_VERSION:-1.19.10}
         OPENSSL_URL: https://github.com.cnpmjs.org/google/boringssl
         DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
         DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security # security.debian.org/debian-security
-    image: khs1994/nginx:${NGINX_VERSION:-1.19.9}-buster
+    image: khs1994/nginx:${NGINX_VERSION:-1.19.10}-buster
     ports:
       - 443:443/tcp
       - 443:443/udp
@@ -35,7 +35,7 @@ services:
       - ./conf.d:/etc/nginx/conf.d:ro
 
   official:
-    image: nginx:1.19.9-alpine
+    image: nginx:1.19.10-alpine
     ports:
       - 443:443
       - 80:80
