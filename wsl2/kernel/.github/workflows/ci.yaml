@@ -18,12 +18,10 @@ jobs:
     strategy:
       matrix:
         repo: ["microsoft/WSL2-Linux-Kernel","torvalds/linux"]
-        ref: ["master","linux-msft-wsl-5.4.y"]
+        ref: ["master","linux-msft-wsl-5.10.y"]
         exclude:
         - repo: "torvalds/linux"
-          ref: "linux-msft-wsl-4.19.y"
-        - repo: "torvalds/linux"
-          ref: "linux-msft-wsl-5.4.y"
+          ref: "linux-msft-wsl-5.10.y"
         - repo: microsoft/WSL2-Linux-Kernel
           ref: master
       fail-fast: false
@@ -56,30 +54,21 @@ jobs:
           # curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/${ref}/Microsoft/config-wsl \
           #  || curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/linux-msft-wsl-4.19.y/Microsoft/config-wsl
 
-          curl -fsSL -O \
-          https://raw.githubusercontent.com/khs1994/WSL2-Linux-Kernel/master/memory-reclaim.diff
+          curl -fsSL -o feature-mm_discard.diff \
+          https://github.com/microsoft/WSL2-Linux-Kernel/commit/cb68ddad0cfbab6afe5ec390af214b989d4af74c.patch
 
-          patch -p1 < memory-reclaim.diff
+          patch -p1 < feature-mm_discard.diff
         fi
 
-        curl -fsSL -o Microsoft/config-wsl https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl
-
-        if [ $ref = "linux-msft-wsl-5.4.y" -o $ref = "master" ];then
+        if [ $ref = "linux-msft-wsl-5.10.y" -o $ref = "master" ];then
           curl -fsSL -o Microsoft/config-wsl \
-            https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl-5.4
+            https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl-5.10
         fi
 
         if [ $ref = "master" ];then
-          curl -L -o gpu.diff https://github.com/microsoft/WSL2-Linux-Kernel/commit/cba4696a38f9d54a5a71a4d1907a8d790b756372.patch
-          curl -L -o 1.diff https://github.com/nathanchance/WSL2-Linux-Kernel/commit/74ea0082a08d11a0454e97d5d0569c5992bb6191.patch
-          curl -L -o 2.diff https://github.com/nathanchance/WSL2-Linux-Kernel/commit/43cea7bd52b2ed17e8369b23865a9df2632704bd.patch
+          curl -L -o feature-dxgkrnl.diff https://github.com/microsoft/WSL2-Linux-Kernel/commit/7b22472e80779572b9c3a9955d93ab598fd4240e.patch
 
-          sed -i "s/down_read(&current->mm->mmap_sem);/mmap_read_lock(current->mm);/g" gpu.diff
-          sed -i "s/up_read(&current->mm->mmap_sem);/mmap_read_unlock(current->mm);/g" gpu.diff
-
-          patch -p1 < gpu.diff
-          patch -p1 < 1.diff
-          patch -p1 < 2.diff
+          patch -p1 < feature-dxgkrnl.diff
         fi
 
         echo "
@@ -99,14 +88,14 @@ jobs:
         CONFIG_NUMA=y
 
         # CNI Calico IPIP
-        CONFIG_NET_IPIP=y
+        # CONFIG_NET_IPIP=y
 
         # CNI Calico eBPF
         CONFIG_BPFILTER=y
         CONFIG_NETFILTER_XT_MATCH_BPF=y
-        CONFIG_NET_CLS_BPF=y
-        CONFIG_NET_ACT_BPF=y
-        CONFIG_BPF_JIT=y
+        # CONFIG_NET_CLS_BPF=y
+        # CONFIG_NET_ACT_BPF=y
+        # CONFIG_BPF_JIT=y
 
         CONFIG_NET_SCH_SFQ=y
         CONFIG_NET_ACT_POLICE=y
@@ -114,7 +103,7 @@ jobs:
 
         CONFIG_CRYPTO_USER=y
         CONFIG_CRYPTO_USER_API_RNG=y
-        CONFIG_CRYPTO_USER_API_HASH=y
+        # CONFIG_CRYPTO_USER_API_HASH=y
         CONFIG_CRYPTO_USER_API_AEAD=y
 
         # kata container

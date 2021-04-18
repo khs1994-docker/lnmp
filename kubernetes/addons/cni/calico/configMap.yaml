@@ -3,9 +3,7 @@ apiVersion: v1
 metadata:
   name: calico.conf
 data:
-  # 官方默认
   # podCIDR: 192.168.0.0/16
-  # 改为和 flannel 一致
   podCIDR: 10.244.0.0/16
   # ipip is default
   # ipip: "Always"
