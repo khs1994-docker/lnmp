@@ -514,7 +514,7 @@ install_docker_compose_arm(){
   print_info "$OS $ARCH docker-compose v$LNMP_DOCKER_COMPOSE_VERSION is installing by pip3 ..."
   command -v pip3 >/dev/null 2>&1 || $(_sudo) apt install -y python3-pip
   $(_sudo) apt install -y libffi-dev || true
-  local pip_config="[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns"
+  local pip_config="[global]\nindex-url = https://pypi.doubanio.com/simple\n[list]\nformat=columns"
   if ! [ -d ~/.pip ];then
     if ! [ "${LNMP_CN_ENV}" = "false" ];then
     mkdir -p ~/.pip

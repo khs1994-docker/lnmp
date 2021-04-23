@@ -84,7 +84,6 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 #
 ;
 --insecure-port=0 \
---kubelet-https=true \
 # --logging-format=json \
 --v=2
 
