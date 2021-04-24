@@ -1,4 +1,4 @@
-FROM mysql:8.0.23
+FROM mysql:8.0.24
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

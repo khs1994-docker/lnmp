@@ -8,7 +8,7 @@ FROM alpine as downloader
 
 # php-cs-fixer https://github.com/FriendsOfPHP/PHP-CS-Fixer
 
-ARG PHP_CS_FIXER_VERSION=2.18.2
+ARG PHP_CS_FIXER_VERSION=3.0.0-rc.1
 
 RUN set -x ; apk add --no-cache curl \
     && curl -fsSL https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${PHP_CS_FIXER_VERSION}/php-cs-fixer.phar \

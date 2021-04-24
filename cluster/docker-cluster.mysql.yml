@@ -24,7 +24,7 @@ version: "3.8"
 
 x-common:
   &common
-  image: mysql:8.0.23
+  image: mysql:8.0.24
   restart: always
   env_file:
     - ./cli/timezone.env

@@ -13,5 +13,5 @@ docker run -it --rm `
     --network $NETWORK `
     -e TZ=${TZ} `
     --entrypoint mysql `
-    mysql:8.0.23 `
+    mysql:8.0.24 `
     $args

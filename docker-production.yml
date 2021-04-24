@@ -113,8 +113,8 @@ services:
       << : *default-build-debian
       context: ./dockerfile/mysql/
       dockerfile: Dockerfile
-    image: mysql:8.0.23
-    # image: khs1994/lnmp-mysql:8.0.23
+    image: mysql:8.0.24
+    # image: khs1994/lnmp-mysql:8.0.24
     # image: username/lnmp-mysql:tag
     environment:
       # MYSQL_ROOT_PASSWORD: mytest
