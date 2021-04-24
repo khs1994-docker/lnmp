@@ -20,6 +20,7 @@ Subcommands:
 	spec             create a new OCI bundle specification file
 	start            start a secure container
 	state            get the state of a container
+	symbolize        Convert synthetic instruction pointers from kcov into positions in the runsc source code. Only used when Go coverage is enabled.
 	wait             wait on a process inside a container
 
 Subcommands for helpers:
