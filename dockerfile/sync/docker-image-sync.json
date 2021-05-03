@@ -136,8 +136,8 @@
     "dest": "library-mirror/redis:6.0.11-alpine"
   },
   {
-    "source": "library/redis:6.2.1-alpine",
-    "dest": "library-mirror/redis:6.2.1-alpine"
+    "source": "library/redis:6.2.2-alpine",
+    "dest": "library-mirror/redis:6.2.2-alpine"
   },
   {
     "source": "library/memcached:alpine",

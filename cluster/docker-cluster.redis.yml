@@ -28,13 +28,13 @@ version: "3.8"
 
 x-common:
   &common
-  image: redis:6.2.1-alpine
+  image: redis:6.2.2-alpine
   restart: always
   env_file:
     - ./cli/timezone.env
   networks:
     cluster_redis:
-      # ipv4_address: 172.16.2.15
+      # ipv4_address: 172.16.2.25
   secrets:
     - source: cluster_redis_conf
       target: /redis.conf
