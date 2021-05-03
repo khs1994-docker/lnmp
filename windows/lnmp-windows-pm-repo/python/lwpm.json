@@ -11,7 +11,7 @@
   ],
   "pre-url": "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe",
   "pre-url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe",
-  "pre-version": "3.9.2",
+  "pre-version": "3.9.4",
   "releases": "https://www.python.org/downloads/",
   "scripts": {
     "install": [
@@ -23,5 +23,5 @@
   },
   "url": "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe",
   "url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe",
-  "version": "3.9.2"
+  "version": "3.9.4"
 }

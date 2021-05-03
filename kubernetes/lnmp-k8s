@@ -1307,6 +1307,7 @@ _k8s_install_systemd(){
   -e "s!/opt/k8s!${K8S_ROOT}!g" \
   -e 's!__opt/k8s__!/opt/k8s!g' \
   /etc/systemd/system/kube-mkdir@.service \
+  /etc/systemd/system/kubelet@.service \
   $(for item in $(cd mount && ls);do echo /etc/systemd/system/$item;done)
 
   cd - > /dev/null

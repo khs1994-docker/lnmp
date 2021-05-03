@@ -5,6 +5,8 @@ set -x
 dest=$2
 source=$1
 
+if [ "$dest" = "$source" ];then exit 0;fi
+
 mountpoint -q $dest
 
 if [ $? != 0 ];then

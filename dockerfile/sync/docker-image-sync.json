@@ -56,8 +56,8 @@
     "dest": "library-mirror/python:alpine"
   },
   {
-    "source": "library/python:3.9.2-alpine",
-    "dest": "library-mirror/python:3.9.2-alpine"
+    "source": "library/python:3.9.4-alpine",
+    "dest": "library-mirror/python:3.9.4-alpine"
   },
   {
     "source": "library/mysql:latest",
