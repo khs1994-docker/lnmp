@@ -25,19 +25,19 @@ services:
 
   php7:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.16}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.18}-fpm-alpine
 
   php8:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.3}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.5}-fpm-alpine
 
   composer:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.0.3}-composer-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.0.5}-composer-alpine
 
   supervisord:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.16}-supervisord-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.18}-supervisord-alpine
 
   phpmyadmin:
     << : *common
