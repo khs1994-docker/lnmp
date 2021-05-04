@@ -35,7 +35,7 @@ services:
     image: phpmyadmin:5.1.0
 
   httpd:
-    image: httpd:2.4.46-alpine
+    image: httpd:2.4.47-alpine
 
   etcd:
     image: quay.io/coreos/etcd:v3.4.15
