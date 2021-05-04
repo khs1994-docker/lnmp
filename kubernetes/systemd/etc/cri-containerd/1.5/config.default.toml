@@ -71,6 +71,15 @@ version = 2
       discard_unpacked_layers = false
       no_pivot = false
       snapshotter = "overlayfs"
+      [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime]
+        base_runtime_spec = ""
+        container_annotations = []
+        pod_annotations = []
+        privileged_without_host_devices = false
+        runtime_engine = ""
+        runtime_root = ""
+        runtime_type = ""
+        [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime.options]
       [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
           base_runtime_spec = ""
@@ -92,10 +101,19 @@ version = 2
             Root = ""
             ShimCgroup = ""
             SystemdCgroup = false
+      [plugins."io.containerd.grpc.v1.cri".containerd.untrusted_workload_runtime]
+        base_runtime_spec = ""
+        container_annotations = []
+        pod_annotations = []
+        privileged_without_host_devices = false
+        runtime_engine = ""
+        runtime_root = ""
+        runtime_type = ""
+        [plugins."io.containerd.grpc.v1.cri".containerd.untrusted_workload_runtime.options]
     [plugins."io.containerd.grpc.v1.cri".image_decryption]
       key_model = "node"
     [plugins."io.containerd.grpc.v1.cri".registry]
-      config_path = "/etc/containerd"
+      config_path = ""
       [plugins."io.containerd.grpc.v1.cri".registry.auths]
       [plugins."io.containerd.grpc.v1.cri".registry.configs]
       [plugins."io.containerd.grpc.v1.cri".registry.headers]
@@ -121,6 +139,8 @@ version = 2
     platforms = ["linux/amd64"]
   [plugins."io.containerd.service.v1.diff-service"]
     default = ["walking"]
+  [plugins."io.containerd.snapshotter.v1.aufs"]
+    root_path = ""
   [plugins."io.containerd.snapshotter.v1.btrfs"]
     root_path = ""
   [plugins."io.containerd.snapshotter.v1.devmapper"]
@@ -131,6 +151,8 @@ version = 2
   [plugins."io.containerd.snapshotter.v1.native"]
     root_path = ""
   [plugins."io.containerd.snapshotter.v1.overlayfs"]
+    root_path = ""
+  [plugins."io.containerd.snapshotter.v1.zfs"]
     root_path = ""
 [proxy_plugins]
 
