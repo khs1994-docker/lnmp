@@ -128,7 +128,7 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 WantedBy=wsl-k8s.target
-; Also=cri-containerd@1.4.service
+; Also=cri-containerd@1.5.service
 Also=cri-containerd@.service
 DefaultInstance=cri-containerd
 ; Alias=kubelet-alias.service

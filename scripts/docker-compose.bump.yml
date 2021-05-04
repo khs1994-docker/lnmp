@@ -5,10 +5,10 @@ services:
     image: mysql:8.0.24
 
   mariadb:
-    image: mariadb:10.5.9
+    image: mariadb:10.6.0
 
   redis:
-    image: redis:6.2.2-alpine
+    image: redis:6.2.3-alpine
 
   memcached:
     image: memcached:1.6.9-alpine
@@ -29,13 +29,13 @@ services:
     image: postgres:13.2-alpine
 
   mongodb:
-    image: mongo:4.4.4
+    image: mongo:4.4.5
 
   phpmyadmin:
     image: phpmyadmin:5.1.0
 
   httpd:
-    image: httpd:2.4.46-alpine
+    image: httpd:2.4.47-alpine
 
   etcd:
     image: quay.io/coreos/etcd:v3.4.15
@@ -44,7 +44,7 @@ services:
     image: minio/minio:RELEASE.2021-01-30T00-20-58Z
 
   kong:
-    image: kong:2.3.2-alpine
+    image: kong:2.4.0-alpine
 
   node:
     image: node:16.0.0-alpine

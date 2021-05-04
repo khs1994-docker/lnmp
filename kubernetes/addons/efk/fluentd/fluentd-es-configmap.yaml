@@ -384,7 +384,7 @@ data:
     <source>
       @id journald-cri-containerd@1.4
       @type systemd
-      matches [{ "_SYSTEMD_UNIT": "cri-containerd@1.4.service" }]
+      matches [{ "_SYSTEMD_UNIT": "cri-containerd@1.5.service" }]
       <storage>
         @type local
         persistent true
@@ -659,6 +659,8 @@ data:
         # time="2020-10-27T17:37:44.055776281+08:00" level=info msg="Finish piping \"stdout\" of container exec \"5996a0545a7cbefd0971461d4b7197787e9e3fd60194c8849a3b5bd11e748807\""
         format regexp
         expression /^time="(?<time>[^"]*)" level=(?<severity>[^ ]*) msg="(?<message>[^"]*)"( err="(?<error>[^"]*)")?( statusCode=($<status_code>\d+))?/
+
+        # {"level":"info","msg":"Start subscribing containerd event","time":"2021-05-04T13:24:07.994649301Z"}
         time_key time
         time_format %Y-%m-%dT%H:%M:%S.%N%:z
       </pattern>

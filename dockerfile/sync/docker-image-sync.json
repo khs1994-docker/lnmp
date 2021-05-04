@@ -80,16 +80,16 @@
     "dest": "library-mirror/mariadb:latest"
   },
   {
+    "source": "library/mariadb:10.6.0",
+    "dest": "library-mirror/mariadb:10.6.0"
+  },
+  {
     "source": "library/mariadb:10.5.9",
     "dest": "library-mirror/mariadb:10.5.9"
   },
   {
     "source": "library/mariadb:10.4.18",
     "dest": "library-mirror/mariadb:10.4.17"
-  },
-  {
-    "source": "library/mariadb:10.3.28",
-    "dest": "library-mirror/mariadb:10.3.27"
   },
   {
     "source": "library/registry:latest",
@@ -104,8 +104,8 @@
     "dest": "library-mirror/mongo:latest"
   },
   {
-    "source": "library/mongo:4.4.4",
-    "dest": "library-mirror/mongo:4.4.4"
+    "source": "library/mongo:4.4.5",
+    "dest": "library-mirror/mongo:4.4.5"
   },
   {
     "source": "library/kong:latest",
@@ -116,12 +116,12 @@
     "dest": "library-mirror/kong:alpine"
   },
   {
-    "source": "library/kong:2.3.2",
-    "dest": "library-mirror/kong:2.3.2"
+    "source": "library/kong:2.4.0",
+    "dest": "library-mirror/kong:2.4.0"
   },
   {
-    "source": "library/kong:2.3.2-alpine",
-    "dest": "library-mirror/kong:2.3.2-alpine"
+    "source": "library/kong:2.4.0-alpine",
+    "dest": "library-mirror/kong:2.4.0-alpine"
   },
   {
     "source": "library/redis:alpine",
@@ -136,8 +136,8 @@
     "dest": "library-mirror/redis:6.0.11-alpine"
   },
   {
-    "source": "library/redis:6.2.2-alpine",
-    "dest": "library-mirror/redis:6.2.2-alpine"
+    "source": "library/redis:6.2.3-alpine",
+    "dest": "library-mirror/redis:6.2.3-alpine"
   },
   {
     "source": "library/memcached:alpine",
@@ -164,8 +164,8 @@
     "dest": "library-mirror/httpd:alpine"
   },
   {
-    "source": "library/httpd:2.4.46-alpine",
-    "dest": "library-mirror/httpd:2.4.46-alpine"
+    "source": "library/httpd:2.4.47-alpine",
+    "dest": "library-mirror/httpd:2.4.47-alpine"
   },
   {
     "source": "library/postgres:alpine",

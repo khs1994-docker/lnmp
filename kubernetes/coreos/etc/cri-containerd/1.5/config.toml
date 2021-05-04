@@ -18,6 +18,7 @@ oom_score = 0
 
 [debug]
   address = ""
+  format = "json"
   uid = 0
   gid = 0
   level = ""

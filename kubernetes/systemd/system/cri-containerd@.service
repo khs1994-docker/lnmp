@@ -31,7 +31,7 @@ var-log-pods.mount
 [Service]
 ExecStartPre=-/sbin/modprobe overlay br_netfilter
 
-# %i 表示 @ 后边的字符，例如 cri-containerd@1.4.service , %i 表示 1.4
+# %i 表示 @ 后边的字符，例如 cri-containerd@1.5.service , %i 表示 1.5
 
 ExecStart=/opt/k8s/bin/cri-containerd \
           --config /opt/k8s/etc/cri-containerd/%i/config.toml
