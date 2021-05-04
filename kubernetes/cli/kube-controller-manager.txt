@@ -15,6 +15,11 @@ Debugging flags:
       --contention-profiling   Enable lock contention profiling, if profiling is enabled
       --profiling              Enable profiling via web interface host:port/debug/pprof/ (default true)
 
+Leader-migration flags:
+
+      --enable-leader-migration          Whether to enable controller leader migration.
+      --leader-migration-config string   Path to the config file for controller leader migration, or empty to use the value that reflects default configuration of the controller manager. The config file should be of type LeaderMigrationConfiguration, group controllermanager.config.k8s.io, version v1alpha1.
+
 Generic flags:
 
       --allocate-node-cidrs                      Should CIDRs for Pods be allocated and set on the cloud provider.
@@ -36,41 +41,35 @@ Generic flags:
                                                  APIServerIdentity=true|false (ALPHA - default=false)
                                                  AllAlpha=true|false (ALPHA - default=false)
                                                  AllBeta=true|false (BETA - default=false)
-                                                 AllowInsecureBackendProxy=true|false (BETA - default=true)
                                                  AnyVolumeDataSource=true|false (ALPHA - default=false)
                                                  AppArmor=true|false (BETA - default=true)
                                                  BalanceAttachedNodeVolumes=true|false (ALPHA - default=false)
-                                                 BoundServiceAccountTokenVolume=true|false (ALPHA - default=false)
+                                                 BoundServiceAccountTokenVolume=true|false (BETA - default=true)
                                                  CPUManager=true|false (BETA - default=true)
-                                                 CRIContainerLogRotation=true|false (BETA - default=true)
                                                  CSIInlineVolume=true|false (BETA - default=true)
                                                  CSIMigration=true|false (BETA - default=true)
                                                  CSIMigrationAWS=true|false (BETA - default=false)
-                                                 CSIMigrationAWSComplete=true|false (ALPHA - default=false)
                                                  CSIMigrationAzureDisk=true|false (BETA - default=false)
-                                                 CSIMigrationAzureDiskComplete=true|false (ALPHA - default=false)
-                                                 CSIMigrationAzureFile=true|false (ALPHA - default=false)
-                                                 CSIMigrationAzureFileComplete=true|false (ALPHA - default=false)
+                                                 CSIMigrationAzureFile=true|false (BETA - default=false)
                                                  CSIMigrationGCE=true|false (BETA - default=false)
-                                                 CSIMigrationGCEComplete=true|false (ALPHA - default=false)
-                                                 CSIMigrationOpenStack=true|false (BETA - default=false)
-                                                 CSIMigrationOpenStackComplete=true|false (ALPHA - default=false)
+                                                 CSIMigrationOpenStack=true|false (BETA - default=true)
                                                  CSIMigrationvSphere=true|false (BETA - default=false)
                                                  CSIMigrationvSphereComplete=true|false (BETA - default=false)
-                                                 CSIServiceAccountToken=true|false (ALPHA - default=false)
-                                                 CSIStorageCapacity=true|false (ALPHA - default=false)
+                                                 CSIServiceAccountToken=true|false (BETA - default=true)
+                                                 CSIStorageCapacity=true|false (BETA - default=true)
                                                  CSIVolumeFSGroupPolicy=true|false (BETA - default=true)
+                                                 CSIVolumeHealth=true|false (ALPHA - default=false)
                                                  ConfigurableFSGroupPolicy=true|false (BETA - default=true)
-                                                 CronJobControllerV2=true|false (ALPHA - default=false)
+                                                 ControllerManagerLeaderMigration=true|false (ALPHA - default=false)
+                                                 CronJobControllerV2=true|false (BETA - default=true)
                                                  CustomCPUCFSQuotaPeriod=true|false (ALPHA - default=false)
+                                                 DaemonSetUpdateSurge=true|false (ALPHA - default=false)
                                                  DefaultPodTopologySpread=true|false (BETA - default=true)
                                                  DevicePlugins=true|false (BETA - default=true)
                                                  DisableAcceleratorUsageMetrics=true|false (BETA - default=true)
-                                                 DownwardAPIHugePages=true|false (ALPHA - default=false)
+                                                 DownwardAPIHugePages=true|false (BETA - default=false)
                                                  DynamicKubeletConfig=true|false (BETA - default=true)
-                                                 EfficientWatchResumption=true|false (ALPHA - default=false)
-                                                 EndpointSlice=true|false (BETA - default=true)
-                                                 EndpointSliceNodeName=true|false (ALPHA - default=false)
+                                                 EfficientWatchResumption=true|false (BETA - default=true)
                                                  EndpointSliceProxying=true|false (BETA - default=true)
                                                  EndpointSliceTerminatingCondition=true|false (ALPHA - default=false)
                                                  EphemeralContainers=true|false (ALPHA - default=false)
@@ -78,47 +77,60 @@ Generic flags:
                                                  ExpandInUsePersistentVolumes=true|false (BETA - default=true)
                                                  ExpandPersistentVolumes=true|false (BETA - default=true)
                                                  ExperimentalHostUserNamespaceDefaulting=true|false (BETA - default=false)
-                                                 GenericEphemeralVolume=true|false (ALPHA - default=false)
-                                                 GracefulNodeShutdown=true|false (ALPHA - default=false)
+                                                 GenericEphemeralVolume=true|false (BETA - default=true)
+                                                 GracefulNodeShutdown=true|false (BETA - default=true)
                                                  HPAContainerMetrics=true|false (ALPHA - default=false)
                                                  HPAScaleToZero=true|false (ALPHA - default=false)
                                                  HugePageStorageMediumSize=true|false (BETA - default=true)
-                                                 IPv6DualStack=true|false (ALPHA - default=false)
-                                                 ImmutableEphemeralVolumes=true|false (BETA - default=true)
+                                                 IPv6DualStack=true|false (BETA - default=true)
+                                                 InTreePluginAWSUnregister=true|false (ALPHA - default=false)
+                                                 InTreePluginAzureDiskUnregister=true|false (ALPHA - default=false)
+                                                 InTreePluginAzureFileUnregister=true|false (ALPHA - default=false)
+                                                 InTreePluginGCEUnregister=true|false (ALPHA - default=false)
+                                                 InTreePluginOpenStackUnregister=true|false (ALPHA - default=false)
+                                                 InTreePluginvSphereUnregister=true|false (ALPHA - default=false)
+                                                 IndexedJob=true|false (ALPHA - default=false)
+                                                 IngressClassNamespacedParams=true|false (ALPHA - default=false)
                                                  KubeletCredentialProviders=true|false (ALPHA - default=false)
                                                  KubeletPodResources=true|false (BETA - default=true)
-                                                 LegacyNodeRoleBehavior=true|false (BETA - default=true)
+                                                 KubeletPodResourcesGetAllocatable=true|false (ALPHA - default=false)
                                                  LocalStorageCapacityIsolation=true|false (BETA - default=true)
                                                  LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (ALPHA - default=false)
+                                                 LogarithmicScaleDown=true|false (ALPHA - default=false)
+                                                 MemoryManager=true|false (ALPHA - default=false)
                                                  MixedProtocolLBService=true|false (ALPHA - default=false)
-                                                 NodeDisruptionExclusion=true|false (BETA - default=true)
+                                                 NamespaceDefaultLabelName=true|false (BETA - default=true)
+                                                 NetworkPolicyEndPort=true|false (ALPHA - default=false)
                                                  NonPreemptingPriority=true|false (BETA - default=true)
-                                                 PodDisruptionBudget=true|false (BETA - default=true)
+                                                 PodAffinityNamespaceSelector=true|false (ALPHA - default=false)
+                                                 PodDeletionCost=true|false (ALPHA - default=false)
                                                  PodOverhead=true|false (BETA - default=true)
+                                                 PreferNominatedNode=true|false (ALPHA - default=false)
+                                                 ProbeTerminationGracePeriod=true|false (ALPHA - default=false)
                                                  ProcMountType=true|false (ALPHA - default=false)
                                                  QOSReserved=true|false (ALPHA - default=false)
                                                  RemainingItemCount=true|false (BETA - default=true)
                                                  RemoveSelfLink=true|false (BETA - default=true)
-                                                 RootCAConfigMap=true|false (BETA - default=true)
                                                  RotateKubeletServerCertificate=true|false (BETA - default=true)
-                                                 RunAsGroup=true|false (BETA - default=true)
                                                  ServerSideApply=true|false (BETA - default=true)
-                                                 ServiceAccountIssuerDiscovery=true|false (BETA - default=true)
+                                                 ServiceInternalTrafficPolicy=true|false (ALPHA - default=false)
                                                  ServiceLBNodePortControl=true|false (ALPHA - default=false)
-                                                 ServiceNodeExclusion=true|false (BETA - default=true)
+                                                 ServiceLoadBalancerClass=true|false (ALPHA - default=false)
                                                  ServiceTopology=true|false (ALPHA - default=false)
                                                  SetHostnameAsFQDN=true|false (BETA - default=true)
                                                  SizeMemoryBackedVolumes=true|false (ALPHA - default=false)
                                                  StorageVersionAPI=true|false (ALPHA - default=false)
                                                  StorageVersionHash=true|false (BETA - default=true)
-                                                 Sysctls=true|false (BETA - default=true)
-                                                 TTLAfterFinished=true|false (ALPHA - default=false)
+                                                 SuspendJob=true|false (ALPHA - default=false)
+                                                 TTLAfterFinished=true|false (BETA - default=true)
+                                                 TopologyAwareHints=true|false (ALPHA - default=false)
                                                  TopologyManager=true|false (BETA - default=true)
                                                  ValidateProxyRedirects=true|false (BETA - default=true)
+                                                 VolumeCapacityPriority=true|false (ALPHA - default=false)
                                                  WarningHeaders=true|false (BETA - default=true)
                                                  WinDSR=true|false (ALPHA - default=false)
                                                  WinOverlay=true|false (BETA - default=true)
-                                                 WindowsEndpointSliceProxying=true|false (ALPHA - default=false)
+                                                 WindowsEndpointSliceProxying=true|false (BETA - default=true)
       --kube-api-burst int32                     Burst to use while talking with kubernetes apiserver. (default 30)
       --kube-api-content-type string             Content type of requests sent to apiserver. (default "application/vnd.kubernetes.protobuf")
       --kube-api-qps float32                     QPS to use while talking with kubernetes apiserver. (default 20)
@@ -143,11 +155,12 @@ Secure serving flags:
       --bind-address ip                        The IP address on which to listen for the --secure-port port. The associated interface(s) must be reachable by the rest of the cluster, and by CLI/web clients. If blank or an unspecified address (0.0.0.0 or ::), all interfaces will be used. (default 0.0.0.0)
       --cert-dir string                        The directory where the TLS certs are located. If --tls-cert-file and --tls-private-key-file are provided, this flag will be ignored.
       --http2-max-streams-per-connection int   The limit that the server gives to clients for the maximum number of streams in an HTTP/2 connection. Zero means to use golang's default.
+      --permit-address-sharing                 If true, SO_REUSEADDR will be used when binding the port. This allows binding to wildcard IPs like 0.0.0.0 and specific IPs in parallel, and it avoids waiting for the kernel to release sockets in TIME_WAIT state. [default=false]
       --permit-port-sharing                    If true, SO_REUSEPORT will be used when binding the port, which allows more than one instance to bind on the same address and port. [default=false]
       --secure-port int                        The port on which to serve HTTPS with authentication and authorization. If 0, don't serve HTTPS at all. (default 10257)
       --tls-cert-file string                   File containing the default x509 Certificate for HTTPS. (CA cert, if any, concatenated after server cert). If HTTPS serving is enabled, and --tls-cert-file and --tls-private-key-file are not provided, a self-signed certificate and key are generated for the public address and saved to the directory specified by --cert-dir.
-      --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be used.
-                                               Preferred values: TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256, TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384.
+      --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be used. 
+                                               Preferred values: TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256, TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384. 
                                                Insecure values: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_ECDSA_WITH_RC4_128_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_RSA_WITH_RC4_128_SHA, TLS_RSA_WITH_AES_128_CBC_SHA256, TLS_RSA_WITH_RC4_128_SHA.
       --tls-min-version string                 Minimum TLS version supported. Possible values: VersionTLS10, VersionTLS11, VersionTLS12, VersionTLS13
       --tls-private-key-file string            File containing the default x509 private key matching --tls-cert-file.
@@ -155,7 +168,7 @@ Secure serving flags:
 
 Insecure serving flags:
 
-      --address ip   The IP address on which to serve the insecure --port (set to 0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces). (default 0.0.0.0) (DEPRECATED: see --bind-address instead.)
+      --address ip   The IP address on which to serve the insecure --port (set to '0.0.0.0' or '::' for listening in all interfaces and IP families). (default 0.0.0.0) (DEPRECATED: see --bind-address instead.)
       --port int     The port on which to serve unsecured, unauthenticated access. Set to 0 to disable. (default 10252) (DEPRECATED: see --secure-port instead.)
 
 Authentication flags:
@@ -173,7 +186,7 @@ Authentication flags:
 
 Authorization flags:
 
-      --authorization-always-allow-paths strings                A list of HTTP paths to skip during authorization, i.e. these are authorized without contacting the 'core' kubernetes server. (default [/healthz])
+      --authorization-always-allow-paths strings                A list of HTTP paths to skip during authorization, i.e. these are authorized without contacting the 'core' kubernetes server. (default [/healthz,/readyz,/livez])
       --authorization-kubeconfig string                         kubeconfig file pointing at the 'core' kubernetes server with enough rights to create subjectaccessreviews.authorization.k8s.io. This is optional. If empty, all requests not skipped by authorization are forbidden.
       --authorization-webhook-cache-authorized-ttl duration     The duration to cache 'authorized' responses from the webhook authorizer. (default 10s)
       --authorization-webhook-cache-unauthorized-ttl duration   The duration to cache 'unauthorized' responses from the webhook authorizer. (default 10s)
@@ -287,7 +300,7 @@ Replicaset controller flags:
 
 Replicationcontroller flags:
 
-      --concurrent_rc_syncs int32   The number of replication controllers that are allowed to sync concurrently. Larger number = more responsive replica management, but more CPU (and network) load (default 5)
+      --concurrent-rc-syncs int32   The number of replication controllers that are allowed to sync concurrently. Larger number = more responsive replica management, but more CPU (and network) load (default 5)
 
 Resourcequota controller flags:
 
@@ -306,6 +319,8 @@ Ttl-after-finished controller flags:
 
 Metrics flags:
 
+      --allow-metric-labels stringToString       The map from metric-label to value allow-list of this label. The key's format is <MetricName>,<LabelName>. The value's format is <allowed_value>,<allowed_value>...e.g. metric1,label1='v1,v2,v3', metric1,label2='v1,v2,v3' metric2,label1='v1,v2,v3'. (default [])
+      --disabled-metrics strings                 This flag provides an escape hatch for misbehaving metrics. You must provide the fully qualified metric name in order to disable it. Disclaimer: disabling metrics is higher in precedence than showing hidden metrics.
       --show-hidden-metrics-for-version string   The previous version for which you want to show hidden metrics. Only the previous minor version is meaningful, other values will not be allowed. The format is <major>.<minor>, e.g.: '1.16'. The purpose of this format is make sure you have the opportunity to notice if the next release hides additional metrics, rather than being surprised when they are permanently removed in the release after that.
 
 Logs flags:
@@ -313,7 +328,7 @@ Logs flags:
       --experimental-logging-sanitization   [Experimental] When enabled prevents logging of fields tagged as sensitive (passwords, keys, tokens).
                                             Runtime log sanitization may introduce significant computation overhead and therefore should not be enabled in production.
       --logging-format string               Sets the log format. Permitted formats: "json", "text".
-                                            Non-default formats don't honor these flags: --add_dir_header, --alsologtostderr, --log_backtrace_at, --log_dir, --log_file, --log_file_max_size, --logtostderr, --one_output, --skip_headers, --skip_log_headers, --stderrthreshold, --vmodule, --log-flush-frequency.
+                                            Non-default formats don't honor these flags: --add-dir-header, --alsologtostderr, --log-backtrace-at, --log-dir, --log-file, --log-file-max-size, --logtostderr, --one-output, --skip-headers, --skip-log-headers, --stderrthreshold, --vmodule, --log-flush-frequency.
                                             Non-default choices are currently alpha and subject to change without warning. (default "text")
 
 Misc flags:
@@ -332,7 +347,7 @@ Global flags:
       --log-file-max-size uint           Defines the maximum size a log file can grow to. Unit is megabytes. If the value is 0, the maximum file size is unlimited. (default 1800)
       --log-flush-frequency duration     Maximum number of seconds between log flushes (default 5s)
       --logtostderr                      log to standard error instead of files (default true)
-      --one-output                       If true, only write logs to their native severity level (vs also writing to each lower severity level
+      --one-output                       If true, only write logs to their native severity level (vs also writing to each lower severity level)
       --skip-headers                     If true, avoid header prefixes in the log messages
       --skip-log-headers                 If true, avoid headers when opening log files
       --stderrthreshold severity         logs at or above this threshold go to stderr (default 2)

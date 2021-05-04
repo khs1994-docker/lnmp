@@ -1,29 +1,27 @@
 {
   "bug": "",
-  "homepage": "https://www.python.org/",
-  "url": "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe",
   "command": "python",
-  "scripts": {
-    "version": "($(python --version) -split \" \")[1]",
-    "test": "printInfo $(python --version) install success",
-    "install": [
-      "# https://docs.python.org/3.7/using/windows.html#installing-without-ui\n\nStart-Process $filename -Wait `\n-ArgumentList @( `\n  '/quiet', `\n  'InstallAllUsers=1', `\n  \"DefaultAllUsersTargetDir=${env:ProgramData}\\Python\", `\n  \"DefaultJustForMeTargetDir=${env:ProgramData}\\Python\", `\n  \"TargetDir=${env:ProgramData}\\Python\", `\n  'PrependPath=1', `\n  'Shortcuts=0', `\n  'Include_doc=0', `\n  'Include_pip=1', `\n  'Include_test=0' `\n);\n"
-    ],
-    "platform-reqs": [
-      "if(!$IsWindows){echo $False}"
-    ]
-  },
-  "version": "3.9.1",
+  "description": "Python is a programming language that lets you work quickly and integrate systems more effectively",
   "github": "python/cpython",
-  "pre-version": "3.9.1",
-  "pre-url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe",
+  "homepage": "https://www.python.org/",
   "name": "python",
-  "releases": "https://www.python.org/downloads/",
-  "url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe",
   "path": [
     "${env:ProgramData}\\Python",
     "${env:ProgramData}\\Python\\Scripts"
   ],
   "pre-url": "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe",
-  "description": "Python is a programming language that lets you work quickly and integrate systems more effectively"
+  "pre-url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe",
+  "pre-version": "3.9.4",
+  "releases": "https://www.python.org/downloads/",
+  "scripts": {
+    "install": [
+      "# https://docs.python.org/3.7/using/windows.html#installing-without-ui\n\nStart-Process $filename -Wait `\n-ArgumentList @( `\n  '/quiet', `\n  'InstallAllUsers=1', `\n  \"DefaultAllUsersTargetDir=${env:ProgramData}\\Python\", `\n  \"DefaultJustForMeTargetDir=${env:ProgramData}\\Python\", `\n  \"TargetDir=${env:ProgramData}\\Python\", `\n  'PrependPath=1', `\n  'Shortcuts=0', `\n  'Include_doc=0', `\n  'Include_pip=1', `\n  'Include_test=0' `\n);"
+    ],
+    "platform-reqs": "if(!$IsWindows){echo $False}",
+    "test": "python --version",
+    "version": "($(python --version) -split \" \")[1]"
+  },
+  "url": "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe",
+  "url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe",
+  "version": "3.9.4"
 }

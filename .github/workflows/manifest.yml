@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       redis:
-        image: redis:6.0.10-alpine
+        image: redis:6.2.3-alpine
     defaults:
       run:
         shell: bash --noprofile --norc -exo pipefail {0}

@@ -2,7 +2,7 @@ FROM debian:buster-slim
 
 ################################################################################
 
-ARG PHP_VERSION=8.0.2
+ARG PHP_VERSION=8.0.5
 
 ARG PHP_NUM=74
 
@@ -10,7 +10,7 @@ ARG PHP_PREFIX=/usr/local/php73
 
 ARG PHP_INI_DIR=/usr/local/etc/php73
 
-ARG COMPOSER_VERSION=2.0.9
+ARG COMPOSER_VERSION=2.0.13
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -341,7 +341,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
       # redis
 
-COPY --from=redis:6.0.10 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
+COPY --from=redis:6.2.3 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
 
       # memcached
 

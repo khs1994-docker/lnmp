@@ -32,6 +32,7 @@ jobs:
      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
      GENERATE_CLI_HELP: ${{matrix.GENERATE_CLI_HELP}}
      IPV6: ${{matrix.IPV6}}
+     DOWNLOAD_FROM_CODING: "false"
    strategy:
      max-parallel: 1
      matrix:
@@ -39,57 +40,59 @@ jobs:
       # next next version
       #  - os: ubuntu
       #    dist: 20.04
-      #    CI_KUBERNETES_VERSION: 1.22.0-alpha.0
+      #    CI_KUBERNETES_VERSION: 1.23.0-alpha.0
       #    LNMP_K8S_GET: --url
       #    GENERATE_CLI_HELP: "true"
 
       # next version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.21.0-alpha.3
+         CI_KUBERNETES_VERSION: 1.22.0-alpha.1
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
 
        # current stable version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.20.0
+         CI_KUBERNETES_VERSION: 1.21.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --crio
          K8S_IMAGE_NS: khs1994
          K8S_IMAGE_REGISTRY: useccr.ccs.tencentyun.com
+         UPLOAD_TO_CODING: "true"
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.20.0
+         CI_KUBERNETES_VERSION: 1.21.0
          LNMP_K8S_GET: --url
          # GENERATE_CLI_HELP: "true"
+         UPLOAD_TO_CODING: "true"
        # ipv6
        # - os: ubuntu
        #  dist: 20.04
-       #  CI_KUBERNETES_VERSION: 1.20.0
+       #  CI_KUBERNETES_VERSION: 1.21.0
        #  LNMP_K8S_GET: --url
        #  IPV6: "true"
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.20.0
+         CI_KUBERNETES_VERSION: 1.21.0
          LNMP_K8S_GET: --url
          CNI_CALICO_EBPF: 'true'
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.20.0
+         CI_KUBERNETES_VERSION: 1.21.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.20.0
+         CI_KUBERNETES_VERSION: 1.21.0
          LNMP_K8S_GET: --url
          K8S_ROOT: /opt/k8s-custom
        # old version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.4
+         CI_KUBERNETES_VERSION: 1.20.5
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.18.12
+         CI_KUBERNETES_VERSION: 1.19.10
          LNMP_K8S_GET: --url
      fail-fast: false
    steps:
@@ -198,9 +201,14 @@ jobs:
          sudo chmod -R 777 /home/runner/.khs1994-docker-lnmp
          ./lnmp-k8s kubernetes-server ${LNMP_K8S_GET}
          ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
+         test "$UPLOAD_TO_CODING" = 'true' && ./lnmp-k8s _crun_install || true
          # debug=1 ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
          tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes
+       env:
+        CODING_USERNAME: khs1994-1601432822176
+        CODING_TOKEN: ${{secrets.CODING_DOCKER_PASSWORD}}
+        UPLOAD_TO_CODING: ${{matrix.UPLOAD_TO_CODING}}
      - name: Start k8s
        run: |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
@@ -367,10 +375,15 @@ jobs:
        run: |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
 
+         if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 21 ];then \
+           sudo install -m755 /usr/local/bin/kubectl ${K8S_ROOT:-/opt/k8s}/bin/kubectl
+           kubectl version --client || true
+         fi
+
          df -h
          ip addr
 
-         kubectl apply -k addons/coredns
+         kubectl apply -f addons/coredns/coredns.yaml
          kubectl apply -k addons/dashboard
          kubectl apply -k addons/metrics-server
          kubectl apply -k addons/ingress/nginx/nodeport
@@ -384,7 +397,7 @@ jobs:
          # test dns
          kubectl describe pod coredns -n kube-system
          kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-         kubectl run nginx --image nginx:1.19.6-alpine
+         kubectl run nginx --image nginx:1.19.10-alpine
          sleep 20
          kubectl get all
          kubectl get pod -o wide
@@ -488,7 +501,7 @@ jobs:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          BASE_BRANCH=master
-         if ! [ $CI_KUBERNETES_VERSION = '1.20.0' -a "$GENERATE_CLI_HELP" = "true" ];then
+         if ! [ $CI_KUBERNETES_VERSION = '1.21.0' -a "$GENERATE_CLI_HELP" = "true" ];then
            exit 0
          fi
 
@@ -514,9 +527,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.21.0-alpha.2-config
+         BASE_BRANCH=v1.22.0-alpha.0-config
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.21.0-alpha.3' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.22.0-alpha.1' ];then
            exit 0
          fi
 
@@ -541,9 +554,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.21.0-alpha.1-config
-         BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.22.0-alpha.0' ];then
+         BASE_BRANCH=v1.22.0-alpha.1-config
+         # BASE_BRANCH=master
+         if [ $CI_KUBERNETES_VERSION != '1.23.0-alpha.0' ];then
            exit 0
          fi
 

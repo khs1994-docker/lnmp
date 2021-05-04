@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 20.10.3
+.VERSION 20.10.6
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -134,8 +134,7 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.19.3"
-$DOCKER_DESKTOP_VERSION = "2.5.1.0"
+$KUBERNETES_VERSION = "1.19.7"
 $EXEC_CMD_DIR = $PWD
 
 Function Test-Command($command) {
@@ -341,6 +340,7 @@ Commands:
   code-init            Init vsCode remote development env
   code-run             Run command on vsCode remote workspace (e.g. ./lnmp-docker code-run -w /app/laravel composer install)
   code-exec            Exec command on vsCode remote workspace (e.g. ./lnmp-docker code-exec -w /app/laravel workspace composer install)
+  mount                Attaches and mounts a physical disk in all WSL2 distributions.(please exec this command before docker desktop running)
 
 lrew(package):
   lrew-init            Init a new lrew package
@@ -359,7 +359,7 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes
+  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | down | ]
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
@@ -479,8 +479,9 @@ Function _update() {
 
   ${BRANCH} = (git rev-parse --abbrev-ref HEAD)
   $ErrorActionPreference = "continue"
-  git pull origin ${BRANCH}
-  git reset --hard origin/${BRANCH}
+  git fetch origin ${BRANCH}:lnmp-temp/${BRANCH}
+  git reset --hard lnmp-temp/${BRANCH}
+  git branch -D lnmp-temp/${BRANCH}
   # git submodule update --init --recursive
 }
 
@@ -707,7 +708,13 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
 
     $cmd = convert_args_to_string_if_use_wsl2 $args
 
-    wsl -d $WSL2_DIST -- sh -xc "$COMPOSE_BIN $cmd"
+    wsl -d $WSL2_DIST command -v $COMPOSE_BIN `> /dev/null `|`| exit 1
+
+    if($?){
+      wsl -d $WSL2_DIST -- sh -xc "$COMPOSE_BIN $cmd"
+    }else{
+      printWarning "Docker Desktop not running"
+    }
   }
 }
 
@@ -1419,7 +1426,7 @@ XXX
     }
     catch {}
 
-    printInfo "This local server support Docker Desktop v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
+    printInfo "This local server support Docker Desktop with Kubernetes v${KUBERNETES_VERSION}"
 
     if ('down' -eq $args[1]) {
       Write-Warning "Stop gcr.io local server success"
@@ -1589,7 +1596,7 @@ Example: ./lnmp-docker composer /app/demo install
       return $wsl2_mount_physicaldiskdevice_path
     }
 
-    printInfo "try mount physical disk to WSL2 $WSL2_DIST"
+    printInfo "try mount physical disk to WSL2 [ $WSL2_DIST ]"
     wsl -d $WSL2_DIST -u root -- sh -c "mountpoint -q /app"
 
     if ($?) {
@@ -1632,6 +1639,7 @@ Example: ./lnmp-docker composer /app/demo install
 
     $wsl2_mount_physicaldiskdevice_path = Get-wsl2_mount_physicaldiskdevice_path $MountPhysicalDiskType2WSL2
 
+    & $PSScriptRoot/kubernetes/wsl2/bin/wsl2d.ps1 $WSL2_DIST
     wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p /app"
     wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p $wsl2_mount_physicaldiskdevice_path/app"
     wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind $wsl2_mount_physicaldiskdevice_path/app /app"

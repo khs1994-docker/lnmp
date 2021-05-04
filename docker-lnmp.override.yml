@@ -13,11 +13,11 @@ x-common:
 services:
   mysql:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/mysql:${LNMP_MYSQL_VERSION:-8.0.23}
+    image: ${LNMP_LIBRARY_NS:-library}/mysql:${LNMP_MYSQL_VERSION:-8.0.24}
 
   redis:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-6.0.10}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-6.2.3}-alpine
 
   memcached:
     << : *common
@@ -25,28 +25,28 @@ services:
 
   php7:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.15}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.18}-fpm-alpine
 
   php8:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.2}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.5}-fpm-alpine
 
   composer:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.0.2}-composer-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.0.5}-composer-alpine
 
   supervisord:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.15}-supervisord-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.18}-supervisord-alpine
 
   phpmyadmin:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.0.4}
+    image: ${LNMP_LIBRARY_NS:-library}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.1.0}
 
   nginx:
     << : *common
-    # image: khs1994/nginx:${LNMP_NGINX_VERSION:-1.19.6}-alpine
-    image: ${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.19.6}-alpine
+    # image: khs1994/nginx:${LNMP_NGINX_VERSION:-1.19.10}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.19.10}-alpine
 
 networks:
   frontend:
@@ -65,8 +65,6 @@ volumes:
     << : *common
   composer-cache-data:
     << : *common
-  mutagen-wsl2-data:
-    << : *common
 
 secrets:
   db_root_password:
@@ -75,3 +73,6 @@ secrets:
   supervisord_ini:
     << : *common
     file: ./config/supervisord/supervisord.ini
+  mysql_conf:
+    << : *common
+    file: ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}

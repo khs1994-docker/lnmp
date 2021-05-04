@@ -1,0 +1,25 @@
+on:
+  push:
+  workflow_dispatch:
+
+name: ci
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          docker run -i --rm \
+            -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
+            -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
+            -e DEST_DOCKER_REGISTRY=ghcr.io \
+            -e DEST_NAMESPACE=dpsigs \
+            -e CI=true \
+            -e GITHUB_ACTIONS \
+            -e LNMP_CN_ENV=false \
+            -e CONFIG_URL=https://github.com/khs1994-docker/docker-image-sync/raw/master/docker-image-sync-ghcr.json \
+            ghcr.io/khs1994/docker-image-sync
+        env:
+          DOCKER_USERNAME: khs1994
+          DOCKER_PASSWORD: ${{secrets.GHCR_IO_TOKEN}}
+        name: Sync docker image

@@ -48,14 +48,14 @@ jobs:
 
           cd coreos
 
-          cp -r ignition/ci/* ignition/fcc/
+          cp -r ignition/ci/* ignition/bu/
 
           echo 'unqualified-search-registries = ["docker.io"]' > etc/containers/registries.conf
 
           sed -i -e 's/eth0/enp1s0/g' \
           -e 's/apiserver-count=3/apiserver-count=2/g' \
-          ignition/fcc/ignition-n.node.template.fcc \
-          ignition/fcc/ignition-n.master.template.fcc
+          ignition/bu/ignition-n.node.template.bu \
+          ignition/bu/ignition-n.master.template.bu
 
           ./coreos server -d
 

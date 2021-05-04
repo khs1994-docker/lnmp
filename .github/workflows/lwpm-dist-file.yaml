@@ -42,7 +42,7 @@ jobs:
         if: matrix.os == 'ubuntu' &&
             contains( github.event.head_commit.message, '[k8s]')
         env:
-          VERSION: 1.4.3
+          VERSION: 1.4.4
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 dist containerd@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push containerd@${env:VERSION}
@@ -59,7 +59,7 @@ jobs:
         if: endsWith('a', 'b')
         shell: pwsh
         env:
-          VERSION: 3.4.14
+          VERSION: 3.4.15
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 dist etcd@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push etcd@${env:VERSION}

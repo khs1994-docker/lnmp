@@ -76,7 +76,7 @@ services:
 
   mysql:
     << : *common
-    image: mysql:${CI_MYSQL_VERSION:-8.0.23}
+    image: mysql:${CI_MYSQL_VERSION:-8.0.24}
     env_file: secrets/mysql.env
     volumes:
       - mysql-data:/var/lib/mysql:rw
@@ -85,14 +85,14 @@ services:
 
   redis:
     << : *common
-    image: redis:${CI_REDIS_VERSION:-6.0.10}-alpine
+    image: redis:${CI_REDIS_VERSION:-6.2.3}-alpine
     volumes:
       - redis-data:/data
 
   nginx:
     << : *common
-    # image: khs1994/nginx:${CI_NGINX_VERSION:-1.19.6}-alpine
-    image: nginx:${CI_NGINX_VERSION:-1.19.6}-alpine
+    # image: khs1994/nginx:${CI_NGINX_VERSION:-1.19.10}-alpine
+    image: nginx:${CI_NGINX_VERSION:-1.19.10}-alpine
     networks:
       - frontend
     ports:

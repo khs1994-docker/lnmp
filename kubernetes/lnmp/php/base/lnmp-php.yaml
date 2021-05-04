@@ -1,14 +1,14 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: php7
+  name: php
   labels:
     app: lnmp
-    tier: php7
+    tier: php
 spec:
   selector:
     app: lnmp
-    tier: php7
+    tier: php
   ports:
   - name: php-fpm
     port: 9000
@@ -17,15 +17,15 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: php7
+  name: php
   labels:
     app: lnmp
-    tier: php7
+    tier: php
 spec:
   selector:
     matchLabels:
       app: lnmp
-      tier: php7
+      tier: php
   replicas: 2
   minReadySeconds: 5
   revisionHistoryLimit: 5 # 保留几个版本
@@ -38,13 +38,13 @@ spec:
     metadata:
       labels:
         app: lnmp
-        tier: php7
+        tier: php
     spec:
       nodeSelector:
         kubernetes.io/os: linux
       containers:
-      - name: lnmp-php7
-        image: khs1994/php:7.4.15-fpm-alpine
+      - name: lnmp-php
+        image: khs1994/php:8.0.5-fpm-alpine
         imagePullPolicy: IfNotPresent
         args:
         - php-fpm

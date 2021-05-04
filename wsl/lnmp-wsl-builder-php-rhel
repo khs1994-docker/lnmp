@@ -49,7 +49,7 @@ if [ "${LNMP_CN_ENV}" != 'false' ];then
   PHP_GIT=https://github.com.cnpmjs.org/php/php-src
 fi
 
-export COMPOSER_VERSION=2.0.9
+export COMPOSER_VERSION=2.0.13
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
@@ -152,20 +152,51 @@ _download_src(){
 
 # 2. install packages
 
-_install_php_run_dep(){
+_install_epel(){
+  $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION_ID}.noarch.rpm
 
+  $(_sudo) rpm -Uvh epel-release-latest-${VERSION_ID}.noarch.rpm
+}
+
+_install_remi(){
+  local fedora_stable_version_id=34
+  local url
+  url=https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
+
+  if [ "${ID}" = 'fedora' ];then
+    url=https://rpms.remirepo.net/${ID}/remi-release-${VERSION_ID}.rpm
+
+    if [ "${VERSION_ID}" -ge 35 ];then
+      url=https://rpms.remirepo.net/${ID}/remi-release-${fedora_stable_version_id}.rpm
+      $(_sudo) wget -N $url
+      $(_sudo) rpm -Uvh remi-release-${fedora_stable_version_id}.rpm
+
+      sudo sed -i 's/$releasever/34/g' /etc/yum.repos.d/remi.repo /etc/yum.repos.d/remi-modular.repo
+
+      return
+    fi
+  fi
+
+  $(_sudo) wget -N $url
+  $(_sudo) rpm -Uvh remi-release-${VERSION_ID}.rpm
+}
+
+_install_php_run_dep(){
     cd /tmp
 
-    if ! [ ${ID} = 'fedora' ];then
-      $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION_ID}.noarch.rpm
+    if ! [ "${ID}" = 'fedora' ];then
+      _install_epel
+    fi
 
-      $(_sudo) rpm -Uvh epel-release-latest-${VERSION_ID}.noarch.rpm
+    if [ "${VERSION_ID}" -ge 34 -a "${ID}" = 'fedora' ];then
+      _install_remi
+
+      $(_sudo) dnf install -y 'dnf-command(config-manager)'
+      $(_sudo) dnf config-manager --enable remi
     fi
 
     # if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then
-    #   $(_sudo) wget -N https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
-    #   $(_sudo) rpm -Uvh remi-release-${VERSION_ID}.rpm
-    #   $(_sudo) dnf --enablerepo=remi install libtidy -y
+    #  _install_remi
     # fi
 
 _libzip(){
@@ -177,7 +208,7 @@ _libzip(){
 
     if [ ${VERSION_ID} -ge 8 ];then
       $(_sudo) dnf install -y pkgconf-pkg-config
-      $(_sudo) dnf --repo AppStream install -y libzip libzip-devel
+      $(_sudo) dnf install -y libzip libzip-devel
 
       return
     fi
@@ -292,10 +323,8 @@ do
 done
 
 if [ $VERSION_ID -ge 8 -a ${ID} != 'fedora' ];then
-  # $(_sudo) dnf --enablerepo=remi install libtidy-devel -y
-
-  $(_sudo) dnf install -y dnf-utils
-  $(_sudo) yum-config-manager --enable PowerTools
+  $(_sudo) dnf install -y 'dnf-command(config-manager)'
+  $(_sudo) dnf config-manager --enable powertools
 fi
 
 $(_sudo) yum install -y ${DEP_SOFTS}
@@ -881,10 +910,10 @@ command -v wget > /dev/null || $(_sudo) yum install -y wget
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
-    PHP_VERSION=8.0.2 ; fi
+    PHP_VERSION=8.0.5 ; fi
 
 if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
-    PHP_VERSION=8.0.2 ; fi
+    PHP_VERSION=8.0.5 ; fi
 
 _get_phpnum $PHP_VERSION
 

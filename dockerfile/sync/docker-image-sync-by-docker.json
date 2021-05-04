@@ -1,19 +1,7 @@
 [
   {
-    "source": "gcr.io/google-containers/pause:3.2",
-    "dest": "gcr-mirror/pause:3.2"
-  },
-  {
-    "source": "k8s.gcr.io/pause:3.3",
-    "dest": "gcr-mirror/pause:3.3-try"
-  },
-  {
-    "source": "us.gcr.io/k8s-artifacts-prod/kubernetes/pause:3.3",
-    "dest": "gcr-mirror/pause:3.3"
-  },
-  {
-    "source": "gcr.io/google-containers/coredns:1.7.0",
-    "dest": "gcr-mirror/coredns:1.7.0"
+    "source": "k8s.gcr.io/coredns/coredns:v1.8.0",
+    "dest": "gcr-mirror/coredns:v1.8.0"
   },
   {
     "source": "gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:e72593477e8cb09b718b9b0b38731de5b4cb7ef0c04712f7b97f51be5c5e06c7",
@@ -103,18 +91,18 @@
     "dest": "gcr-mirror/git-sync:v3.1.6"
   },
   {
-    "source": "quay.io/coreos/etcd:v3.4.14",
-    "dest": "quay-mirror/etcd:v3.4.14",
+    "source": "quay.io/coreos/etcd:v3.4.15",
+    "dest": "quay-mirror/etcd:v3.4.15",
     "platforms": [
       {
-        "source": "quay.io/coreos/etcd:v3.4.14"
+        "source": "quay.io/coreos/etcd:v3.4.15"
       },
       {
         "os": "linux",
         "architecture": "arm64",
         "variant": "v8",
-        "source": "quay.io/coreos/etcd:v3.4.14-arm64",
-        "dest": "quay-mirror/etcd:v3.4.14-arm64"
+        "source": "quay.io/coreos/etcd:v3.4.15-arm64",
+        "dest": "quay-mirror/etcd:v3.4.15-arm64"
       }
     ]
   },
@@ -145,45 +133,45 @@
     ]
   },
   {
-    "source": "k8s.gcr.io/kube-proxy:v1.19.2",
-    "dest": "gcr-mirror/kube-proxy:v1.19.2",
+    "source": "k8s.gcr.io/kube-proxy:v1.19.7",
+    "dest": "gcr-mirror/kube-proxy:v1.19.7",
     "registry": "k8s.gcr.io",
     "image": "kube-proxy",
-    "ref": "v1.19.2"
+    "ref": "v1.19.7"
   },
   {
-    "source": "k8s.gcr.io/kube-controller-manager:v1.19.2",
-    "dest": "gcr-mirror/kube-controller-manager:v1.19.2",
+    "source": "k8s.gcr.io/kube-controller-manager:v1.19.7",
+    "dest": "gcr-mirror/kube-controller-manager:v1.19.7",
     "registry": "k8s.gcr.io",
     "image": "kube-controller-manager",
-    "ref": "v1.19.2"
+    "ref": "v1.19.7"
   },
   {
-    "source": "k8s.gcr.io/kube-apiserver:v1.19.2",
-    "dest": "gcr-mirror/kube-apiserver:v1.19.2",
+    "source": "k8s.gcr.io/kube-apiserver:v1.19.7",
+    "dest": "gcr-mirror/kube-apiserver:v1.19.7",
     "registry": "k8s.gcr.io",
     "image": "kube-apiserver",
-    "ref": "v1.19.2"
+    "ref": "v1.19.7"
   },
   {
-    "source": "k8s.gcr.io/kube-scheduler:v1.19.2",
-    "dest": "gcr-mirror/kube-scheduler:v1.19.2",
+    "source": "k8s.gcr.io/kube-scheduler:v1.19.7",
+    "dest": "gcr-mirror/kube-scheduler:v1.19.7",
     "registry": "k8s.gcr.io",
     "image": "kube-scheduler",
-    "ref": "v1.19.2"
+    "ref": "v1.19.7"
   },
   {
-    "source": "k8s.gcr.io/etcd:3.4.14-0",
-    "dest": "gcr-mirror/etcd:3.4.14-0",
+    "source": "k8s.gcr.io/etcd:3.4.15-0",
+    "dest": "gcr-mirror/etcd:3.4.15-0",
     "registry": "k8s.gcr.io",
     "image": "etcd",
-    "ref": "3.4.14-0"
+    "ref": "3.4.15-0"
   },
   {
-    "source": "k8s.gcr.io/coredns:1.7.0",
-    "dest": "gcr-mirror/coredns:1.7.0",
+    "source": "k8s.gcr.io/pause:3.5",
+    "dest": "gcr-mirror/pause:3.5",
     "registry": "k8s.gcr.io",
-    "image": "coredns",
-    "ref": "1.7.0"
+    "image": "pause",
+    "ref": "3.5"
   }
 ]

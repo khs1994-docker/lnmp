@@ -4,9 +4,9 @@
 
 * metrics-server `0.4.2`
 
-* CoreDNS `1.7.0`
+* CoreDNS `1.8.0`
 
-* Dashboard `2.1.0`
+* Dashboard `2.2.0`
 
 * Istio `1.9.0`
 
@@ -18,7 +18,7 @@
 
 ## CNI
 
-* [calico](https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/) `3.17`
+* [calico](https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/) `3.19`
 
 ## CI/CD
 

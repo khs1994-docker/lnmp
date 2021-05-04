@@ -26,6 +26,9 @@ FROM mcr.microsoft.com/powershell:preview-alpine-3.12
 # token 过期时间
 # ENV DOCKER_TOKEN_EXPIRE_TIME=205
 
+# push manifest once
+# ENV PUSH_MANIFEST_ONCE=false
+
 RUN apk add --no-cache curl
 
 COPY docker-image-sync.ps1 /root/lnmp/windows/

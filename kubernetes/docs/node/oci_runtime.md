@@ -27,7 +27,7 @@
 下载 `containerd-shim-runsc-v1`
 
 ```bash
-$ sudo curl -fsSL -o /usr/local/bin/containerd-shim-runsc-v1 https://storage.googleapis.com/gvisor/releases/master/latest/containerd-shim-runsc-v1
+$ sudo curl -fsSL -o /usr/local/bin/containerd-shim-runsc-v1 https://storage.googleapis.com/gvisor/releases/master/latest/x86_64/containerd-shim-runsc-v1
 
 $ sudo chmod +x /usr/local/bin/containerd-shim-runsc-v1
 ```

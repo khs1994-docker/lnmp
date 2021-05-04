@@ -84,17 +84,19 @@ jobs:
           patch -p1 < ../laravel-demo/cdn-patch/config-app.patch
           patch -p1 < ../laravel-demo/patch/app-console-kernel.patch
 
-          lnmp-composer require laravel/ui
+          lnmp-composer require laravel/jetstream
           lnmp-composer require league/flysystem 1.x
           lnmp-composer require league/flysystem-aws-s3-v3 1.x
           # 此步骤会重置 webpack.mix.js
-          lnmp-php artisan ui vue --auth
+          # lnmp-php artisan jetstream:install livewire
+          lnmp-php artisan jetstream:install inertia
+          # lnmp-php artisan jetstream:install --teams
 
           cp -r ../laravel-demo/laravel-patch/. .
           ls -la resources/views
 
           lnmp-npm i
-          lnmp-npm install laravel-mix-versionhash --save
+          lnmp-npm install laravel-mix-versionhash --save-dev
           lnmp-npm run dev
       - name: Test Laravel
         run: |

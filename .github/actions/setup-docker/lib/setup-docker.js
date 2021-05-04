@@ -53,7 +53,7 @@ async function buildx() {
       'run',
       '--rm',
       '--privileged',
-      'tonistiigi/binfmt:latest',
+      'ghcr.io/dpsigs/tonistiigi-binfmt:latest',
       "--install",
       "all"
     ]);
@@ -75,7 +75,12 @@ async function buildx() {
       '--driver',
       'docker-container',
       '--driver-opt',
-      'image=moby/buildkit:master'
+      // 'image=moby/buildkit:master'
+      // moby/buildkit:buildx-stable-1
+      'image=ghcr.io/dpsigs/moby-buildkit:master'
+      // $ docker pull moby/buildkit:master
+      // $ docker tag moby/buildkit:master ghcr.io/dpsigs/moby-buildkit:master
+      // $ docker push ghcr.io/dpsigs/moby-buildkit:master
     ]);
     core.endGroup();
 
@@ -119,6 +124,7 @@ async function run() {
       '--version']).catch(() => { });
 
     core.startGroup('install docker')
+    await exec.exec('brew', ['update'])
     await exec.exec('brew', [
       'install',
       '--cask',
@@ -265,13 +271,6 @@ echo "-- Docker is ready."
       '-c',
       'apt-get install -y /tmp/*.deb'
     ]).catch(async () => {
-      core.startGroup('download libseccomp2_2.4.4 deb for old os');
-      await exec.exec('curl', [
-        '-fsSL',
-        '-o',
-        '/tmp/libseccomp2_2.4.4-1~bpo10+1_amd64.deb',
-        'http://ftp.us.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.4.4-1~bpo10+1_amd64.deb'
-      ]);
       core.endGroup();
 
       core.startGroup('install docker');
@@ -288,26 +287,19 @@ echo "-- Docker is ready."
     core.exportVariable('DOCKER_CONFIG', '/home/runner/.docker');
 
     core.debug('add apt-key');
-    await exec.exec('curl', [
-      '-fsSL',
-      '-o',
-      '/tmp/docker.gpg',
-      'https://download.docker.com/linux/ubuntu/gpg',
-    ]);
-    await exec.exec('sudo', [
-      'apt-key',
-      'add',
-      '/tmp/docker.gpg',
-    ]);
+    await shell(`
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    `);
 
     message = 'add apt source';
     core.debug(message);
     const UBUNTU_CODENAME = await shell('lsb_release -cs');
     core.startGroup(message);
-    await exec.exec('sudo', [
-      'add-apt-repository',
-      `deb [arch=amd64,arm64] https://download.docker.com/linux/ubuntu ${UBUNTU_CODENAME} ${DOCKER_CHANNEL}`,
-    ]);
+    await shell(`
+    echo \
+      "deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+      ${UBUNTU_CODENAME} ${DOCKER_CHANNEL}" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    `)
     core.endGroup();
 
     message = 'update apt cache'

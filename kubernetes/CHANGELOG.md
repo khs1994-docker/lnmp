@@ -2,7 +2,7 @@
 
 * CRI 默认为 `containerd`, 还有 `crio` `docker` 可供选择
 
-* Kubernetes `1.20.0`
+* Kubernetes `1.21.0`
 
 ## v1.19.0
 

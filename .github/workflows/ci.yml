@@ -36,17 +36,10 @@ jobs:
     - uses: actions/checkout@main
       with:
         fetch-depth: 2
-    - uses: azure/docker-login@v1
-      if: |
-        github.event_name == 'push'
-      with:
-        # login-server: contoso.azurecr.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
     - uses: docker-practice/actions-setup-docker@master
       with:
-        docker_channel: nightly
-        # docker_version: "20.10"
+        docker_channel: test
+        docker_version: "20.10"
     - uses: azure/docker-login@v1
       if: |
         github.event_name == 'push'
@@ -55,6 +48,22 @@ jobs:
         # login-server: contoso.azurecr.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+    - uses: azure/docker-login@v1
+      if: |
+        github.event_name == 'push'
+        && startsWith(matrix.os, 'ubuntu' )
+      with:
+        login-server: ghcr.io
+        username: khs1994
+        password: ${{ secrets.GHCR_IO_TOKEN }}
+    - uses: azure/docker-login@v1
+      if: |
+        github.event_name == 'push'
+        && startsWith(matrix.os, 'ubuntu' )
+      with:
+        login-server: pcit-docker.pkg.coding.net
+        username: khs1994-1601432822176
+        password: ${{secrets.CODING_DOCKER_PASSWORD}}
     - name: Update docker compose
       run: |
         docker-compose --version
@@ -119,21 +128,30 @@ jobs:
         && github.event_name == 'push'
         && startsWith(matrix.os, 'ubuntu' )
       run: |
-        docker buildx build -t lwpm/lwpm -f windows/lwpm.Dockerfile --push windows
+        docker buildx build -t lwpm/lwpm \
+                            -t ghcr.io/khs1994/lwpm \
+                            -t pcit-docker.pkg.coding.net/khs1994-docker/lwpm/lwpm \
+                            -f windows/lwpm.Dockerfile --push windows
     - name: build and push [ docker-image-sync ] image
       if: |
         contains( github.event.head_commit.message, '[lwpm]' )
         && github.event_name == 'push'
         && startsWith(matrix.os, 'ubuntu' )
       run: |
-        docker buildx build -t khs1994/docker-image-sync -f windows/docker-image-sync.Dockerfile --push windows
+        docker buildx build -t khs1994/docker-image-sync \
+                            -t ghcr.io/khs1994/docker-image-sync \
+                            -t pcit-docker.pkg.coding.net/khs1994-docker/khs1994/docker-image-sync \
+                            -f windows/docker-image-sync.Dockerfile --push windows
     - name: build and push [ lrew ] image
       if: |
         contains( github.event.head_commit.message, '[lrew]' )
         && github.event_name == 'push'
         && startsWith(matrix.os, 'ubuntu' )
       run: |
-        docker buildx build -t lrew/lrew --push lrew
+        docker buildx build -t lrew/lrew \
+                            -t ghcr.io/lrew/lrew \
+                            -t pcit-docker.pkg.coding.net/khs1994-docker/lrew/lrew \
+                            --push lrew
     - name: Config git
       run: |
         git config --global user.email "ci@khs1994.com"

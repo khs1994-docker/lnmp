@@ -10,7 +10,6 @@ tty=
 tty -s > /dev/null 2>&1 && tty=--tty || true
 
 readonly KUBERNETES_VERSION="1.19.3"
-readonly DOCKER_DESKTOP_VERSION="2.5.1.0"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -165,7 +164,7 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | ]
+  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | down | ]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -187,7 +186,7 @@ ClusterKit:
 
 Developer Tools:
   test                 Test LNMP
-
+  pwsh                 Print pwsh docs url
 Read './docs/*.md' for more information about CLI commands.
 
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
@@ -254,7 +253,7 @@ _gcr_io(){
 
   _gcr_io_down
 
-  print_info "This local server support Docker Desktop v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
+  print_info "This local server support Docker Desktop with Kubernetes v${KUBERNETES_VERSION}"
 
   mkdir -p $HOME/.khs1994-docker-lnmp/registry
 
@@ -515,7 +514,7 @@ install_docker_compose_arm(){
   print_info "$OS $ARCH docker-compose v$LNMP_DOCKER_COMPOSE_VERSION is installing by pip3 ..."
   command -v pip3 >/dev/null 2>&1 || $(_sudo) apt install -y python3-pip
   $(_sudo) apt install -y libffi-dev || true
-  local pip_config="[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns"
+  local pip_config="[global]\nindex-url = https://pypi.doubanio.com/simple\n[list]\nformat=columns"
   if ! [ -d ~/.pip ];then
     if ! [ "${LNMP_CN_ENV}" = "false" ];then
     mkdir -p ~/.pip
@@ -650,6 +649,7 @@ set_git_remote_origin_url(){
 }
 
 update(){
+  local force=
   if ! [ -d .git ];then git init > /dev/null 2>&1; BRANCH=master; fi
 
   set_git_remote_origin_url
@@ -666,8 +666,9 @@ update(){
      exit 1
   fi
   print_info "Branch is ${BRANCH}"
-  git pull origin ${BRANCH} || true
-  git reset --hard origin/${BRANCH}
+  git fetch origin ${BRANCH}:lnmp-temp/${BRANCH} || true
+  git reset --hard lnmp-temp/${BRANCH}
+  git branch -D lnmp-temp/${BRANCH}
   # print_info "Update Git Submodule"
   # git submodule update --init --recursive
   command -v bash > /dev/null 2>&1 || sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker
@@ -1837,6 +1838,10 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
     BRANCH=${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
     update
+    ;;
+
+  pwsh )
+    print_info "please open https://docs.microsoft.com/zh-cn/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7.1"
     ;;
 
   * )

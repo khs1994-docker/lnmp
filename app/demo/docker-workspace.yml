@@ -11,7 +11,7 @@ x-common:
 services:
   workspace:
     &workspace
-    image: khs1994/php:8.0.2-composer-alpine
+    image: khs1994/php:8.0.5-composer-alpine
     networks:
       - backend
     volumes:
@@ -24,8 +24,6 @@ services:
       # fix me 将依赖挂载到数据卷
       # - vendor:/app/demo/vendor
 
-      # fix me
-      # mutagen: 若使用 mutagen 请注释掉上方两项，取消注释下方一项
       # - /var/lib/app/demo:/app/demo
 
       # composer
@@ -65,13 +63,13 @@ services:
   composer:
     << : *workspace
     << : *common
-    image: "khs1994/php:8.0.2-composer-alpine"
+    image: "khs1994/php:8.0.5-composer-alpine"
     command: [] # install | update
 
   npm:
     << : *workspace
     << : *common
-    image: node:15.8.0-alpine
+    image: node:16.0.0-alpine
     entrypoint: npm
     command: [] # install | "run","dev" |
 

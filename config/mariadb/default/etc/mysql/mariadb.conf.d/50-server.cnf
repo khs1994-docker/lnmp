@@ -82,6 +82,7 @@ expire_logs_days        = 10
 #ssl-ca = /etc/mysql/cacert.pem
 #ssl-cert = /etc/mysql/server-cert.pem
 #ssl-key = /etc/mysql/server-key.pem
+#require-secure-transport = on
 
 #
 # * Character sets
@@ -110,7 +111,7 @@ collation-server      = utf8mb4_general_ci
 # you can put MariaDB-only options here
 [mariadb]
 
-# This group is only read by MariaDB-10.5 servers.
+# This group is only read by MariaDB-10.6 servers.
 # If you use the same .cnf file for MariaDB of different versions,
 # use this group for options that older servers don't understand
-[mariadb-10.5]
+[mariadb-10.6]

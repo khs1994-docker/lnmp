@@ -12,7 +12,7 @@ if len(sys.argv) == 3:
     input_version = sys.argv[1]
     input_sudo = sys.argv[2]
 else:
-    wsl.print_help_info('lnmp-wsl-builder-redis.py', 'Redis', '6.0.10')
+    wsl.print_help_info('lnmp-wsl-builder-redis.py', 'Redis', '6.2.3')
     exit(0)
 
 sudo_cmd = 'echo ' + input_sudo + ' | sudo -S '
@@ -29,7 +29,7 @@ if ret != 0:
 
 redis_prefix='/usr/local/redis'
 
-url = 'https://github.com/antirez/redis/archive/' + input_version + '.tar.gz'
+url = 'https://github.com/redis/redis/archive/' + input_version + '.tar.gz'
 
 wsl.download_src(url, input_version + '.tar.gz', 'redis-' + input_version)
 

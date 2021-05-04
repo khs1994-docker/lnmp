@@ -10,8 +10,7 @@ x-build-debian:
   &default-build-debian
   # Dockerfile: my.Dockerfile
   args:
-    DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
-    DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
+    DEB_URL: mirrors.ustc.edu.cn # archive.ubuntu.com
 
 x-labels:
   &default-labels

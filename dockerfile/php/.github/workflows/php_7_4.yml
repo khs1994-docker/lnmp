@@ -9,7 +9,7 @@ on:
       PHP_VERSION:
         description: php version
         required: true
-        default: "7.4.15"
+        default: "7.4.18"
 
 name: PHP_7.4
 
@@ -103,7 +103,6 @@ jobs:
         --build-arg PHP_VERSION=$PHP_TAG_VERSION \
         --cache-from=khs1994/php:${FOLDER}-arm-${TYPE,,}-cache \
         --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
-        --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache \
         --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
 
         echo ::group::Build Unit
@@ -212,9 +211,9 @@ jobs:
         PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v7
         PHP_VERSION: 7_4_X
         FOLDER: 7.4
-        PHP_TAG_VERSION: 7.4.15
+        PHP_TAG_VERSION: 7.4.18
         TYPE: ${{ matrix.TYPE }}
-        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php # ghcr.io/khs1994/php
+        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php ghcr.io/khs1994/php
       name: 'Build Image'
     - run: |
         curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=

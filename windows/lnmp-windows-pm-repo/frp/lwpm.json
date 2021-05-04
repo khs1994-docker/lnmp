@@ -1,8 +1,8 @@
 {
   "name": "frp",
   "description": "A fast reverse proxy to help you expose a local server behind a NAT or firewall to the internet",
-  "version": "0.35.1",
-  "pre-version": "0.35.1",
+  "version": "0.36.0",
+  "pre-version": "0.36.0",
   "homepage": "https://github.com/fatedier/frp",
   "bug": "https://github.com/fatedier/frp/issues",
   "github": "fatedier/frp",
@@ -20,7 +20,7 @@
       "if(!$IsWindows){sudo install -m755 frp/frp_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}/frps /usr/local/bin}",
       "_cleanup frp"
     ],
-    "uninstall": "Remove-item C:\\bin\\frpc.exe"
+    "uninstall": "if($IsWindows){Remove-item C:\\bin\\frpc.exe ; Remove-item C:\\bin\\frps.exe}else{sudo rm -rf /usr/local/bin/frpc ; sudo rm -rf /usr/local/bin/frps }"
   },
   "path": [
     "C:\\bin"

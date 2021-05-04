@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=8.0.2
+ARG PHP_VERSION=8.0.5
 ARG USERNAME=khs1994
 ARG BASE=cli
 
@@ -7,7 +7,7 @@ FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ENV NGINX_UNIT_VERSION=1.22.0
+ENV NGINX_UNIT_VERSION=1.23.0
 
 RUN set -x \
   && mkdir -p /usr/src/unit \

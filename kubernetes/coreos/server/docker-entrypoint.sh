@@ -13,14 +13,14 @@ cd /srv/www/coreos
 
 sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ipxe.html
 
-fcct --version ; fcct --help || true
+butane --version ; butane --help || true
 
 cd ignition
 
-rm -rf *.ign *.fcc
+rm -rf *.ign *.bu
 
-cp fcc/* .
-cp ignition-local.example.fcc ignition-local.fcc
+cp bu/* .
+cp ignition-local.example.bu ignition-local.bu
 
 MERGE_LIST="crictl \
             docker \
@@ -50,21 +50,21 @@ do
             ${NETWORK_GATEWAY} \
             ${DEFAULT_GATEWAY} \
            ' \
-  < $item.fcc > $item.fcc.source
+  < $item.bu > $item.bu.source
 
-  cp $item.fcc.source $item.fcc
+  cp $item.bu.source $item.bu
 done
 
 for i in `seq ${NODE_NUM}`;do
-  cp ignition-n.master.template.fcc ignition-$i.example.fcc
-  sed -i "s#{{n}}#$i#g" ignition-$i.example.fcc
-  cp ignition-$i.example.fcc ignition-$i.fcc
+  cp ignition-n.master.template.bu ignition-$i.example.bu
+  sed -i "s#{{n}}#$i#g" ignition-$i.example.bu
+  cp ignition-$i.example.bu ignition-$i.bu
 
-  if ! [ -f ignition-$i.fcc ];then
+  if ! [ -f ignition-$i.bu ];then
     break
   fi
 
-  echo "handle ignition-$i.fcc ...
+  echo "handle ignition-$i.bu ...
 
 "
   envsubst '${K8S_ROOT} \
@@ -78,17 +78,17 @@ for i in `seq ${NODE_NUM}`;do
             ${CONTAINERD_VERSION} \
             ${NETWORK_GATEWAY} \
            ' \
-  < ignition-$i.fcc > ignition-$i.fcc.source
+  < ignition-$i.bu > ignition-$i.bu.source
 
-  cp ignition-$i.fcc.source ignition-$i.fcc
+  cp ignition-$i.bu.source ignition-$i.bu
 
-  sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" ignition-$i.fcc
-  sed -i "s#{{DISCOVERY_URL}}#${DISCOVERY_URL}#g" ignition-$i.fcc
-  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ignition-$i.fcc
-  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" ignition-$i.fcc
+  sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" ignition-$i.bu
+  sed -i "s#{{DISCOVERY_URL}}#${DISCOVERY_URL}#g" ignition-$i.bu
+  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ignition-$i.bu
+  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" ignition-$i.bu
 done
 
-cp ../pxe/pxe-ignition.example.fcc ../pxe/pxe-ignition.fcc
+cp ../pxe/pxe-ignition.example.bu ../pxe/pxe-ignition.bu
 
 # replace
 
@@ -97,50 +97,50 @@ for i in `seq ${NODE_NUM}` ; do
   IP=$(echo ${NODE_IPS} | cut -d ',' -f $i)
 
   if [ -n "$IP" ];then
-    sed -i "s/{{IP_$i}}/${IP}/g" $( ls *.fcc )
+    sed -i "s/{{IP_$i}}/${IP}/g" $( ls *.bu )
   fi
 done
 
-# fcct
+# butane
 
-_fcct(){
-  echo "fcct --strict --pretty "
+_butane(){
+  echo "butane --strict --pretty "
 }
 
 sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" \
-  ignition-local.fcc \
-  basic.fcc \
-  ../pxe/pxe-ignition.fcc
+  ignition-local.bu \
+  basic.bu \
+  ../pxe/pxe-ignition.bu
 
 sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" \
-  ignition-local.fcc \
-  basic.fcc \
-  ../pxe/pxe-ignition.fcc
+  ignition-local.bu \
+  basic.bu \
+  ../pxe/pxe-ignition.bu
 
-sed -i "s#{{ETCD_VERSION}}#${ETCD_VERSION}#g" basic.fcc
+sed -i "s#{{ETCD_VERSION}}#${ETCD_VERSION}#g" basic.bu
 
 for i in `seq ${NODE_NUM}` ; do
 
-  if [ -f ignition-$i.fcc ];then
-    $(_fcct) ignition-$i.fcc > ignition-$i.ign
+  if [ -f ignition-$i.bu ];then
+    $(_butane) ignition-$i.bu > ignition-$i.ign
   fi
 
 done
 
 for item in $MERGE_LIST
 do
-  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" $item.fcc
-  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" $item.fcc
-  $(_fcct) $item.fcc > $item.ign
+  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" $item.bu
+  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" $item.bu
+  $(_butane) $item.bu > $item.ign
 done
 
-$(_fcct) ignition-local.fcc > ignition-local.ign
-$(_fcct) basic.fcc > basic.ign
+$(_butane) ignition-local.bu > ignition-local.ign
+$(_butane) basic.bu > basic.ign
 
 rm -rf *.source
 
 cd ../pxe
 
-$(_fcct) pxe-ignition.fcc > pxe-config.ign
+$(_butane) pxe-ignition.bu > pxe-config.ign
 
 exec nginx -g "daemon off;"

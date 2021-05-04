@@ -79,11 +79,9 @@ _ide_helper.php
 
 **有以下几种解决思路**：
 
-1. 使用 [mutagen](windows/mutagen.md)，将 Windows 中的项目同步到 WSL2 中。
+1. 或者 `vendor` 目录使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_improving-container-disk-performance) 的说明和笔者提出的方案原理大致相同
 
-2. 或者 `vendor` 目录使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_improving-container-disk-performance) 的说明和笔者提出的方案原理大致相同
-
-3. 或者将项目文件夹放置于 WSL2，使用 **vsCode remote WSL** WSL 远程开发(推荐使用)
+2. 或者将项目文件夹放置于 WSL2，使用 **vsCode remote WSL** WSL 远程开发(推荐使用)
 
 > 项目放置于 WSL2 也可以使用 PHPStorm，请参考 https://github.com/khs1994-docker/php-demo
 
@@ -167,7 +165,7 @@ $ wsl -d <WSL名称> -- wslpath "'$PWD'"
 # 将结果追加到 WSL2 中的 PATH 环境变量中
 ```
 
-4. 或者将项目文件夹放置于 WSL2，使用 **vsCode remote container** 容器远程开发(推荐使用)
+3. 或者将项目文件夹放置于 WSL2，使用 **vsCode remote container** 容器远程开发(推荐使用)
 
 **在 Docker 设置中启用 WSL2 集成**
 

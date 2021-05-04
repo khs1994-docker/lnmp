@@ -60,8 +60,14 @@ Function _downloader($name, $url) {
 
 # 下载文件
 
-_downloader "kernel-${kernelversion}-microsoft-standard-WSL2.img" "https://github.com/khs1994/WSL2-Linux-Kernel/releases/download/${kernelversion}-microsoft-standard-WSL2/kernel-${kernelversion}-microsoft-standard-WSL2.img"
-_downloader $deb "https://github.com/khs1994/WSL2-Linux-Kernel/releases/download/${kernelversion}-microsoft-standard-WSL2/$deb"
+$GITHUB_RELEASE = "github.com"
+
+if ($env:LNMP_CN_ENV -ne "false") {
+  $GITHUB_RELEASE = "download.fastgit.org"
+}
+
+_downloader "kernel-${kernelversion}-microsoft-standard-WSL2.img" "https://${GITHUB_RELEASE}/khs1994/WSL2-Linux-Kernel/releases/download/${kernelversion}-microsoft-standard-WSL2/kernel-${kernelversion}-microsoft-standard-WSL2.img"
+_downloader $deb "https://${GITHUB_RELEASE}/khs1994/WSL2-Linux-Kernel/releases/download/${kernelversion}-microsoft-standard-WSL2/$deb"
 
 # 复制配置文件
 

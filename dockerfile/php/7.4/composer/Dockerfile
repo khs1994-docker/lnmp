@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.15
+ARG PHP_VERSION=7.4.18
 ARG USERNAME=khs1994
 ARG BASE=fpm
 
@@ -27,12 +27,12 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 \
     # COMPOSER_MEMORY_LIMIT= \
     COMPOSER_PROCESS_TIMEOUT=300 \
     # COMPOSER_SELF_UPDATE_TARGET= \
-    COMPOSER_VERSION=2.0.9 \
+    COMPOSER_VERSION=2.0.13 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:2.0.9,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:2.0.13,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .composer_deps $COMPOSER_DEP_APKS \
     && { echo "memory_limit=-1"; \

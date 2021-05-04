@@ -29,6 +29,9 @@ Environment="K8S_ETCD_HOST=192.168.199.100"
 ; Environment="_K8S_ETCD_HOST=wsl2.k8s.khs1994.com"
 Environment="_K8S_ETCD_HOST=127.0.0.1"
 
+ExecStartPre=/usr/bin/env mkdir -p /opt/k8s/var/log/kubernetes/kube-apiserver
+ExecStartPre=/usr/bin/env touch /opt/k8s/var/log/kubernetes/kube-apiserver/audit.log
+
 ExecStart=/opt/k8s/bin/kube-apiserver \
 --advertise-address=${KUBE_APISERVER_HOST} \
 --default-not-ready-toleration-seconds=360 \
@@ -84,7 +87,6 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 #
 ;
 --insecure-port=0 \
---kubelet-https=true \
 # --logging-format=json \
 --v=2
 

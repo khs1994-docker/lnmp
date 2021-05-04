@@ -93,7 +93,7 @@ pipeline {
             -e CI=true \
             -e CONFIG_URL=https://gitee.com/khs1994-docker/lnmp/raw/20.10/kubernetes/kubernetes-release/sync/docker-image-sync.json \
             -v \$PWD/docker-image-sync.json:/docker-entrypoint.d/docker-image-sync.json \
-            khs1994/docker-image-sync"
+            pcit-docker.pkg.coding.net/khs1994-docker/khs1994/docker-image-sync"
       }
     }
 

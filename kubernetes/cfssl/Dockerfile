@@ -1,6 +1,6 @@
 FROM --platform=${TARGETPLATFORM} alpine:edge
 
-ENV KUBECTL_VERSION=v1.20.0
+ENV KUBECTL_VERSION=v1.21.0
 
 ARG TARGETARCH
 
@@ -22,7 +22,7 @@ RUN set -x \
 FROM --platform=${TARGETPLATFORM} alpine:3.13
 
 LABEL maintainer="khs1994@khs1994.com" \
-      version="1.20.0"
+      version="1.21.0"
 
 COPY --from=0 /usr/local/bin /usr/local/bin
 

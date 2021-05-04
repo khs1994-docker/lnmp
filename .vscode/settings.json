@@ -17,7 +17,7 @@
       "mutagen.example.yml"
     ],
     "https://raw.githubusercontent.com/coreos/ignition/master/config/v3_1/schema/ignition.json": [
-      "*.fcc",
+      "*.bu",
       "*.ign"
     ]
   },
@@ -57,7 +57,7 @@
   // 文件类型关联
   "files.associations": {
     "*.ign": "json",
-    "*.fcc": "yaml",
+    "*.bu": "yaml",
     "*.conflist": "json",
     "**/systemd/**/**.conf": "systemd-unit-file"
   },

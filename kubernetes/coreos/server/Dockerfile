@@ -1,20 +1,20 @@
-FROM nginx:1.19.6-alpine
+FROM nginx:1.19.10-alpine
 
 LABEL maintainer="khs1994@khs1994.com" \
-      version="1.20.0"
+      version="1.21.0"
 
-ARG FCCT_URL=https://github.com/coreos/fcct/releases/download/
-ARG FCCT_VERSION=v0.10.0
+ARG BUTANE_URL=https://github.com/coreos/butane/releases/download/
+ARG BUTANE_VERSION=v0.11.0
 
-COPY --from=quay.io/coreos/fcct:v0.10.0 /usr/local/bin/fcct /usr/local/bin/fcct
+COPY --from=quay.io/coreos/butane:v0.11.0 /usr/local/bin/butane /usr/local/bin/butane
 
 RUN set -ex \
       && ARCH=`uname -m` \
       && mkdir -p /srv/www/coreos \
       && apk add --no-cache tzdata curl \
-      # && curl -L ${FCCT_URL}${FCCT_VERSION}/fcct-${ARCH}-unknown-linux-gnu > /usr/local/bin/fcct \
-      # && chmod +x /usr/local/bin/fcct \
-      # && /usr/local/bin/fcct --version \
+      # && curl -L ${BUTANE_URL}${BUTANE_VERSION}/butane-${ARCH}-unknown-linux-gnu > /usr/local/bin/butane \
+      # && chmod +x /usr/local/bin/butane \
+      # && /usr/local/bin/butane --version \
       && apk del --no-network curl \
       && apk add --no-cache --virtual .gettext gettext \
       && mv /usr/bin/envsubst /tmp/ \

@@ -1,4 +1,4 @@
-# https://github.com/coreos/fcct/blob/master/docs/config-fcos-v1_1.md
+# https://github.com/coreos/butane/blob/master/docs/config-fcos-v1_1.md
 # master
 variant: fcos
 version: 1.3.0
@@ -72,8 +72,10 @@ systemd:
         ExecStartPre=-/usr/bin/mkdir --parents /opt/k8s/var/lib/etcd
         ExecStartPre=-/usr/bin/env chmod 700 /opt/k8s/var/lib/etcd
 
+        ExecStartPre=-/bin/podman container kill etcd
         ExecStartPre=-/bin/podman container rm etcd
-        ExecStart=/bin/podman run --name etcd --network host --privileged \
+        # ExecStartPre=-/bin/podman pull quay.io/coreos/etcd:v${ETCD_VERSION}
+        ExecStart= /bin/podman run --name etcd --network host --privileged \
           -e ETCD_DATA_DIR \
           -v /opt/k8s/var/lib/etcd:/var/lib/etcd \
           -v ${K8S_ROOT}/etc/kubernetes/pki:${K8S_ROOT}/etc/kubernetes/pki \
@@ -180,12 +182,11 @@ systemd:
         --runtime-config=api/all=true \
         --enable-admission-plugins=NodeRestriction \
         --allow-privileged=true \
-        --apiserver-count=1 \
+        --apiserver-count=3 \
         --event-ttl=168h \
         --kubelet-certificate-authority=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --kubelet-client-certificate=${K8S_ROOT}/etc/kubernetes/pki/apiserver-kubelet-client.pem \
         --kubelet-client-key=${K8S_ROOT}/etc/kubernetes/pki/apiserver-kubelet-client-key.pem \
-        --kubelet-https=true \
         --kubelet-timeout=10s \
         --proxy-client-cert-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-client.pem \
         --proxy-client-key-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-client-key.pem \
@@ -249,7 +250,7 @@ systemd:
         --authorization-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
         --cluster-signing-cert-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --cluster-signing-key-file=${K8S_ROOT}/etc/kubernetes/pki/ca-key.pem \
-        --experimental-cluster-signing-duration=876000h \
+        --cluster-signing-duration=876000h \
         --horizontal-pod-autoscaler-sync-period=10s \
         --concurrent-deployment-syncs=10 \
         --concurrent-gc-syncs=30 \
@@ -344,8 +345,8 @@ systemd:
 
         ExecStartPre=-/usr/bin/env swapoff -a
         ExecStartPre=-${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
-        ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
         ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kubelet
+        ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
         ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/var/lib/kubelet /var/lib/kubelet
         ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
         ExecStartPre=-/usr/bin/env mkdir -p /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
@@ -373,6 +374,8 @@ systemd:
         # --pod-infra-container-image=gcr.mirror/google-containers/pause:3.2 \
         # --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 \
         # --image-pull-progress-deadline=15m \
+
+        ExecStartPost=/usr/bin/env chown -R core:core /home/core/.kube
 
         ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
         ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
@@ -547,18 +550,19 @@ storage:
       mode: 0755
       contents:
         source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kubectl
-    - path: /etc/NetworkManager/system-connections/eth1.nmconnection
+    - path: /etc/NetworkManager/system-connections/eth0.nmconnection
       mode: 0600
       contents:
         inline: |
           [connection]
-          id=eth1
-          interface-name=eth1
+          id=eth0
+          interface-name=eth0
           type=ethernet
           autoconnect=true
 
           [ipv4]
           method=manual
-          dns=114.114.114.114
+          dns=114.114.114.114;8.8.8.8;1.1.1.1
           addresses={{IP_{{n}}}}/24
           gateway=${NETWORK_GATEWAY}
+          # dns-search=redhat.com

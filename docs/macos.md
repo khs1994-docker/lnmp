@@ -58,7 +58,7 @@ registry=https://registry.npm.taobao.org
 ```bash
 # ~/.pip/pip.conf
 [global]
-index-url = https://pypi.douban.com/simple
+index-url = https://pypi.doubanio.com/simple
 [list]
 format=columns
 ```

@@ -76,7 +76,10 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
   }
   catch {
     write-host "==> [error] check blob error, skip" -ForegroundColor Red
-
+    if ($env:GITHUB_ACTIONS) {
+      Write-Host "::warning::check blob error, skip"
+      Write-Host "::endgroup::"
+    }
     throw 'error'
   }
 
@@ -84,11 +87,21 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
     $blob_dest = Get-Blob $source_token $source_image $digest $source_registry
     if (!$blob_dest) {
       write-host "==> [error] get blob error" -ForegroundColor Red
-
-      throw 'error'
+      if ($env:GITHUB_ACTIONS) {
+        Write-Host "::warning::get blob error"
+        Write-Host "::endgroup::"
+      }
+      throw 'get blob error'
     }
     # upload  blob
-    New-Blob $dest_token $dest_image $blob_dest $media_type $dest_registry | out-host
+    $result, $_ = New-Blob $dest_token $dest_image $blob_dest $media_type $dest_registry
+    if (!$result) {
+      if ($env:GITHUB_ACTIONS) {
+        Write-Host "::warning::upload blob error"
+        Write-Host "::endgroup::"
+      }
+      throw 'upload blob error'
+    }
   }
 }
 
@@ -278,7 +291,11 @@ Function _sync($source, $dest, $config) {
     }
   }
 
-  $push_manifest_once = $false
+  $already_push_manifest_once = $false
+
+  if ($env:PUSH_MANIFEST_ONCE -eq 'false' -or !$env:PUSH_MANIFEST_ONCE) {
+    $already_push_manifest_once = $true
+  }
 
   foreach ($manifest in $manifests) {
     if (!$manifests_list_not_exists) {
@@ -303,7 +320,7 @@ manifest $manifest_digest already exists" `
 
         # 有的仓库不能展示 manifest list，推送一次 manifest 以显示
 
-        if (!$push_manifest_once) {
+        if (!$already_push_manifest_once) {
           Write-Host "==> Registry maybe not show manifest list, push manifest once" -ForegroundColor Blue
 
           $token = _getSourceToken $source_registry $source_image
@@ -316,7 +333,7 @@ manifest $manifest_digest already exists" `
           _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
             $dest_registry
 
-          $push_manifest_once = $true
+          $already_push_manifest_once = $true
         }
 
         continue
@@ -418,9 +435,10 @@ manifest not found, skip" -ForegroundColor Red
   }
 
   if ($manifests_list_not_exists) {
+
     write-host "==> [sync end] manifest list not exists" `
       -ForegroundColor Yellow
-
+    if ($env:GITHUB_ACTIONS) { Write-Host "::endgroup::" }
     return $manifest_json_path
   }
 
@@ -439,6 +457,7 @@ manifest not found, skip" -ForegroundColor Red
   }
 
   write-host "==> [sync end]" -ForegroundColor Blue
+  if ($env:GITHUB_ACTIONS) { Write-Host "::endgroup::" }
 }
 
 # main
@@ -470,6 +489,7 @@ foreach ($item in $sync_config) {
     $dest = $source
   }
 
+  if ($env:GITHUB_ACTIONS) { Write-Host "::group::Sync [ $source ] to [ $dest ]" }
   write-host "==> [sync start] Sync [ $source ] to [ $dest ]" -ForegroundColor Blue
 
   _sync $source $dest $item

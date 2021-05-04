@@ -1,0 +1,38 @@
+[
+  {
+    "source": "moby/buildkit",
+    "dest": "moby-buildkit"
+  },
+  {
+    "source": "moby/buildkit:nightly",
+    "dest": "moby-buildkit:nightly"
+  },
+  {
+    "source": "moby/buildkit:nightly-rootless",
+    "dest": "moby-buildkit:nightly-rootless"
+  },
+  {
+    "source": "moby/buildkit:buildx-stable-1",
+    "dest": "moby-buildkit:buildx-stable-1"
+  },
+  {
+    "source": "moby/buildkit:buildx-stable-1-rootless",
+    "dest": "moby-buildkit:buildx-stable-1-rootless"
+  },
+  {
+    "source": "moby/buildkit:master",
+    "dest": "moby-buildkit:master"
+  },
+  {
+    "source": "moby/buildkit:master-rootless",
+    "dest": "moby-buildkit:master-rootless"
+  },
+  {
+    "source": "moby/buildkit:rootless",
+    "dest": "moby-buildkit:rootless"
+  },
+  {
+    "source": "tonistiigi/binfmt:latest",
+    "dest": "tonistiigi-binfmt:latest"
+  }
+]

@@ -65,7 +65,8 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
   $length = (Get-ChildItem $file).Length
 
   $headers = @{}
-  $headers.Add('Content-Type', $contentType);
+  # $headers.Add('Content-Type', $contentType);
+  $headers.Add('Content-Type', "application/octet-stream");
   $headers.Add('Authorization', "Bearer $token")
 
   if ($uuid.substring(0, 4) -eq '/v2/') {

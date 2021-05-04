@@ -36,7 +36,7 @@ gateway=192.168.57.1
 ```
 
 * https://github.com/coreos/fedora-coreos-tracker/issues/233
-* https://github.com/coreos/fcct/issues/34
+* https://github.com/coreos/butane/issues/34
 * https://www.cnblogs.com/lcword/p/5917440.html
 * https://developer.gnome.org/NetworkManager/
 
