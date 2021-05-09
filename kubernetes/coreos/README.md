@@ -11,6 +11,10 @@
 
 ## Usage
 
+## virtualbox 国内镜像地址
+
+* https://mirror.tuna.tsinghua.edu.cn/help/virtualbox/
+
 ## 注意事项
 
 * 虚拟机内存 `3072M (3G)`，设置为 `2048M (2G)` 将无法启动
@@ -23,16 +27,15 @@
 
 ### 虚拟机网络配置
 
-> VirtualBox 增加 **hostonly** 网络 **192.168.57.1** 网段,并启用 DHCP:
+> VirtualBox 增加 **hostonly** 网络 **192.168.57.1** 网段(vboxnet1 网卡)、**192.168.58.1** 网段(vboxnet2 网卡),并启用 DHCP:
 
 ```bash
-# 首次使用执行两次，保证存在 vboxnet1 网卡，到 VirtualBox -> 管理 -> 主机网络管理器 查看
+# 首次使用执行两次，保证存在 vboxnet1、vboxnet2 网卡（在 VirtualBox -> 管理 -> 主机网络管理器 查看）
 $ VBoxManage hostonlyif create
 
-$ VBoxManage hostonlyif ipconfig vboxnet1 --ip 192.168.57.1 --netmask 255.255.255.0
+$ VBoxManage hostonlyif ipconfig vboxnet1 --ip 192.168.57.1 --netmask 255.255.255.0 --dhcp
+$ VBoxManage hostonlyif ipconfig vboxnet2 --ip 192.168.58.1 --netmask 255.255.255.0 --dhcp
 ```
-
-VirtualBox -> 管理 -> 主机网络管理器 -> vboxnet1 -> 启用 DHCP 服务器（右边）
 
 ### 下载相关文件
 
@@ -112,7 +115,7 @@ $ ./coreos mount-iso N
 
 * `192.168.57.110`
 * `192.168.57.111`
-* `192.168.57.112`
+* `192.168.58.112`
 
 **安装 ipset (否则将不能启用 IPVS 模式)**
 

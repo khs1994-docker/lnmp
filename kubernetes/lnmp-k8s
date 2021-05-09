@@ -133,18 +133,6 @@ GOOS=`uname -s | tr A-Z  a-z`
 
 command -v curl > /dev/null || print_info "curl not install"
 
-if [ $GOOS = 'darwin' -a ! -f /usr/local/opt/gnu-sed/libexec/gnubin/sed ];then
-  print_info "please install gnu-sed by EXEC:
-
-\$ brew install gnu-sed"
-
-  exit 1
-fi
-
-if [ $GOOS = 'darwin' ];then
-  alias sed=gsed
-fi
-
 CODING_URL=https://pcit-generic.pkg.coding.net/khs1994-docker/kubernetes
 
 _upload_to_coding(){
@@ -222,6 +210,10 @@ _kubernetes_server_install(){
   if [ "$1" = "--url" ];then
     local get_by_url=1
     shift 1
+  fi
+
+  if [ "$GOOS" = 'darwin' ];then
+    local GOOS=linux
   fi
 
   test -n "${1}" && local GOOS=$1

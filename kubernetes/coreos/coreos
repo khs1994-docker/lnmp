@@ -48,9 +48,19 @@ virt-shutdown     [1|2|3]
 
 # write ssh pub
 
+if ! [ -f $HOME/.ssh/id_rsa.pub ];then 
+   echo "please exec '$ ssh-keygen' generate id_rsa.pub file"
+
+   exit 1
+fi
+
 ssh_pub=$( cat ~/.ssh/id_rsa.pub | cut -d " " -f 2 )
 
-sed -i "s!^SSH_PUB=.*!SSH_PUB=$ssh_pub!g" .env
+if [ `uname -s` = 'Darwin' ];then
+  /usr/bin/sed -i '' "s!^SSH_PUB=.*!SSH_PUB=$ssh_pub!g" .env
+else
+  sed -i "s!^SSH_PUB=.*!SSH_PUB=$ssh_pub!g" .env
+fi
 
 # cp kube config
 
@@ -133,7 +143,11 @@ case "$1" in
     if [ -n "$3" ];then TYPE=$3;fi
 
     cp ignition/example/ignition-n.${TYPE:-master}.template.yaml ignition/ignition-$2.yaml
-    sed -i "s#{{n}}#$2#g" ignition/ignition-$2.yaml
+    if [ `uname -s` = 'Darwin' ];then
+      /usr/bin/sed -i '' "s#{{n}}#$2#g" ignition/ignition-$2.yaml
+    else
+      sed -i "s#{{n}}#$2#g" ignition/ignition-$2.yaml
+    fi
   ;;
 
   new-vm )
@@ -153,8 +167,10 @@ case "$1" in
       --boot1 dvd \
       --nic2 bridged \
       --nic1 hostonly \
+      --nic3 hostonly \
       --bridgeadapter2 $(test `uname -s` = 'Linux' && (ip route list | grep default | awk '{print $5}') || true ) \
       --hostonlyadapter1 vboxnet1 \
+      --hostonlyadapter2 vboxnet2 \
       --firmware efi
 
       VBoxManage createmedium --filename "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi" --size 100000
