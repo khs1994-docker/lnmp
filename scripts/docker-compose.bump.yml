@@ -23,7 +23,7 @@ services:
     image: nginx:1.19.10-alpine
 
   rabbitmq:
-    image: rabbitmq:3.8.14-management-alpine
+    image: rabbitmq:3.8.16-management-alpine
 
   postgresql:
     image: postgres:13.2-alpine
@@ -47,10 +47,10 @@ services:
     image: kong:2.4.0-alpine
 
   node:
-    image: node:16.0.0-alpine
+    image: node:16.1.0-alpine
 
   go:
-    image: golang:1.16.3-alpine
+    image: golang:1.16.4-alpine
 
   alpine:
     image: alpine:3.13

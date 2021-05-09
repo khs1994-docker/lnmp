@@ -8,16 +8,16 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:16.0.0-alpine",
-    "dest": "library-mirror/node:16.0.0-alpine"
+    "source": "node:16.1.0-alpine",
+    "dest": "library-mirror/node:16.1.0-alpine"
   },
   {
     "source": "node:14.16.0-alpine",
     "dest": "library-mirror/node:14.16.0-alpine"
   },
   {
-    "source": "golang:1.16.3-alpine",
-    "dest": "library-mirror/golang:1.16.3-alpine"
+    "source": "golang:1.16.4-alpine",
+    "dest": "library-mirror/golang:1.16.4-alpine"
   },
   {
     "source": "golang:alpine",
@@ -180,16 +180,16 @@
     "dest": "library-mirror/rabbitmq:alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.14-alpine",
-    "dest": "library-mirror/rabbitmq:3.8.14-alpine"
+    "source": "library/rabbitmq:3.8.16-alpine",
+    "dest": "library-mirror/rabbitmq:3.8.16-alpine"
   },
   {
     "source": "library/rabbitmq:management-alpine",
     "dest": "library-mirror/rabbitmq:management-alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.14-management-alpine",
-    "dest": "library-mirror/rabbitmq:3.8.14-management-alpine"
+    "source": "library/rabbitmq:3.8.16-management-alpine",
+    "dest": "library-mirror/rabbitmq:3.8.16-management-alpine"
   },
   {
     "source": "library/phpmyadmin:latest",

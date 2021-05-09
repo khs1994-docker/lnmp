@@ -1,8 +1,8 @@
 {
   "name": "vclib",
   "description": "Microsoft Visual C++ Redistributable for Visual Studio 2019",
-  "version": "16.0.0",
-  "pre-version": "16.0.0",
+  "version": "16.1.0",
+  "pre-version": "16.1.0",
   "homepage": "https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads",
   "bug": "",
   "github": "",
