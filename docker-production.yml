@@ -75,7 +75,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:8.0.5-fpm-alpine
+  image: khs1994/php:8.0.6-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
