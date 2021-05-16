@@ -16,7 +16,7 @@ $ kubectl create ns ci
 $ kubectl apply -n ci -k mysql
 ```
 
-默认密码 `mytest`，手动进入创建 `gogs` `drone` `droneKubenative` 数据库 
+默认密码 `mytest`，手动进入创建 `gogs` `drone` 数据库
 
 ```bash
 $ kubectl get pod -n ci
@@ -28,7 +28,6 @@ $ mysql -uroot -pmytest
 # mysql> create database db-name;
 mysql> create database gogs;
 mysql> create database drone;
-mysql> create database droneKubenative;
 ```
 
 ## Redis
@@ -43,7 +42,7 @@ $ kubectl apply -n ci -k redis
 $ kubectl apply -n ci -k minio
 ```
 
-手动创建 `drone` `drone-kubenative` bucket
+手动创建 `drone` bucket
 
 ## Gogs
 
@@ -53,9 +52,7 @@ $ kubectl apply -n ci -k minio
 $ kubectl apply -n ci -k gogs
 ```
 
-> 部署 Drone 一、二 任选其一（支持同时部署），新的 drone-kubenative 将任务作为 k8s 的 pod 运行。
-
-## 一、[Drone](https://github.com/helm/charts/tree/master/stable/drone) + [Runner](https://docs.drone.io/runner/overview/)
+## 部署 [Drone](https://github.com/helm/charts/tree/master/stable/drone) + [Runner](https://docs.drone.io/runner/overview/)
 
 ```bash
 $ kubectl apply -n ci -k drone
@@ -71,17 +68,11 @@ $ kubectl apply -n ci -k drone-runner/docker
 
 ### 1.2 [Kubernetes runner](https://docs.drone.io/runner/kubernetes/installation/)
 
-* 任务 pod 运行在 `drone-runner` 命名空间
-
 ```
 $ kubectl apply -n ci -k drone-runner/kubernetes
 ```
 
-## 二、Drone + kubenative
-
-```bash
-$ kubectl apply -n ci -k drone-kubenative
-```
+> 任务 pod 运行在 `drone-runner` 命名空间
 
 ## ingress-nginx
 

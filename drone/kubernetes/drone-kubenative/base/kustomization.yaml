@@ -1,9 +1,0 @@
-bases:
-- ../../drone/base
-patches:
-- patch.yaml
-resources:
-- rbac.yaml
-- rbac-pipeline.yaml
-namespace: ci
-nameSuffix: -kubenative
