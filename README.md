@@ -209,7 +209,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.0.6-composer-alpine`| **2.0.13**      |`alpine:3.13`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.9-alpine`           | **1.6.9**       |`alpine:3.13`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.16-management-alpine` | **3.8.16**       |`alpine:3.13`    |
-|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:13.2-alpine`             | **13.2**        |`alpine:3.13`    |
+|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:13.3-alpine`             | **13.3**        |`alpine:3.13`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.4.5`                      | **4.4.5**       |`ubuntu:bionic`  |
 |[PHPMyAdmin](https://github.com/docker-library/docs/tree/master/phpmyadmin)|`phpmyadmin:5.1.0`                | **5.1.0**       |`alpine:3.13`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`alpine:3.11`    |
