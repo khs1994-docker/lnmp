@@ -64,8 +64,8 @@
     "dest": "library-mirror/mysql:latest"
   },
   {
-    "source": "library/mysql:8.0.24",
-    "dest": "library-mirror/mysql:8.0.24"
+    "source": "library/mysql:8.0.25",
+    "dest": "library-mirror/mysql:8.0.25"
   },
   {
     "source": "library/mysql:5.7.33",

@@ -371,6 +371,9 @@ jobs:
          kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
          sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
          for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
+     - name: Show port
+       run: |
+         sudo netstat -nlpt || true
      - name: Setup addons
        run: |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH

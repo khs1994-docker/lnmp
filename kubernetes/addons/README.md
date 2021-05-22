@@ -8,7 +8,7 @@
 
 * Dashboard `2.2.0`
 
-* Istio `1.9.0`
+* Istio `1.10.0`
 
 ## ingress
 
