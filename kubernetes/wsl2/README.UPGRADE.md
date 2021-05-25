@@ -9,14 +9,8 @@ KUBERNETES_VERSION=x.y.z
 ## 停止 k8s
 
 ```powershell
-$ wsl -d wsl-k8s
-```
+$ New-Item \\wsl$\wsl-k8s\non-systemd
 
-```bash
-$ touch /non-systemd
-```
-
-```powershell
 $ wsl --shutdown
 ```
 
@@ -47,4 +41,4 @@ $ Remove-Item \\wsl$\wsl-k8s\non-systemd
 $ wsl -d wsl-k8s
 ```
 
-## 开始使用
+**开始使用**
