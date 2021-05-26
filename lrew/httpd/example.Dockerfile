@@ -1,4 +1,4 @@
-FROM httpd:2.4.47-alpine
+FROM httpd:2.4.48-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

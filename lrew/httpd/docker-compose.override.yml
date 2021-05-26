@@ -9,4 +9,4 @@ x-common:
 services:
   httpd:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/httpd:${LNMP_HTTPD_VERSION:-2.4.47}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/httpd:${LNMP_HTTPD_VERSION:-2.4.48}-alpine

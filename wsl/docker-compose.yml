@@ -131,6 +131,7 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION_73:-7.3.28}
         - OS_TYPE=centos:8
+        # - OS_TYPE=quay.io/centos/centos:stream8
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.28}-centos-8_amd64
 
   wsl-php-builder-rhel8-74:
@@ -139,7 +140,7 @@ services:
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_74:-7.4.19}
-        - OS_TYPE=centos:8
+        - OS_TYPE=quay.io/centos/centos:stream8
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.19}-centos-8_amd64
 
 # latest stable php and rhel
@@ -149,7 +150,7 @@ services:
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_80:-8.0.6}
-        - OS_TYPE=centos:8
+        - OS_TYPE=quay.io/centos/centos:stream8
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.6}-centos-8_amd64
 
   wsl-php-builder-fc34-73:

@@ -5,7 +5,7 @@ services:
     image: mysql:8.0.25
 
   mariadb:
-    image: mariadb:10.6.0
+    image: mariadb:10.6.1
 
   redis:
     image: redis:6.2.3-alpine
@@ -17,7 +17,7 @@ services:
     image: php:8.0.6-fpm-alpine
 
   composer:
-    image: composer:2.0.13
+    image: composer:2.0.14
 
   nginx:
     image: nginx:1.19.10-alpine
@@ -35,7 +35,7 @@ services:
     image: phpmyadmin:5.1.0
 
   httpd:
-    image: httpd:2.4.47-alpine
+    image: httpd:2.4.48-alpine
 
   etcd:
     image: quay.io/coreos/etcd:v3.4.16
