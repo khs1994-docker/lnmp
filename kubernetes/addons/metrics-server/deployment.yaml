@@ -18,16 +18,21 @@ spec:
       priorityClassName: system-cluster-critical
       containers:
       - name: metrics-server
-        image: k8s.gcr.io/metrics-server/metrics-server:v0.4.2
+        image: k8s.gcr.io/metrics-server/metrics-server:v0.5.0
         imagePullPolicy: IfNotPresent
         args:
           - --cert-dir=/tmp
-          - --secure-port=4443
+          - --secure-port=443
           - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
           - --kubelet-use-node-status-port
+          - --metric-resolution=15s
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
         ports:
         - name: https
-          containerPort: 4443
+          containerPort: 443
           protocol: TCP
         readinessProbe:
           httpGet:
@@ -36,6 +41,7 @@ spec:
             scheme: HTTPS
           periodSeconds: 10
           failureThreshold: 3
+          initialDelaySeconds: 20
         livenessProbe:
           httpGet:
             path: /livez
