@@ -887,7 +887,7 @@ _conmon_install(){
   $(_sudo) make PREFIX=${K8S_ROOT}/usr/local install
 }
 
-# https://github.com/cri-o/cri-o/blob/master/tutorials/setup.md
+# https://github.com/cri-o/cri-o/blob/master/install.md#build-and-install-cri-o-from-source
 _crio_install(){
   set +e
   command -v crio > /dev/null 2>&1
@@ -975,7 +975,12 @@ _crio_install(){
   $(_sudo) go version || true
   go env
   $(_sudo) go env || true
-  GO111MODULE=off go get github.com/cpuguy83/go-md2man
+
+  if ! [ "${LNMP_CN_ENV}" = "false" ];then
+    $(_sudo) sed -i \
+        's/proxy.golang.org/goproxy.cn,direct/g' \
+        Makefile
+  fi
 
   make clean
   make DESTDIR="${K8S_ROOT}" BUILDTAGS='seccomp exclude_graphdriver_btrfs exclude_graphdriver_devicemapper'
@@ -1221,10 +1226,6 @@ _k8s_install_systemd(){
       /etc/systemd/system/kube-controller-manager.service \
       /etc/systemd/system/kube-scheduler.service \
       /etc/systemd/system/kube-proxy.service
-
-    $(_sudo) sed -i \
-      's!__opt/k8s__!/opt/k8s!g' \
-      /etc/systemd/system/kubelet@.service
 
     $(_sudo) sed -i 's/SystemdCgroup = true/SystemdCgroup = false/g' \
       /wsl/wsl-k8s-data/k8s/etc/cri-containerd/1.5/config.toml

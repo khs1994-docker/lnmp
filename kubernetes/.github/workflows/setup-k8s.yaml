@@ -317,7 +317,7 @@ jobs:
          sudo journalctl -u kube-proxy
          sudo journalctl -u kubelet${KUBELET_SERVICE}
          sudo journalctl -u cri-containerd@1.5 || true
-         sudo journalctl -u crio || true
+         sudo journalctl -u cri-o || true
 
          kubectl get csr
          CSR_NAME=`kubectl get csr | grep system:node:node1 | awk '{print $1}' | head -1`
@@ -360,7 +360,7 @@ jobs:
          kubectl get all -A
          ip addr
 
-         sudo journalctl -u crio || true
+         # sudo journalctl -u cri-o || true
 
          # if [ "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" ];then sudo systemctl restart cri-o && sudo systemctl restart kubelet@crio ;fi
 
@@ -400,11 +400,13 @@ jobs:
          # test dns
          kubectl describe pod coredns -n kube-system
          kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-         kubectl run nginx --image nginx:1.20.0-alpine
+         kubectl run nginx --image nginx:1.19.10-alpine
          sleep 20
          kubectl get all
          kubectl get pod -o wide
          NGINX_POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
+         sudo crictl pull nginx:1.19.10-alpine || true
+         # sudo journalctl -u cri-o || true
          kubectl exec ${NGINX_POD_NAME} -- cat /etc/resolv.conf
          kubectl exec ${NGINX_POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${NGINX_POD_NAME} -- nslookup kubernetes || true
          kubectl exec ${NGINX_POD_NAME} -- ping -c 5 github.com || kubectl exec ${NGINX_POD_NAME} -- nslookup github.com

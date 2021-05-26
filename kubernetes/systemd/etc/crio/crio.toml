@@ -17,19 +17,19 @@
 
 # Path to the "root directory". CRI-O stores all of its data, including
 # containers images, in this directory.
-#root = "/var/lib/containers/storage"
+root = "/var/lib/containers/storage"
 
 # Path to the "run directory". CRI-O stores all of its state in this directory.
-#runroot = "/var/run/containers/storage"
+runroot = "/run/containers/storage"
 
 # Storage driver used to manage the storage of images and containers. Please
 # refer to containers-storage.conf(5) to see all available storage drivers.
-#storage_driver = ""
+storage_driver = ""
 
 # List to pass options to the storage driver. Please refer to
 # containers-storage.conf(5) to see all available storage options.
-#storage_option = [
-#]
+storage_option = [
+]
 
 # The default log directory where all logs will go unless directly specified by
 # the kubelet. The log directory specified must be an absolute directory.
@@ -44,6 +44,15 @@ version_file = "/var/run/crio/version"
 # It is used to check if crio wipe should wipe images, which should
 # only happen when CRI-O has been upgraded
 version_file_persist = "/var/lib/crio/version"
+
+# InternalWipe is whether CRI-O should wipe containers and images after a reboot when the server starts.
+# If set to false, one must use the external command 'crio wipe' to wipe the containers and images in these situations.
+internal_wipe = false
+
+# Location for CRI-O to lay down the clean shutdown file.
+# It is used to check whether crio had time to sync before shutting down.
+# If not found, crio wipe will clear the storage directory.
+clean_shutdown_file = "/var/lib/crio/clean.shutdown"
 
 # The crio.api table contains settings for the kubelet/gRPC interface.
 [crio.api]
@@ -60,6 +69,9 @@ stream_port = "0"
 
 # Enable encrypted TLS transport of the stream server.
 stream_enable_tls = false
+
+# Length of time until open streams terminate due to lack of activity
+stream_idle_timeout = ""
 
 # Path to the x509 certificate file used to serve the encrypted stream. This
 # file can change, and CRI-O will automatically pick up the changes within 5
@@ -89,13 +101,8 @@ grpc_max_recv_msg_size = 16777216
 # "<ulimit name>=<soft limit>:<hard limit>", for example:
 # "nofile=1024:2048"
 # If nothing is set here, settings will be inherited from the CRI-O daemon
-#default_ulimits = [
-#]
-
-# default_runtime is the _name_ of the OCI runtime to be used as the default.
-# The name is matched against the runtimes map below. If this value is changed,
-# the corresponding existing entry from the runtimes map below will be ignored.
-default_runtime = "runc"
+default_ulimits = [
+]
 
 # If true, the runtime will not use pivot_root, but instead use MS_MOVE.
 no_pivot = false
@@ -131,6 +138,12 @@ selinux = false
 # will be used. This option supports live configuration reload.
 seccomp_profile = ""
 
+# Changes the meaning of an empty seccomp profile. By default
+# (and according to CRI spec), an empty profile means unconfined.
+# This option tells CRI-O to treat an empty profile as the default profile,
+# which might increase security.
+seccomp_use_default_when_empty = false
+
 # Used to change the name of the default AppArmor profile of CRI-O. The default
 # profile name is "crio-default". This profile only takes effect if the user
 # does not specify a profile via the Kubernetes Pod's metadata annotation. If
@@ -138,8 +151,15 @@ seccomp_profile = ""
 # This option supports live configuration reload.
 apparmor_profile = "crio-default"
 
+# Used to change irqbalance service config file path which is used for configuring
+# irqbalance daemon.
+irqbalance_config_file = "/etc/sysconfig/irqbalance"
+
 # Cgroup management implementation used for the runtime.
 cgroup_manager = "systemd"
+
+# Specify whether the image pull must be performed in a separate cgroup.
+separate_pull_cgroup = ""
 
 # List of default capabilities for containers. If it is empty or commented out,
 # only the capabilities defined in the containers json file by the user/kube
@@ -163,7 +183,7 @@ default_sysctls = [
 
 # List of additional devices. specified as
 # "<device-on-host>:<device-on-container>:<permissions>", for example: "--device=/dev/sdc:/dev/xvdc:rwm".
-#If it is empty or commented out, only the devices
+# If it is empty or commented out, only the devices
 # defined in the container json file by the user/kube will be added.
 additional_devices = [
 ]
@@ -172,11 +192,6 @@ additional_devices = [
 # directories does not exist, then CRI-O will automatically skip them.
 hooks_dir = [
 	"/usr/share/containers/oci/hooks.d",
-]
-
-# List of default mounts for each container. **Deprecated:** this option will
-# be removed in future versions in favor of default_mounts_file.
-default_mounts = [
 ]
 
 # Path to the file specifying the defaults mounts for each container. The
@@ -192,7 +207,7 @@ default_mounts = [
 #      you can change the default_mounts_file. Note, if this is done, CRI-O will
 #      only add mounts it finds in this file.
 #
-#default_mounts_file = ""
+default_mounts_file = ""
 
 # Maximum number of processes allowed in a container.
 pids_limit = 1024
@@ -242,15 +257,16 @@ gid_mappings = ""
 # value is 30s, whereas lower values are not considered by CRI-O.
 ctr_stop_timeout = 30
 
-# manage_ns_lifecycle determines whether we pin and remove namespaces
-# and manage their lifecycle
-manage_ns_lifecycle = true
-
 # drop_infra_ctr determines whether CRI-O drops the infra container
 # when a pod does not have a private PID namespace, and does not use
 # a kernel separating runtime (like kata).
 # It requires manage_ns_lifecycle to be true.
 drop_infra_ctr = false
+
+# infra_ctr_cpuset determines what CPUs will be used to run infra containers.
+# You can use linux CPU list format to specify desired CPUs.
+# To get better isolation for guaranteed pods, set this parameter to be equal to kubelet reserved-cpus.
+infra_ctr_cpuset = ""
 
 # The directory where the state of the managed namespaces gets tracked.
 # Only used when manage_ns_lifecycle is true.
@@ -258,6 +274,20 @@ namespaces_dir = "/var/run"
 
 # pinns_path is the path to find the pinns binary, which is needed to manage namespace lifecycle
 pinns_path = ""
+
+# default_runtime is the _name_ of the OCI runtime to be used as the default.
+# The name is matched against the runtimes map below. If this value is changed,
+# the corresponding existing entry from the runtimes map below will be ignored.
+default_runtime = "runc"
+
+# A list of paths that, when absent from the host,
+# will cause a container creation to fail (as opposed to the current behavior being created as a directory).
+# This option is to protect from source locations whose existence as a directory could jepordize the health of the node, and whose
+# creation as a file is not desired either.
+# An example is /etc/hostname, which will cause failures on reboot if it's created as a directory, but often doesn't exist because
+# the hostname is being managed dynamically.
+absent_mount_sources_to_reject = [
+]
 
 # The "crio.runtime.runtimes" table defines a list of OCI compatible runtimes.
 # The runtime to use is picked based on the runtime_handler provided by the CRI.
@@ -268,7 +298,8 @@ pinns_path = ""
 #  runtime_path = "/path/to/the/executable"
 #  runtime_type = "oci"
 #  runtime_root = "/path/to/the/root"
-#
+#  privileged_without_host_devices = false
+#  allowed_annotations = []
 # Where:
 # - runtime-handler: name used to identify the runtime
 # - runtime_path (optional, string): absolute path to the runtime executable in
@@ -279,12 +310,28 @@ pinns_path = ""
 #   omitted, an "oci" runtime is assumed.
 # - runtime_root (optional, string): root directory for storage of containers
 #   state.
+# - privileged_without_host_devices (optional, bool): an option for restricting
+#   host devices from being passed to privileged containers.
+# - allowed_annotations (optional, array of strings): an option for specifying
+#   a list of experimental annotations that this runtime handler is allowed to process.
+#   The currently recognized values are:
+#   "io.kubernetes.cri-o.userns-mode" for configuring a user namespace for the pod.
+#   "io.kubernetes.cri-o.Devices" for configuring devices for the pod.
+#   "io.kubernetes.cri-o.ShmSize" for configuring the size of /dev/shm.
+#   "io.kubernetes.cri-o.UnifiedCgroup.$CTR_NAME" for configuring the cgroup v2 unified block for a container.
+#   "io.containers.trace-syscall" for tracing syscalls via the OCI seccomp BPF hook.
 
 
 [crio.runtime.runtimes.runc]
 runtime_path = ""
 runtime_type = "oci"
 runtime_root = "/run/runc"
+
+
+allowed_annotations = [
+	"io.containers.trace-syscall",
+]
+
 
 
 # crun is a fast and lightweight fully featured OCI runtime and C library for
@@ -303,6 +350,32 @@ runtime_root = "/run/runc"
 
 # Kata Containers with the Firecracker VMM
 #[crio.runtime.runtimes.kata-fc]
+
+# The workloads table defines ways to customize containers with different resources
+# that work based on annotations, rather than the CRI.
+# Note, the behavior of this table is EXPERIMENTAL and may change at any time.
+# Each workload, has a name, activation_annotation, annotation_prefix and set of resources it supports mutating.
+# The currently supported resources are "cpu" (to configure the cpu shares) and "cpuset" to configure the cpuset.
+# Each resource can have a default value specified, or be empty.
+# For a container to opt-into this workload, the pod should be configured with the annotation $activation_annotation (key only, value is ignored).
+# To customize per-container, an annotation of the form $annotation_prefix.$resource/$ctrName = "value" can be specified
+# signifying for that resource type to override the default value.
+# If the annotation_prefix is not present, every container in the pod will be given the default values.
+# Example:
+# [crio.runtime.workloads.workload-type]
+# activation_annotation = "io.crio/workload"
+# annotation_prefix = "io.crio.workload-type"
+# [crio.runtime.workloads.workload-type.resources]
+# cpuset = 0
+# cpushares = "0-1"
+# Where:
+# The workload name is workload-type.
+# To specify, the pod must have the "io.crio.workload" annotation (this is a precise string match).
+# This workload supports setting cpuset and cpu resources.
+# annotation_prefix is used to customize the different resources.
+# To configure the cpu shares a container gets in the example above, the pod would have to have the following annotation:
+# "io.crio.workload-type/$container_name = {"cpushares": "value"}"
+
 
 # The crio.image table contains settings pertaining to the management of OCI images.
 #
@@ -345,19 +418,12 @@ signature_policy = ""
 # List of registries to skip TLS verification for pulling images. Please
 # consider configuring the registries via /etc/containers/registries.conf before
 # changing them here.
-#insecure_registries = "[]"
+insecure_registries = [
+]
 
 # Controls how image volumes are handled. The valid values are mkdir, bind and
 # ignore; the latter will ignore volumes entirely.
 image_volumes = "mkdir"
-
-# List of registries to be used when pulling an unqualified image (e.g.,
-# "alpine:latest"). By default, registries is set to "docker.io" for
-# compatibility reasons. Depending on your workload and usecase you may add more
-# registries (e.g., "quay.io", "registry.fedoraproject.org",
-# "registry.opensuse.org", etc.).
-#registries = [
-# ]
 
 # Temporary directory to use for storing big files
 big_files_temporary_dir = ""
@@ -389,3 +455,10 @@ metrics_port = 9090
 
 # Local socket path to bind the metrics server to
 metrics_socket = ""
+
+# The certificate for the secure metrics server.
+metrics_cert = ""
+
+# The certificate key for the secure metrics server.
+metrics_key = ""
+
