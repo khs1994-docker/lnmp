@@ -92,7 +92,7 @@ jobs:
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.10
+         CI_KUBERNETES_VERSION: 1.21.0
          LNMP_K8S_GET: --url
      fail-fast: false
    steps:
@@ -400,12 +400,12 @@ jobs:
          # test dns
          kubectl describe pod coredns -n kube-system
          kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-         kubectl run nginx --image nginx:1.19.10-alpine
+         kubectl run nginx --image nginx:1.21.0-alpine
          sleep 20
          kubectl get all
          kubectl get pod -o wide
          NGINX_POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
-         sudo crictl pull nginx:1.19.10-alpine || true
+         sudo crictl pull nginx:1.21.0-alpine || true
          # sudo journalctl -u cri-o || true
          kubectl exec ${NGINX_POD_NAME} -- cat /etc/resolv.conf
          kubectl exec ${NGINX_POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${NGINX_POD_NAME} -- nslookup kubernetes || true

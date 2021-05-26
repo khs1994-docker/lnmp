@@ -203,7 +203,7 @@ $ ./lnmp-docker down
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:2.8.8`            | **2.8.8**           |`alpine:3.13`    |
-|[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.19.10-alpine`           | **1.19.10**          |`alpine:3.13`    |
+|[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.21.0-alpine`           | **1.21.0**          |`alpine:3.13`    |
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.0.6-unit-alpine`| **1.23.0**          |`alpine:3.13`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.48-alpine`           | **2.4.48**          |`alpine:3.12`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.25`                  | **8.0.25**          |`debian:buster-slim`|
