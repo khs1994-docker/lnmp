@@ -27,6 +27,7 @@ docker run -i ${tty} --rm \
   "set -x; \
    mkdir -p ${COMPOSER_CACHE_DIR}/repo; \
    mkdir -p ${COMPOSER_CACHE_DIR}/files; \
+   rm -rf ${COMPOSER_HOME}/auth.json; \
    chown -R ${LNMP_USER} ${COMPOSER_CACHE_DIR}; \
    chown -R ${LNMP_USER} ${COMPOSER_HOME}; \
   "

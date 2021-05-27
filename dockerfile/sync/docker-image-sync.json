@@ -152,8 +152,8 @@
     "dest": "library-mirror/nginx:alpine"
   },
   {
-    "source": "library/nginx:1.18.0-alpine",
-    "dest": "library-mirror/nginx:1.18.0-alpine"
+    "source": "library/nginx:1.20.0-alpine",
+    "dest": "library-mirror/nginx:1.20.0-alpine"
   },
   {
     "source": "library/nginx:1.21.0-alpine",

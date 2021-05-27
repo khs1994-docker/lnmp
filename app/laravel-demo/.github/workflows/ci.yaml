@@ -61,11 +61,13 @@ jobs:
 
           patch -p1 < ../laravel-demo/patch/app-console-kernel.patch
 
-          lnmp-composer require laravel/ui
+          lnmp-composer require laravel/jetstream
           # 此步骤会重置 webpack.mix.js
-          lnmp-php artisan ui vue --auth
+          lnmp-php artisan jetstream:install inertia
 
-          cp -r ../laravel-demo/laravel-patch/. .
+          # sudo chown `id -u`:`id -g` -R resources public
+
+          sudo cp -r ../laravel-demo/laravel-patch/. .
           ls -la resources/views
 
           lnmp-npm install

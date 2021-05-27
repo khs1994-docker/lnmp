@@ -28,6 +28,9 @@ fi
 
 . $ScriptRoot/../.env
 
+source $ScriptRoot/../config/composer/.env.example
+source $ScriptRoot/../config/composer/.env
+
 # -S 参数需要容器暴露端口
 
 S_ERROR(){
@@ -56,12 +59,11 @@ if [ "$1" = '-S' ];then
     --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
     --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
     --network $network \
-    --entrypoint php \
     -e APP_ENV=${APP_ENV} \
     -e TZ=${TZ} \
     -p $ADDR:$PORT:$PORT \
     ${DOCKER_IMAGE}:${TAG} \
-    -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log -S 0.0.0.0:$PORT "$@"
+    gosu ${LNMP_USER:-root:root} php -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log -S 0.0.0.0:$PORT "$@"
 fi
 
 #
@@ -70,14 +72,28 @@ fi
 # @link https://github.com/moby/moby/issues/2838#issuecomment-29205965
 #
 
+docker run -i ${tty} --rm \
+  --mount src=lnmp_composer-cache-data,target=${COMPOSER_CACHE_DIR} \
+  --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
+  --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
+  bash \
+  bash -c \
+  "set -x; \
+   mkdir -p ${COMPOSER_CACHE_DIR}/repo; \
+   mkdir -p ${COMPOSER_CACHE_DIR}/files; \
+   rm -rf ${COMPOSER_HOME}/auth.json; \
+   chown -R ${LNMP_USER} ${COMPOSER_CACHE_DIR}; \
+   chown -R ${LNMP_USER} ${COMPOSER_HOME}; \
+  "
+
 exec docker run --init -i ${tty} --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer-cache-data,target=/tmp/composer/cache \
   --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
   --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
+  --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
   --network $network \
-  --entrypoint php \
   -e TZ=${TZ} \
   -e APP_ENV=${APP_ENV} \
   ${DOCKER_IMAGE}:${TAG} \
-  -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log $COMMAND
+  gosu ${LNMP_USER:-root:root} php -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log $COMMAND
