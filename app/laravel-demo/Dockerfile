@@ -25,13 +25,15 @@ ARG NODE_REGISTRY=https://registry.npmjs.org
 
 # COPY package.json webpack.mix.js yarn.lock /app/
 # COPY package.json webpack.mix.js package-lock.json /app/
-COPY package.json webpack.mix.js /app/
+COPY package.json /app/
 
 RUN set -x ; cd /app \
       # && yarn install \
       && npm install --registry=${NODE_REGISTRY}
 
 COPY resources/ /app/resources/
+
+COPY webpack.mix.js webpack.config.js tailwind.config.js /app/
 
 RUN set -x ; cd /app \
 # File.exists('./artisan'); 如果 artisan 文件存在，则说明是 laravel 项目
