@@ -41,7 +41,7 @@ services:
       - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
       - "${LNMP_MYSQL_PORT_X:-127.0.0.1:33060}:33060"
     volumes:
-      # - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
+      - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
       # @link https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
       - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro,cached
       - type: volume
@@ -56,12 +56,16 @@ services:
       - --character-set-server=utf8mb4
       - --default-authentication-plugin=mysql_native_password
     secrets:
-    #   - db_root_password
-      - source: mysql_conf
-        target: /etc/mysql/conf.d/docker.cnf
+      - db_root_password
+      # - source: mysql_conf
+      #   target: /etc/mysql/conf.d/docker.cnf
         # uid: "999"
         # gid: "999"
         # mode: 0444
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${LNMP_MYSQL_ROOT_PASSWORD:-mytest}"]
+      retries: 3
+      timeout: 5s
 
   redis:
     << : *common
@@ -91,6 +95,8 @@ services:
       ]
     healthcheck:
       test: ["CMD","redis-cli","ping"]
+      retries: 3
+      timeout: 5s
 
   memcached:
     << : *common

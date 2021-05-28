@@ -39,6 +39,10 @@ services:
     networks:
       - backend
       - frontend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      retries: 3
+      timeout: 5s
 
 volumes:
   minio-data:

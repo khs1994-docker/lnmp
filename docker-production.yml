@@ -146,6 +146,9 @@ services:
     configs:
       - source: mysql_conf_d_docker_cnf
         target: /etc/mysql/conf.d/docker.cnf
+        mode: 0644
+        uid: "0"
+        gid: "0"
     tmpfs: /var/run/mysqld
 
   # mariadb:

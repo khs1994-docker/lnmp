@@ -21,8 +21,10 @@ services:
     << : *common
     image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${LNMP_POSTGRESQL_VERSION:-13.3}-alpine
     environment:
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
-      - POSTGRES_DB=test
+      # - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
+      - POSTGRES_PASSWORD=${LNMP_POSTGRES_PASSWORD:-mytest}
+      - POSTGRES_DB=${LNMP_POSTGRES_DB:-postgres}
+      - POSTGRES_USER=${LNMP_POSTGRES_USER:-postgres}
     volumes:
       - type: volume
         source: postgresql-data
@@ -32,6 +34,10 @@ services:
     secrets:
       # default is mysql password
       - db_root_password
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "${LNMP_POSTGRES_DB:-postgres}", "-U", "${LNMP_POSTGRES_USER:-postgres}"]
+      retries: 3
+      timeout: 5s
 
 secrets:
   db_root_password:
