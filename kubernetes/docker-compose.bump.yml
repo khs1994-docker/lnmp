@@ -19,13 +19,13 @@ services:
     image: calico/cni:v3.19.0
 
   ingress_nginx:
-    image: k8s.gcr.io/ingress-nginx/controller:v0.44.0
+    image: k8s.gcr.io/ingress-nginx/controller:v0.46.0
 
   ingress-kong:
     image: kong-docker-kubernetes-ingress-controller.bintray.io/kong-ingress-controller:0.9.1
 
   metrics_server:
-    image: k8s.gcr.io/metrics-server/metrics-server:v0.4.2
+    image: k8s.gcr.io/metrics-server/metrics-server:v0.5.0
 
   butane:
     image: quay.io/coreos/butane:v0.11.0

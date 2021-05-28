@@ -1,4 +1,4 @@
-FROM postgres:13.2-alpine
+FROM postgres:13.3-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

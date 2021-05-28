@@ -13,25 +13,27 @@
 #
 # $ docker build --target=laravel -t khs1994/laravel:7 --build-arg NODE_REGISTRY=https://registry.npm.taobao.org --build-arg CI=false .
 
-ARG NODE_VERSION=16.0.0
-ARG PHP_VERSION=8.0.5
-ARG NGINX_VERSION=1.19.10-alpine
+ARG NODE_VERSION=16.2.0
+ARG PHP_VERSION=8.0.6
+ARG NGINX_VERSION=1.21.0-alpine
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建
-FROM node:${NODE_VERSION:-16.0.0}-alpine as frontend
+FROM node:${NODE_VERSION:-16.2.0}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
 # COPY package.json webpack.mix.js yarn.lock /app/
 # COPY package.json webpack.mix.js package-lock.json /app/
-COPY package.json webpack.mix.js /app/
+COPY package.json /app/
 
 RUN set -x ; cd /app \
       # && yarn install \
       && npm install --registry=${NODE_REGISTRY}
 
 COPY resources/ /app/resources/
+
+COPY webpack.mix.js webpack.config.js tailwind.config.js /app/
 
 RUN set -x ; cd /app \
 # File.exists('./artisan'); 如果 artisan 文件存在，则说明是 laravel 项目
@@ -41,7 +43,7 @@ RUN set -x ; cd /app \
       && npm run production
 
 # 2.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME}/php:8.0.5-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME}/php:8.0.6-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
 COPY composer.json /app/

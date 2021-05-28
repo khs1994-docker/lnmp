@@ -18,8 +18,9 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
     ->ignoreVCS(true);
 
-return PhpCsFixer\Config::create()
-    ->setRules([
+$config = new PhpCsFixer\Config();
+
+return $config->setRules([
       '@Symfony' => true,
       '@Symfony:risky'=>true,
       'array_syntax' => array('syntax' => 'short'),

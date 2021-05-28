@@ -8,16 +8,16 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:16.0.0-alpine",
-    "dest": "library-mirror/node:16.0.0-alpine"
+    "source": "node:16.2.0-alpine",
+    "dest": "library-mirror/node:16.2.0-alpine"
   },
   {
     "source": "node:14.16.0-alpine",
     "dest": "library-mirror/node:14.16.0-alpine"
   },
   {
-    "source": "golang:1.16.3-alpine",
-    "dest": "library-mirror/golang:1.16.3-alpine"
+    "source": "golang:1.16.4-alpine",
+    "dest": "library-mirror/golang:1.16.4-alpine"
   },
   {
     "source": "golang:alpine",
@@ -56,16 +56,16 @@
     "dest": "library-mirror/python:alpine"
   },
   {
-    "source": "library/python:3.9.4-alpine",
-    "dest": "library-mirror/python:3.9.4-alpine"
+    "source": "library/python:3.9.5-alpine",
+    "dest": "library-mirror/python:3.9.5-alpine"
   },
   {
     "source": "library/mysql:latest",
     "dest": "library-mirror/mysql:latest"
   },
   {
-    "source": "library/mysql:8.0.24",
-    "dest": "library-mirror/mysql:8.0.24"
+    "source": "library/mysql:8.0.25",
+    "dest": "library-mirror/mysql:8.0.25"
   },
   {
     "source": "library/mysql:5.7.33",
@@ -80,8 +80,8 @@
     "dest": "library-mirror/mariadb:latest"
   },
   {
-    "source": "library/mariadb:10.6.0",
-    "dest": "library-mirror/mariadb:10.6.0"
+    "source": "library/mariadb:10.6.1",
+    "dest": "library-mirror/mariadb:10.6.1"
   },
   {
     "source": "library/mariadb:10.5.9",
@@ -116,12 +116,12 @@
     "dest": "library-mirror/kong:alpine"
   },
   {
-    "source": "library/kong:2.4.0",
-    "dest": "library-mirror/kong:2.4.0"
+    "source": "library/kong:2.4.1",
+    "dest": "library-mirror/kong:2.4.1"
   },
   {
-    "source": "library/kong:2.4.0-alpine",
-    "dest": "library-mirror/kong:2.4.0-alpine"
+    "source": "library/kong:2.4.1-alpine",
+    "dest": "library-mirror/kong:2.4.1-alpine"
   },
   {
     "source": "library/redis:alpine",
@@ -152,44 +152,44 @@
     "dest": "library-mirror/nginx:alpine"
   },
   {
-    "source": "library/nginx:1.18.0-alpine",
-    "dest": "library-mirror/nginx:1.18.0-alpine"
+    "source": "library/nginx:1.20.0-alpine",
+    "dest": "library-mirror/nginx:1.20.0-alpine"
   },
   {
-    "source": "library/nginx:1.19.10-alpine",
-    "dest": "library-mirror/nginx:1.19.10-alpine"
+    "source": "library/nginx:1.21.0-alpine",
+    "dest": "library-mirror/nginx:1.21.0-alpine"
   },
   {
     "source": "library/httpd:alpine",
     "dest": "library-mirror/httpd:alpine"
   },
   {
-    "source": "library/httpd:2.4.47-alpine",
-    "dest": "library-mirror/httpd:2.4.47-alpine"
+    "source": "library/httpd:2.4.48-alpine",
+    "dest": "library-mirror/httpd:2.4.48-alpine"
   },
   {
     "source": "library/postgres:alpine",
     "dest": "library-mirror/postgres:alpine"
   },
   {
-    "source": "library/postgres:13.2-alpine",
-    "dest": "library-mirror/postgres:13.2-alpine"
+    "source": "library/postgres:13.3-alpine",
+    "dest": "library-mirror/postgres:13.3-alpine"
   },
   {
     "source": "library/rabbitmq:alpine",
     "dest": "library-mirror/rabbitmq:alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.14-alpine",
-    "dest": "library-mirror/rabbitmq:3.8.14-alpine"
+    "source": "library/rabbitmq:3.8.16-alpine",
+    "dest": "library-mirror/rabbitmq:3.8.16-alpine"
   },
   {
     "source": "library/rabbitmq:management-alpine",
     "dest": "library-mirror/rabbitmq:management-alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.14-management-alpine",
-    "dest": "library-mirror/rabbitmq:3.8.14-management-alpine"
+    "source": "library/rabbitmq:3.8.16-management-alpine",
+    "dest": "library-mirror/rabbitmq:3.8.16-management-alpine"
   },
   {
     "source": "library/phpmyadmin:latest",
@@ -234,7 +234,7 @@
     "source": "khs1994/tls"
   },
   {
-    "source": "khs1994/kube-nginx:1.19.10"
+    "source": "khs1994/kube-nginx:1.21.0"
   },
   {
     "source": "khs1994/kube-nginx"
@@ -249,7 +249,7 @@
     "source": "khs1994/nginx:alpine"
   },
   {
-    "source": "khs1994/nginx:1.19.10-alpine"
+    "source": "khs1994/nginx:1.21.0-alpine"
   },
   {
     "source": "khs1994/docker-image-sync:latest"

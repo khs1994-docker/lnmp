@@ -75,7 +75,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:8.0.5-fpm-alpine
+  image: khs1994/php:8.0.6-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
@@ -113,8 +113,8 @@ services:
       << : *default-build-debian
       context: ./dockerfile/mysql/
       dockerfile: Dockerfile
-    image: mysql:8.0.24
-    # image: khs1994/lnmp-mysql:8.0.24
+    image: mysql:8.0.25
+    # image: khs1994/lnmp-mysql:8.0.25
     # image: username/lnmp-mysql:tag
     environment:
       # MYSQL_ROOT_PASSWORD: mytest
@@ -146,6 +146,9 @@ services:
     configs:
       - source: mysql_conf_d_docker_cnf
         target: /etc/mysql/conf.d/docker.cnf
+        mode: 0644
+        uid: "0"
+        gid: "0"
     tmpfs: /var/run/mysqld
 
   # mariadb:
@@ -155,9 +158,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
   #     dockerfile: Dockerfile
-  #   image: "mariadb:10.6.0"
+  #   image: "mariadb:10.6.1"
   #   # image: username/lnmp-mariadb:tag
-  #   # image: khs1994/lnmp-mariadb:10.6.0
+  #   # image: khs1994/lnmp-mariadb:10.6.1
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
   #     MYSQL_DATABASE: test
@@ -406,8 +409,8 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.19.10-alpine
-    # image: khs1994/nginx:1.19.10-alpine
+    image: nginx:1.21.0-alpine
+    # image: khs1994/nginx:1.21.0-alpine
     ports:
       - "443:443/tcp"
       - "443:443/udp"
@@ -500,9 +503,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./config/httpd
   #     dockerfile: Dockerfile
-  #   image: "httpd:2.4.47-alpine"
+  #   image: "httpd:2.4.48-alpine"
   #   # image: username/lnmp-httpd:tag
-  #   # image: khs1994/lnmp-httpd:2.4.47
+  #   # image: khs1994/lnmp-httpd:2.4.48
   #   ports:
   #     - "443:443"
   #     - "80:80"

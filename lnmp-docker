@@ -418,7 +418,7 @@ update_version(){
     version="LNMP_${soft}_VERSION"
     eval version=$(echo \$$version)
     if [ $OS = "Darwin" ];then
-      sed -i '' 's/^LNMP_'"${soft}"'_VERSION.*/LNMP_'"${soft}"'_VERSION='"${version}"'/g' $LNMP_ENV_FILE
+      /usr/bin/sed -i '' 's/^LNMP_'"${soft}"'_VERSION.*/LNMP_'"${soft}"'_VERSION='"${version}"'/g' $LNMP_ENV_FILE
     else
       sed -i 's/^LNMP_'"${soft}"'_VERSION.*/LNMP_'"${soft}"'_VERSION='"${version}"'/g' $LNMP_ENV_FILE
     fi

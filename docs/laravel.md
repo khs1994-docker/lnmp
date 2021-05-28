@@ -75,7 +75,7 @@ _ide_helper.php
 * Docker Desktop 上 Docker 运行在虚拟机，项目文件位于 Windows
 * Docker WSL2 上 Docker 运行在 WSL2(仍然是虚拟机)，项目文件位于 Windows
 
-以上两种情况均为跨主机, 故存在性能问题。
+以上两种情况均为跨主机, 故存在文件性能问题。
 
 **有以下几种解决思路**：
 

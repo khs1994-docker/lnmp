@@ -75,12 +75,12 @@
     "ref": "preview-alpine-3.12"
   },
   {
-    "source": "k8s.gcr.io/ingress-nginx/controller:v0.44.0@sha256:3dd0fac48073beaca2d67a78c746c7593f9c575168a17139a9955a82c63c4b9a",
-    "dest": "nginx-ingress-controller:v0.44.0@sha256:3dd0fac48073beaca2d67a78c746c7593f9c575168a17139a9955a82c63c4b9a"
+    "source": "k8s.gcr.io/ingress-nginx/controller:v0.46.0@sha256:52f0058bed0a17ab0fb35628ba97e8d52b5d32299fbc03cc0f6c7b9ff036b61a",
+    "dest": "nginx-ingress-controller:v0.46.0@sha256:52f0058bed0a17ab0fb35628ba97e8d52b5d32299fbc03cc0f6c7b9ff036b61a"
   },
   {
-    "source": "k8s.gcr.io/metrics-server/metrics-server:v0.4.2",
-    "dest": "gcr-mirror/metrics-server:v0.4.2"
+    "source": "k8s.gcr.io/metrics-server/metrics-server:v0.5.0",
+    "dest": "gcr-mirror/metrics-server:v0.5.0"
   },
   {
     "source": "gcr.io/k8s-staging-metrics-server/metrics-server:master",
@@ -91,18 +91,18 @@
     "dest": "gcr-mirror/git-sync:v3.1.6"
   },
   {
-    "source": "quay.io/coreos/etcd:v3.4.15",
-    "dest": "quay-mirror/etcd:v3.4.15",
+    "source": "quay.io/coreos/etcd:v3.4.16",
+    "dest": "quay-mirror/etcd:v3.4.16",
     "platforms": [
       {
-        "source": "quay.io/coreos/etcd:v3.4.15"
+        "source": "quay.io/coreos/etcd:v3.4.16"
       },
       {
         "os": "linux",
         "architecture": "arm64",
         "variant": "v8",
-        "source": "quay.io/coreos/etcd:v3.4.15-arm64",
-        "dest": "quay-mirror/etcd:v3.4.15-arm64"
+        "source": "quay.io/coreos/etcd:v3.4.16-arm64",
+        "dest": "quay-mirror/etcd:v3.4.16-arm64"
       }
     ]
   },
@@ -161,11 +161,11 @@
     "ref": "v1.19.7"
   },
   {
-    "source": "k8s.gcr.io/etcd:3.4.15-0",
-    "dest": "gcr-mirror/etcd:3.4.15-0",
+    "source": "k8s.gcr.io/etcd:3.4.16-0",
+    "dest": "gcr-mirror/etcd:3.4.16-0",
     "registry": "k8s.gcr.io",
     "image": "etcd",
-    "ref": "3.4.15-0"
+    "ref": "3.4.16-0"
   },
   {
     "source": "k8s.gcr.io/pause:3.5",

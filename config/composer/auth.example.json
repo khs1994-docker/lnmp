@@ -1,7 +1,8 @@
 {
-    "bitbucket-oauth": {},
-    "github-oauth": {},
-    "gitlab-oauth": {},
-    "gitlab-token": {},
-    "http-basic": {}
+  "bitbucket-oauth": {},
+  "github-oauth": {},
+  "gitlab-oauth": {},
+  "gitlab-token": {},
+  "http-basic": {},
+  "bearer": {}
 }

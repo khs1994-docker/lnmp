@@ -110,6 +110,6 @@ secrets:
   supervisord_ini:
     << : *default-labels
     file: ./config/supervisord/supervisord.ini
-  mysql_conf:
-    << : *default-labels
-    file: ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}
+  # mysql_conf:
+  #   << : *default-labels
+  #   file: ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}

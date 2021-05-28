@@ -81,8 +81,8 @@ jobs:
 
           cd laravel
 
-          patch -p1 < ../laravel-demo/cdn-patch/config-app.patch
-          patch -p1 < ../laravel-demo/patch/app-console-kernel.patch
+          patch -p1 < ../laravel-demo/.patch/cdn/config-app.patch
+          patch -p1 < ../laravel-demo/.patch/app-console-kernel.patch
 
           lnmp-composer require laravel/jetstream
           lnmp-composer require league/flysystem 1.x
@@ -92,7 +92,9 @@ jobs:
           lnmp-php artisan jetstream:install inertia
           # lnmp-php artisan jetstream:install --teams
 
-          cp -r ../laravel-demo/laravel-patch/. .
+          # sudo chown `id -u`:`id -g` -R resources public
+
+          sudo cp -r ../laravel-demo/patch/. .
           ls -la resources/views
 
           lnmp-npm i

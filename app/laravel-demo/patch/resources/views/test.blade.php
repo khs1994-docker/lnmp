@@ -10,5 +10,5 @@
     <example-component></example-component>
 </div>
 </body>
-<script src="{{mix('js/app.js')}}"></script>
+<script src="{{mix('js/a.js')}}"></script>
 </html>

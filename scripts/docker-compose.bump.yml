@@ -2,10 +2,10 @@ version: "3.8"
 
 services:
   mysql:
-    image: mysql:8.0.24
+    image: mysql:8.0.25
 
   mariadb:
-    image: mariadb:10.6.0
+    image: mariadb:10.6.1
 
   redis:
     image: redis:6.2.3-alpine
@@ -14,19 +14,19 @@ services:
     image: memcached:1.6.9-alpine
 
   php:
-    image: php:8.0.5-fpm-alpine
+    image: php:8.0.6-fpm-alpine
 
   composer:
-    image: composer:2.0.13
+    image: composer:2.0.14
 
   nginx:
-    image: nginx:1.19.10-alpine
+    image: nginx:1.21.0-alpine
 
   rabbitmq:
-    image: rabbitmq:3.8.14-management-alpine
+    image: rabbitmq:3.8.16-management-alpine
 
   postgresql:
-    image: postgres:13.2-alpine
+    image: postgres:13.3-alpine
 
   mongodb:
     image: mongo:4.4.5
@@ -35,28 +35,28 @@ services:
     image: phpmyadmin:5.1.0
 
   httpd:
-    image: httpd:2.4.47-alpine
+    image: httpd:2.4.48-alpine
 
   etcd:
-    image: quay.io/coreos/etcd:v3.4.15
+    image: quay.io/coreos/etcd:v3.4.16
 
   minio:
     image: minio/minio:RELEASE.2021-01-30T00-20-58Z
 
   kong:
-    image: kong:2.4.0-alpine
+    image: kong:2.4.1-alpine
 
   node:
-    image: node:16.0.0-alpine
+    image: node:16.2.0-alpine
 
   go:
-    image: golang:1.16.3-alpine
+    image: golang:1.16.4-alpine
 
   alpine:
     image: alpine:3.13
 
   python:
-    image: python:3.9.4-alpine
+    image: python:3.9.5-alpine
 
   docker-binfmt:
     image: tonistiigi/binfmt:latest

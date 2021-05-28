@@ -34,6 +34,7 @@ docker run -i ${tty} --rm \
   "set -x; \
    mkdir -p ${COMPOSER_CACHE_DIR}/repo; \
    mkdir -p ${COMPOSER_CACHE_DIR}/files; \
+   rm -rf ${COMPOSER_HOME}/auth.json; \
    chown -R ${LNMP_USER} ${COMPOSER_CACHE_DIR}; \
    chown -R ${LNMP_USER} ${COMPOSER_HOME}; \
   "
@@ -63,9 +64,9 @@ _sudo(){
   command -v sudo > /dev/null && echo "sudo" || true
 }
 
-if [[ ${OS} = 'Linux' || ${OS} = 'Darwin' ]];then
-  echo -e "\n\033[32m==> INFO\033[0m  change folder own and group ..."
-  $(_sudo) chmod -R 765 ${LARAVEL_PATH}
-  $(_sudo) chown -R `id -u`:`id -g` ${LARAVEL_PATH}
-  chmod -R 777 ${LARAVEL_PATH}/storage
-fi
+# if [[ ${OS} = 'Linux' || ${OS} = 'Darwin' ]];then
+#   echo -e "\n\033[32m==> INFO\033[0m  change folder own and group ..."
+#   $(_sudo) chmod -R 765 ${LARAVEL_PATH}
+#   $(_sudo) chown -R `id -u`:`id -g` ${LARAVEL_PATH}
+#   chmod -R 777 ${LARAVEL_PATH}/storage
+# fi

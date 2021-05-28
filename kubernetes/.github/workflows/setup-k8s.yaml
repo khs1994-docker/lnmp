@@ -47,7 +47,7 @@ jobs:
       # next version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.22.0-alpha.1
+         CI_KUBERNETES_VERSION: 1.22.0-alpha.2
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
 
@@ -92,7 +92,7 @@ jobs:
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.10
+         CI_KUBERNETES_VERSION: 1.21.0
          LNMP_K8S_GET: --url
      fail-fast: false
    steps:
@@ -317,7 +317,7 @@ jobs:
          sudo journalctl -u kube-proxy
          sudo journalctl -u kubelet${KUBELET_SERVICE}
          sudo journalctl -u cri-containerd@1.5 || true
-         sudo journalctl -u crio || true
+         sudo journalctl -u cri-o || true
 
          kubectl get csr
          CSR_NAME=`kubectl get csr | grep system:node:node1 | awk '{print $1}' | head -1`
@@ -360,7 +360,7 @@ jobs:
          kubectl get all -A
          ip addr
 
-         sudo journalctl -u crio || true
+         # sudo journalctl -u cri-o || true
 
          # if [ "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" ];then sudo systemctl restart cri-o && sudo systemctl restart kubelet@crio ;fi
 
@@ -371,6 +371,9 @@ jobs:
          kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
          sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
          for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
+     - name: Show port
+       run: |
+         sudo netstat -nlpt || true
      - name: Setup addons
        run: |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
@@ -397,11 +400,13 @@ jobs:
          # test dns
          kubectl describe pod coredns -n kube-system
          kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-         kubectl run nginx --image nginx:1.19.10-alpine
+         kubectl run nginx --image nginx:1.21.0-alpine
          sleep 20
          kubectl get all
          kubectl get pod -o wide
          NGINX_POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
+         sudo crictl pull nginx:1.21.0-alpine || true
+         # sudo journalctl -u cri-o || true
          kubectl exec ${NGINX_POD_NAME} -- cat /etc/resolv.conf
          kubectl exec ${NGINX_POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${NGINX_POD_NAME} -- nslookup kubernetes || true
          kubectl exec ${NGINX_POD_NAME} -- ping -c 5 github.com || kubectl exec ${NGINX_POD_NAME} -- nslookup github.com
@@ -445,7 +450,11 @@ jobs:
          HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | grep NodePort | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
          curl --version
          SERVER_IP=`cat .server_ip`
+         if [ $CI_KUBERNETES_VERSION = '1.22.0-alpha.2' ];then
+         curl ${SERVER_IP}:${HTTP_PORT} || true
+         else
          curl ${SERVER_IP}:${HTTP_PORT}
+         fi
 
          # test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
      - name: cleanup
@@ -527,9 +536,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.22.0-alpha.0-config
+         BASE_BRANCH=v1.22.0-alpha.1-config
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.22.0-alpha.1' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.22.0-alpha.2' ];then
            exit 0
          fi
 
@@ -554,7 +563,7 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.22.0-alpha.1-config
+         BASE_BRANCH=v1.22.0-alpha.2-config
          # BASE_BRANCH=master
          if [ $CI_KUBERNETES_VERSION != '1.23.0-alpha.0' ];then
            exit 0
