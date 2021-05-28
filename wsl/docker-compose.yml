@@ -107,14 +107,14 @@ services:
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_0.0.0-ubuntu-focal_amd64
 
 # latest stable php and ubuntu
-  wsl-php-builder-ubuntu2104-80:
+  wsl-php-builder-ubuntu2110-80:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_80:-8.0.6}
-        - OS_TYPE=ubuntu:21.04
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.6}-ubuntu-hirsute_amd64
+        - OS_TYPE=ubuntu:21.10
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.6}-ubuntu-impish_amd64
 
   wsl-php-builder-rhel7-73:
     build:
