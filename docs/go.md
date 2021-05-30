@@ -4,4 +4,5 @@
 
 * `$ go env -w GOPROXY=https://goproxy.cn,direct`
 * `$ go env -w GOPROXY=https://goproxy.io,direct`
-* GOPROXY=https://proxy.golang.org 默认
+
+默认值为 `GOPROXY=https://proxy.golang.org`

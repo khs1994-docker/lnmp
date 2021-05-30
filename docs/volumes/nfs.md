@@ -8,7 +8,7 @@
 
 * https://blog.csdn.net/ycnian/article/details/8515517
 
-本文以 `NFSv4` 版本为例，无需 RPC `111` 端口, 只需监听 `2049` 端口即可。
+本文以 `NFSv4` 版本为例，无需开启 RPC `111` 端口, 只需开启 `2049` 端口即可。
 
 ## 配置 NFS Server 容器
 

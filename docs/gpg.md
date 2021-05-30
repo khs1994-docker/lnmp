@@ -33,7 +33,7 @@ uid                 [ultimate] khs1994 <khs1994@khs1994.com>
 $ gpg --armor --export <GPG-key-id>
 
 # copy output to github
-# https://docs.github.com/en/github/authenticating-to-github/adding-a-new-gpg-key-to-your-github-account
+# https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification/adding-a-new-gpg-key-to-your-github-account
 ```
 
 ## 配置 GIT
@@ -85,7 +85,7 @@ $ gpg --import filename(.pub)
 
 ## X.509 Key
 
-* https://docs.github.com/en/github/authenticating-to-github/telling-git-about-your-signing-key
+* https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification/telling-git-about-your-signing-key
 
 git 2.19 +
 

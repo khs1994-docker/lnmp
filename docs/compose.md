@@ -19,11 +19,6 @@ Similarly, the following syntax allows you to specify mandatory variables:
 
 * `${VARIABLE?err msg}` exits with an error message containing err if VARIABLE is unset in the environment. 未设置，报错 `err msg`
 
-## macOS
-
-* `consistent`: 或者 default：完全一致的默认设置，如上所述。
-* `delegated`：容器运行时的挂载视图是权威的。在容器中进行的更新可能在主机上可见之前可能会有延迟。(例如：挂载源代码)
-* `cached`：macOS 主机的挂载视图是权威的。在主机上进行的更新在容器中可见之前可能会有延迟。
 
 ## $$
 

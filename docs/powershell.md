@@ -35,7 +35,7 @@ PS> Write-Information -MessageData "Got your features!" -InformationAction Conti
 
 ## $ErrorActionPreference
 
-> 可以设置为这些值：SilentlyContinue,Stop,Continue,Inquire,Ignore,Suspend,Break
+> 可以设置为这些值：`SilentlyContinue` `Stop` `Continue` `Inquire` `Ignore` `Suspend` `Break`
 
 默认值为 `Continue`，当执行错误时，将继续执行。
 

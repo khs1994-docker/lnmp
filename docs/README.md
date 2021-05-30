@@ -31,10 +31,9 @@
 即：本项目 `v18.09.0` 与 **Docker 桌面版** `v18.09` 和 **PHP** `7.2.13` 对应。
 
 发布流程：
-* PHP 发布新版本时(PHP 7.3.9)，打 `tag`，归档当前项目(PHP 7.3.8)，发布正式版本(7.3.8)
+* PHP 发布新版本时(PHP 7.3.9)，本项目打 `tag`，发布版本(7.3.8)
 * 更新 PHP Dockerfile(PHP 7.3.9)，推送到 `YY.MM-pre` 分支，CI 自动同步 PHP Dockerfile 到 `khs1994-docker/php`
-* `khs1994-docker/php` 打 `tag`(PHP 7.3.9)
-* CI 构建 PHP 镜像(PHP 7.3.9)，构建完成之后合并到 `YY.MM` 分支，发布 `alpha` 版本(PHP 7.3.9)
+* `khs1994-docker/php` 打 `tag`(PHP 7.3.9)，CI 构建 PHP 镜像(PHP 7.3.9)，构建完成之后合并到 `YY.MM` 分支，发布 `alpha` 版本(PHP 7.3.9)
 * 后续根据开发流程，发布 `beta` `rc` 版本(PHP 7.3.9)
 * 期间更新 PHP Dockerfile (PHP 7.3.9)时，`khs1994-docker/php` 可以打多个 tag (**7.3.9-1** **7.3.9-2**)
 

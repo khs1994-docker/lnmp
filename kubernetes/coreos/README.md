@@ -162,7 +162,7 @@ $ sudo route add default gw 192.168.199.1
 * https://github.com/coreos/coreos-kubernetes
 * https://github.com/opsnull/follow-me-install-kubernetes-cluster
 * https://github.com/Mengkzhaoyun/ansible
-* https://github.com/coreos/butane/blob/master/docs/config-fcos-v1_1.md
+* https://github.com/coreos/butane/blob/main/docs/config-fcos-v1_1.md
 * https://www.cnblogs.com/mengkzhaoyun/p/7599695.html
 * https://github.com/cloudflare/cfssl
 * https://docs.fedoraproject.org/en-US/fedora-coreos/getting-started/

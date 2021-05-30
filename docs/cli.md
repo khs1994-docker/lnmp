@@ -8,7 +8,7 @@
 
 * 便捷生成 `NGINX` `APACHE` 配置文件
 
-## 尽量兼容原始命令
+## 与 docker compose 命令保持一致
 
 例如 `lnmp-docker up | down` 对应着 `docker-compose up | down`
 

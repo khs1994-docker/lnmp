@@ -4,8 +4,6 @@
 
 ## 安装 Laravel
 
-> 国内使用 [laravel/installer 4.0 以下版本](https://laravel.com/docs/8.x/installation#installing-laravel) 安装 Laravel 不会使用 composer 镜像，故安装十分缓慢。（这里做一提示，下面的命令封装的是 composer create-project 命令，laravel/installer 4.0 及以上会使用 composer 镜像）
-
 ```bash
 $ cd app
 

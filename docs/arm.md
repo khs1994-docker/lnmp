@@ -8,9 +8,10 @@
 $ ./lnmp-docker up
 ```
 
-## arm 暂不支持 MySQL
+## MySQL 暂不支持 arm
 
-* arm32 位(armv7l) 无法使用 `mariadb`
+> arm32 位(armv7l) 同样无法使用 `mariadb`
+
 * 在 `.env` 文件中将 `mysql` 替换为 `mariadb`
 * 在 `.env` 文件中 `LREW_INCLUDE` 新增 `mariadb`
 

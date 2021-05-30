@@ -10,7 +10,7 @@
 * `laravel`  => `lnmp-laravel`
 * `php-cs-fixer` => `lnmp-php-cs-fixer`
 
-> 为避免与原始命令冲突，这里加上了 `lnmp-` 前缀
+> 为避免与原始命令冲突，命令加上了 `lnmp-` 前缀
 
 ## APP_ENV
 
@@ -52,7 +52,7 @@ $ [environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User")
 $ [environment]::SetEnvironmentvariable("Path", "$env:path;$env:LNMP_PATH;$env:LNMP_PATH\windows;$env:LNMP_PATH\bin;$env:LNMP_PATH\wsl", "User")
 ```
 
-> 如果 `PoswerShell` 禁止执行脚本，请以管理员身份执行 `set-ExecutionPolicy Bypass`,之后输入 `Y` 确认。[说明](https://docs.microsoft.com/zh-cn/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-6)
+> 如果 `PoswerShell` 禁止执行脚本，请以管理员身份执行 `set-ExecutionPolicy Bypass`,之后输入 `Y` 确认。[说明](https://docs.microsoft.com/zh-cn/powershell/module/microsoft.powershell.core/about/about_execution_policies)
 
 ### 使用
 
