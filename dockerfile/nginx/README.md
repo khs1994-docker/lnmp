@@ -20,13 +20,13 @@
 
 * https://quic.tech:8443
 
-**chrome 83+**
+**chrome 85+**
 
 ```bash
---enable-quic --quic-version=h3-27 --origin-to-force-quic-on=example.com:443
+--enable-quic --quic-version=h3-29 --origin-to-force-quic-on=example.com:443
 ```
 
-**firefox 75+**
+**firefox 80+**
 
 `about:config` -> `network.http.http3.enabled = true`
 
@@ -74,7 +74,7 @@ $ docker run -dit \
 ```bash
 $ docker-compose up alpine | buster | official
 
-$ h2load -n 100 -c 10 https://t.khs1994.com
+$ h2load -n 100 -c 10 https://quic.t.khs1994.com
 ```
 
 ## alpine
