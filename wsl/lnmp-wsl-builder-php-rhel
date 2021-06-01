@@ -140,7 +140,7 @@ _download_src(){
 
       cd /usr/local/src
 
-      wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz
+      wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz --no-check-certificate
 
       echo -e "Untar ...\n\n"
 
@@ -230,7 +230,7 @@ libxml2 \
 openssl \
 libsqlite3x \
 libxslt \
-$(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then echo libcurl-minimal; else echo libcurl ;fi ) \
+$(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' -a "${REDHAT_SUPPORT_PRODUCT_VERSION}" != 'CentOS Stream' ];then echo libcurl-minimal; else echo libcurl ;fi ) \
 $(if [ ${VERSION_ID} -ge 8 ];then echo libpq; else echo postgresql-libs ;fi ) \
 libmemcached \
 cyrus-sasl \
