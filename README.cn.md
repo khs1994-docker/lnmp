@@ -2,7 +2,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://travis-ci.com/khs1994-docker/lnmp.svg?branch=20.10)](https://travis-ci.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=20.10)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
 
-[![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
+[![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers)
 
 :computer: :whale: :elephant: :dolphin: :penguin: :rocket: 使用 Docker Compose 快速搭建 LNMP 环境，仅需 **一条命令** `$ ./lnmp-docker up`
 
@@ -23,7 +23,7 @@
 
 * [支持文档](https://docs.lnmp.khs1994.com)
 
-* [腾讯云 Kubernetes](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [【腾讯云】618云上GO！云服务器限时秒杀，1核2G首年95元！](https://cloud.tencent.com/act/cps/redirect?redirect=1443&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console)
 
 * [项目演示](https://asciinema.org/a/215588)
 
@@ -42,8 +42,6 @@
 :warning: Windows Docker 非常不稳定，且运行 Laravel 响应较慢。[解决办法](docs/laravel.md)
 
 :gift: 为了本项目的持续发展，你可以使用 [推广产品](ad) 或直接 [打赏](https://zan.khs1994.com) 赞助本项目。
-
-:whale: [腾讯云 Kubernetes](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## 微信订阅号
 
@@ -269,7 +267,7 @@ https://docs.lnmp.khs1994.com
 
 * LNMP
 * [Docker Hub](https://hub.docker.com)
-* [Tencent Cloud Container Service](https://cloud.tencent.com/product/tke)
+* [Tencent Cloud Container Service](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 * [Let's Encrypt](https://letsencrypt.org/)
 * [acme.sh](https://github.com/acmesh-official/acme.sh)
 
@@ -296,9 +294,3 @@ https://docs.lnmp.khs1994.com
 本项目每日默认会将用户的系统和 IP 信息发送到数据收集服务器。建议用户保持开启状态来帮助提升本项目。
 
 你可以通过在 `.env` 文件中设置 `DATA_COLLECTION=false` 来禁用数据收集服务。
-
-## 云容器服务推广 :whale:
-
-**腾讯云 Kubernetes**
-
-* [腾讯云容器服务](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)

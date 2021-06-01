@@ -3,8 +3,7 @@
 * [首页](README.md)
 * [项目初衷](why.md)
 * [安装配置 Docker](docker.md)
-* [腾讯云容器服务](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
-* [腾讯云自媒体](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
+* [【腾讯云】618云上GO！云服务器限时秒杀，1核2G首年95元！](https://cloud.tencent.com/act/cps/redirect?redirect=1443&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console)
 
 ## 商业版
 

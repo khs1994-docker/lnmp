@@ -303,9 +303,6 @@ Official WebSite https://lnmp.khs1994.com
 
 Usage: ./docker-lnmp COMMAND
 
-Run Kubernetes on Tencent Cloud:
-  k8s                  Run Kubernetes on Tencent Cloud
-
 Donate:
   zan                  Donate
 
@@ -383,8 +380,6 @@ Read './docs/*.md' for more information about CLI commands.
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
 
 You must Update .env file when update this project.
-
-Exec '$ lnmp-docker k8s' Run Kubernetes on Tencent Cloud
 
 Exec '$ lnmp-docker zan' donate
 "
@@ -1298,13 +1293,6 @@ XXX
 
     # Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues
     Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues/new?body=$(cat bug.md)
-  }
-
-  k8s {
-    clear
-
-    printInfo "please try kubernetes on website"
-    Start-Process -FilePath "https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61"
   }
 
   zan {
