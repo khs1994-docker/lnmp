@@ -120,7 +120,7 @@ services:
       # fpm config
       - ./config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
       # php.ini
-      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini:ro,cached
       # php.ini override
       - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
@@ -170,7 +170,7 @@ services:
       # fpm config
       - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
       # php.ini
-      - ./config/php8/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro,cached
       # php.ini override
       - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc

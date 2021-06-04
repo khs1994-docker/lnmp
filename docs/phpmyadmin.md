@@ -32,3 +32,7 @@ volumes:
 ```
 
 将 `config/nginx/demo.config/phpmyadmin.config` 复制到 `config/nginx/phpmyadmin.conf`，自行调整配置后，重启 NGINX 容器。
+
+```bash
+$ lnmp-docker restart nginx
+```

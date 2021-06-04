@@ -169,7 +169,7 @@ RUN --mount=type=bind,from=composer:2.0.14,source=/usr/bin/composer,target=/opt/
     set -x \
     && { echo "memory_limit=-1"; \
          echo "date.timezone=${PHP_TIMEZONE:-PRC}"; \
-       } | tee ${PHP_INI_DIR}/conf.d/php-cli.ini \
+       } | tee ${PHP_INI_DIR}/php-cli.ini \
  #    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer \
  #    && php -r " \
  #       \$signature = '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5'; \

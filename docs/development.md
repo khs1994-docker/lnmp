@@ -66,16 +66,6 @@ $WSL2_DIST="ubuntu"
 
 想要在 PHPStorm 中实现右键点击运行测试脚本必须进行额外的设置，请查看 [PHP 容器化最佳实践](https://github.com/khs1994-docker/php-demo#6-cli-settings)
 
-## 容器数量伸缩
-
-```bash
-# 扩容
-$ ./lnmp-docker scale php7=3
-
-# 缩容
-$ ./lnmp-docker scale php7=1
-```
-
 ## 保持运行的软件最新
 
 在 `.env` 文件中注释掉 `LNMP_SOFT_VERSION` 变量，例如

@@ -41,6 +41,9 @@ services:
       - type: bind
         source: ./.devcontainer/docker-php.ini
         target: /usr/local/etc/php/conf.d/docker-php.ini
+      - type: bind
+        source: ./.devcontainer/php-cli.ini
+        target: /usr/local/etc/php/php-cli.ini
       - ./.devcontainer/php-log:/var/log/php
 
       # node

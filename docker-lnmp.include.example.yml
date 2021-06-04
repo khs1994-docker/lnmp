@@ -88,8 +88,8 @@ services:
       - backend
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
-      - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       - ./log/php:/var/log/php:cached
 
 # volumes:

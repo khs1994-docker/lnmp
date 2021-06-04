@@ -18,9 +18,9 @@ export ARCH=`uname -m`
 
 VERSION=${LNMP_PHP_VERSION}
 
-export TAG=${VERSION}-composer-alpine
+export LNMP_PHP_IMAGE=khs1994/php
 
-export DOCKER_IMAGE=khs1994/php
+export LNMP_PHP_IMAGE_TAG=${VERSION}-composer-alpine
 
 export LNMP_USER=`id -u`:`id -g`
 

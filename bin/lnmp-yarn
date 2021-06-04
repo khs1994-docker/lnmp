@@ -8,7 +8,7 @@ set -e
 
 if [ "$debug" = 'true' ];then set -x; fi
 
-checkNetwork=`docker network ls -f driver=bridge -f name=lnmp_backend -q`
+checkNetwork=`docker network ls -f name=lnmp_backend -q`
 
 test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
 
@@ -22,6 +22,7 @@ docker run -i ${tty} --rm \
   --mount type=bind,src=${ScriptRoot}/../config/yarn/.yarnrc,target=/usr/local/share/.yarnrc \
   --mount type=volume,src=lnmp_yarn_cache-data,target=/tmp/node/.yarn \
   --mount type=volume,src=lnmp_yarn_global-data,target=/tmp/node/yarn \
+  --network none \
   bash \
   bash -c \
   "set -x;chown -R ${LNMP_USER} /tmp/node/.yarn; \
@@ -34,11 +35,10 @@ if [ "$LNMP_CN_ENV" = 'false' ];then
 fi
 
 exec docker run -i ${tty} --rm \
-    --mount type=bind,src=$PWD,target=/app,consistency=${APP_ROOT_CONSISTENCY:delegated} \
+    --mount type=bind,src=$PWD,target=/app \
     --mount type=bind,src=${ScriptRoot}/../config/yarn/.yarnrc,target=/usr/local/share/.yarnrc \
     --mount type=volume,src=lnmp_yarn_cache-data,target=/tmp/node/.yarn \
     --mount type=volume,src=lnmp_yarn_global-data,target=/tmp/node/yarn \
-    --mount type=bind,src=${ScriptRoot}/../config/yarn/.yarnrc,target=/root/.yarnrc \
     --env-file ${ScriptRoot}/../config/yarn/.env \
     --network $network \
     --workdir /app \

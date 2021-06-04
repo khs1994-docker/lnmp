@@ -126,6 +126,12 @@ $ lnmp-docker code
 
 在出现的终端中执行命令，本例以添加 `laravel/jetstream` 组件为例：(请提前将本项目的 `bin` 目录加入到 PATH)
 
+```powershell
+# 你也可以在 Windows 终端执行命令
+
+$ cd \\wsl.localhost\ubuntu\app
+```
+
 ```bash
 # 安装 laravel 到 laravel 文件夹
 # $ lnmp-laravel new laravel

@@ -16,7 +16,7 @@ services:
     volumes:
       - ./pcit/key:/app/pcit/framework/storage/private_key:cached
       - ./pcit/.env.${APP_ENV:-development}:/app/pcit/.env.${APP_ENV:-development}:cached
-      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
       - type: volume
         source: pcit-tmp
         target: /tmp
@@ -40,7 +40,7 @@ services:
     volumes:
       - ./pcit/key:/app/.pcit/framework/storage/private_key:cached
       - ./pcit/.env.${APP_ENV:-development}:/app/.pcit/.env.${APP_ENV:-development}:cached
-      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
       - type: volume
         source: pcit-tmp
         target: /tmp

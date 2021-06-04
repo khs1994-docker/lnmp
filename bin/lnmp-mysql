@@ -7,7 +7,7 @@
 
 set -e
 
-checkNetwork=`docker network ls -f driver=bridge -f name=lnmp_backend -q`
+checkNetwork=`docker network ls -f name=lnmp_backend -q`
 
 test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
 

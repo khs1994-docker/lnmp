@@ -1,4 +1,4 @@
-# Xdebug in Docker + PhpStorm 最佳实践
+# Xdebug in Docker + PhpStorm
 
 * https://xdebug.org/docs/all_settings
 

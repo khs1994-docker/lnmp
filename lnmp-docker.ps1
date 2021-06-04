@@ -185,9 +185,11 @@ Function New-InitFile() {
 
   _cp_only_not_exists config/php/docker-php.example.ini config/php/docker-php.ini
   _cp_only_not_exists config/php/php.development.ini config/php/php.ini
+  _cp_only_not_exists config/php/php-cli.example.ini config/php/php-cli.ini
   _cp_only_not_exists config/php/zz-docker.example.conf config/php/zz-docker.conf
   _cp_only_not_exists config/php8/docker-php.example.ini config/php8/docker-php.ini
   _cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
+  _cp_only_not_exists config/php8/php-cli.example.ini config/php8/php-cli.ini
   _cp_only_not_exists config/php8/zz-docker.example.conf config/php8/zz-docker.conf
 
   _cp_only_not_exists config/npm/.npmrc.example config/npm/.npmrc

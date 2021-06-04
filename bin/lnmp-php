@@ -2,7 +2,7 @@
 
 set -e
 
-checkNetwork=`docker network ls -f driver=bridge -f name=lnmp_backend -q`
+checkNetwork=`docker network ls -f name=lnmp_backend -q`
 
 test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
 
@@ -25,8 +25,6 @@ if ! [ -f $ScriptRoot/../log/php/cli_error.log ];then
 fi
 
 . $ScriptRoot/.init
-
-. $ScriptRoot/../.env
 
 source $ScriptRoot/../config/composer/.env.example
 source $ScriptRoot/../config/composer/.env
@@ -54,15 +52,18 @@ if [ "$1" = '-S' ];then
   shift 2
 
   exec docker run --init -i ${tty} --rm \
-    --mount type=bind,src=$PWD,target=/app,consistency=cached \
-    --mount src=lnmp_composer-cache-data,target=/tmp/composer/cache \
-    --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
+    --mount type=bind,src=$PWD,target=/app \
+    --mount src=lnmp_composer-cache-data,target=${COMPOSER_CACHE_DIR} \
+    --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
+    --mount type=bind,src=$ScriptRoot/../config/php8/php.ini,target=/usr/local/etc/php/php.ini \
     --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
+    --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
     --network $network \
+    --env-file $ScriptRoot/../config/composer/.env \
     -e APP_ENV=${APP_ENV} \
     -e TZ=${TZ} \
     -p $ADDR:$PORT:$PORT \
-    ${DOCKER_IMAGE}:${TAG} \
+    ${LNMP_PHP_IMAGE}:${LNMP_PHP_IMAGE_TAG} \
     gosu ${LNMP_USER:-root:root} php -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log -S 0.0.0.0:$PORT "$@"
 fi
 
@@ -76,6 +77,7 @@ docker run -i ${tty} --rm \
   --mount src=lnmp_composer-cache-data,target=${COMPOSER_CACHE_DIR} \
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
+  --network none \
   bash \
   bash -c \
   "set -x; \
@@ -87,13 +89,15 @@ docker run -i ${tty} --rm \
   "
 
 exec docker run --init -i ${tty} --rm \
-  --mount type=bind,src=$PWD,target=/app,consistency=cached \
-  --mount src=lnmp_composer-cache-data,target=/tmp/composer/cache \
-  --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
+  --mount type=bind,src=$PWD,target=/app \
+  --mount src=lnmp_composer-cache-data,target=${COMPOSER_CACHE_DIR} \
+  --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
+  --mount type=bind,src=$ScriptRoot/../config/php8/php-cli.ini,target=/usr/local/etc/php/php-cli.ini \
   --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
   --network $network \
+  --env-file $ScriptRoot/../config/composer/.env \
   -e TZ=${TZ} \
   -e APP_ENV=${APP_ENV} \
-  ${DOCKER_IMAGE}:${TAG} \
+  ${LNMP_PHP_IMAGE}:${LNMP_PHP_IMAGE_TAG} \
   gosu ${LNMP_USER:-root:root} php -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log $COMMAND
