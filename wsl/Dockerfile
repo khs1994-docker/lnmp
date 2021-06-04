@@ -341,7 +341,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
       # redis
 
-COPY --from=redis:6.2.3 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
+COPY --from=redis:6.2.4 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
 
       # memcached
 
