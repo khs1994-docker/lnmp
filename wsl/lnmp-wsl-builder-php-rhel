@@ -49,7 +49,7 @@ if [ "${LNMP_CN_ENV}" != 'false' ];then
   PHP_GIT=https://github.com.cnpmjs.org/php/php-src
 fi
 
-export COMPOSER_VERSION=2.0.14
+export COMPOSER_VERSION=2.1.0
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
