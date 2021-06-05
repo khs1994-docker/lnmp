@@ -75,7 +75,7 @@ _ide_helper.php
 
 **有以下几种解决思路**：
 
-1. `vendor` 目录使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_improving-container-disk-performance) 的说明和笔者提出的方案原理大致相同（不推荐使用）
+1. `vendor` 目录使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_use-a-targeted-named-volume) 的说明和笔者提出的方案原理大致相同（不推荐使用）
 
 2. 或者将项目文件夹放置于 WSL2，使用 **vsCode remote WSL** WSL 远程开发(推荐使用)
 
