@@ -1,6 +1,6 @@
 # COMPOSE_CONVERT_WINDOWS_PATHS=1
 
-version: "3.8"
+version: "3.9"
 
 x-common:
   &common

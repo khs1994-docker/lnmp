@@ -19,6 +19,13 @@
     "https://raw.githubusercontent.com/coreos/ignition/master/config/v3_1/schema/ignition.json": [
       "*.bu",
       "*.ign"
+    ],
+    "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json":[
+       "docker-lnmp.yml",
+       "docker-lnmp.*.yml",
+       "docker-production.yml",
+       "docker-workspace.yml",
+       "docker-workspace.*.yml",
     ]
   },
   "json.schemas": [
