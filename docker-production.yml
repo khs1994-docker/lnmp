@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 #
 # khs1994.com Docker Swarm mode
@@ -422,6 +422,8 @@ services:
       - frontend
     depends_on:
       - php7
+        # condition: service_completed_successfully
+          # service_started service_healthy service_completed_successfully
       - minio
     # logging: *default-logging
     deploy:

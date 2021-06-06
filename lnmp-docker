@@ -172,7 +172,7 @@ Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
   swarm-config         Validate and view the Swarm mode Compose file
   swarm-deploy         Deploy LNMP stack IN Swarm mode
-  swarm-down           Remove LNMP stack IN Swarm mode
+  swarm-rm           Remove LNMP stack IN Swarm mode
   swarm-ps             List the LNMP tasks
   swarm-pull           Pull LNMP Docker Images IN Swarm mode
   swarm-push           Push Swarm mode LNMP images (nginx php7)
@@ -1283,7 +1283,7 @@ main() {
     fi
     ;;
 
-  swarm-down )
+  swarm-rm )
     docker stack rm lnmp
     sleep 6
     ;;
