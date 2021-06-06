@@ -38,7 +38,7 @@ jobs:
     #     sudo install -m755 docker-compose /usr/local/bin
     #   name: 'Setup Docker Compose'
     #   env:
-    #     DOCKER_COMPOSE_VERSION: 1.27.0
+    #     DOCKER_COMPOSE_VERSION: 1.29.0
     - run: |
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com

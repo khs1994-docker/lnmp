@@ -120,7 +120,7 @@ sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" \
 sed -i "s#{{ETCD_VERSION}}#${ETCD_VERSION}#g" basic.bu
 
 for i in `seq ${NODE_NUM}` ; do
- 
+
   if [ -f ignition-$i.bu ];then
     if [ $i = '3' ];then
       sed -i \
