@@ -2,6 +2,27 @@ variant: fcos
 version: 1.3.0
 systemd:
   units:
+    # https://docs.fedoraproject.org/en-US/fedora-coreos/os-extensions/
+    - name: rpm-ostree-install-ipset.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Layer ipset with rpm-ostree
+        # We run after `systemd-machine-id-commit.service` to ensure that
+        # `ConditionFirstBoot=true` services won't rerun on the next boot.
+        After=systemd-machine-id-commit.service
+        After=network-online.target
+        ConditionPathExists=!/var/lib/rpm-ostree-install-ipset.stamp
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        ExecStart=/usr/bin/rpm-ostree install --allow-inactive ipset
+        ExecStart=/bin/touch /var/lib/rpm-ostree-install-ipset.stamp
+        ExecStart=/bin/systemctl --no-block reboot
+
+        [Install]
+        WantedBy=multi-user.target
     - name: settimezone.service
       enabled: true
       contents: |
@@ -26,11 +47,14 @@ systemd:
         [Service]
         Restart=on-failure
         RestartSec=5
-        ExecStartPre=ls /etc/NetworkManager/system-connections/eth0.nmconnection
-        ExecStartPre=ls /etc/NetworkManager/system-connections/eth1.nmconnection
-        ExecStartPre=nmcli con up eth0
-        ExecStartPre=nmcli con up eth1
+        ExecStartPre=ls /etc/NetworkManager/system-connections/enp0s3.nmconnection
+        ExecStartPre=ls /etc/NetworkManager/system-connections/enp0s8.nmconnection
+        ExecStartPre=ls /etc/NetworkManager/system-connections/enp0s9.nmconnection
+        ExecStartPre=nmcli con up enp0s3
+        ExecStartPre=nmcli con up enp0s8
+        ExecStartPre=nmcli con up enp0s9
         ExecStartPre=route add default gw ${DEFAULT_GATEWAY}
+        ExecStartPre=ip route del default via 192.168.57.1
         ExecStart=sh -c "echo setup network"
 
         [Install]
@@ -113,14 +137,14 @@ storage:
           #     minimum - Modification of targeted policy. Only selected processes are protected.
           #     mls - Multi Level Security protection.
           SELINUXTYPE=targeted
-    - path: /etc/NetworkManager/system-connections/eth1.nmconnection
+    - path: /etc/NetworkManager/system-connections/enp0s8.nmconnection
       mode: 0600
       contents:
         inline: |
           [connection]
-          id=eth1
+          id=enp0s8
           type=ethernet
-          interface-name=eth1
+          interface-name=enp0s8
           permissions=
           autoconnect=true
 

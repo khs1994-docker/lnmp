@@ -21,9 +21,9 @@ $ cp cert/kubectl.kubeconfig ~/.kube/config
 第一步启动 `etcd` 集群。
 
 ```bash
-$ systemctl status etcd-member
+$ systemctl status etcd
 
-$ journalctl -u etcd-member
+$ journalctl -u etcd
 
 $ ETCDCTL_API=3 etcdctl \
     --endpoints=https://${node_ip:-192.168.57.110}:2379 \

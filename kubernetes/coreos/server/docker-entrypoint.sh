@@ -120,8 +120,14 @@ sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" \
 sed -i "s#{{ETCD_VERSION}}#${ETCD_VERSION}#g" basic.bu
 
 for i in `seq ${NODE_NUM}` ; do
-
+ 
   if [ -f ignition-$i.bu ];then
+    if [ $i = '3' ];then
+      sed -i \
+      -e 's/gateway=192.168.57.1/gateway=192.168.58.1/g' \
+      -e 's/enp0s3/enp0s9/g' \
+      ignition-$i.bu
+    fi
     $(_butane) ignition-$i.bu > ignition-$i.ign
   fi
 

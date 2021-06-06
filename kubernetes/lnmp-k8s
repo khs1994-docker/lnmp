@@ -602,6 +602,10 @@ _crun_install(){
 
 _containerd_install(){
   if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/cri-containerd;fi
+  
+  if [ "$GOOS" = 'darwin' ];then
+    local GOOS='linux'
+  fi
 
   if ! [ "$GOARCH" = 'amd64' -o "$GOARCH" = 'arm64' ];then
     echo "only support [ amd64 ] and [ arm64 ]"

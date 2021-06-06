@@ -546,13 +546,13 @@ storage:
       mode: 0755
       contents:
         source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kubectl
-    - path: /etc/NetworkManager/system-connections/eth1.nmconnection
+    - path: /etc/NetworkManager/system-connections/enp0s3.nmconnection
       mode: 0600
       contents:
         inline: |
           [connection]
-          id=eth1
-          interface-name=eth1
+          id=enp0s3
+          interface-name=enp0s3
           type=ethernet
           autoconnect=true
 

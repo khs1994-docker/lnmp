@@ -104,7 +104,7 @@ $ poweroff
 # 存储 -> 存储介质 -> 选住 ISO -> 属性 -> 移除虚拟盘 点击确定
 # 或者执行
 $ ./coreos umount-iso N
-$ ./coreos mount-iso N
+# $ ./coreos mount-iso N
 
 # 重新启动(可能会遇到异常，只要不是 ignition 错误，强制重启即可)
 ```
