@@ -23,13 +23,13 @@ services:
     image: nginx:1.21.0-alpine
 
   rabbitmq:
-    image: rabbitmq:3.8.16-management-alpine
+    image: rabbitmq:3.8.17-management-alpine
 
   postgresql:
     image: postgres:13.3-alpine
 
   mongodb:
-    image: mongo:4.4.5
+    image: mongo:4.4.6
 
   phpmyadmin:
     image: phpmyadmin:5.1.1
@@ -62,7 +62,7 @@ services:
     image: tonistiigi/binfmt:latest
 
   docker:
-    image: docker:20.10.6
+    image: docker:20.10.7
 
   gogs:
     image: gogs/gogs:0.12
