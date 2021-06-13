@@ -4,9 +4,9 @@ LABEL maintainer="khs1994@khs1994.com" \
       version="1.21.0"
 
 ARG BUTANE_URL=https://github.com/coreos/butane/releases/download/
-ARG BUTANE_VERSION=v0.11.0
+ARG BUTANE_VERSION=v0.12.1
 
-COPY --from=quay.io/coreos/butane:v0.11.0 /usr/local/bin/butane /usr/local/bin/butane
+COPY --from=quay.io/coreos/butane:v0.12.1 /usr/local/bin/butane /usr/local/bin/butane
 
 RUN set -ex \
       && ARCH=`uname -m` \

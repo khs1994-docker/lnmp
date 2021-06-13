@@ -63,7 +63,7 @@ services:
 # More Demo
 
   # phpmyadmin:
-  #   image: phpmyadmin:5.1.0-fpm-alpine
+  #   image: phpmyadmin:5.1.1-fpm-alpine
   #   volumes:
   #     - phpmyadmin:/var/www/html
   #   healthcheck:

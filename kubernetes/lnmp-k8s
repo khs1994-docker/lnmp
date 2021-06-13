@@ -602,7 +602,7 @@ _crun_install(){
 
 _containerd_install(){
   if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/cri-containerd;fi
-  
+
   if [ "$GOOS" = 'darwin' ];then
     local GOOS='linux'
   fi
@@ -854,8 +854,8 @@ _conmon_install(){
     return
   fi
 
-  local url=https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
-  local url_official=https://download.fastgit.org/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
+  local url_official=https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
+  local url=https://download.fastgit.org/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
 
   if [ $DOWNLOAD_FROM_CODING != "false" ];then
     url=$CODING_URL/conmon.$GOARCH?version=${CONMON_VERSION}
