@@ -161,6 +161,7 @@ async function run() {
       `
 set -x
 
+VmnetdVersion=$(cat /Applications/Docker.app/Contents/Info.plist | tail -5 | head -1 | cut -d '>' -f 2 | cut -d '<' -f 1)
 
 cat <<EOF | tee /tmp/com.docker.vmnetd.plist
 <?xml version="1.0" encoding="UTF-8"?>
@@ -188,7 +189,7 @@ cat <<EOF | tee /tmp/com.docker.vmnetd.plist
 		</dict>
 	</dict>
 	<key>Version</key>
-	<string>59</string>
+	<string>\${VmnetdVersion}</string>
 </dict>
 </plist>
 EOF
