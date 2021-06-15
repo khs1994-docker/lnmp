@@ -109,7 +109,7 @@ $options = [
 $sentinels = [
     'tcp://192.168.0.1:26379',
     'tcp://192.168.0.2:26379',
-    'tcp://192.168.0.6:26379',
+    'tcp://192.168.0.7:26379',
 ];
 
 $client  = new Client($sentinels, $options);

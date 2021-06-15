@@ -9,4 +9,4 @@ x-common:
 services:
   nginx-unit:
     << : *common
-    image: khs1994/php:${LNMP_PHP_VERSION:-8.0.6}-unit-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-8.0.7}-unit-alpine
