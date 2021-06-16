@@ -195,7 +195,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:2.8.8`           | **2.8.8**           |`alpine:3.13`    |
+|[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:2.9.0`           | **2.9.0**           |`alpine:3.13`    |
 |[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.21.0-alpine`           | **1.21.0**          |`alpine:3.13`    |
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.0.7-unit-alpine`| **1.24.0**          |`alpine:3.13`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.48-alpine`           | **2.4.48**          |`alpine:3.12`    |
