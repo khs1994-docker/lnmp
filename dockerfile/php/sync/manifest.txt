@@ -1,3 +1,9 @@
+8.1.0alpha1-cli-alpine
+8.1.0alpha1-fpm-alpine
+8.1.0alpha1-unit-alpine
+8.1.0alpha1-composer-alpine
+8.1.0alpha1-swoole-alpine
+8.1.0alpha1-s6-alpine
 8.0.7-cli-alpine
 8.0.7-fpm-alpine
 8.0.7-unit-alpine
@@ -17,12 +23,6 @@
 7.3.28-composer-alpine
 7.3.28-swoole-alpine
 7.3.28-supervisord-alpine
-7.2.34-cli-alpine
-7.2.34-fpm-alpine
-7.2.34-unit-alpine
-7.2.34-composer-alpine
-7.2.34-swoole-alpine
-7.2.34-supervisord-alpine
 nightly-cli-alpine
 nightly-fpm-alpine
 nightly-unit-alpine
