@@ -73,7 +73,7 @@ module.exports = {
           '/config',
           '/port',
           '/command',
-          '/windows/lwpm',
+          '/lpm',
           '/compose',
         ]
       }, {

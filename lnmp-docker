@@ -762,7 +762,7 @@ server {
   }
 
   location ~ .*\.php(\/.*)*$ {
-    fastcgi_pass   php7:9000;
+    fastcgi_pass   php8:9000;
     include        fastcgi.conf;
   }
 }" > config/${LNMP_NGINX_CONF_D:-nginx}/$1.conf
@@ -783,7 +783,7 @@ apache_http(){
   CustomLog \"logs/$1.access.log\" common
 
   <FilesMatch \.php$>
-    SetHandler \"proxy:fcgi://php7:9000\"
+    SetHandler \"proxy:fcgi://php8:9000\"
   </FilesMatch>
 
   <Directory \"/app/$2\" >
@@ -816,7 +816,7 @@ apache_https(){
   Header always set Strict-Transport-Security \"max-age=15768000\"
 
   <FilesMatch \.php$>
-    SetHandler \"proxy:fcgi://php7:9000\"
+    SetHandler \"proxy:fcgi://php8:9000\"
   </FilesMatch>
 
   <Directory \"/app/$2\" >
@@ -867,7 +867,7 @@ server{
   }
 
   location ~ .*\.php(\/.*)*$ {
-    fastcgi_pass   php7:9000;
+    fastcgi_pass   php8:9000;
     include        fastcgi.conf;
   }
 }" > config/${LNMP_NGINX_CONF_D:-nginx}/$1.conf
@@ -1324,7 +1324,7 @@ For information please run $ docker service update --help
     _docker_is_run
     init
 
-    local service=${LNMP_SERVICES:-nginx mysql php7 redis}
+    local service=${LNMP_SERVICES:-nginx mysql php8 redis}
 
     if ! [ -z "$@" ];then
       service="$@"
@@ -1345,7 +1345,7 @@ For information please run $ docker service update --help
     _docker_is_run
     init
 
-    local service=${LNMP_SERVICES:-nginx mysql php7 redis}
+    local service=${LNMP_SERVICES:-nginx mysql php8 redis}
 
     if ! [ -z "$@" ];then
       service="$@"
@@ -1370,7 +1370,7 @@ For information please run $ docker service update --help
   build-push )
     _docker_is_run; init
 
-    local service=${LNMP_SERVICES:-nginx mysql php7 redis}
+    local service=${LNMP_SERVICES:-nginx mysql php8 redis}
 
     if ! [ -z "$@" ];then
       service="$@"
@@ -1389,7 +1389,7 @@ For information please run $ docker service update --help
 
     sleep 2
 
-    local service=${LNMP_SERVICES:-nginx mysql php7 redis}
+    local service=${LNMP_SERVICES:-nginx mysql php8 redis}
 
     if ! [ -z "$@" ];then
       service="$@"
@@ -1406,7 +1406,7 @@ For information please run $ docker service update --help
     ;;
 
   service* )
-      echo ${LNMP_SERVICES:-nginx mysql php7 redis}
+      echo ${LNMP_SERVICES:-nginx mysql php8 redis}
     ;;
 
   env-file )
@@ -1418,7 +1418,7 @@ For information please run $ docker service update --help
     init
     # 判断架构
 
-    local service=${LNMP_SERVICES:-nginx mysql php7 redis}
+    local service=${LNMP_SERVICES:-nginx mysql php8 redis}
 
     if ! [ -z "$@" ];then
       service="$@"
@@ -1477,10 +1477,10 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     print_info "You must checkout ./config/${LNMP_HTTPD_CONF_D:-httpd}/$2.conf, then restart httpd $ lnmp-docker restart httpd"
     ;;
 
-  php-cli | php7-cli )
+  php-cli )
       local cli_command
       if [ -z "$1" ];then cli_command=bash; else cli_command="$@"; fi
-      bash_cli php7 $cli_command
+      bash_cli php8 $cli_command
     ;;
 
   mongodb-cli | mongo-cli )
@@ -1547,7 +1547,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     _get_compose_options "docker-lnmp.yml" \
                          "docker-lnmp.override.yml"
 
-    docker-compose $options pull ${LNMP_SERVICES:-nginx mysql php7 redis}
+    docker-compose $options pull ${LNMP_SERVICES:-nginx mysql php8 redis}
 
     #@custom
     __lnmp_custom_pull "$@" 2>/dev/null || true

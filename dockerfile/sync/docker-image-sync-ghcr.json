@@ -34,5 +34,21 @@
   {
     "source": "tonistiigi/binfmt:latest",
     "dest": "tonistiigi-binfmt:latest"
+  },
+  {
+    "source": "docker/dockerfile",
+    "dest": "docker-dockerfile"
+  },
+  {
+    "source": "docker/dockerfile:labs",
+    "dest": "docker-dockerfile:labs"
+  },
+  {
+    "source": "docker/dockerfile-upstream:master",
+    "dest": "docker-dockerfile-upstream:master"
+  },
+  {
+    "source": "docker/dockerfile-upstream:master-labs",
+    "dest": "docker-dockerfile-upstream:master-labs"
   }
 ]

@@ -707,9 +707,10 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
 
     wsl -d $WSL2_DIST command -v $COMPOSE_BIN `> /dev/null `|`| exit 1
 
-    if($?){
+    if ($?) {
       wsl -d $WSL2_DIST -- sh -xc "$COMPOSE_BIN $cmd"
-    }else{
+    }
+    else {
       printWarning "Docker Desktop not running"
     }
   }
@@ -740,6 +741,9 @@ if (!(Test-Path cli/khs1994-robot.enc )) {
   }
   else {
     # cd $PSScriptRoot
+    if (!(Test-Path $APP_ROOT)) {
+      New-Item -ItemType Directory -Force $APP_ROOT | Out-Null
+    }
     cd $APP_ROOT
     $APP_ROOT = $PWD
     printInfo "APP_ROOT is $APP_ROOT"
@@ -752,6 +756,9 @@ else {
     printInfo "APP_ROOT is WSL2 [ $WSL2_DIST ] PATH $APP_ROOT"
   }
   else {
+    if (!(Test-Path $APP_ROOT)) {
+      New-Item -ItemType Directory -Force $APP_ROOT | Out-Null
+    }
     cd $APP_ROOT
     $APP_ROOT = $PWD
     printInfo "APP_ROOT is $APP_ROOT"
@@ -767,7 +774,7 @@ if ($LNMP_SERVICES_CONTENT) {
   $LNMP_SERVICES = $LNMP_SERVICES_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
 }
 else {
-  $LNMP_SERVICES = 'nginx', 'mysql', 'php7', 'redis'
+  $LNMP_SERVICES = 'nginx', 'mysql', 'php8', 'redis'
 }
 
 # LREW_INCLUDE
@@ -796,7 +803,7 @@ if (Test-Command docker) {
 $DOCKER_VERSION_YY = ([System.Version]$DOCKER_VERSION).Major
 $DOCKER_VERSION_MM = ([System.Version]$DOCKER_VERSION).Minor
 
-if($DOCKER_VERSION_MM -lt 10){
+if ($DOCKER_VERSION_MM -lt 10) {
   $DOCKER_VERSION_MM = '0' + $DOCKER_VERSION_MM
 }
 
@@ -1580,7 +1587,7 @@ Example: ./lnmp-docker composer /app/demo install
       return $dev_sdx
     }
 
-    function Get-wsl2_mount_physicaldiskdevice_path($type = "ext4"){
+    function Get-wsl2_mount_physicaldiskdevice_path($type = "ext4") {
       $wsl2_mount_physicaldiskdevice_path = wsl -d $WSL2_DIST -- mount -t $type `| grep PHYSICALDRIVE `| cut -d ' ' -f 3
 
       return $wsl2_mount_physicaldiskdevice_path
