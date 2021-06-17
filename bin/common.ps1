@@ -22,6 +22,6 @@ if ($IsWindows -and $PWD.ProviderPath.StartsWith('\\wsl.localhost\')) {
   $LNMP_USER = "1000:1000"
 }
 
-if (-not $IsWindows) {
+if ($IsWindows -eq $False) {
   $LNMP_USER = "$(id -u):$(id -g)"
 }

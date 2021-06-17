@@ -53,6 +53,11 @@ Let's Encrypt 现已支持通过 DNS 验证来申请通配符证书，本例以�
 * `--rsa`
 
 ```bash
+# 首次使用必须执行此命令
+$ ./lnmp-docker acme.sh --register-account -m my@example.com(替换为自己的邮箱)
+```
+
+```bash
 $ ./lnmp-docker ssl example.com -d *.example.com -d t.example.com -d *.t.example.com [--debug]
 ```
 

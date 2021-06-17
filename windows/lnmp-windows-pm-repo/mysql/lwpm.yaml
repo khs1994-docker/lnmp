@@ -37,7 +37,7 @@ scripts:
 
     $ net start mysql
 
-    $ mysql -uroot -p`"$mysql_password`"
+    $ C:\mysql\bin\mysql.exe -uroot -p`"$mysql_password`"
 
     mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest';
 

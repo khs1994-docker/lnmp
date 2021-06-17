@@ -121,9 +121,6 @@ Function _start($soft) {
 
     "php" {
       printInfo "Start php-cgi..." Green
-      # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c "$PHP_PATH"
-      # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9100 -c "$PHP_PATH"
-      # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9200 -c "$PHP_PATH"
       php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9000 1
       php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9100 1
       php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9200 1
@@ -136,9 +133,6 @@ Function _start($soft) {
 
     "php-pre" {
       printInfo "Start php-cgi..." Green
-      # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c "$PHP_PATH"
-      # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9100 -c "$PHP_PATH"
-      # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9200 -c "$PHP_PATH"
       php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9000 1
       php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9100 1
       php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9200 1

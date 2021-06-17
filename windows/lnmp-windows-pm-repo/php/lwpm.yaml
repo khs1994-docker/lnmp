@@ -1,7 +1,7 @@
 name: "php"
 description: "PHP is a popular general-purpose scripting language that is especially suited to web development"
 version: "8.0.7"
-pre-version: "8.0.7"
+pre-version: "8.1.0alpha1"
 homepage: "https://www.php.net/"
 bug: "https://www.php.net/"
 github: "php/php-src"
@@ -33,6 +33,14 @@ scripts:
   test: |
     & ${PHP_PREFIX}/php -v
   install: |
+    if(!(Test-Path C:\Windows\System32\vcruntime140.dll)){
+      printError "please install vclib"
+      exit 0
+    }
+
+    $PHP_INI="${PHP_PREFIX}/php.ini"
+    $PHP_BIN="${PHP_PREFIX}/php.exe"
+
     Function _install_ext($PHP_PREFIX){
     $PHP_CACERT_DATE="2021-01-19"
 
@@ -45,20 +53,11 @@ scripts:
          'igbinary'
 
     _downloader `
-      http://redmine.lighttpd.net/attachments/download/660/RunHiddenConsole.zip `
-      RunHiddenConsole.zip `
-      RunHiddenConsole
-
-    _downloader `
       https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar `
       pickle `
       pickle
 
-    _unzip RunHiddenConsole.zip RunHiddenConsole
-
-    copy-item -r -force RunHiddenConsole\RunHiddenConsole.exe C:\bin
     copy-item -r -force pickle C:\bin
-    _cleanup RunHiddenConsole
 
     _downloader `
       https://github.com/deemru/php-cgi-spawner/releases/download/1.1.23/php-cgi-spawner.exe `
@@ -79,6 +78,18 @@ scripts:
       cacert-${PHP_CACERT_DATE}.pem
 
     copy-item -r -force cacert-${PHP_CACERT_DATE}.pem C:\bin
+
+    Function EnableExt($ext){
+      if(& ${PHP_BIN} --ri $ext | select-string "Extension '$ext' not present."){
+        PrintInfo "enable php(${PHP_BIN}) ext $ext"
+
+        "extension=$ext" `
+        | out-file -Append $PHP_INI -encoding utf8
+      }
+    }
+
+    EnableExt mbstring
+    EnableExt openssl
 
     Foreach ($extension in $extensions){
     "==> install $extension ..."
@@ -112,6 +123,14 @@ scripts:
     Copy-item -r -force $unzipDesc "C:\"
 
     _cleanup $unzipDesc
+
+    if($isPre){
+      if(& $PHP_BIN -r "echo ini_get('extension_dir');" -ne 'ext'){
+        'extension_dir = "ext"' `
+        | out-file -Append $PHP_INI -encoding utf8
+      }
+    }
+
   get-version: |-
     if(!($VERSION)){
     $VERSION=$stable_version

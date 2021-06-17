@@ -15,8 +15,10 @@
 > 使用以下脚本，开发者可以快速的建立开发环境，后续会介绍脚本所做的工作。
 
 ```bash
-$ lnmp-windows-pm.ps1 install nginx mysql php composer node
+$ lnmp-windows-pm.ps1 install vclib nginx mysql php composer node
 ```
+
+> 部分软件（例如：PHP、MySQL）依赖 `vclib`，请首先安装。
 
 ### 安装指定软件(Windows 包管理)
 
@@ -63,10 +65,6 @@ Current application environment: windows
 
 # 输出 windows 说明设置成功
 ```
-
-## vclib
-
-部分软件（例如：MySQL）依赖 `vclib`，请首先安装，请查看 `windows/lnmp-windows-pm-repo/vclib`
 
 ## MySQL
 
