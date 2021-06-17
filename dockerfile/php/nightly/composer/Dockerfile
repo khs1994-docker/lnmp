@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:experimental
+# syntax=docker/dockerfile:labs
 
 ARG USERNAME=khs1994
 ARG BASE=fpm

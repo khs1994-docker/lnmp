@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:experimental
+# syntax=docker/dockerfile:labs
 FROM alpine:3.13 as boringssl-builder
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org

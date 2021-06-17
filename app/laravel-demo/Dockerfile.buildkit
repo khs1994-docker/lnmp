@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:experimental
+# syntax=docker/dockerfile:labs
 
 # 此 Dockerfile 使用了多阶段构建，同时构建了 PHP 及 NGINX 两个镜像
 #

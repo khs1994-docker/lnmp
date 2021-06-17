@@ -5,7 +5,7 @@
 **alpine/debian**
 
 ```docker
-# syntax=docker/dockerfile:experimental
+# syntax=docker/dockerfile:labs
 
 FROM --platform=$TARGETPLATFORM alpine
 
@@ -28,7 +28,7 @@ lrwxrwxrwx   1 root root    7 Jul 29 01:29 bin -> usr/bin
 **ubuntu/centos/fedora**
 
 ```docker
-# syntax=docker/dockerfile:experimental
+# syntax=docker/dockerfile:labs
 
 FROM --platform=$TARGETPLATFORM ubuntu
 

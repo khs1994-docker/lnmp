@@ -1,4 +1,4 @@
-# syntax = docker/dockerfile:experimental
+# syntax = docker/dockerfile:labs
 
 # export TYPE=server
 # export KUBERNETES_VERSION=x.y.z

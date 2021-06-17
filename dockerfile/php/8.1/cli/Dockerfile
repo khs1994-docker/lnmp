@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:experimental
+# syntax=docker/dockerfile:labs
 ARG PHP_VERSION=8.1.0alpha1
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
