@@ -212,8 +212,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
   && docker-php-source extract \
-  && mv /usr/include/gnu-libiconv/*.h /usr/include \
-  && rm -rf /usr/include/gnu-libiconv \
+  && cp /usr/include/gnu-libiconv/*.h /usr/include \
   && cd /usr/src/php \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   && ./configure \
@@ -331,11 +330,12 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
   && strip --strip-all /usr/local/lib/libphp7.so \
   && apk del --no-network .build-deps \
   && rm -rf /usr/local/include/php/TSRM/tsrm_win32.h \
-           /usr/local/include/php/TSRM/tsrm_config.w32.h \
-           /usr/local/include/php/Zend/zend_config.w32.h \
-           /usr/local/include/php/ext/mysqlnd/config-win.h \
-           /usr/local/include/php/ext/standard/winver.h \
-           /usr/local/php/man \
+            /usr/local/include/php/TSRM/tsrm_config.w32.h \
+            /usr/local/include/php/Zend/zend_config.w32.h \
+            /usr/local/include/php/ext/mysqlnd/config-win.h \
+            /usr/local/include/php/ext/standard/winver.h \
+            /usr/local/php/man \
+            /usr/include/*.h \
   # 创建日志文件夹
   && ln -sf /dev/stderr /var/log/xdebug-remote.log \
   && rm -rf /usr/src/*

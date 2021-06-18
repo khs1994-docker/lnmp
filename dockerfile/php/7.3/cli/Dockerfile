@@ -206,8 +206,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
   && docker-php-source extract \
-  && mv /usr/include/gnu-libiconv/*.h /usr/include \
-  && rm -rf /usr/include/gnu-libiconv \
+  && cp /usr/include/gnu-libiconv/*.h /usr/include \
   && cd /usr/src/php \
 # enchant-2.patch
   && curl -fsSL -o enchant-2.patch https://raw.githubusercontent.com/alpinelinux/aports/3.12-stable/community/php7/enchant-2.patch \
@@ -323,15 +322,18 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && apk del --no-network .build-deps \
   && rm -rf /usr/local/include/php/TSRM/tsrm_win32.h \
-           /usr/local/include/php/TSRM/tsrm_config.w32.h \
-           /usr/local/include/php/Zend/zend_config.w32.h \
-           /usr/local/include/php/ext/mysqlnd/config-win.h \
-           /usr/local/include/php/ext/standard/winver.h \
-           /usr/local/php/man \
+            /usr/local/include/php/TSRM/tsrm_config.w32.h \
+            /usr/local/include/php/Zend/zend_config.w32.h \
+            /usr/local/include/php/ext/mysqlnd/config-win.h \
+            /usr/local/include/php/ext/standard/winver.h \
+            /usr/local/php/man \
+            /usr/include/*.h \
 # https://github.com/docker-library/php/issues/443
   && pecl update-channels \
   && rm -rf /tmp/pear ~/.pearrc \
   \
+# smoke test
+  && php --version \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium
   \
