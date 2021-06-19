@@ -356,6 +356,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
            /usr/local/include/php/ext/standard/winver.h \
            /usr/local/php/man \
   \
+# smoke test
+  && php --version \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium
   \

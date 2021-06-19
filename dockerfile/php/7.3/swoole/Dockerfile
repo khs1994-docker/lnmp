@@ -38,7 +38,9 @@ RUN --mount=type=bind,from=php:7.3.28-alpine,source=/usr/local/bin,target=/opt/b
          -n --defaults --strip --cleanup \
     && apk del --no-network .pecl_build_deps \
     && rm -rf /tmp/* \
-    && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
+    && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
+# smoke test
+    && php --version
 
 WORKDIR /app
 

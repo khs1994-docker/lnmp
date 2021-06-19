@@ -270,7 +270,7 @@ jobs:
         docker buildx build \
         --build-arg PHP_EXTENSION_EXTRA="wddx xsl" \
         --build-arg PECL_EXTENSION_EXTRA="imagick msgpack" \
-        --build-arg APK_EXTRA="libxslt imagemagick-libs musl" \
+        --build-arg APK_EXTRA="libxslt imagemagick-libs libgomp musl" \
         --build-arg APK_DEV_EXTRA="libxslt-dev imagemagick-dev imagemagick" \
         --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
         --build-arg USERNAME=${DOCKER_HUB_USERNAME} \

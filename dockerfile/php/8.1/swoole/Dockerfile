@@ -41,7 +41,9 @@ RUN --mount=type=bind,from=php:8.1.0alpha1-alpine,source=/usr/local/bin,target=/
          -n --defaults --strip --cleanup \
     && apk del --no-network .pecl_build_deps \
     && rm -rf /tmp/* \
-    && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
+    && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
+# smoke test
+    && php --version
 
 WORKDIR /app
 
