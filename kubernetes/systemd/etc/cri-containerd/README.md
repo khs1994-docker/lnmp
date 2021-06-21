@@ -1,6 +1,6 @@
 * https://github.com/containerd/cri/blob/master/docs/config.md
-* https://github.com/containerd/containerd/blob/master/docs/ops.md
-* https://github.com/containerd/containerd/blob/master/docs/man/containerd-config.toml.5.md
+* https://github.com/containerd/containerd/blob/main/docs/ops.md
+* https://github.com/containerd/containerd/blob/main/docs/man/containerd-config.toml.5.md
 
 ```bash
 $ containerd config default > config.default.toml

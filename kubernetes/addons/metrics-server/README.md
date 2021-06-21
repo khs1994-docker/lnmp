@@ -1,6 +1,6 @@
 # Metrics Server
 
-> 本文基于 0.4.x 版本。
+> 本文基于 0.5.x 版本。
 
 * https://github.com/kubernetes-sigs/metrics-server/tree/master/manifests/base
 

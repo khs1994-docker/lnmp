@@ -73,7 +73,7 @@ oom_score = 0
           runtime_type = "io.containerd.runc.v2"
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-            SystemdCgroup = false
+            SystemdCgroup = true
 
             # BinaryName = "runc"
             # BinaryName = "crun"
@@ -83,7 +83,7 @@ oom_score = 0
           runtime_type = "io.containerd.runc.v2"
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun.options]
-            SystemdCgroup = false
+            SystemdCgroup = true
             BinaryName = "crun"
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun-disable-systemd]
           # runtime_type = "io.containerd.runtime.v1.linux"
@@ -129,7 +129,7 @@ oom_score = 0
           # runtime_type = "io.containerd.runc.v2"
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1.options]
-            SystemdCgroup = false
+            SystemdCgroup = true
             # BinaryName = "runc"
             # BinaryName = "crun"
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runclinux]

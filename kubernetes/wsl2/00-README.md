@@ -63,6 +63,10 @@ $ debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin
 
 请查看 [00-README.systemd.md](00-README.systemd.md)
 
+## 部署组件
+
+请查看 [01-README.addons.md](01-README.addons.md)
+
 ## kubectl
 
 请查看 [00-README.kubectl.md](00-README.kubectl.md)

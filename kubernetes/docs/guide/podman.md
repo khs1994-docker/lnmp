@@ -5,7 +5,7 @@
 * `/etc/containers/registries.conf`
 * `/etc/containers/storage.conf`
 
-* https://github.com/containers/image/tree/master/docs
+* https://github.com/containers/image/tree/main/docs
 * https://github.com/containers/podman/tree/master/docs
 
 ```bash

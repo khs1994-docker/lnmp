@@ -6,10 +6,17 @@ _sudo(){
 
 $(_sudo) mkdir -p /etc/sudoers.d
 
-if [ -f /usr/sbin/start-systemd-namespace ] && [ "$1" != "--force" ]; then
-  echo "It appears you have already installed the systemd hack."
-  echo "To forcibly reinstall, run this script with the \`--force\` parameter."
-  exit
+if [ "$1" != "--force" ]; then
+    if [ -f /usr/sbin/start-systemd-namespace ]; then
+        echo "It appears you have already installed the systemd hack."
+        echo "To forcibly reinstall, run this script with the \`--force\` parameter."
+        exit
+    fi
+    if [ -z "$WSL_DISTRO_NAME" ]; then
+        echo "It appears that you are not running on WSL."
+        echo "To forcibly install anyway, run this script with the \`--force\` parameter."
+        exit
+    fi
 fi
 
 self_dir="$(dirname $0)"
@@ -79,15 +86,3 @@ $(_sudo) ln -sf /dev/null /etc/systemd/user/sockets.target.wants/gpg-agent*.sock
 $(_sudo) ln -sf /dev/null /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.automount || true
 $(_sudo) ln -sf /dev/null /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.mount || true
 $(_sudo) ln -sf /dev/null /lib/systemd/system/sysinit.target.wants/systemd-binfmt.service || true
-
-if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ] && [ "$(head -n1  /proc/sys/fs/binfmt_misc/WSLInterop)" == "enabled" ]; then
-  "$(interop_prefix)$(sysdrive_prefix)"/Windows/System32/cmd.exe /C setx WSLENV BASH_ENV/u
-  "$(interop_prefix)$(sysdrive_prefix)"/Windows/System32/cmd.exe /C setx BASH_ENV /etc/bash.bashrc
-else
-  echo
-  echo "You need to manually run the following two commands in Windows' cmd.exe:"
-  echo
-  echo "  setx WSLENV BASH_ENV/u"
-  echo "  setx BASH_ENV /etc/bash.bashrc"
-  echo
-fi

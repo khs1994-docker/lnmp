@@ -74,7 +74,7 @@ https://dev.mysql.com/downloads/mysql/
 
 8.0.4-rc+ ，默认使用新的密码验证机制 `caching_sha2_password` ，目前主流的客户端不支持该方式，所以我们仍然采用旧的密码验证机制。
 
-在 `C` 盘根目录增加 `my.cnf` 文件，文件内容可以参考本目录下的 `config/my.cnf`.
+在 `C:\mysql` 根目录增加 `my.cnf` 文件，文件内容可以参考本目录下的 `config/my.cnf`.
 
 ```bash
 # 这条命令会产生一个随机密码，--initialize-insecure 初始化默认密码为空
@@ -130,7 +130,7 @@ https://windows.php.net/download/
 
 里面有 `Non Thread Safe` 和 `Thread Safe`，两者区别请查阅资料，我这里的是下载 `NTS` 版。
 
-只有 `TS` 版才包含 `php7apache2_4.dll` （php 以 apache 模块方式运行才会用到，我后边 apache 选择的是 fcgi 方式，这里记录一下）
+只有 `TS` 版才包含 `php7apache2_4.dll` （php 以 apache 模块方式运行才会用到，本文后边 apache 选择的是 fcgi 方式）
 
 ### 复制 `php.ini`
 
@@ -160,12 +160,12 @@ $ php -v
 
 手动在 https://pecl.php.net/ 下载扩展（注意与 PHP 版本对应）。
 
-之后在 `php.ini` 中增加配置(为了后续升级方便将 pecl 下载的扩展放到 `C:\php-ext`)。
+将其放到 PHP 目录中的 ext 目录，并在 `php.ini` 中增加配置
 
 ```bash
-extension=C:\php-ext\php_yaml
+extension=yaml
 
-zend_extension=C:\php-ext\php_xdebug
+zend_extension=xdebug
 ```
 
 * 或者使用 [pickle](https://github.com/khs1994-php/pickle)
@@ -239,6 +239,7 @@ Include conf.d/*.conf
 ```bash
 $ httpd -k install
 
+# 卸载服务
 # $ httpd -k uninstall
 ```
 
