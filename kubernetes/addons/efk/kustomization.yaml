@@ -2,3 +2,5 @@ bases:
 - ./es
 - ./fluentd
 - ./kibana
+resources:
+  - ./create-logging-namespace.yaml

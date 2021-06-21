@@ -28,14 +28,18 @@
 ```bash
 $ kubectl apply -k addons/efk
 
-$ kubectl get pods -n kube-system -o wide|grep -E 'elasticsearch|fluentd|kibana'
+$ kubectl get pods -n logging -o wide|grep -E 'elasticsearch|fluentd|kibana'
 
 $ kubectl cluster-info|grep -E 'Elasticsearch|Kibana'
 
 $ kubectl proxy --address='127.0.0.1' --port=8086 --accept-hosts='^*$'
 ```
 
-访问 http://127.0.0.1:8086/api/v1/namespaces/kube-system/services/kibana-logging/proxy
+访问 http://127.0.0.1:8086/api/v1/namespaces/logging/services/kibana-logging/proxy
+
+在 Management -> Indices 页面创建一个 index（相当于 mysql 中的一个 database），选中 Index contains time-based events，使用默认的 `logstash-*` pattern，点击 Create ;
+
+在 `Discover` 中查看日志
 
 ## 删除
 
@@ -52,3 +56,4 @@ $ kubectl delete -k addons/efk
 * https://blog.51cto.com/ylw6006/2071943
 * https://www.jianshu.com/p/1000ae80a493
 * https://blog.csdn.net/java_zyq/article/details/82179175
+* https://docs.fluentd.org/
