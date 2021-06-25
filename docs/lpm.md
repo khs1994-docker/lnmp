@@ -114,7 +114,7 @@ $ ./lpm.ps1 restart-service minio
  |__lwpm.json
 ```
 
-**add --platform** 获取所有架构的文件（适用于从 docker hub 获取文件）
+**add --platform** 获取所有架构的文件（从 Docker Registry 获取文件）
 
 ```bash
  package

@@ -6,6 +6,7 @@ metadata:
   name: nginx
   namespace: default
 spec:
+  # 1.20-
   # ipFamily: IPv6
 
   # 1.20+

@@ -57,3 +57,4 @@ $ kubectl delete -k addons/efk
 * https://www.jianshu.com/p/1000ae80a493
 * https://blog.csdn.net/java_zyq/article/details/82179175
 * https://docs.fluentd.org/
+* https://github.com/fluent/fluent-bit/releases
