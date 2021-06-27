@@ -11,6 +11,11 @@
   "url-mirror": "https://download.fastgit.org/fatedier/frp/releases/download/v${VERSION}/frp_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.$(if($_IsWindows){echo zip}else{echo tar.gz})",
   "command": "frpc",
   "scripts": {
+    "service": [
+      "C:\\bin\\frpc.exe",
+      "-c",
+      "C:\\bin\\frpc.ini"
+    ],
     "test": "printInfo frp $(frpc --version) install success",
     "version": "frpc --version",
     "install": [

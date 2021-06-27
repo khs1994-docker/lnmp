@@ -248,6 +248,11 @@
             "if($isPre){$VERSION='x.y.z-beta'}else{$VERSION='x.y.z'}"
           ]
         },
+        "service": {
+          "type": "array",
+          "description": "windows service",
+          "default": []
+        },
         "hash": {
           "type": [
             "string",

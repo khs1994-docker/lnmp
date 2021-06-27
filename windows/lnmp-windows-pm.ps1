@@ -1066,13 +1066,36 @@ switch ($command) {
     _mkdir C:/bin | out-null
     $Global:BaseDir = "C:\bin"
 
-    CreateService -ServiceName $opt[0] -CommandLine $opt[1] `
-      -LogFile $opt[2] -EnvVaribles $opt[3]
+    $ServiceName = $opt[0]
+    $CommandLine = $opt[1]
+    $LogFile = $opt[2]
+    $EnvVaribles = $opt[3]
+
+    if (${opt}.GetType().Name -eq 'String') {
+      $ServiceName = $opt
+      try {
+        $pkg_root = pkg_root $ServiceName
+
+        if ($pkg_root) {
+          $service = (ConvertFrom-Json (Get-Content $pkg_root/lwpm.json -raw)).scripts.service
+
+          if ($service) {
+            $CommandLine = $service
+            $LogFile = "C:\logs\${ServiceName}.log"
+            $EnvVaribles = $null
+          }
+        }
+      }
+      catch { }
+    }
+    CreateService -ServiceName $ServiceName -CommandLine $CommandLine `
+      -LogFile $LogFile -EnvVaribles $EnvVaribles
 
     # @{NODE_NAME = "$nodeName";}
   }
 
   "remove-service" {
+    Import-Module $PSScriptRoot/sdk/service/service.psm1 -Force
     foreach ($item in $opt) {
       Write-Host "==> Remove service $item" -ForegroundColor Red
       RemoveService -ServiceName $item

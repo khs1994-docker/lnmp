@@ -1,6 +1,6 @@
 # You can overwrite this file in .env.ps1
 
-$CI_HOST="ci.khs1994.com:10000"
+$CI_HOST="ci.khs1994.com:1218"
 
 # wsl name
 # $ wslconfig /l
