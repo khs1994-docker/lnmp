@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=7.3.28
+ARG PHP_VERSION=7.3.29
 ARG USERNAME=khs1994
 ARG BASE=fpm
 
