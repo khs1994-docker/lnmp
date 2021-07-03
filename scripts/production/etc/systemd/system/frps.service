@@ -6,7 +6,7 @@ Wants=network.target
 [Service]
 Type=simple
 Restart=on-failure
-ExecStart=/data/bin/frps -c /data/etc/frps.ini
+ExecStart=/data/usr/bin/frps -c /data/etc/frps.ini
 ExecStop=-/bin/kill -s QUIT $MAINPID
 ExecReload=/bin/kill -s HUP $MAINPID
 
