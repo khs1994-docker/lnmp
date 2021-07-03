@@ -205,9 +205,3 @@ jobs:
         TYPE: ${{ matrix.TYPE }}
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php ghcr.io/khs1994/php
       name: 'Build Image'
-    - run: |
-        curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
-      name: 'Trigger hooks'
-      env:
-        DOCKER_HUB_USERNAME: khs1994
-      if: success()

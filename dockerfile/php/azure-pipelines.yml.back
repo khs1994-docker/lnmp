@@ -313,11 +313,3 @@ jobs:
       add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php # ghcr.io/khs1994/php
     displayName: 'Build Image'
     timeoutInMinutes: 0
-
-  - script: |
-      curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
-    displayName: 'Trigger hooks'
-    env:
-      DOCKER_HUB_USERNAME: khs1994
-    condition: succeeded()
-    # condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))

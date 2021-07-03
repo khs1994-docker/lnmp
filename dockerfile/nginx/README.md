@@ -7,11 +7,6 @@
 * https://github.com/khs1994-docker/lnmp/issues/137
 * https://github.com/khs1994-docker/lnmp/issues/895
 
-| Verson     | Details     |
-| :------------- | :------------- |
-| [![](https://images.microbadger.com/badges/version/khs1994/nginx:1.21.0-alpine.svg)](https://microbadger.com/images/khs1994/nginx:1.21.0-alpine "Get your own version badge on microbadger.com") | [![](https://images.microbadger.com/badges/image/khs1994/nginx:1.21.0-alpine.svg)](https://microbadger.com/images/khs1994/nginx:1.21.0-alpine "Get your own image badge on microbadger.com") |
-| [![](https://images.microbadger.com/badges/version/khs1994/nginx:1.21.0-buster.svg)](https://microbadger.com/images/khs1994/nginx:1.21.0-buster "Get your own version badge on microbadger.com") | [![](https://images.microbadger.com/badges/image/khs1994/nginx:1.21.0-buster.svg)](https://microbadger.com/images/khs1994/nginx:1.21.0-buster "Get your own image badge on microbadger.com") |
-
 ## 注意
 
 * 只有一个 `server {}` 能启用 HTTP3，多个 `server {}` 启用 HTTP3 会提示冲突。

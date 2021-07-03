@@ -218,12 +218,6 @@ jobs:
         PHP_VCS_REF: ${{ github.event.inputs.PHP_VCS_REF }}
       name: 'Build Image'
       id: build
-    - run: |
-        curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
-      name: 'Trigger hooks'
-      env:
-        DOCKER_HUB_USERNAME: khs1994
-      if: success()
     - name: Run Snyk to check Docker image for vulnerabilities
       # Snyk can be used to break the build when it detects vulnerabilities.
       # In this case we want to upload the issues to GitHub Code Scanning
