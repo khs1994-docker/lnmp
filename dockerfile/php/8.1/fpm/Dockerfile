@@ -95,6 +95,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          icu-libs \
                          gnu-libiconv \
                          zstd-libs \
+                         libavif \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
@@ -123,6 +124,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libwebp-dev \
                          icu-dev \
                          zstd-dev \
+                         libavif-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
@@ -146,7 +148,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                         --with-freetype \
                                         --with-jpeg \
                                         --with-webp \
-                                        --with-xpm" > /tmp/gd.configure.options \
+                                        --with-xpm \
+                                        --with-avif" > /tmp/gd.configure.options \
         # && docker-php-ext-install $PHP_EXTENSION \
         && pickle install $PHP_EXTENSION -n --defaults --strip \
         && docker-php-source delete \

@@ -77,6 +77,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
             --with-jpeg \
             --with-webp \
             --with-xpm \
+            --with-avif \
         --with-pdo-mysql=shared \
         --with-pdo-pgsql=shared \
         # --with-xsl=shared \
@@ -227,6 +228,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           # tidyhtml-dev \
           # net-snmp-dev \
           openldap-dev \
+          libavif-dev \
           \
           bison \
           gnu-libiconv-dev \

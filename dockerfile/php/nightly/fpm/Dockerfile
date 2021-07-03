@@ -74,6 +74,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
             --with-jpeg \
             --with-webp \
             --with-xpm \
+            --with-avif \
         --enable-pdo=shared \
         --with-pdo-sqlite=shared,/usr \
         --with-pdo-mysql=shared \
@@ -213,6 +214,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
           # tidyhtml-dev \
           # net-snmp-dev \
           openldap-dev \
+          libavif-dev \
           \
           bison \
           gnu-libiconv-dev \
