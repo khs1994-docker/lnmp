@@ -6,8 +6,6 @@
 
 * [问题反馈](https://github.com/khs1994-docker/ci/issues)
 
-* [更多信息](https://blog.khs1994.com/categories/CI/Drone/)
-
 ## 重要提示
 
 本项目基于 [Drone `2.x`](https://docs.drone.io/) 版本。
@@ -78,31 +76,13 @@ $ ./ci
 
 修改 `.env` 中的 `CI_HOST` 变量值为 `你自己的 IP`(例如 `云服务器公网 IP`、`路由器分配给电脑的 IP`)
 
-> Windows 用户请将 `COMPOSE_CONVERT_WINDOWS_PATHS=1` 取消注释
-
 ### MySQL 密码(可选)
 
 修改 `secrets/mysql.env` 中的 `MYSQL_ROOT_PASSWORD` 变量值为 MySQL 密码。
 
-### 安全（务必仔细配置）
+### 安全
 
-```bash
-# https://docs.drone.io/server/user/admin/
-# https://docs.drone.io/server/reference/drone-user-create/
-# 只有管理员账户(admin) 才可以编辑仓库的 `Trusted` 选项
-# 为了启用 `Trusted` 选项，强烈建议编辑此变量
-# 将 USERNAME 替换为自己的 github 用户名
-# 或者参考 https://docs.drone.io/server/user/admin/ 使用 CLI 设置管理员
-DRONE_USER_CREATE=
-# DRONE_USER_CREATE=username:USERNAME,admin:true
-# DRONE_USER_CREATE=username:khs1994,machine:false,admin:true,token:TOKEN
-# TOKEN 使用 $ openssl rand -hex 16 生成
-
-# 仅限某些用户或某些组织的成员注册
-# https://docs.drone.io/server/reference/drone-user-filter/
-DRONE_USER_FILTER=
-# DRONE_USER_FILTER=khs1994,github
-```
+在 `.env` 文件中配置如下两个变量
 
 * `DRONE_USER_CREATE` Drone 启动时创建哪些用户
 * `DRONE_USER_FILTER` Drone 允许哪些用户注册，留空即表示允许所有用户注册，将会造成资源浪费，**强烈建议** 配置该选项
@@ -131,7 +111,7 @@ networks:
     name: lnmp_frontend
 ```
 
-> CI 启动之前必须先启动 khs1994-docker/lnmp
+> 启动之前必须先启动 khs1994-docker/lnmp
 
 ### 使用外部服务(高级选项)
 
@@ -193,15 +173,11 @@ $ ./ci up [-d] [--reset]
 
 ## 启用构建
 
-在 `Drone` 页面登录账号，在项目列表的右边打开开关，将项目推送到 Git，可以看到 Drone 开始构建项目。
+在 `Drone` 页面登录账号，点击右上角 `sync` 按钮，在项目列表点击项目，并启用。之后将项目推送到 Git，可以看到 Drone 开始构建项目。
 
 ## 使用示例
 
 * [PHP](https://github.com/khs1994-php/tencent-ai)
-
-## 最佳实践
-
-https://blog.khs1994.com/categories/CI/Drone/
 
 ## More Information
 

@@ -6,8 +6,6 @@
 
 * [问题反馈](https://github.com/khs1994-docker/ci/issues)
 
-* [更多信息](https://blog.khs1994.com/categories/CI/Drone/)
-
 ## 重要提示
 
 本项目基于 [Drone `2.x`](https://docs.drone.io/) 版本。
@@ -52,27 +50,11 @@ $ ./ci
 
 * `CI_DOMAIN` 为服务主域名（例如 `t.khs1994.com`）
 
-* Windows 用户请将 `COMPOSE_CONVERT_WINDOWS_PATHS=1` 取消注释
+### 安全
 
-### 安全（务必仔细配置）
+在 `.env` 文件中配置如下两个变量
 
-```bash
-# https://docs.drone.io/manage/user/admins/
-# https://docs.drone.io/installation/reference/drone-user-create/
-# 只有管理员账户(admin) 才可以编辑仓库的 `Trusted` 选项
-# 为了启用 `Trusted` 选项，强烈建议编辑此变量
-# 将 USERNAME 替换为自己的 github 用户名
-# 或者参考 https://docs.drone.io/manage/user/admins/ 使用 CLI 设置管理员
-DRONE_USER_CREATE=
-# DRONE_USER_CREATE=username:USERNAME,admin:true
-# DRONE_USER_CREATE=username:khs1994,machine:false,admin:true,token:TOKEN
-# TOKEN 使用 $ openssl rand -hex 16 生成
-# https://docs.drone.io/server/reference/drone-user-filter/
-DRONE_USER_FILTER=
-# DRONE_USER_FILTER=khs1994,github
-```
-
-* `DRONE_USER_CREATE` Drone 启动时创建哪些用户
+* `DRONE_USER_CREATE` Drone 启动时创建的用户
 * `DRONE_USER_FILTER` Drone 允许哪些用户注册，留空即表示允许所有用户注册，将会造成资源浪费，**强烈建议** 配置该选项
 
 ### 使用 khs1994-docker/lnmp 的 MySQL Redis NGINX 服务(可选项)
@@ -95,7 +77,7 @@ networks:
     name: lnmp_frontend
 ```
 
-> CI 启动之前必须先启动 khs1994-docker/lnmp
+> 启动之前必须先启动 khs1994-docker/lnmp
 
 ```bash
 $ ./ci up-tls --config
@@ -120,7 +102,7 @@ $ ./ci up-tls
 NGINX 配置好之后，重启 `khs1994-docker/lnmp`
 
 ```bash
-$ lnmp-docker restart nginx
+$ ./lnmp-docker restart nginx
 ```
 
 ### `443` 端口是否占用
