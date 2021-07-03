@@ -76,6 +76,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
             --with-jpeg \
             --with-webp \
             --with-xpm \
+            # --with-avif \
         --with-pdo-mysql=shared \
         --with-pdo-pgsql=shared \
         # --with-xsl=shared \
@@ -97,7 +98,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-kerberos \
         --with-imap=shared \
             --with-imap-ssl \
-        # --with-xmlrpc=shared \
         --with-pic \
         --with-enchant=shared \
         --enable-fileinfo=shared \
@@ -182,7 +182,6 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
           libexif-dev \
           # libxslt-dev \
           gmp-dev \
-          # xmlrpc-c-dev \
           bzip2-dev \
           enchant2-dev \
           imap-dev \
@@ -197,6 +196,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
           openldap-dev \
           gnu-libiconv-dev \
           oniguruma-dev \
+          # libavif-dev \
           ${APK_DEV_EXTRA:-} \
   \
   && export CFLAGS="$PHP_CFLAGS" \
@@ -285,7 +285,6 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
                            sysvsem \
                            sysvshm \
                            # tidy \
-                           # xmlrpc \
                            # xsl \
                            # opcache 已默认安装，需要自行载入
                            opcache \
