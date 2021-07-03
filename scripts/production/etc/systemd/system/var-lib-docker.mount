@@ -1,0 +1,22 @@
+[Unit]
+Description=mount --bind /data/%P /%P
+DefaultDependencies=no
+Conflicts=umount.target
+Before=umount.target
+
+X-Before=local-fs.target
+After=data.mount
+Requires=data.mount
+
+StopWhenUnneeded=yes
+RefuseManualStart=yes
+RefuseManualStop=yes
+[Mount]
+What=/data/%P
+Where=/%P
+Type=none
+Options=bind
+DirectoryMode=0755
+X-TimeoutSec=5
+[Install]
+WantedBy=local-fs.target
