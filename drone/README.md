@@ -10,7 +10,7 @@
 
 ## 重要提示
 
-本项目基于 [Drone `1.x`](https://docs.drone.io/) 版本。
+本项目基于 [Drone `2.x`](https://docs.drone.io/) 版本。
 
 ## 微信订阅号
 
@@ -36,7 +36,7 @@
 
 ## 准备
 
-* 了解 CI，了解 Travis CI (Drone 和大多数 CI 工具一样，不过 Drone 可以免费的进行私有部署)
+* 了解 CI(Drone 和大多数 CI 工具一样，不过 Drone 可以免费的进行私有部署)
 
 * 有公网 IP 的云服务器（推荐，但不是必须）
 

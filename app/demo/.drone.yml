@@ -4,19 +4,22 @@
 # 项目构建设置中 Repository Hooks 全部勾选
 #
 
-# workspace:
-#   base: /app
-#   path: .
-
+# https://docs.drone.io/secret/encrypted/
 # kind: secret
 # name: username
 # data: hl3v+FODjduX0UpXBHgYzPzVTppQblg51CVgCbgDk4U=
+
+---
 
 kind: pipeline
 name: default
 
 # type: kubernetes
-# type: docker
+type: docker
+
+# workspace:
+#   base: /app
+#   path: ./
 
 platform:
   os: linux
@@ -25,6 +28,7 @@ platform:
 
 clone:
   depth: 50
+  # disable: true
 
 steps:
   # install dep
@@ -43,9 +47,13 @@ steps:
   # test script
   - name: script
     image: khs1994/php:8.0.8-fpm-alpine
-    # pull: always
+    # pull: always | never | if-not-exists
     # detach: true
     # privileged: true
+    # network_mode: host
+    # user: www-data
+    # depends_on:
+    #   - ""
     commands:
       - pwd
       - mv $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
@@ -58,8 +66,6 @@ steps:
     when:
       # target:
       # - production
-      # status:
-      # - changed
       # status:
       # - failure
       # - success
@@ -184,19 +190,12 @@ steps:
 
   - name: after_failure
     image: bash
+    failure: ignore
     when:
       status:
       - failure
     commands:
       - echo "build failure"
-
-  - name: after_changed
-    image: bash
-    when:
-      status:
-      - changed
-    commands:
-      - echo "build changed"
 
 services:
   - name: mysql
@@ -261,13 +260,24 @@ volumes:
 #     include: [ master, dev, feature/* ]
 #     exclude: [ release/1.0.0, release/1.1.* ]
 #   event:
-#   - push
-#   - pull_request
-#   - tag
+#   - cron
+#   - custom
 #   - promote
+#   - pull_request
+#   - push
 #   - rollback
+#   - tag
 #     exclude:
 #     - pull_request
 #   ref:
 #   - refs/heads/feature-*
 #   - refs/tags/v1.*
+
+# ---
+
+# kind: pipeline
+# type: docker
+# name: ci
+
+# depends_on:
+#   - "default"

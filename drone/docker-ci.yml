@@ -10,7 +10,7 @@ services:
 
   drone-server:
     << : *common
-    image: drone/drone:${CI_DRONE_VERSION:-2.0.1}
+    image: drone/drone:${CI_DRONE_VERSION:-2.0.3}
     volumes:
       - drone-data-v1:/data:rw
     networks:
@@ -18,8 +18,6 @@ services:
       - backend
     environment:
     - DRONE_LOGS_DEBUG=${CI_DEBUG:-true}
-    # 设为 false, server 与 agent 将同时运行
-    - DRONE_AGENTS_ENABLED=true
     # volumes:
     #   - type: bind
     #     source: /var/run/docker.sock

@@ -1,1 +1,1 @@
-* Drone `1.x`
+* Drone `2.x`

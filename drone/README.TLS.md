@@ -10,7 +10,7 @@
 
 ## 重要提示
 
-本项目基于 [Drone `1.x`](https://docs.drone.io/) 版本。
+本项目基于 [Drone `2.x`](https://docs.drone.io/) 版本。
 
 ## 微信订阅号
 
