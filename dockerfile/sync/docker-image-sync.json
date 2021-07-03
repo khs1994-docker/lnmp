@@ -40,8 +40,8 @@
     "dest": "library-mirror/docker:test-dind-rootless"
   },
   {
-    "source": "library/alpine:3.13",
-    "dest": "library-mirror/alpine:3.13"
+    "source": "library/alpine:3.14",
+    "dest": "library-mirror/alpine:3.14"
   },
   {
     "source": "library/alpine:edge",

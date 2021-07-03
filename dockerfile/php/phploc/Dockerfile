@@ -4,7 +4,7 @@ ARG PHP_VERSION=7.4.21
 ARG USERNAME=khs1994
 ARG BASE=composer
 
-FROM alpine:3.13 as phploc-downloader
+FROM alpine:3.14 as phploc-downloader
 
 # Copy/Paste Detector (CPD) for PHP code.  https://github.com/sebastianbergmann/phploc
 
