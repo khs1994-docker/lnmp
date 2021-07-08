@@ -91,7 +91,6 @@ systemd:
         --hostname-override=coreos{{n}} \
         --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
-        --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
         --v=2
 
         # cri is docker

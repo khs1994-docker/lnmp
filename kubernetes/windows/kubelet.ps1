@@ -12,7 +12,6 @@ kubelet `
 --hostname-override=${NODE_NAME} `
 --volume-plugin-dir=${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ `
 --logtostderr=true `
---dynamic-config-dir=${K8S_ROOT}/var/lib/kubelet/dynamic-config `
 --container-runtime=remote `
 --container-runtime-endpoint=npipe:////./pipe/containerd-containerd `
 --v=6 `

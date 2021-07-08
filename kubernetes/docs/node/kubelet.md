@@ -90,29 +90,3 @@ kubelet 启动后使用 `--bootstrap-kubeconfig` 向 kube-apiserver 发送 CSR �
 同样是一个软连接文件，当 kubelet 配置了 `--feature-gates=RotateKubeletServerCertificate=true` 选项后，会在证书总有效期的 70%~90% 的时间内发起续期请求，请求被批准后会生成一个 `kubelet-server-时间戳.pem` `kubelet-server-current.pem` 文件则始终软连接到最新的真实证书文件，该文件将会一直被用于 kubelet 10250 api 端口鉴权
 
 `kubelet-client.crt` 该文件在 kubelet 完成 TLS bootstrapping 后生成，此证书是由 `controller-manager` 签署的，此后 kubelet 将会加载该证书，用于与 apiserver 建立 TLS 通讯，同时使用该证书的 CN 字段作为用户名，O 字段作为用户组向 apiserver 发起其他请求
-
-## 动态 kubelet 配置（Dynamic Kubelet Configuration）
-
-`Kubelet` **动态配置** 可以使让我们及其方便的大规模更新集群 `Kubelet` 配置，让我们可以像配置集群中其他应用一样通过 `ConfigMap` 配置 `Kubelet`，并且 `Kubelet` 能动态感知到配置的变化，自动退出重新加载最新配置。不仅如此，Kubelet Dynamic Config 还有本地 `Checkpoint` 数据、失败回滚到上一个可用配置集等美丽特性。
-
-* https://kubernetes.io/docs/tasks/administer-cluster/reconfigure-kubelet/
-
-根据官方文档配置即可。
-
-```bash
-jq '.kubeletconfig|.kind="KubeletConfiguration"|.apiVersion="kubelet.config.k8s.io/v1beta1"'
-```
-
-此命令在 `kubeletconfig` 字段增加 `kind="KubeletConfiguration"` `apiVersion="kubelet.config.k8s.io/v1beta1"`
-
-```bash
-$ kubectl get no ${NODE_NAME} -o json | jq '.status.config'
-```
-
-**注意事项**
-
-* kubelet 必须配置重启（systemd），重载配置时 kubelet 会自动退出
-* 如果你的 NODE IP 不固定（WSL2），请不要使用动态配置
-
-* https://cloud.tencent.com/developer/article/1381318
-* https://kubernetes.io/blog/2018/07/11/dynamic-kubelet-configuration/

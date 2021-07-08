@@ -47,7 +47,7 @@ jobs:
       # next version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.22.0-beta.0
+         CI_KUBERNETES_VERSION: 1.22.0-beta.1
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
 
@@ -450,7 +450,7 @@ jobs:
          HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | grep NodePort | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
          curl --version
          SERVER_IP=`cat .server_ip`
-         if [ $CI_KUBERNETES_VERSION = '1.22.0-beta.0' ];then
+         if [ $CI_KUBERNETES_VERSION = '1.22.0-beta.1' ];then
          curl ${SERVER_IP}:${HTTP_PORT} || true
          else
          curl ${SERVER_IP}:${HTTP_PORT}
@@ -536,9 +536,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.22.0-alpha.3-config
+         BASE_BRANCH=v1.22.0-beta.0-config
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.22.0-beta.0' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.22.0-beta.1' ];then
            exit 0
          fi
 
@@ -563,7 +563,7 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.22.0-beta.0-config
+         BASE_BRANCH=v1.22.0-beta.1-config
          # BASE_BRANCH=master
          if [ $CI_KUBERNETES_VERSION != '1.23.0-alpha.0' ];then
            exit 0
