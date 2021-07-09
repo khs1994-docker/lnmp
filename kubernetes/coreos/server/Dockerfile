@@ -1,7 +1,6 @@
-FROM nginx:1.21.0-alpine
+FROM nginx:1.21.1-alpine
 
-LABEL maintainer="khs1994@khs1994.com" \
-      version="1.21.0"
+LABEL maintainer="khs1994@khs1994.com"
 
 ARG BUTANE_URL=https://github.com/coreos/butane/releases/download/
 ARG BUTANE_VERSION=v0.12.1

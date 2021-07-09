@@ -409,8 +409,8 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.21.0-alpine
-    # image: khs1994/nginx:1.21.0-alpine
+    image: nginx:1.21.1-alpine
+    # image: khs1994/nginx:1.21.1-alpine
     ports:
       - "443:443/tcp"
       - "443:443/udp"
@@ -590,6 +590,8 @@ services:
     command:
       - server
       - /data
+      - --console-address
+      - ':9090'
     environment:
       MINIO_ROOT_USER_FILE: minio-root-user
       MINIO_ROOT_PASSWORD_FILE: minio-root-password
