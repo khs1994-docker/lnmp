@@ -85,8 +85,7 @@ jobs:
           patch -p1 < ../laravel-demo/.patch/app-console-kernel.patch
 
           lnmp-composer require laravel/jetstream
-          lnmp-composer require league/flysystem 1.x
-          lnmp-composer require league/flysystem-aws-s3-v3 1.x
+          lnmp-composer require league/flysystem-aws-s3-v3 "~1.0"
           # 此步骤会重置 webpack.mix.js
           # lnmp-php artisan jetstream:install livewire
           lnmp-php artisan jetstream:install inertia
