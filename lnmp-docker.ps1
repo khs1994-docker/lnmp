@@ -170,9 +170,9 @@ Function New-InitFile() {
 
   _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
 
-  if (!(Test-Path secrets/minio/key.txt)) {
-    Copy-Item secrets/minio/key.example.txt secrets/minio/key.txt
-    Copy-Item secrets/minio/secret.example.txt secrets/minio/secret.txt
+  if (!(Test-Path secrets/minio/root-password.txt)) {
+    Copy-Item secrets/minio/root-password.example.txt secrets/minio/root-password.txt
+    Copy-Item secrets/minio/root-user.example.txt secrets/minio/root-user.txt
   }
 
   if (!(Test-Path config/redis/redis.conf)) {

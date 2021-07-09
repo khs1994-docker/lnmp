@@ -18,24 +18,28 @@ x-common-label:
 services:
   minio:
     << : *common
-    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2021-01-30T00-20-58Z}
+    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2021-07-08T01-15-01Z}
     volumes:
       - type: volume
         source: minio-data
         target: /data
       # - ./config/nginx/demo-ssl/t.khs1994.com.crt:/root/.minio/certs/public.crt
       # - ./config/nginx/demo-ssl/t.khs1994.com.key:/root/.minio/certs/private.key
-    # ports:
-    #   - "9000:9000"
+    ports:
+      - "9000:9000"
+      - "9090:9090"
     environment:
       # https://github.com/minio/minio/blob/master/docs/config/README.md
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
-      MINIO_REGION: ${MINIO_REGION:-'us-east-1'}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      MINIO_REGION_NAME: ${MINIO_REGION_NAME:-us-east-1}
       MINIO_BROWSER: ${MINIO_BROWSER:-on}
-      MINIO_WORM: ${MINIO_WORM:-off}
       MINIO_DOMAIN: ${MINIO_DOMAIN:-''}
-    command: server /data
+    command:
+      - server
+      - /data
+      - --console-address
+      - ':9090'
     networks:
       - backend
       - frontend

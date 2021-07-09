@@ -25,9 +25,9 @@ LREW_INCLUDE="minio pcit"
 在 `.env` 进行配置
 
 ```bash
-MINIO_ACCESS_KEY=minioadmin
+MINIO_ROOT_USER=minioadmin
 
-MINIO_SECRET_KEY=minioadmin
+MINIO_ROOT_PASSWORD=minioadmin
 ```
 
 > 自行修改配置之后，下边命令中的密钥换成你自己设置的！

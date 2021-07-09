@@ -393,8 +393,8 @@ env_status(){
 
   _cp_only_not_exists kubernetes/nfs-server/.env.example kubernetes/nfs-server/.env
 
-  _cp_only_not_exists secrets/minio/key.example.txt secrets/minio/key.txt
-  _cp_only_not_exists secrets/minio/secret.example.txt secrets/minio/secret.txt
+  _cp_only_not_exists secrets/minio/root-password.example.txt secrets/minio/root-password.txt
+  _cp_only_not_exists secrets/minio/root-user.example.txt secrets/minio/root-user.txt
 
   _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
 }

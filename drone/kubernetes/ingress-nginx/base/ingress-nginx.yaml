@@ -71,4 +71,4 @@ spec:
       - path: /
         backend:
           serviceName: minio
-          servicePort: http
+          servicePort: console

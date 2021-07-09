@@ -208,8 +208,8 @@
     "dest": "library-mirror/phpmyadmin:5.1.1-fpm-alpine"
   },
   {
-    "source": "minio/minio:RELEASE.2021-01-30T00-20-58Z",
-    "dest": "minio:RELEASE.2021-01-30T00-20-58Z"
+    "source": "minio/minio:RELEASE.2021-07-08T01-15-01Z",
+    "dest": "minio:RELEASE.2021-07-08T01-15-01Z"
   },
   {
     "source": "dockerpracticesig/docker_practice:vuepress",

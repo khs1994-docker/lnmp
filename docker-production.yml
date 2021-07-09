@@ -586,16 +586,15 @@ services:
   minio:
     << : *common
     << : *default-labels
-    image: minio/minio:RELEASE.2021-01-30T00-20-58Z
+    image: minio/minio:RELEASE.2021-07-08T01-15-01Z
     command:
       - server
       - /data
     environment:
-      MINIO_ACCESS_KEY_FILE: miniokey
-      MINIO_SECRET_KEY_FILE: miniosecret
-      MINIO_REGION: ${MINIO_REGION:-us-east-1}
+      MINIO_ROOT_USER_FILE: minio-root-user
+      MINIO_ROOT_PASSWORD_FILE: minio-root-password
+      MINIO_REGION_NAME: ${MINIO_REGION_NAME:-us-east-1}
       MINIO_BROWSER: ${MINIO_BROWSER:-on}
-      MINIO_WORM: ${MINIO_WORM:-off}
       MINIO_DOMAIN: ${MINIO_DOMAIN:-''}
     networks:
       - backend
@@ -603,8 +602,8 @@ services:
     volumes:
       - minio-data:/data
     secrets:
-      - miniokey
-      - miniosecret
+      - minio-root-user
+      - minio-root-password
 
 networks:
   frontend:
@@ -703,11 +702,11 @@ secrets:
   ssh_config:
     file: ./secrets/ssh_config
     << : *default-labels
-  miniokey:
-    file: ./secrets/minio/key.txt
+  minio-root-user:
+    file: ./secrets/minio/root-user.txt
     << : *default-labels
-  miniosecret:
-    file: ./secrets/minio/secret.txt
+  minio-root-password:
+    file: ./secrets/minio/root-password.txt
     << : *default-labels
 
 configs:
