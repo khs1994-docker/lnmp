@@ -808,7 +808,7 @@ cd /tmp
 if [ ${ID} = 'fedora' ];then
   rpm_release_name="1.fc${VERSION_ID}"
 else
-  rpm_release_name="1.el${VERSION_ID}.centos"
+  rpm_release_name="1.el${VERSION_ID}.${ID}"
 fi
 
 echo "Name:       khs1994-wsl-php${PHP_NUM}
@@ -924,6 +924,8 @@ export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 # verify os
 
 . /etc/os-release
+
+export VERSION_ID=`echo $VERSION_ID | cut -d '.' -f 1`
 
 #
 # ID="centos"

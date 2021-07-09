@@ -43,6 +43,8 @@ jobs:
             DIST_FILE: khs1994-wsl-php74-7.4.21-1.el8.centos.x86_64.rpm
           - JOB_NAME: wsl-php-builder-rhel8-80
             DIST_FILE: khs1994-wsl-php80-8.0.8-1.el8.centos.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-rocky8-80
+            DIST_FILE: khs1994-wsl-php80-8.0.8-1.el8.rocky.x86_64.rpm
           - JOB_NAME: wsl-php-builder-fc34-73
             DIST_FILE: khs1994-wsl-php73-7.3.29-1.fc34.x86_64.rpm
           - JOB_NAME: wsl-php-builder-fc34-74

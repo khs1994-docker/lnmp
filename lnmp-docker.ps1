@@ -176,7 +176,7 @@ Function New-InitFile() {
   }
 
   if (!(Test-Path config/redis/redis.conf)) {
-    Write-Output "#" | Out-File config/redis/redis.conf
+    New-Item -ItemType File config/redis/redis.conf
   }
 
   _cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
@@ -372,10 +372,6 @@ ClusterKit:
   clusterkit-help      Print ClusterKit help info
 
 Developer Tools:
-
-
-WSL2:
-  dockerd              Start Dockerd on WSL2
 
 Read './docs/*.md' for more information about CLI commands.
 
@@ -1535,25 +1531,6 @@ Example: ./lnmp-docker composer /app/demo install
 
   hosts {
     Edit-Hosts
-  }
-
-  dockerd {
-    & $PSScriptRoot/wsl2/bin/dockerd-wsl2.ps1 $other
-  }
-
-  "compose$" {
-    $DIST = "C:\ProgramData\DockerDesktop\version-bin\docker-compose.exe"
-    if ($other) {
-      $DIST = $other
-
-      if ($other.count -gt 1) {
-        $DIST = $other[0]
-      }
-    }
-
-    printInfo "Download docker-compose $LNMP_DOCKER_COMPOSE_VERSION to $DIST ..."
-
-    start-process "curl.exe" -ArgumentList "-L", "https://github.com/docker/compose/releases/download/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-Windows-x86_64.exe", "-o", "$DIST" -Verb Runas -wait -WindowStyle Hidden
   }
 
   "^code-init$" {

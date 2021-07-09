@@ -41,7 +41,7 @@ spec:
         - containerPort: 3000
           name: dashboard
         env:
-        # https://kube-runner.docs.drone.io/installation/reference/
+        # https://docs.drone.io/runner/docker/configuration/
         - name: DRONE_RPC_HOST
           value: drone
         - name: DRONE_RPC_PROTO

@@ -32,7 +32,7 @@ services:
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
-    # https://docker-runner.docs.drone.io/installation/reference/
+    # https://docs.drone.io/runner/docker/configuration/
     environment:
       - DRONE_RPC_SECRET=${DRONE_RPC_SECRET:-secret}
       - DRONE_RPC_HOST=drone-server

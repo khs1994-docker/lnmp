@@ -49,25 +49,14 @@ jobs:
 
         mkdir -p Microsoft/
 
-        if ! [ -f Microsoft/config-wsl ];then
-          # mkdir -p Microsoft/
-          # curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/${ref}/Microsoft/config-wsl \
-          #  || curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/linux-msft-wsl-4.19.y/Microsoft/config-wsl
-
-          curl -fsSL -o feature-mm_discard.diff \
-          https://github.com/microsoft/WSL2-Linux-Kernel/commit/cb68ddad0cfbab6afe5ec390af214b989d4af74c.patch
-
-          patch -p1 < feature-mm_discard.diff
-        fi
-
         if [ $ref = "linux-msft-wsl-5.10.y" -o $ref = "master" ];then
           curl -fsSL -o Microsoft/config-wsl \
             https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl-5.10
         fi
 
         if [ $ref = "master" ];then
-          curl -L -o feature-dxgkrnl.diff https://github.com/microsoft/WSL2-Linux-Kernel/commit/7b22472e80779572b9c3a9955d93ab598fd4240e.patch
-
+          # curl -L -o feature-dxgkrnl.diff https://github.com/microsoft/WSL2-Linux-Kernel/commit/a11b238a0398ea063c555d8c9fab3d3ed95882fa.patch
+          curl -L -o feature-dxgkrnl.diff https://github.com/nathanchance/WSL2-Linux-Kernel/commit/7e3c16ef15554d7efd7ce946d335b9f8f93e6b92.patch
           patch -p1 < feature-dxgkrnl.diff
         fi
 
