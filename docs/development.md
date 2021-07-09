@@ -1,7 +1,5 @@
 # 开发环境
 
-[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
-
 ## 使用方法
 
 **1.** **可选项** 在 `.env` 文件中通过 `LNMP_SERVICES` 变量修改需要启用的软件，详细说明请参考 [个性化方案](custom.md)
@@ -68,16 +66,6 @@ $WSL2_DIST="ubuntu"
 
 想要在 PHPStorm 中实现右键点击运行测试脚本必须进行额外的设置，请查看 [PHP 容器化最佳实践](https://github.com/khs1994-docker/php-demo#6-cli-settings)
 
-## 容器数量伸缩
-
-```bash
-# 扩容
-$ ./lnmp-docker scale php7=3
-
-# 缩容
-$ ./lnmp-docker scale php7=1
-```
-
 ## 保持运行的软件最新
 
 在 `.env` 文件中注释掉 `LNMP_SOFT_VERSION` 变量，例如
@@ -89,4 +77,6 @@ $ ./lnmp-docker scale php7=1
 
 ## 危险的命令
 
-**$ docker volume prune** 执行 `$ lnmp-docker down` 之后执行该命令将会删除数据卷（例如：数据库数据）
+* `docker volume prune`
+
+执行 `$ lnmp-docker down` 之后执行该命令将会删除数据卷（例如：数据库数据）

@@ -19,7 +19,7 @@ phpmyadmin                   latest                         e8e3976e7f7f        
 
 services:
   phpmyadmin:
-    image: phpmyadmin:5.1.0-fpm-alpine
+    image: phpmyadmin:5.1.1-fpm-alpine
     volumes:
       - phpmyadmin:/var/www/html
 
@@ -32,3 +32,7 @@ volumes:
 ```
 
 将 `config/nginx/demo.config/phpmyadmin.config` 复制到 `config/nginx/phpmyadmin.conf`，自行调整配置后，重启 NGINX 容器。
+
+```bash
+$ lnmp-docker restart nginx
+```

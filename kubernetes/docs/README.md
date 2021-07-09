@@ -1,7 +1,7 @@
 ---
 home: true
-actionText: （AD）腾讯云容器服务
-actionLink: https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61
+actionText: 【腾讯云】618云上GO！云服务器限时秒杀，1核2G首年95元！
+actionLink: https://cloud.tencent.com/act/cps/redirect?redirect=1443&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console
 features:
 - title: 开始 Kubernetes 之旅
   details: ''

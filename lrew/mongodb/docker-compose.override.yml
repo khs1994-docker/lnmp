@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 x-common:
   &common
@@ -9,4 +9,4 @@ x-common:
 services:
   mongodb:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/mongo:${LNMP_MONGODB_VERSION:-4.4.5}
+    image: ${LNMP_LIBRARY_NS:-library}/mongo:${LNMP_MONGODB_VERSION:-4.4.6}

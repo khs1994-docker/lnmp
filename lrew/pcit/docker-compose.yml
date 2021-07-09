@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 x-common-label:
   &common-label
@@ -16,7 +16,7 @@ services:
     volumes:
       - ./pcit/key:/app/pcit/framework/storage/private_key:cached
       - ./pcit/.env.${APP_ENV:-development}:/app/pcit/.env.${APP_ENV:-development}:cached
-      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
       - type: volume
         source: pcit-tmp
         target: /tmp
@@ -40,7 +40,7 @@ services:
     volumes:
       - ./pcit/key:/app/.pcit/framework/storage/private_key:cached
       - ./pcit/.env.${APP_ENV:-development}:/app/.pcit/.env.${APP_ENV:-development}:cached
-      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
       - type: volume
         source: pcit-tmp
         target: /tmp
@@ -68,7 +68,7 @@ services:
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
-      - "${LNMP_PCIT_PORT:-0.0.0.0:10000}:10000"
+      - "${LNMP_PCIT_PORT:-0.0.0.0:1218}:1218"
 
 volumes:
   pcit-tmp:

@@ -25,7 +25,6 @@ spec:
   - hosts:
     - git.t.khs1994.com
     - drone.t.khs1994.com
-    - drone-kubenative.t.khs1994.com
     - drone-runner-kubernetes.t.khs1994.com
     - drone-runner-docker.t.khs1994.com
     - s3.t.khs1994.com
@@ -52,13 +51,6 @@ spec:
         backend:
           serviceName: drone
           servicePort: http
-  - host: drone-kubenative.t.khs1994.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: drone-kubenative
-          servicePort: http
   - host: drone-runner-kubernetes.t.khs1994.com
     http:
       paths:
@@ -79,4 +71,4 @@ spec:
       - path: /
         backend:
           serviceName: minio
-          servicePort: http
+          servicePort: console

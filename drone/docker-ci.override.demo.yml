@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 x-production:
   &production
@@ -26,12 +26,15 @@ x-gogs:
     - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
     #
     - DRONE_GOGS_SERVER={{ DRONE_GOGS_SERVER }}
+    - DRONE_GOGS_SKIP_VERIFY=false
     - DRONE_TLS_AUTOCERT=false
     #
     - DRONE_DATABASE_DRIVER={{ DB_TYPE }}
     - DRONE_DATABASE_DATASOURCE={{ DB_USERNAME }}:{{ DB_PASSWORD }}@tcp({{ DB_HOST }})/gogs?parseTime=true
     # - DRONE_TLS_KEY=/etc/drone/ssl/${CI_DOMAIN}.key
     # - DRONE_TLS_CERT=/etc/drone/ssl/${CI_DOMAIN}.crt
+    - DRONE_USER_CREATE=${DRONE_USER_CREATE}
+    - DRONE_USER_FILTER=${DRONE_USER_FILTER:?DRONE_USER_FILTER}
 
 x-github:
   &github
@@ -66,6 +69,8 @@ x-gitlab:
     - DRONE_DATABASE_DATASOURCE={{ DB_USERNAME }}:{{ DB_PASSWORD }}@tcp({{ DB_HOST }})/gogs?parseTime=true
     # - DRONE_TLS_KEY=/etc/drone/ssl/${CI_DOMAIN}.key
     # - DRONE_TLS_CERT=/etc/drone/ssl/${CI_DOMAIN}.crt
+    - DRONE_USER_CREATE=${DRONE_USER_CREATE}
+    - DRONE_USER_FILTER=${DRONE_USER_FILTER:?DRONE_USER_FILTER}
 
 services:
   drone-server:
@@ -81,9 +86,10 @@ services:
       - "${CI_HOST:?CI_HOST}:${CI_DRONE_PORT:-8000}:80"
       # - 9000:9000
 
-  drone-docker-runner:
-    # ports:
-    #   - 3000:3000
+  # drone-docker-runner:
+  #   ports:
+  #     # runner dashboard
+  #     - 3001:3000
 
 # networks:
 #   backend:

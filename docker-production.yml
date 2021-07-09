@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 #
 # khs1994.com Docker Swarm mode
@@ -75,7 +75,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:8.0.6-fpm-alpine
+  image: khs1994/php:8.0.8-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
@@ -196,9 +196,9 @@ services:
       # << : *default-build-debian
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    image: redis:6.2.3-alpine
+    image: redis:6.2.4-alpine
     # image: username/lnmp-redis:tag
-    # image: khs1994/lnmp-redis:6.2.3
+    # image: khs1994/lnmp-redis:6.2.4
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
@@ -305,9 +305,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mongodb/
   #     dockerfile: Dockerfile
-  #   image: mongo:4.4.5
+  #   image: mongo:4.4.6
   #   # image: username/lnmp-mongodb:tag
-  #   # image: khs1994/lnmp-mongodb:4.4.5
+  #   # image: khs1994/lnmp-mongodb:4.4.6
   #   volumes:
   #     # - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db
@@ -422,6 +422,8 @@ services:
       - frontend
     depends_on:
       - php7
+        # condition: service_completed_successfully
+          # service_started service_healthy service_completed_successfully
       - minio
     # logging: *default-logging
     deploy:
@@ -584,16 +586,15 @@ services:
   minio:
     << : *common
     << : *default-labels
-    image: minio/minio:RELEASE.2021-01-30T00-20-58Z
+    image: minio/minio:RELEASE.2021-07-08T01-15-01Z
     command:
       - server
       - /data
     environment:
-      MINIO_ACCESS_KEY_FILE: miniokey
-      MINIO_SECRET_KEY_FILE: miniosecret
-      MINIO_REGION: ${MINIO_REGION:-us-east-1}
+      MINIO_ROOT_USER_FILE: minio-root-user
+      MINIO_ROOT_PASSWORD_FILE: minio-root-password
+      MINIO_REGION_NAME: ${MINIO_REGION_NAME:-us-east-1}
       MINIO_BROWSER: ${MINIO_BROWSER:-on}
-      MINIO_WORM: ${MINIO_WORM:-off}
       MINIO_DOMAIN: ${MINIO_DOMAIN:-''}
     networks:
       - backend
@@ -601,8 +602,8 @@ services:
     volumes:
       - minio-data:/data
     secrets:
-      - miniokey
-      - miniosecret
+      - minio-root-user
+      - minio-root-password
 
 networks:
   frontend:
@@ -701,11 +702,11 @@ secrets:
   ssh_config:
     file: ./secrets/ssh_config
     << : *default-labels
-  miniokey:
-    file: ./secrets/minio/key.txt
+  minio-root-user:
+    file: ./secrets/minio/root-user.txt
     << : *default-labels
-  miniosecret:
-    file: ./secrets/minio/secret.txt
+  minio-root-password:
+    file: ./secrets/minio/root-password.txt
     << : *default-labels
 
 configs:

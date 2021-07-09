@@ -18,7 +18,7 @@
       "os": "linux"
     }
   ],
-  "pre-version": "1.27.0",
+  "pre-version": "1.29.0",
   "scripts": {
     "dist": "_mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}\n\nif(${env:lwpm_os} -ne \"windows\"){\n  $url = $url.trim('.exe')\n  $filename = $filename.trim('.exe')\n}\n\ncurl -L `\n$url `\n-o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename\n",
     "install": "Copy-Item -Force $filename C:\\bin\\docker-compose.exe\n",
@@ -31,5 +31,5 @@
   },
   "url": "https://github.com/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})",
   "url-mirror": "https://download.fastgit.org/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})",
-  "version": "1.27.0"
+  "version": "1.29.0"
 }

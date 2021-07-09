@@ -99,10 +99,6 @@ else
   echo "[ $item ] exists"
 fi
 
-if [ `uname -a | grep -q WSL2 ; echo $?` -ne 0 ];then
-  xz -d $items
-fi
-
 done
 
 cd .. > /dev/null
@@ -168,10 +164,9 @@ case "$1" in
       --nic2 bridged \
       --nic1 hostonly \
       --nic3 hostonly \
-      --bridgeadapter2 $(test `uname -s` = 'Linux' && (ip route list | grep default | awk '{print $5}') || true ) \
+      --bridgeadapter2 $(test `uname -s` = 'Linux' && (ip route list | grep default | awk '{print $5}') || echo 'en0' ) \
       --hostonlyadapter1 vboxnet1 \
-      --hostonlyadapter2 vboxnet2 \
-      --firmware efi
+      --hostonlyadapter3 vboxnet2
 
       VBoxManage createmedium --filename "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi" --size 100000
 

@@ -1,14 +1,12 @@
 # NFS Volume(NFSv4)
 
-[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
-
 **NFS 数据卷** 是跨主机的容器数据存储方案之一。
 
 ## NFS 各个版本的区别
 
 * https://blog.csdn.net/ycnian/article/details/8515517
 
-本文以 `NFSv4` 版本为例，无需 RPC `111` 端口, 只需监听 `2049` 端口即可。
+本文以 `NFSv4` 版本为例，无需开启 RPC `111` 端口, 只需开启 `2049` 端口即可。
 
 ## 配置 NFS Server 容器
 

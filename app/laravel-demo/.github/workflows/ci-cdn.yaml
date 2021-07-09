@@ -42,9 +42,9 @@ jobs:
       - name: Setup S3(Minio)
         run: |
           set -x
-          echo "MINIO_ACCESS_KEY=minioadmin" >> $LNMP_PATH/.env
-          echo "MINIO_SECRET_KEY=minioadmin" >> $LNMP_PATH/.env
-          echo "MINIO_REGION=us-east-1" >> $LNMP_PATH/.env
+          echo "MINIO_ROOT_USER=minioadmin" >> $LNMP_PATH/.env
+          echo "MINIO_ROOT_PASSWORD=minioadmin" >> $LNMP_PATH/.env
+          echo "MINIO_REGION_NAME=us-east-1" >> $LNMP_PATH/.env
           echo "MINIO_BROWSER=off" >> $LNMP_PATH/.env
           # echo "LNMP_MINIO_VERSION=latest" >> $LNMP_PATH/.env
 
@@ -85,8 +85,7 @@ jobs:
           patch -p1 < ../laravel-demo/.patch/app-console-kernel.patch
 
           lnmp-composer require laravel/jetstream
-          lnmp-composer require league/flysystem 1.x
-          lnmp-composer require league/flysystem-aws-s3-v3 1.x
+          lnmp-composer require league/flysystem-aws-s3-v3 "~1.0"
           # 此步骤会重置 webpack.mix.js
           # lnmp-php artisan jetstream:install livewire
           lnmp-php artisan jetstream:install inertia

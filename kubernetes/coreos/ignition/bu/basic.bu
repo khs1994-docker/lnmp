@@ -1,4 +1,4 @@
-# https://github.com/coreos/butane/blob/master/docs/config-fcos-v1_1.md
+# https://github.com/coreos/butane/blob/main/docs/config-fcos-v1_1.md
 variant: fcos
 version: 1.3.0
 # version: 1.4.0-experimental
@@ -14,14 +14,14 @@ passwd:
         - docker
 storage:
   files:
-    - path: /etc/NetworkManager/system-connections/eth0.nmconnection
+    - path: /etc/NetworkManager/system-connections/enp0s8.nmconnection
       mode: 0600
       contents:
         inline: |
           [connection]
-          id=eth0
+          id=enp0s8
           type=ethernet
-          interface-name=eth0
+          interface-name=enp0s8
           permissions=
           autoconnect=true
 
@@ -33,13 +33,13 @@ storage:
           addr-gen-mode=stable-privacy
           dns-search=
           method=auto
-    - path: /etc/NetworkManager/system-connections/eth1.nmconnection
+    - path: /etc/NetworkManager/system-connections/enp0s3.nmconnection
       mode: 0600
       contents:
         inline: |
           [connection]
-          id=eth1
-          interface-name=eth1
+          id=enp0s3
+          interface-name=enp0s3
           type=ethernet
           autoconnect=true
 

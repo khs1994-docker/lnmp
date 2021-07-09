@@ -1,5 +1,5 @@
-# syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.3.28
+# syntax=docker/dockerfile:labs
+ARG PHP_VERSION=7.3.29
 ARG USERNAME=khs1994
 ARG BASE=fpm
 
@@ -18,17 +18,17 @@ ENV COMPOSER_DEP_APKS \
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_HOME=/tmp/composer \
     COMPOSER_NO_INTERACTION=1 \
-    COMPOSER_VERSION=2.0.14 \
+    COMPOSER_VERSION=2.1.3 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:2.0.14,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:2.1.3,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .composer_deps $COMPOSER_DEP_APKS \
     && { echo "memory_limit=-1"; \
          echo "date.timezone=${PHP_TIMEZONE:-PRC}"; \
-       } | tee ${PHP_INI_DIR}/conf.d/php-cli.ini \
+       } | tee ${PHP_INI_DIR}/php-cli.ini \
  #    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer \
  #    && php -r " \
  #    \$signature = '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5'; \
@@ -39,7 +39,7 @@ RUN --mount=type=bind,from=composer:2.0.14,source=/usr/bin/composer,target=/opt/
  #        exit(1); \
  #    }" \
  # && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
-    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/2.0/docker-entrypoint.sh \
+    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/2.1/docker-entrypoint.sh \
          -o /docker-entrypoint.composer \
     && chmod +x /docker-entrypoint.composer \
     && cp -a /opt/bin/composer /usr/bin/composer \

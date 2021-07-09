@@ -40,9 +40,19 @@
   // "forwardPorts": [
 
   // ],
+  // A command string or list of command arguments to run inside the container after is created.
   // "postCreateCommand": [
 
   // ],
+  // A command string or list of command arguments to run when the container starts (in all cases).
+  // "postStartCommand": [
+
+  // ],
+  // A command string or list of command arguments to run after VS Code has attached to a running container (in all cases).
+  // "postAttachCommand": [
+
+  // ],
+  // A command string or list of command arguments to run on the host machine before the container is created.
   // "initializeCommand": [
 
   // ],

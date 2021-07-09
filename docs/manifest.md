@@ -5,13 +5,13 @@
 ```bash
 # 事先请登录 Docker Hub
 # 镜像列表中的镜像请事先构建并推送到 Docker Hub
-# docker manifest create PULL名字 [镜像列表]
+# docker manifest create [manifest list] [镜像列表]
 $ docker manifest create khs1994/php:7.3.8-fpm-alpine \
       khs1994/php:7.3.8-fpm-alpine \
       khs1994/arm32v7-php:7.3.8-fpm-alpine \
       khs1994/arm64v8-php:7.3.8-fpm-alpine
 
-# docker manifest annotate PULL名字 镜像名 --os 系统  --arch 架构
+# docker manifest annotate [manifest list] [镜像名] --os [系统]  --arch [架构]
 $ docker manifest annotate khs1994/php:7.3.8-fpm-alpine \
       khs1994/php:7.3.8-fpm-alpine \
       --os linux --arch amd64

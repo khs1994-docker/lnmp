@@ -1,3 +1,5 @@
 registry "https://registry.npm.taobao.org"
 cache-folder "/tmp/node/.yarn"
+#             /usr/local/share/.cache/yarn
 global-folder "/tmp/node/yarn"
+#              /usr/local/share/.config/yarn/global

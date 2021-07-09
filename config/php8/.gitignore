@@ -7,3 +7,4 @@
 !php.production.ini
 !zz-docker.example.conf
 !zz-docker.production.conf
+!php-cli.example.ini

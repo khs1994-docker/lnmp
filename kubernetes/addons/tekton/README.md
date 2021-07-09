@@ -1,6 +1,6 @@
 # [Tekton](https://github.com/tektoncd/pipeline)
 
-* https://github.com/tektoncd/pipeline/blob/master/docs/install.md
+* https://github.com/tektoncd/pipeline/blob/main/docs/install.md
 * https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
 * https://github.com/tektoncd/pipeline/releases
 
@@ -37,7 +37,7 @@ webhook 使用了 kubernetes 的 admissionwebhook 机制，所以，在我们 ku
 
 **v1beta1**
 
-* https://github.com/tektoncd/pipeline/blob/master/docs/migrating-v1alpha1-to-v1beta1.md
+* https://github.com/tektoncd/pipeline/blob/main/docs/migrating-v1alpha1-to-v1beta1.md
 * `PipelineResources` 废弃
 
 ## 部署

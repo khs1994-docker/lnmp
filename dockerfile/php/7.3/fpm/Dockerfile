@@ -1,7 +1,7 @@
-# syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.3.28
+# syntax=docker/dockerfile:labs
+ARG PHP_VERSION=7.3.29
 
-FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.13 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -169,7 +169,9 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
         && php -m \
         && ls -la $(php-config --extension-dir) \
-        && LD_PRELOAD="/usr/lib/preloadable_libiconv.so php" php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));'
+        && LD_PRELOAD="/usr/lib/preloadable_libiconv.so php" php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));' \
+# smoke test
+        && php --version
 
 ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so php"
 

@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 services:
 
   redis:
@@ -6,4 +6,4 @@ services:
       context: .
       args:
         ALPINE_URL: mirrors.aliyun.com
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/redis:${TAG:-6.2.3}-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/redis:${TAG:-6.2.4}-alpine

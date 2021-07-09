@@ -28,6 +28,14 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/etcd-peer-key.pem
+    - path: ${K8S_ROOT}/etc/kubernetes/pki/etcd-client-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/etcd-client-key.pem
+    - path: ${K8S_ROOT}/etc/kubernetes/pki/etcd-client.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/etcd-client.pem
     - path: ${K8S_ROOT}/bin/fcos-etcdctl
       mode: 0755
       contents:

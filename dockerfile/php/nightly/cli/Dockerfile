@@ -1,5 +1,5 @@
-# syntax=docker/dockerfile:experimental
-FROM --platform=$TARGETPLATFORM alpine:3.13
+# syntax=docker/dockerfile:labs
+FROM --platform=$TARGETPLATFORM alpine:3.14
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -50,7 +50,6 @@ RUN set -ex \
                  tzdata \
 # ensure www-data user exists
 # RUN set -x \
-      && addgroup -g 82 -S www-data \
       && adduser -u 82 -D -S -G www-data www-data
 # 82 is the standard uid/gid for "www-data" in Alpine
 # http://git.alpinelinux.org/cgit/aports/tree/main/apache2/apache2.pre-install?h=v3.3.2
@@ -77,6 +76,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
             --with-jpeg \
             --with-webp \
             --with-xpm \
+            --with-avif \
         --with-pdo-mysql=shared \
         --with-pdo-pgsql=shared \
         # --with-xsl=shared \
@@ -132,7 +132,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
 # Enable linker optimization (this sorts the hash buckets to improve cache locality, and is non-default)
 # Adds GNU HASH segments to generated executables (this is used if present, and is much faster than sysv hash; in this configuration, sysv hash is also generated)
 # https://github.com/docker-library/php/issues/272
-ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
+ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
 ENV PHP_CPPFLAGS="$PHP_CFLAGS"
 ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 
@@ -227,6 +227,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           # tidyhtml-dev \
           # net-snmp-dev \
           openldap-dev \
+          libavif-dev \
           \
           bison \
           gnu-libiconv-dev \
@@ -356,6 +357,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
            /usr/local/include/php/ext/standard/winver.h \
            /usr/local/php/man \
   \
+# smoke test
+  && php --version \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium
   \
@@ -415,7 +418,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \
       && ls -la $(php-config --extension-dir) \
-      && php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));'
+      && php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));' \
+# smoke test
+      && php --version
 
 ENTRYPOINT ["docker-php-entrypoint"]
 

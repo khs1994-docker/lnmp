@@ -8,3 +8,4 @@
 !zz-docker.example.conf
 !zz-docker.production.conf
 !php-PHP_SAPI.ini
+!php-cli.example.ini

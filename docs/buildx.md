@@ -8,7 +8,7 @@
 
 ## 环境变量
 
-必须设置如下环境变量才能使用 buildx
+Docker 19.03 及以下版本必须设置如下环境变量才能使用 buildx（Docker 20.10及以上版本无需设置）
 
 ```bash
 $ DOCKER_CLI_EXPERIMENTAL=enabled
@@ -34,7 +34,7 @@ $ docker buildx create --use --name=mybuilder --driver docker-container
 ## Dockerfile ARG
 
 ```docker
-# syntax=docker/dockerfile:experimental
+# syntax=docker/dockerfile:labs
 ARG TARGETPLATFORM - platform of the build result. Eg linux/amd64, linux/arm/v7, windows/amd64.
 ARG TARGETOS - OS component of TARGETPLATFORM
 ARG TARGETARCH - architecture component of TARGETPLATFORM

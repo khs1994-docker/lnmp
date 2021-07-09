@@ -18,17 +18,16 @@ $ composer install \
 # 每 5min 更新
 $ composer config -g repos.packagist composer https://mirrors.aliyun.com/composer/
 
-# 每日更新
-$ composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/
+$ composer config -g repos.packagist composer https://mirrors.huaweicloud.com/repository/php/
 
 # 不推荐
-$ composer config -g repos.packagist composer https://packagist.mirrors.sjtug.sjtu.edu.cn
+$ composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/
 ```
 
 **过时**
 
+* https://packagist.mirrors.sjtug.sjtu.edu.cn
 * https://packagist.phpcomposer.com
-* https://mirrors.huaweicloud.com/repository/php/
 
 **取消配置**
 

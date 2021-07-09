@@ -54,7 +54,7 @@ ENV PECL_EXTENSION \
 # 安装测试版的扩展，可以在扩展名后加 -beta
 # xdebug-2.9.1 require 7.1.0+
       xdebug-2.9.0 \
-      yaml \
+      yaml-2.1.0 \
       # swoole \
       ${PECL_EXTENSION_EXTRA:-}
 

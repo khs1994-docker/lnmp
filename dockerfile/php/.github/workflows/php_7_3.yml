@@ -9,7 +9,7 @@ on:
       PHP_VERSION:
         description: php version
         required: true
-        default: "7.3.28"
+        default: "7.3.29"
 
 name: PHP_7.3
 
@@ -43,7 +43,7 @@ jobs:
     #     sudo install -m755 docker-compose /usr/local/bin
     #   name: 'Setup Docker Compose'
     #   env:
-    #     DOCKER_COMPOSE_VERSION: 1.27.0
+    #     DOCKER_COMPOSE_VERSION: 1.29.0
     - run: |
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
@@ -80,7 +80,7 @@ jobs:
 
         if ! [ -n "${IS_TAG_EVENT}" -o "${GITHUB_EVENT_NAME}" = 'workflow_dispatch' ];then \
           export PLATFORM=linux/amd64; \
-          if [ "$PHP_VERSION" = 8_1_X -o "$PHP_VERSION" = nightly ];then \
+          if [ "$PHP_VERSION" = 8_X_X -o "$PHP_VERSION" = nightly ];then \
             export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
             IS_PUSH=--push; \
             mirror="${add_mirror}"; \
@@ -270,7 +270,7 @@ jobs:
         docker buildx build \
         --build-arg PHP_EXTENSION_EXTRA="wddx xsl" \
         --build-arg PECL_EXTENSION_EXTRA="imagick msgpack" \
-        --build-arg APK_EXTRA="libxslt imagemagick-libs musl" \
+        --build-arg APK_EXTRA="libxslt imagemagick-libs libgomp musl" \
         --build-arg APK_DEV_EXTRA="libxslt-dev imagemagick-dev imagemagick" \
         --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
         --build-arg USERNAME=${DOCKER_HUB_USERNAME} \
@@ -284,13 +284,7 @@ jobs:
         PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v7
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.28
+        PHP_TAG_VERSION: 7.3.29
         TYPE: ${{ matrix.TYPE }}
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php ghcr.io/khs1994/php
       name: 'Build Image'
-    - run: |
-        curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
-      name: 'Trigger hooks'
-      env:
-        DOCKER_HUB_USERNAME: khs1994
-      if: success()

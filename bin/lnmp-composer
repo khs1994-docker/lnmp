@@ -12,7 +12,7 @@ source $ScriptRoot/../config/composer/.env
 
 if [ "$debug" = 'true' ];then set -x; fi
 
-checkNetwork=`docker network ls -f driver=bridge -f name=lnmp_backend -q`
+checkNetwork=`docker network ls -f name=lnmp_backend -q`
 
 test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
 
@@ -22,6 +22,7 @@ docker run -i ${tty} --rm \
   --mount src=lnmp_composer-cache-data,target=${COMPOSER_CACHE_DIR} \
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
+  --network none \
   bash \
   bash -c \
   "set -x; \
@@ -38,14 +39,15 @@ if [ "$LNMP_CN_ENV" = 'false' ];then
 fi
 
 exec docker run -i ${tty} --rm \
-  --mount type=bind,src=$PWD,target=/app,consistency=${APP_ROOT_CONSISTENCY:delegated} \
+  --mount type=bind,src=$PWD,target=/app \
   --mount src=lnmp_composer-cache-data,target=${COMPOSER_CACHE_DIR} \
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
+  --mount type=bind,src=$ScriptRoot/../config/php8/php-cli.ini,target=/usr/local/etc/php/php-cli.ini \
   --env-file $ScriptRoot/../config/composer/.env \
   --env PATH=${COMPOSER_HOME}/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
   --network $network \
-  ${DOCKER_IMAGE}:${TAG} \
+  ${LNMP_PHP_IMAGE}:${LNMP_PHP_IMAGE_TAG} \
   gosu ${LNMP_USER:-root:root} composer "$@"
 
 # --entrypoint /docker-entrypoint.composer \

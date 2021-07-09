@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 20.10.6
+.VERSION 20.10.8
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -170,13 +170,13 @@ Function New-InitFile() {
 
   _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
 
-  if (!(Test-Path secrets/minio/key.txt)) {
-    Copy-Item secrets/minio/key.example.txt secrets/minio/key.txt
-    Copy-Item secrets/minio/secret.example.txt secrets/minio/secret.txt
+  if (!(Test-Path secrets/minio/root-password.txt)) {
+    Copy-Item secrets/minio/root-password.example.txt secrets/minio/root-password.txt
+    Copy-Item secrets/minio/root-user.example.txt secrets/minio/root-user.txt
   }
 
   if (!(Test-Path config/redis/redis.conf)) {
-    Write-Output "#" | Out-File config/redis/redis.conf
+    New-Item -ItemType File config/redis/redis.conf
   }
 
   _cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
@@ -185,9 +185,11 @@ Function New-InitFile() {
 
   _cp_only_not_exists config/php/docker-php.example.ini config/php/docker-php.ini
   _cp_only_not_exists config/php/php.development.ini config/php/php.ini
+  _cp_only_not_exists config/php/php-cli.example.ini config/php/php-cli.ini
   _cp_only_not_exists config/php/zz-docker.example.conf config/php/zz-docker.conf
   _cp_only_not_exists config/php8/docker-php.example.ini config/php8/docker-php.ini
   _cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
+  _cp_only_not_exists config/php8/php-cli.example.ini config/php8/php-cli.ini
   _cp_only_not_exists config/php8/zz-docker.example.conf config/php8/zz-docker.conf
 
   _cp_only_not_exists config/npm/.npmrc.example config/npm/.npmrc
@@ -303,9 +305,6 @@ Official WebSite https://lnmp.khs1994.com
 
 Usage: ./docker-lnmp COMMAND
 
-Run Kubernetes on Tencent Cloud:
-  k8s                  Run Kubernetes on Tencent Cloud
-
 Donate:
   zan                  Donate
 
@@ -374,17 +373,11 @@ ClusterKit:
 
 Developer Tools:
 
-
-WSL2:
-  dockerd              Start Dockerd on WSL2
-
 Read './docs/*.md' for more information about CLI commands.
 
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
 
 You must Update .env file when update this project.
-
-Exec '$ lnmp-docker k8s' Run Kubernetes on Tencent Cloud
 
 Exec '$ lnmp-docker zan' donate
 "
@@ -710,9 +703,10 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
 
     wsl -d $WSL2_DIST command -v $COMPOSE_BIN `> /dev/null `|`| exit 1
 
-    if($?){
+    if ($?) {
       wsl -d $WSL2_DIST -- sh -xc "$COMPOSE_BIN $cmd"
-    }else{
+    }
+    else {
       printWarning "Docker Desktop not running"
     }
   }
@@ -743,6 +737,9 @@ if (!(Test-Path cli/khs1994-robot.enc )) {
   }
   else {
     # cd $PSScriptRoot
+    if (!(Test-Path $APP_ROOT)) {
+      New-Item -ItemType Directory -Force $APP_ROOT | Out-Null
+    }
     cd $APP_ROOT
     $APP_ROOT = $PWD
     printInfo "APP_ROOT is $APP_ROOT"
@@ -755,6 +752,9 @@ else {
     printInfo "APP_ROOT is WSL2 [ $WSL2_DIST ] PATH $APP_ROOT"
   }
   else {
+    if (!(Test-Path $APP_ROOT)) {
+      New-Item -ItemType Directory -Force $APP_ROOT | Out-Null
+    }
     cd $APP_ROOT
     $APP_ROOT = $PWD
     printInfo "APP_ROOT is $APP_ROOT"
@@ -770,7 +770,7 @@ if ($LNMP_SERVICES_CONTENT) {
   $LNMP_SERVICES = $LNMP_SERVICES_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
 }
 else {
-  $LNMP_SERVICES = 'nginx', 'mysql', 'php7', 'redis'
+  $LNMP_SERVICES = 'nginx', 'mysql', 'php8', 'redis'
 }
 
 # LREW_INCLUDE
@@ -799,7 +799,7 @@ if (Test-Command docker) {
 $DOCKER_VERSION_YY = ([System.Version]$DOCKER_VERSION).Major
 $DOCKER_VERSION_MM = ([System.Version]$DOCKER_VERSION).Minor
 
-if($DOCKER_VERSION_MM -lt 10){
+if ($DOCKER_VERSION_MM -lt 10) {
   $DOCKER_VERSION_MM = '0' + $DOCKER_VERSION_MM
 }
 
@@ -1300,13 +1300,6 @@ XXX
     Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues/new?body=$(cat bug.md)
   }
 
-  k8s {
-    clear
-
-    printInfo "please try kubernetes on website"
-    Start-Process -FilePath "https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61"
-  }
-
   zan {
     clear
     printInfo "Thank You"
@@ -1540,25 +1533,6 @@ Example: ./lnmp-docker composer /app/demo install
     Edit-Hosts
   }
 
-  dockerd {
-    & $PSScriptRoot/wsl2/bin/dockerd-wsl2.ps1 $other
-  }
-
-  "compose$" {
-    $DIST = "C:\ProgramData\DockerDesktop\version-bin\docker-compose.exe"
-    if ($other) {
-      $DIST = $other
-
-      if ($other.count -gt 1) {
-        $DIST = $other[0]
-      }
-    }
-
-    printInfo "Download docker-compose $LNMP_DOCKER_COMPOSE_VERSION to $DIST ..."
-
-    start-process "curl.exe" -ArgumentList "-L", "https://github.com/docker/compose/releases/download/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-Windows-x86_64.exe", "-o", "$DIST" -Verb Runas -wait -WindowStyle Hidden
-  }
-
   "^code-init$" {
     cd $EXEC_CMD_DIR
 
@@ -1590,7 +1564,7 @@ Example: ./lnmp-docker composer /app/demo install
       return $dev_sdx
     }
 
-    function Get-wsl2_mount_physicaldiskdevice_path($type = "ext4"){
+    function Get-wsl2_mount_physicaldiskdevice_path($type = "ext4") {
       $wsl2_mount_physicaldiskdevice_path = wsl -d $WSL2_DIST -- mount -t $type `| grep PHYSICALDRIVE `| cut -d ' ' -f 3
 
       return $wsl2_mount_physicaldiskdevice_path

@@ -1,11 +1,11 @@
-version: "3.8"
+version: "3.9"
 
 services:
   k8s_apiserver:
     image: k8s.gcr.io/kube-apiserver:v1.21.0
 
   k8s_dashboard:
-    image: kubernetesui/dashboard:v2.2.0
+    image: kubernetesui/dashboard:v2.3.1
 
   coredns:
     image: k8s.gcr.io/coredns/coredns:v1.8.0
@@ -28,7 +28,7 @@ services:
     image: k8s.gcr.io/metrics-server/metrics-server:v0.5.0
 
   butane:
-    image: quay.io/coreos/butane:v0.11.0
+    image: quay.io/coreos/butane:v0.12.1
 
   php-fpm-exporter:
     image: bakins/php-fpm-exporter:v0.6.1

@@ -1,7 +1,5 @@
 # 使用 LinuxKit 运行 LNMP
 
-[![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
-
 >注意，暂不支持 MySQL
 
 本地编写 `PHP` 项目源代码（必须包含 `Dockerfile`）及 `nginx` 配置文件。

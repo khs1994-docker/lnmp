@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 x-common:
   &common
@@ -9,4 +9,4 @@ x-common:
 services:
   rabbitmq:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.8.16}-management-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.8.17}-management-alpine

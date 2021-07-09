@@ -48,6 +48,7 @@ LimitCORE=infinity
 # Comment TasksMax if your systemd version does not supports it.
 # Only systemd 226 and above support this version.
 TasksMax=infinity
+OOMScoreAdjust=-999
 
 Restart=on-failure
 RestartSec=5

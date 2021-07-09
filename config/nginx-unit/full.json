@@ -1,245 +1,410 @@
 {
   "certificates": {
-    "bundle": {
-      "key": "RSA (4096 bits)",
-      "chain": [
-        {
-          "subject": {
-            "common_name": "example.com",
-            "alt_names": [
-              "example.com",
-              "www.example.com"
-            ],
-            "country": "US",
-            "state_or_province": "CA",
-            "organization": "Acme, Inc."
-          },
-          "issuer": {
-            "common_name": "intermediate.ca.example.com",
-            "country": "US",
-            "state_or_province": "CA",
-            "organization": "Acme Certification Authority"
-          },
-          "validity": {
-            "since": "Sep 18 19:46:19 2018 GMT",
-            "until": "Jun 15 19:46:19 2021 GMT"
-          }
-        },
-        {
-          "subject": {
-            "common_name": "intermediate.ca.example.com",
-            "country": "US",
-            "state_or_province": "CA",
-            "organization": "Acme Certification Authority"
-          },
-          "issuer": {
-            "common_name": "root.ca.example.com",
-            "country": "US",
-            "state_or_province": "CA",
-            "organization": "Acme Root Certification Authority"
-          },
-          "validity": {
-            "since": "Feb 22 22:45:55 2016 GMT",
-            "until": "Feb 21 22:45:55 2019 GMT"
-          }
-        }
-      ]
-    }
+      "example.com": {
+          "key": "RSA (4096 bits)",
+          "chain": [
+              {
+                  "subject": {
+                      "common_name": "example.com",
+                      "alt_names": [
+                          "example.com",
+                          "www.example.com"
+                      ],
+
+                      "country": "US",
+                      "state_or_province": "CA",
+                      "organization": "Acme, Inc."
+                  },
+
+                  "issuer": {
+                      "common_name": "intermediate.ca.example.com",
+                      "country": "US",
+                      "state_or_province": "CA",
+                      "organization": "Acme Certification Authority"
+                  },
+
+                  "validity": {
+                      "since": "Sep 18 19:46:19 2018 GMT",
+                      "until": "Jun 15 19:46:19 2021 GMT"
+                  }
+              },
+
+              {
+                  "subject": {
+                      "common_name": "intermediate.ca.example.com",
+                      "country": "US",
+                      "state_or_province": "CA",
+                      "organization": "Acme Certification Authority"
+                  },
+
+                  "issuer": {
+                      "common_name": "root.ca.example.com",
+                      "country": "US",
+                      "state_or_province": "CA",
+                      "organization": "Acme Root Certification Authority"
+                  },
+
+                  "validity": {
+                      "since": "Feb 22 22:45:55 2016 GMT",
+                      "until": "Feb 21 22:45:55 2019 GMT"
+                  }
+              }
+          ]
+      },
+
+      "example.org": {
+          "key": "RSA (4096 bits)",
+          "chain": [
+              {
+                  "subject": {
+                      "common_name": "example.org",
+                      "alt_names": [
+                          "example.org",
+                          "www.example.org"
+                      ],
+
+                      "country": "US",
+                      "state_or_province": "CA",
+                      "organization": "Acme, Inc."
+                  },
+
+                  "issuer": {
+                      "common_name": "intermediate.ca.example.org",
+                      "country": "US",
+                      "state_or_province": "CA",
+                      "organization": "Acme Certification Authority"
+                  },
+
+                  "validity": {
+                      "since": "Sep 18 19:46:19 2018 GMT",
+                      "until": "Jun 15 19:46:19 2021 GMT"
+                  }
+              },
+
+              {
+                  "subject": {
+                      "common_name": "intermediate.ca.example.org",
+                      "country": "US",
+                      "state_or_province": "CA",
+                      "organization": "Acme Certification Authority"
+                  },
+
+                  "issuer": {
+                      "common_name": "root.ca.example.org",
+                      "country": "US",
+                      "state_or_province": "CA",
+                      "organization": "Acme Root Certification Authority"
+                  },
+
+                  "validity": {
+                      "since": "Feb 22 22:45:55 2016 GMT",
+                      "until": "Feb 21 22:45:55 2019 GMT"
+                  }
+              }
+          ]
+      }
   },
+
   "config": {
-    "settings": {
-      "http": {
-        "header_read_timeout": 10,
-        "body_read_timeout": 10,
-        "send_timeout": 10,
-        "idle_timeout": 120,
-        "max_body_size": 6291456,
-        "static": {
-          "mime_types": {
-            "text/plain": [
-              ".log",
-              "README",
-              "CHANGES"
-            ]
+      "settings": {
+          "http": {
+              "header_read_timeout": 10,
+              "body_read_timeout": 10,
+              "send_timeout": 10,
+              "idle_timeout": 120,
+              "max_body_size": 6291456,
+              "static": {
+                  "mime_types": {
+                      "text/plain": [
+                           ".log",
+                           "README",
+                           "CHANGES"
+                      ]
+                  }
+              },
+              "discard_unsafe_fields": false
           }
-        }
-      }
-    },
-    "listeners": {
-      "*:8000": {
-        "pass": "routes",
-        "tls": {
-          "certificate": "bundle"
-        }
       },
-      "127.0.0.1:8001": {
-        "pass": "applications/drive"
-      }
-    },
-    "routes": [
-      {
-        "match": {
-          "uri": "/admin/*",
-          "scheme": "https",
-          "arguments": {
-            "mode": "strict",
-            "access": "!raw"
+
+      "listeners": {
+          "*:8000": {
+              "pass": "routes",
+              "tls": {
+                  "certificate": [
+                      "example.com",
+                      "example.org"
+                  ],
+                  "conf_commands" : {
+                       "ciphersuites": "TLS_CHACHA20_POLY1305_SHA256"
+                  }
+              }
           },
-          "cookies": {
-            "user_role": "admin"
+
+          "127.0.0.1:8001": {
+              "pass": "applications/drive"
+          },
+
+          "*:8080": {
+              "pass": "upstreams/rr-lb"
           }
-        },
-        "action": {
-          "pass": "applications/cms"
-        }
       },
-      {
-        "match": {
-          "host": [
-            "blog.example.com",
-            "blog.*.org"
-          ],
-          "source": "*:8000-9000"
-        },
-        "action": {
-          "pass": "applications/blogs"
-        }
-      },
-      {
-        "match": {
-          "host": "example.com",
-          "source": "127.0.0.0-127.0.0.255:8080-8090",
-          "uri": "/chat/*"
-        },
-        "action": {
-          "pass": "applications/chat"
-        }
-      },
-      {
-        "match": {
-          "host": "example.com",
-          "source": [
-            "10.0.0.0/7:1000",
-            "10.0.0.0/32:8080-8090"
-          ]
-        },
-        "action": {
-          "pass": "applications/store"
-        }
-      },
-      {
-        "match": {
-          "host": "wiki.example.com"
-        },
-        "action": {
-          "pass": "applications/wiki"
-        }
-      },
-      {
-        "match": {
-          "scheme": "http"
-        },
-        "action": {
-          "proxy": "http://127.0.0.1:8080"
-        }
-      },
-      {
-        "action": {
-          "share": "/www/not_found/"
-        }
-      }
-    ],
-    "applications": {
-      "blogs": {
-        "type": "php",
-        "root": "/www/blogs/scripts/",
-        "limits": {
-          "timeout": 10,
-          "requests": 1000
-        },
-        "options": {
-          "file": "/etc/php.ini",
-          "admin": {
-            "memory_limit": "256M",
-            "variables_order": "EGPCS",
-            "expose_php": "0"
+
+      "routes": [
+          {
+              "match": {
+                  "uri": "/admin/*",
+                  "scheme": "https",
+                  "arguments": {
+                      "mode": "strict",
+                      "access": "!raw"
+                  },
+
+                  "cookies": {
+                      "user_role": "admin"
+                  }
+              },
+
+              "action": {
+                  "pass": "applications/cms"
+              }
           },
-          "user": {
-            "display_errors": "0"
+          {
+              "match": {
+                  "host": "admin.emea-*.*.example.com",
+                  "source": "*:8000-9000"
+              },
+
+              "action": {
+                  "pass": "applications/blogs/admin"
+              }
+          },
+          {
+              "match": {
+                  "host": ["blog.example.com", "blog.*.org"],
+                  "source": "*:8000-9000"
+              },
+
+              "action": {
+                  "pass": "applications/blogs/core"
+              }
+          },
+          {
+              "match": {
+                  "host": "example.com",
+                  "source": "127.0.0.0-127.0.0.255:8080-8090",
+                  "uri": "/chat/*"
+              },
+
+              "action": {
+                  "pass": "applications/chat"
+              }
+          },
+          {
+              "match": {
+                  "host": "example.com",
+                  "source": [
+                      "10.0.0.0/7:1000",
+                      "10.0.0.0/32:8080-8090"
+                  ]
+              },
+
+              "action": {
+                  "pass": "applications/store"
+              }
+          },
+          {
+              "match": {
+                  "host": "extwiki.example.com"
+              },
+
+              "action": {
+                  "pass": "applications/wiki/external"
+              }
+          },
+          {
+              "match": {
+                  "host": "intwiki.example.com"
+              },
+
+              "action": {
+                  "pass": "applications/wiki/internal"
+              }
+          },
+          {
+              "match": {
+                   "uri": "/legacy/*"
+              },
+
+              "action": {
+                  "return": 301,
+                  "location": "https://legacy.example.com"
+              }
+          },
+          {
+              "match": {
+                  "scheme": "http"
+              },
+
+              "action": {
+                  "proxy": "http://127.0.0.1:8080"
+              }
+          },
+          {
+              "action": {
+                  "share": "/www/data/static/",
+                  "chroot": "/www/data/",
+                  "traverse_mounts": false,
+                  "follow_symlinks": false,
+                  "types": [
+                      "image/*",
+                      "video/*",
+                      "application/json"
+                  ],
+                  "fallback": {
+                      "proxy": "http://127.0.0.1:9000"
+                  }
+              }
           }
-        },
-        "processes": 4
-      },
-      "chat": {
-        "type": "external",
-        "executable": "bin/chat_app",
-        "group": "www-chat",
-        "user": "www-chat",
-        "working_directory": "/www/chat/",
-        "isolation": {
-          "namespaces": {
-            "cgroup": false,
-            "credential": true,
-            "mount": false,
-            "network": false,
-            "pid": false,
-            "uname": false
+      ],
+
+      "applications": {
+          "blogs": {
+              "type": "php",
+              "targets": {
+                  "admin": {
+                      "root": "/www/blogs/admin/",
+                      "script": "index.php"
+                  },
+
+                  "core" : {
+                      "root": "/www/blogs/scripts/"
+                  }
+              },
+
+              "limits": {
+                  "timeout": 10,
+                  "requests": 1000
+              },
+
+              "options": {
+                  "file": "/etc/php.ini",
+                  "admin": {
+                      "memory_limit": "256M",
+                      "variables_order": "EGPCS",
+                      "expose_php": "0"
+                  },
+
+                  "user": {
+                      "display_errors": "0"
+                  }
+              },
+
+              "processes": 4
           },
-          "uidmap": [
-            {
-              "host": 1000,
-              "container": 0,
-              "size": 1000
-            }
-          ],
-          "gidmap": [
-            {
-              "host": 1000,
-              "container": 0,
-              "size": 1000
-            }
-          ]
-        }
+
+          "chat": {
+              "type": "external",
+              "executable": "bin/chat_app",
+              "group": "www-chat",
+              "user": "www-chat",
+              "working_directory": "/www/chat/",
+              "isolation": {
+                  "namespaces": {
+                      "cgroup": false,
+                      "credential": true,
+                      "mount": false,
+                      "network": false,
+                      "pid": false,
+                      "uname": false
+                  },
+
+                  "uidmap": [
+                      {
+                          "host": 1000,
+                          "container": 0,
+                          "size": 1000
+                      }
+                  ],
+
+                  "gidmap": [
+                      {
+                          "host": 1000,
+                          "container": 0,
+                          "size": 1000
+                      }
+                  ],
+
+                  "automount": {
+                      "language_deps": false,
+                      "procfs": false,
+                      "tmpfs": false
+                  }
+              }
+          },
+
+          "cms": {
+              "type": "ruby",
+              "script": "/www/cms/main.ru",
+              "working_directory": "/www/cms/"
+          },
+
+          "drive": {
+              "type": "perl",
+              "script": "app.psgi",
+              "threads": 2,
+              "thread_stack_size": 4096,
+              "working_directory": "/www/drive/",
+              "processes": {
+                  "max": 10,
+                  "spare": 5,
+                  "idle_timeout": 20
+              }
+          },
+
+          "store": {
+              "type": "java",
+              "webapp": "/www/store/store.war",
+              "classpath": ["/www/store/lib/store-2.0.0.jar"],
+              "options": ["-Dlog_path=/var/log/store.log"]
+          },
+
+          "wiki": {
+              "type": "python",
+              "protocol": "asgi",
+              "targets": {
+                  "internal": {
+                      "module": "internal.asgi"
+                  },
+
+                  "external": {
+                      "module": "external.asgi"
+                  }
+              },
+
+              "environment": {
+                  "DJANGO_SETTINGS_MODULE": "wiki.settings.prod",
+                  "DB_ENGINE": "django.db.backends.postgresql",
+                  "DB_NAME": "wiki",
+                  "DB_HOST": "127.0.0.1",
+                  "DB_PORT": "5432"
+              },
+
+              "path": "/www/wiki/",
+              "processes": 10
+          }
       },
-      "cms": {
-        "type": "ruby",
-        "script": "/www/cms/main.ru",
-        "working_directory": "/www/cms/"
+
+      "upstreams": {
+          "rr-lb": {
+              "servers": {
+                  "192.168.1.100:8080": { },
+                  "192.168.1.101:8080": {
+                      "weight": 2
+                  }
+              }
+          }
       },
-      "drive": {
-        "type": "perl",
-        "script": "app.psgi",
-        "processes": {
-          "max": 10,
-          "spare": 5,
-          "idle_timeout": 20
-        },
-        "working_directory": "/www/drive/"
-      },
-      "store": {
-        "type": "java",
-        "webapp": "/www/store/store.war",
-        "classpath": [
-          "/www/store/lib/store-2.0.0.jar"
-        ],
-        "options": [
-          "-Dlog_path=/var/log/store.log"
-        ]
-      },
-      "wiki": {
-        "type": "python",
-        "module": "wsgi",
-        "environment": {
-          "DJANGO_SETTINGS_MODULE": "wiki.settings.prod",
-          "DB_ENGINE": "django.db.backends.postgresql",
-          "DB_NAME": "wiki",
-          "DB_HOST": "127.0.0.1",
-          "DB_PORT": "5432"
-        },
-        "path": "/www/wiki/",
-        "processes": 10
-      }
-    },
-    "access_log": "/var/log/access.log"
+
+      "access_log": "/var/log/access.log"
   }
 }

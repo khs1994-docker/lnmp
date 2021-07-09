@@ -1,6 +1,6 @@
 # khs1994-docker/lnmp 支持文档
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![Build Status](https://travis-ci.com/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://travis-ci.com/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp)
 
 <p align="center">
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
@@ -31,10 +31,9 @@
 即：本项目 `v18.09.0` 与 **Docker 桌面版** `v18.09` 和 **PHP** `7.2.13` 对应。
 
 发布流程：
-* PHP 发布新版本时(PHP 7.3.9)，打 `tag`，归档当前项目(PHP 7.3.8)，发布正式版本(7.3.8)
+* PHP 发布新版本时(PHP 7.3.9)，本项目打 `tag`，发布版本(7.3.8)
 * 更新 PHP Dockerfile(PHP 7.3.9)，推送到 `YY.MM-pre` 分支，CI 自动同步 PHP Dockerfile 到 `khs1994-docker/php`
-* `khs1994-docker/php` 打 `tag`(PHP 7.3.9)
-* CI 构建 PHP 镜像(PHP 7.3.9)，构建完成之后合并到 `YY.MM` 分支，发布 `alpha` 版本(PHP 7.3.9)
+* `khs1994-docker/php` 打 `tag`(PHP 7.3.9)，CI 构建 PHP 镜像(PHP 7.3.9)，构建完成之后合并到 `YY.MM` 分支，发布 `alpha` 版本(PHP 7.3.9)
 * 后续根据开发流程，发布 `beta` `rc` 版本(PHP 7.3.9)
 * 期间更新 PHP Dockerfile (PHP 7.3.9)时，`khs1994-docker/php` 可以打多个 tag (**7.3.9-1** **7.3.9-2**)
 
@@ -87,7 +86,3 @@
 ## 捐赠
 
 请访问 [https://zan.khs1994.com](https://zan.khs1994.com)
-
-## 腾讯云容器服务 Kubernetes
-
-如果您的企业有使用 `Kubernetes` 的需求，欢迎使用 [腾讯云容器服务](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)。

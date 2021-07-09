@@ -36,7 +36,7 @@ spec:
       - name: drone-runner-docker
         image: drone/drone-runner-docker:1
         env:
-        # https://docker-runner.docs.drone.io/installation/reference/
+        # https://docs.drone.io/runner/docker/configuration/
         - name: DRONE_RPC_SECRET
           value: secret
         - name: DRONE_RPC_HOST

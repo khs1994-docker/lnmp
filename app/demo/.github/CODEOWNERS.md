@@ -1,4 +1,4 @@
-# https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
+# https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-code-owners
 # This is a comment.
 # Each line is a file pattern followed by one or more owners.
 

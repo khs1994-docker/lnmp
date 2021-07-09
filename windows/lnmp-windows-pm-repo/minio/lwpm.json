@@ -1,8 +1,8 @@
 {
   "name": "minio",
   "description": "MinIO is a high performance object storage server compatible with Amazon S3 APIs",
-  "version": "RELEASE.2021-01-30T00-20-58Z",
-  "pre-version": "RELEASE.2021-01-30T00-20-58Z",
+  "version": "RELEASE.2021-07-08T01-15-01Z",
+  "pre-version": "RELEASE.2021-07-08T01-15-01Z",
   "homepage": "https://min.io/",
   "bug": "https://github.com/minio/minio/issues",
   "github": "minio/minio",

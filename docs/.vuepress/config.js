@@ -22,8 +22,8 @@ module.exports = {
       link: 'https://github.com/khs1994/donate'
     },
     {
-      text: '腾讯云容器服务',
-      link: 'https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61'
+      text: '腾讯云服务器限时秒杀',
+      link: 'https://cloud.tencent.com/act/cps/redirect?redirect=1443&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console'
     },
     {
       text: 'Docker LNMP',
@@ -73,7 +73,7 @@ module.exports = {
           '/config',
           '/port',
           '/command',
-          '/windows/lwpm',
+          '/lpm',
           '/compose',
         ]
       }, {

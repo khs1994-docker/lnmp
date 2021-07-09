@@ -1,0 +1,26 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: test
+spec:
+  securityContext:
+  shareProcessNamespace: true
+  containers:
+    - name: test
+      image: nginx:1.20.1-alpine
+      volumeMounts:
+        - name: test
+          mountPath: /tmp
+      command:
+        - "sh"
+        - -c
+        - "sleep 10000000"
+      securityContext:
+
+      env:
+      - name: A
+        value: AAAA
+  volumes:
+    - name: test
+      hostPath:
+        path: /tmp/t

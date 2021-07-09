@@ -1,7 +1,5 @@
 ## 申请 SSL 证书
 
-[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
-
 第一种方法是自行到国内云服务商等处申请 SSL 证书。
 
 你也可以使用以下命令申请（由 [acme.sh](https://github.com/acmesh-official/acme.sh) 提供技术支持，感谢 [Let's Encrypt](https://letsencrypt.org/)）。
@@ -53,6 +51,11 @@ Let's Encrypt 现已支持通过 DNS 验证来申请通配符证书，本例以�
 * `--httpd`
 
 * `--rsa`
+
+```bash
+# 首次使用必须执行此命令
+$ ./lnmp-docker acme.sh --register-account -m my@example.com(替换为自己的邮箱)
+```
 
 ```bash
 $ ./lnmp-docker ssl example.com -d *.example.com -d t.example.com -d *.t.example.com [--debug]

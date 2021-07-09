@@ -1,19 +1,19 @@
-# [Windows 包管理工具 lwpm](https://github.com/khs1994-docker?utf8=✓&q=lwpm&type=&language=)
+# [包管理工具 lpm](https://github.com/khs1994-docker?utf8=✓&q=lwpm&type=&language=)
 
-正如 `macOS` 上的 `brew`、Linux 上的 `apt` `yum` `dnf`，本项目提供了 `lnmp-windows-pm.ps1` 这一包管理工具，让开发者快速在 `Windows` 安装开发软件。
+正如 `macOS` 上的 `brew`、Linux 上的 `apt` `yum` `dnf`，本项目提供了 `lpm.ps1` 这一包管理工具，让开发者快速安装开发软件。
 
 ```bash
-$ lnmp-windows-pm.ps1 install go
+$ ./lpm.ps1 install go
 ```
 
-执行以上命令可以安装 `go`。执行 `$ lnmp-windows-pm.ps1 list` 查看可供安装的软件。
+执行以上命令可以安装 `go`。执行 `$ ./lpm list` 查看可供安装的软件。
 
 ## 安装测试版软件
 
 只需加上 `--pre` 参数即可安装测试版软件。
 
 ```bash
-$ lnmp-windows-pm.ps1 install go --pre
+$ ./lpm.ps1 install go --pre
 ```
 
 ## 开发一个包(开发者)
@@ -21,7 +21,7 @@ $ lnmp-windows-pm.ps1 install go --pre
 本项目提供了一些常用的包，你也可以自己开发一个包，供用户安装某个软件。
 
 ```bash
-$ lnmp-windows-pm.ps1 init example
+$ ./lpm.ps1 init example
 ```
 
 编辑 `~/lnmp/vendor/lwpm-dev/example` 文件夹中的文件。
@@ -34,7 +34,7 @@ $ lnmp-windows-pm.ps1 init example
 $ $env:LWPM_DOCKER_USERNAME="your_username"
 $ $env:LWPM_DOCKER_PASSWORD="your_password"
 
-$ lnmp-windows-pm.ps1 push docker_registry_username/example
+$ ./lpm.ps1 push docker_registry_username/example
 ```
 
 * 示例: https://github.com/khs1994-docker/lwpm-openjdk
@@ -51,9 +51,9 @@ $ cd ~/lnmp
 # $ $env:LWPM_DOCKER_USERNAME="your_username"
 # $ $env:LWPM_DOCKER_PASSWORD="your_password"
 
-$ lnmp-windows-pm.ps1 add example
+$ ./lpm.ps1 add example
 
-$ lnmp-windows-pm.ps1 install example
+$ ./lpm.ps1 install example
 ```
 
 ## 优先级(开发者)
@@ -64,34 +64,34 @@ $ lnmp-windows-pm.ps1 install example
 
 **注册（新增）服务**
 
-请以 **管理员** 打开 `powershell` 执行下面的命令(这里以 minio 为例)
+请以 **管理员权限** 打开 `powershell` 执行下面的命令(这里以 minio 为例)
 
 ```powershell
-$ lnmp-windows-pm.ps1 install-service minio "C:/bin/minio","server","$HOME/minio" C:/logs/minio.log
+$ .\windows\lnmp-windows-pm.ps1 install-service minio "C:/bin/minio","server","$HOME/minio" C:/logs/minio.log
 ```
 
 **移除服务**
 
 ```powershell
-$ lnmp-windows-pm.ps1 remove-service minio
+$ ./lpm.ps1 remove-service minio
 ```
 
 **启动服务**
 
 ```powershell
-$ lnmp-windows-pm.ps1 start-service minio
+$ ./lpm.ps1 start-service minio
 ```
 
 **停止服务**
 
 ```powershell
-$ lnmp-windows-pm.ps1 stop-service minio
+$ ./lpm.ps1 stop-service minio
 ```
 
 **重启服务**
 
 ```powershell
-$ lnmp-windows-pm.ps1 restart-service minio
+$ ./lpm.ps1 restart-service minio
 ```
 
 ## 开发者
@@ -114,7 +114,7 @@ $ lnmp-windows-pm.ps1 restart-service minio
  |__lwpm.json
 ```
 
-**add --platform** 获取所有架构的文件（适用于从 docker hub 获取文件）
+**add --platform** 获取所有架构的文件（从 Docker Registry 获取文件）
 
 ```bash
  package

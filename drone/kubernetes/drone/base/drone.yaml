@@ -33,7 +33,7 @@ spec:
         kubernetes.io/os: linux
       containers:
       - name: drone
-        image: drone/drone:2.0.1
+        image: drone/drone:2.0.3
         ports:
         - name: http
           containerPort: 80
@@ -41,9 +41,6 @@ spec:
         - name: data
           mountPath: /data
         env:
-        - name: DRONE_AGENTS_ENABLED
-          value: "true"
-
         - name: DRONE_GOGS_SERVER
           value: http://gogs
 

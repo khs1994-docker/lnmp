@@ -2,5 +2,6 @@
 !.gitignore
 !devcontainer.json
 !docker-php.ini
+!php-cli.ini
 !.npmrc
 !composer.config.json

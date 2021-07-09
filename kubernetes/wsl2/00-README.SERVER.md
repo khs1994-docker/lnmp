@@ -6,7 +6,8 @@
 * `windows.k8s.khs1994.com` 解析到 Windows IP
 * k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(使用 netsh.exe 代理 wsl2 到 windows)`
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
-* 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data`（可选）WSL 发行版用于存储数据
+* 新建 `wsl-k8s` WSL 发行版用于 k8s 运行
+* （可选）新建 `wsl-k8s-data` WSL 发行版用于存储数据
 * 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 后使用本项目
 
 ## Master
@@ -82,6 +83,8 @@ $ cp ../wsl/config/wsl.conf /etc/wsl.conf
 $ vim /etc/wsl.conf
 ```
 
+作如下更改：
+
 ```diff
 - root = /mnt
 + root = /
@@ -152,10 +155,6 @@ $ mount /dev/sda3 /wsl/wsl-k8s-data/
 ## 获取 kubernetes
 
 ```bash
-$ cd ~/lnmp/kubernetes
-
-$ wsl -d wsl-k8s
-
 $ ./lnmp-k8s kubernetes-server --url
 # 如果上面的命令出现错误，可以执行这个命令
 # $ ./lnmp-k8s kubernetes-server
@@ -169,15 +168,13 @@ $ ./lnmp-k8s kubernetes-server --url
 
 **启动桌面版 Docker**
 
-```bash
-$ cd ~/lnmp/kubernetes
-
+```powershell
 $ docker-compose up cfssl-wsl2
 ```
 
 **退出 桌面版 Docker** 并执行以下命令
 
-```bash
+```powershell
 $ wsl --shutdown
 ```
 
@@ -203,10 +200,6 @@ $ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kuber
 $ cp -a kubernetes-release/release/v1.21.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
 ```
 
-## kubectl
+## 工作节点配置
 
-请查看 [00-README.kubectl.md](00-README.kubectl.md)
-
-## 启动 K8S
-
-请查看 [00-README.systemd.md](00-README.systemd.md)
+请查看 [00-README.md](00-README.md)

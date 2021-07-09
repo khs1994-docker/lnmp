@@ -21,7 +21,7 @@ services:
       # fpm config
       - ./config/php5/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
       # php.ini
-      - ./config/php5/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php5/php.ini:/usr/local/etc/php/php.ini:ro,cached
       # php.ini override
       - ./config/php5/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc

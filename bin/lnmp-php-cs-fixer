@@ -13,11 +13,8 @@ source $ScriptRoot/../config/composer/.env
 if [ "$debug" = 'true' ];then set -x; fi
 
 exec docker run -i ${tty} --rm \
-  --mount type=bind,src=$PWD,target=/app,consistency=${APP_ROOT_CONSISTENCY:delegated} \
-  --mount src=lnmp_composer-cache-data,target=${COMPOSER_CACHE_DIR} \
-  --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
-  --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
-  --env-file $ScriptRoot/../config/composer/.env \
+  --mount type=bind,src=$PWD,target=/app \
+  --mount type=bind,src=$ScriptRoot/../config/php8/php-cli.ini,target=/usr/local/etc/php/php-cli.ini \
   --entrypoint gosu \
   khs1994/php:php-cs-fixer \
   ${LNMP_USER:-root:root} php-cs-fixer "$@"

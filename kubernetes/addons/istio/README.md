@@ -1,4 +1,4 @@
-# Istio 1.9
+# Istio 1.10
 
 * https://github.com/istio
 
@@ -39,7 +39,7 @@ $ ./manifest.ps1
 
 $ kubectl create ns istio-system
 
-$ kubectl apply -f istio.yaml
+$ kubectl apply -k istio.yaml
 ```
 
 ## 测试

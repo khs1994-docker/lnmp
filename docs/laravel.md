@@ -1,10 +1,6 @@
 # Laravel 最佳实践
 
-[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
-
 ## 安装 Laravel
-
-> 国内使用 [laravel/installer 4.0 以下版本](https://laravel.com/docs/8.x/installation#installing-laravel) 安装 Laravel 不会使用 composer 镜像，故安装十分缓慢。（这里做一提示，下面的命令封装的是 composer create-project 命令，laravel/installer 4.0 及以上会使用 composer 镜像）
 
 ```bash
 $ cd app
@@ -79,7 +75,7 @@ _ide_helper.php
 
 **有以下几种解决思路**：
 
-1. 或者 `vendor` 目录使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_improving-container-disk-performance) 的说明和笔者提出的方案原理大致相同
+1. `vendor` 目录使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_use-a-targeted-named-volume) 的说明和笔者提出的方案原理大致相同（不推荐使用）
 
 2. 或者将项目文件夹放置于 WSL2，使用 **vsCode remote WSL** WSL 远程开发(推荐使用)
 
@@ -128,7 +124,13 @@ $ lnmp-docker code
 
 在 vsCode 中点击菜单栏 `查看` -> `终端`
 
-在出现的终端中执行命令，本例以添加 Laravel UI 组件为例：(请提前将本项目的 `bin` 目录加入到 PATH)
+在出现的终端中执行命令，本例以添加 `laravel/jetstream` 组件为例：(请提前将本项目的 `bin` 目录加入到 PATH)
+
+```powershell
+# 你也可以在 Windows 终端执行命令
+
+$ cd \\wsl.localhost\ubuntu\app
+```
 
 ```bash
 # 安装 laravel 到 laravel 文件夹
@@ -140,12 +142,9 @@ $ lnmp-docker code
 # $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/framework
 $ cd laravel
 
-$ lnmp-composer require laravel/ui
+$ lnmp-composer require laravel/jetstream
 
-$ lnmp-php artisan ui vue --auth
-Vue scaffolding installed successfully.
-Please run "npm install && npm run dev" to compile your fresh scaffolding.
-Authentication scaffolding generated successfully.
+$ lnmp-php artisan jetstream:install inertia
 
 $ lnmp-npm install
 
@@ -206,7 +205,7 @@ $ ./lnmp-docker up
 
 在 vsCode 中点击菜单栏 `查看` -> `终端`
 
-在出现的终端中执行命令，本例以添加 Laravel UI 组件为例：
+在出现的终端中执行命令，本例以添加 `laravel/jetstream` 组件为例：
 
 ```bash
 # 安装 laravel 到 laravel 文件夹
@@ -218,9 +217,9 @@ $ ./lnmp-docker up
 # $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/framework
 $ cd laravel
 
-$ composer require laravel/ui
+$ composer require laravel/jetstream
 
-$ php artisan ui vue --auth
+$ php artisan jetstream:install inertia
 Vue scaffolding installed successfully.
 Please run "npm install && npm run dev" to compile your fresh scaffolding.
 Authentication scaffolding generated successfully.
@@ -243,13 +242,13 @@ $ lnmp-docker code-run -w /app/laravel npm run dev
 
 ## 运行 Laravel 队列(Queue)
 
-* 选择1：使用 **宿主机** 的系统级的守护程序（systemd 等）来运行以下命令。具体请查看 [systemd](systemd.md)
+* **方案1：** 使用 **宿主机** 的系统级的守护程序（systemd 等）来运行以下命令。具体请查看 [systemd](systemd.md)
 
 ```bash
 $ lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
 ```
 
-* 选择2：参考 `config/s6` 或 `config/supervisord` 在一个容器中同时运行多个服务 (两钟方案中均包含了 Laravel 队列等示例)。
+* **方案2：** 参考 `config/s6` 或 `config/supervisord` 在一个容器中同时运行多个服务 (两钟方案中均包含了 Laravel 队列等示例)。
 
 ## 运行 Laravel 调度器(Schedule)
 

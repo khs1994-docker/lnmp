@@ -19,7 +19,7 @@ RUN set -x \
     && apk del --no-network curl \
     && chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson /usr/local/bin/kubectl
 
-FROM --platform=${TARGETPLATFORM} alpine:3.13
+FROM --platform=${TARGETPLATFORM} alpine:3.14
 
 LABEL maintainer="khs1994@khs1994.com" \
       version="1.21.0"

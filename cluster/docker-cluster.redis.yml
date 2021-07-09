@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 #
 # Redis cluster (by Ruby 5.0 under, 5.0 + please see $ redis-cli --cluster help)
@@ -28,13 +28,13 @@ version: "3.8"
 
 x-common:
   &common
-  image: redis:6.2.3-alpine
+  image: redis:6.2.4-alpine
   restart: always
   env_file:
     - ./cli/timezone.env
   networks:
     cluster_redis:
-      # ipv4_address: 172.16.2.35
+      # ipv4_address: 172.16.2.45
   secrets:
     - source: cluster_redis_conf
       target: /redis.conf

@@ -1,4 +1,4 @@
-# https://github.com/coreos/butane/blob/master/docs/config-fcos-v1_1.md
+# https://github.com/coreos/butane/blob/main/docs/config-fcos-v1_1.md
 # master
 variant: fcos
 version: 1.3.0
@@ -363,7 +363,6 @@ systemd:
         --hostname-override=coreos{{n}} \
         --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
-        --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
         --v=2
 
         # cri is docker
@@ -550,13 +549,13 @@ storage:
       mode: 0755
       contents:
         source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kubectl
-    - path: /etc/NetworkManager/system-connections/eth0.nmconnection
+    - path: /etc/NetworkManager/system-connections/enp0s3.nmconnection
       mode: 0600
       contents:
         inline: |
           [connection]
-          id=eth0
-          interface-name=eth0
+          id=enp0s3
+          interface-name=enp0s3
           type=ethernet
           autoconnect=true
 

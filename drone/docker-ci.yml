@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 x-common:
   &common
@@ -10,7 +10,7 @@ services:
 
   drone-server:
     << : *common
-    image: drone/drone:${CI_DRONE_VERSION:-2.0.1}
+    image: drone/drone:${CI_DRONE_VERSION:-2.0.3}
     volumes:
       - drone-data-v1:/data:rw
     networks:
@@ -18,8 +18,6 @@ services:
       - backend
     environment:
     - DRONE_LOGS_DEBUG=${CI_DEBUG:-true}
-    # 设为 false, server 与 agent 将同时运行
-    - DRONE_AGENTS_ENABLED=true
     # volumes:
     #   - type: bind
     #     source: /var/run/docker.sock
@@ -34,7 +32,7 @@ services:
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
-    # https://docker-runner.docs.drone.io/installation/reference/
+    # https://docs.drone.io/runner/docker/configuration/
     environment:
       - DRONE_RPC_SECRET=${DRONE_RPC_SECRET:-secret}
       - DRONE_RPC_HOST=drone-server
@@ -85,7 +83,7 @@ services:
 
   redis:
     << : *common
-    image: redis:${CI_REDIS_VERSION:-6.2.3}-alpine
+    image: redis:${CI_REDIS_VERSION:-6.2.4}-alpine
     volumes:
       - redis-data:/data
 

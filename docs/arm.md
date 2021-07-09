@@ -1,16 +1,15 @@
 # ARM 架构
 
-[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
-
 如果你手上有一个树莓派，那也可以很轻松的使用本项目，你同样只需执行以下命令(使用前 **建议** 阅读后续章节，做好准备工作)。
 
 ```bash
 $ ./lnmp-docker up
 ```
 
-## arm 暂不支持 MySQL
+## MySQL 暂不支持 arm
 
-* arm32 位(armv7l) 无法使用 `mariadb`
+> arm32 位(armv7l) 同样无法使用 `mariadb`
+
 * 在 `.env` 文件中将 `mysql` 替换为 `mariadb`
 * 在 `.env` 文件中 `LREW_INCLUDE` 新增 `mariadb`
 

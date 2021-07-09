@@ -79,7 +79,7 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a ssl-self          -d   
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a swarm-build       -d     'Build Swarm mode LNMP images (nginx php7 etc)'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a swarm-config      -d     'Validate and view the Swarm mode Compose file'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a swarm-deploy      -d     'Deploy LNMP stack IN Swarm mode'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a swarm-down        -d     'Remove LNMP stack IN Swarm mode'
+complete -c lnmp-docker -n "__fish_use_subcommand" -f -a swarm-rm          -d     'Remove LNMP stack IN Swarm mode'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a swarm-ps          -d     'List the LNMP tasks'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a swarm-pull        -d     'Pull LNMP Docker Images IN Swarm mode'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a swarm-push        -d     'Push Swarm mode LNMP images (nginx php7 etc)'

@@ -32,7 +32,7 @@
 
 ```yaml
 # docker-lnmp.include.yml
-version: "3.8"
+version: "3.9"
 
 services:
   php7:
@@ -46,7 +46,7 @@ services:
 
 ```yaml
 # docker-lnmp.include.yml
-version: "3.8"
+version: "3.9"
 
 services:
   php7:
@@ -58,7 +58,7 @@ services:
 
 ```yaml
 # docker-lnmp.include.yml
-version: "3.8"
+version: "3.9"
 
 services:
   mysql:
@@ -70,7 +70,7 @@ services:
 
 ```yaml
 # docker-lnmp.include.yml
-version: "3.8"
+version: "3.9"
 
 services:
   my_add_service:

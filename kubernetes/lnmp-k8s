@@ -88,14 +88,18 @@ _sudo(){
   command -v sudo > /dev/null && echo sudo || true
 }
 
-uname -a | grep -q microsoft && IS_WSL2=1 || true
+uname -a | grep -q '\-microsoft\-standard\-WSL2' && IS_WSL2=1 || true
 
 $(_sudo) systemctl is-system-running -q > /dev/null 2>&1 && IS_SYSTEMD=1 || true
 
-if [ -n "${IS_SYSTEMD}" -a -n "${IS_WSL2}" ];then
-  if [ $(systemd-detect-virt) = 'wsl' ];then
-     WSL2_SYSTEMD=1
-  fi
+# if [ -n "${IS_SYSTEMD}" -a -n "${IS_WSL2}" ];then
+#   if [ $(systemd-detect-virt) = 'wsl' ];then
+#      WSL2_SYSTEMD=1
+#   fi
+# fi
+
+if [ -n "${IS_WSL2}" ];then
+  WSL2_SYSTEMD=1
 fi
 
 if [ -n "$WSL2_SYSTEMD" ];then
@@ -603,6 +607,10 @@ _crun_install(){
 _containerd_install(){
   if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/cri-containerd;fi
 
+  if [ "$GOOS" = 'darwin' ];then
+    local GOOS='linux'
+  fi
+
   if ! [ "$GOARCH" = 'amd64' -o "$GOARCH" = 'arm64' ];then
     echo "only support [ amd64 ] and [ arm64 ]"
 
@@ -850,8 +858,8 @@ _conmon_install(){
     return
   fi
 
-  local url=https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
-  local url_official=https://download.fastgit.org/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
+  local url_official=https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
+  local url=https://download.fastgit.org/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
 
   if [ $DOWNLOAD_FROM_CODING != "false" ];then
     url=$CODING_URL/conmon.$GOARCH?version=${CONMON_VERSION}
@@ -1040,6 +1048,11 @@ _containerd_cri_config(){
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/1.5/config.toml \
     | $(_sudo) tee ${K8S_ROOT}/etc/cri-containerd/1.5/config.toml
 
+  if ! [ "${LNMP_CN_ENV}" = 'false' ];then
+  $(_sudo) cp -r systemd/etc/cri-containerd/1.5/certs.d \
+                 ${K8S_ROOT}/etc/cri-containerd/1.5
+  fi
+
   _cri_sysctl
 }
 
@@ -1226,9 +1239,6 @@ _k8s_install_systemd(){
       /etc/systemd/system/kube-controller-manager.service \
       /etc/systemd/system/kube-scheduler.service \
       /etc/systemd/system/kube-proxy.service
-
-    $(_sudo) sed -i 's/SystemdCgroup = true/SystemdCgroup = false/g' \
-      /wsl/wsl-k8s-data/k8s/etc/cri-containerd/1.5/config.toml
 
     $(_sudo) sed -i \
       -e 's/# ConditionVirtualization/ConditionVirtualization/g' \

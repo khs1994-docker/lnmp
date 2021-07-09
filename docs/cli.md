@@ -1,14 +1,12 @@
 # 命令行工具
 
-[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
-
 为避免输入过多的命令，本项目提供了 **命令行** 工具 `lnmp-docker` 来简化操作：
 
 * 各种场景和架构中一键启动
 
 * 便捷生成 `NGINX` `APACHE` 配置文件
 
-## 尽量兼容原始命令
+## 与 docker compose 命令保持一致
 
 例如 `lnmp-docker up | down` 对应着 `docker-compose up | down`
 
@@ -19,8 +17,6 @@
 **例如：** 你需要在执行 `lnmp-docker up` 命令后执行一些操作那么可以编写 `__lnmp_custom_up` 函数。
 
 ## 命令行补全
-
-[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
 设置环境变量 `LNMP_PATH` 为本项目的绝对路径(下面以 `/data/lnmp` 为例，实际请替换为你自己的路径)，并加入到 `PATH`，这样你就可以在任意目录使用本项目的 CLI。
 

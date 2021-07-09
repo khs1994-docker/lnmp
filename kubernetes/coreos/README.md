@@ -27,14 +27,13 @@
 
 ### 虚拟机网络配置
 
-> VirtualBox 增加 **hostonly** 网络 **192.168.57.1** 网段(vboxnet1 网卡)、**192.168.58.1** 网段(vboxnet2 网卡),并启用 DHCP:
+> VirtualBox 增加 **hostonly** 网络 **192.168.57.1** 网段(vboxnet1 网卡),并启用 DHCP:
 
 ```bash
-# 首次使用执行两次，保证存在 vboxnet1、vboxnet2 网卡（在 VirtualBox -> 管理 -> 主机网络管理器 查看）
+# 首次使用执行两次，保证存在 vboxnet1（在 VirtualBox -> 管理 -> 主机网络管理器 查看）
 $ VBoxManage hostonlyif create
 
 $ VBoxManage hostonlyif ipconfig vboxnet1 --ip 192.168.57.1 --netmask 255.255.255.0 --dhcp
-$ VBoxManage hostonlyif ipconfig vboxnet2 --ip 192.168.58.1 --netmask 255.255.255.0 --dhcp
 ```
 
 ### 下载相关文件
@@ -104,7 +103,7 @@ $ poweroff
 # 存储 -> 存储介质 -> 选住 ISO -> 属性 -> 移除虚拟盘 点击确定
 # 或者执行
 $ ./coreos umount-iso N
-$ ./coreos mount-iso N
+# $ ./coreos mount-iso N
 
 # 重新启动(可能会遇到异常，只要不是 ignition 错误，强制重启即可)
 ```
@@ -115,7 +114,7 @@ $ ./coreos mount-iso N
 
 * `192.168.57.110`
 * `192.168.57.111`
-* `192.168.58.112`
+* `192.168.57.112`
 
 **安装 ipset (否则将不能启用 IPVS 模式)**
 
@@ -162,7 +161,7 @@ $ sudo route add default gw 192.168.199.1
 * https://github.com/coreos/coreos-kubernetes
 * https://github.com/opsnull/follow-me-install-kubernetes-cluster
 * https://github.com/Mengkzhaoyun/ansible
-* https://github.com/coreos/butane/blob/master/docs/config-fcos-v1_1.md
+* https://github.com/coreos/butane/blob/main/docs/config-fcos-v1_1.md
 * https://www.cnblogs.com/mengkzhaoyun/p/7599695.html
 * https://github.com/cloudflare/cfssl
 * https://docs.fedoraproject.org/en-US/fedora-coreos/getting-started/

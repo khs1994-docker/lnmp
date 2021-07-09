@@ -46,7 +46,6 @@ ExecStart=/opt/k8s/bin/kubelet \
 --hostname-override=${NODE_NAME} \
 --logtostderr=true \
 --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
---dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
 --v=2 \
 $KUBELET_CRI
 

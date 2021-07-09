@@ -1,16 +1,16 @@
-# syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.3.28
+# syntax=docker/dockerfile:labs
+ARG PHP_VERSION=7.3.29
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
 
-FROM --platform=$TARGETPLATFORM alpine:3.13
+FROM --platform=$TARGETPLATFORM alpine:3.14
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=7.3.28
+ARG PHP_VERSION=7.3.29
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -51,7 +51,6 @@ RUN set -ex \
                  tzdata \
 # ensure www-data user exists
 # RUN set -x \
-      && addgroup -g 82 -S www-data \
       && adduser -u 82 -D -S -G www-data www-data
 # 82 is the standard uid/gid for "www-data" in Alpine
 # http://git.alpinelinux.org/cgit/aports/tree/main/apache2/apache2.pre-install?h=v3.3.2
@@ -137,14 +136,14 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
 # Enable linker optimization (this sorts the hash buckets to improve cache locality, and is non-default)
 # Adds GNU HASH segments to generated executables (this is used if present, and is much faster than sysv hash; in this configuration, sysv hash is also generated)
 # https://github.com/docker-library/php/issues/272
-ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
+ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
 ENV PHP_CPPFLAGS="$PHP_CFLAGS"
 ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
 ENV PHP_VERSION=${PHP_VERSION}
-# ENV PHP_URL="https://www.php.net/get/php-7.3.28.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.3.28.tar.xz.asc/from/this/mirror"
+# ENV PHP_URL="https://www.php.net/get/php-7.3.29.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.3.29.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -206,8 +205,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
   && docker-php-source extract \
-  && mv /usr/include/gnu-libiconv/*.h /usr/include \
-  && rm -rf /usr/include/gnu-libiconv \
+  && cp /usr/include/gnu-libiconv/*.h /usr/include \
   && cd /usr/src/php \
 # enchant-2.patch
   && curl -fsSL -o enchant-2.patch https://raw.githubusercontent.com/alpinelinux/aports/3.12-stable/community/php7/enchant-2.patch \
@@ -323,15 +321,18 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && apk del --no-network .build-deps \
   && rm -rf /usr/local/include/php/TSRM/tsrm_win32.h \
-           /usr/local/include/php/TSRM/tsrm_config.w32.h \
-           /usr/local/include/php/Zend/zend_config.w32.h \
-           /usr/local/include/php/ext/mysqlnd/config-win.h \
-           /usr/local/include/php/ext/standard/winver.h \
-           /usr/local/php/man \
+            /usr/local/include/php/TSRM/tsrm_config.w32.h \
+            /usr/local/include/php/Zend/zend_config.w32.h \
+            /usr/local/include/php/ext/mysqlnd/config-win.h \
+            /usr/local/include/php/ext/standard/winver.h \
+            /usr/local/php/man \
+            /usr/include/*.h \
 # https://github.com/docker-library/php/issues/443
   && pecl update-channels \
   && rm -rf /tmp/pear ~/.pearrc \
   \
+# smoke test
+  && php --version \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium
   \
@@ -385,7 +386,9 @@ RUN --mount=type=bind,from=upstream,source=/usr/local/bin,target=/opt/bin,rw \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \
       && ls -la $(php-config --extension-dir) \
-      && php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));'
+      && php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));' \
+# smoke test
+      && php --version
 
 WORKDIR /app
 

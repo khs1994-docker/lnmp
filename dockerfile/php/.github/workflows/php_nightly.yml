@@ -38,7 +38,7 @@ jobs:
     #     sudo install -m755 docker-compose /usr/local/bin
     #   name: 'Setup Docker Compose'
     #   env:
-    #     DOCKER_COMPOSE_VERSION: 1.27.0
+    #     DOCKER_COMPOSE_VERSION: 1.29.0
     - run: |
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
@@ -71,7 +71,7 @@ jobs:
 
         if ! [ -n "${IS_TAG_EVENT}" -o "${GITHUB_EVENT_NAME}" = 'workflow_dispatch' ];then \
           export PLATFORM=linux/amd64; \
-          if [ "$PHP_VERSION" = 8_1_X -o "$PHP_VERSION" = nightly ];then \
+          if [ "$PHP_VERSION" = 8_X_X -o "$PHP_VERSION" = nightly ];then \
             export PLATFORM=linux/amd64,linux/arm64; \
             IS_PUSH=--push; \
             mirror="${add_mirror}"; \
@@ -218,12 +218,6 @@ jobs:
         PHP_VCS_REF: ${{ github.event.inputs.PHP_VCS_REF }}
       name: 'Build Image'
       id: build
-    - run: |
-        curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
-      name: 'Trigger hooks'
-      env:
-        DOCKER_HUB_USERNAME: khs1994
-      if: success()
     - name: Run Snyk to check Docker image for vulnerabilities
       # Snyk can be used to break the build when it detects vulnerabilities.
       # In this case we want to upload the issues to GitHub Code Scanning

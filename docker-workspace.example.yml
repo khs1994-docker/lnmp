@@ -1,9 +1,8 @@
-# COMPOSE_CONVERT_WINDOWS_PATHS=1
 #
 # @link https://www.ruanyifeng.com/blog/2016/07/yaml.html
 #
 
-version: "3.8"
+version: "3.9"
 
 x-common:
   &common
@@ -14,12 +13,14 @@ x-common:
 services:
   workspace:
     &workspace
-    image: khs1994/php:${LNMP_PHP_VERSION:-8.0.6}-composer-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-8.0.8}-composer-alpine
     networks:
       - backend
     volumes:
+      # https://code.visualstudio.com/docs/remote/containers-advanced#_avoiding-extension-reinstalls-on-container-rebuild
       - vscode-server:/root/.vscode-server
       - vscode-server-insiders:/root/.vscode-server-insiders
+
       - vscode-phpls-cache:/root/.phpls
       # fix me
       # linux/macOS
@@ -43,6 +44,9 @@ services:
       - type: bind
         source: ./.devcontainer/docker-php.ini
         target: /usr/local/etc/php/conf.d/docker-php.ini
+      - type: bind
+        source: ./.devcontainer/php-cli.ini
+        target: /usr/local/etc/php/php-cli.ini
       - ./.devcontainer/php-log:/var/log/php
 
       # node
@@ -66,13 +70,13 @@ services:
   composer:
     << : *workspace
     << : *common
-    image: "khs1994/php:${LNMP_PHP_VERSION:-8.0.6}-composer-alpine"
+    image: "khs1994/php:${LNMP_PHP_VERSION:-8.0.8}-composer-alpine"
     command: [] # install | update
 
   npm:
     << : *workspace
     << : *common
-    image: node:${LNMP_NODE_VERSION:-16.2.0}-alpine
+    image: node:${LNMP_NODE_VERSION:-16.3.0}-alpine
     entrypoint: npm
     command: [] # install | ["run","dev"] |
 

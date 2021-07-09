@@ -29,7 +29,7 @@ $ docker volume create lnmp_npm-cache-data
 
 **前端配置**
 
-9. [vsCode 终端] `$ composer require laravel/ui` `$ php artisan ui vue`
+9. [vsCode 终端] `$ composer require laravel/jetstream` `$ php artisan jetstream:install inertia`
 
 10. [macOS 终端] `$ docker-compose -f docker-workspace.yml run --rm npm install` (或者执行 `$ lnmp-docker code-run npm install`)
 

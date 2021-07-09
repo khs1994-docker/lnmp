@@ -1,15 +1,15 @@
-FROM alpine:3.13
+FROM alpine:3.14
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ENV ACME_SH_VERSION=2.8.8 \
+ENV ACME_SH_VERSION=2.9.0 \
     AUTO_UPGRADE=1 \
     LE_CONFIG_HOME=/acme.sh
 
 RUN apk add --no-cache openssl \
                        curl \
                        socat \
-    && curl https://raw.githubusercontent.com/acmesh-official/acme.sh/${ACME_SH_VERSION}/acme.sh | INSTALLONLINE=1 sh \
+    && curl https://get.acme.sh | sh \
     && ln -s /root/.acme.sh/acme.sh /usr/local/bin/acme.sh
 
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh

@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 x-common:
   &common
@@ -27,11 +27,11 @@ services:
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/laravel:${LNMP_LARAVEL_TAG:-8}"
     volumes:
       # fpm config
-      - ./config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
+      - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
       # php.ini
-      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro,cached
       # php.ini override
-      - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php:/var/log/php:cached
       - ./lrew/laravel/.env.development:/app/laravel-docker/.env.development

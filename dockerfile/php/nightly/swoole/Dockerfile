@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:experimental
+# syntax=docker/dockerfile:labs
 ARG USERNAME=khs1994
 ARG BASE=cli
 
@@ -25,7 +25,7 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-# ENV SWOOLE_VERSION=v4.6.6
+# ENV SWOOLE_VERSION=v4.6.7
 ENV SWOOLE_VERSION=master
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
@@ -42,7 +42,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
            -n --defaults --strip --cleanup \
     && apk del --no-network .pecl_build_deps \
     && rm -rf /tmp/* \
-    && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
+    && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
+# smoke test
+    && php --version
 
 WORKDIR /app
 

@@ -2,7 +2,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://travis-ci.com/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
 
-[![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
+[![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers)
 
 :computer: :whale: :elephant: :dolphin: :penguin: :rocket: 使用 Docker Compose 快速搭建 LNMP 环境，仅需 **一条命令** `$ ./lnmp-docker up`
 
@@ -23,7 +23,7 @@
 
 * [支持文档](https://docs.lnmp.khs1994.com)
 
-* [腾讯云 Kubernetes](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [【腾讯云】618云上GO！云服务器限时秒杀，1核2G首年95元！](https://cloud.tencent.com/act/cps/redirect?redirect=1443&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console)
 
 * [项目演示](https://asciinema.org/a/215588)
 
@@ -43,8 +43,6 @@
 
 :gift: 为了本项目的持续发展，你可以使用 [推广产品](ad) 或直接 [打赏](https://zan.khs1994.com) 赞助本项目。
 
-:whale: [腾讯云 Kubernetes](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
-
 ## 微信订阅号
 
 <p align="center">
@@ -61,7 +59,7 @@
 
 :two: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 19.03 Stable +
 
-:three: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.27.0+
+:three: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.29.0+
 
 :four: WSL (**Windows** Only)
 
@@ -202,20 +200,20 @@ $ ./lnmp-docker down
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:2.8.8`            | **2.8.8**           |`alpine:3.13`    |
+|[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:2.9.0`            | **2.9.0**           |`alpine:3.14`    |
 |[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.21.0-alpine`           | **1.21.0**          |`alpine:3.13`    |
-|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.0.6-unit-alpine`| **1.23.0**          |`alpine:3.13`    |
-|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.48-alpine`           | **2.4.48**          |`alpine:3.12`    |
+|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.0.8-unit-alpine`| **1.24.0**          |`alpine:3.13`    |
+|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.48-alpine`           | **2.4.48**          |`alpine:3.14`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.25`                  | **8.0.25**          |`debian:buster-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.6.1`                | **10.6.1**          |`ubuntu:focal`  |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.2.3-alpine`            | **6.2.3**           |`alpine:3.13`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.0.6-fpm-alpine`     | **8.0.6**      |`alpine:3.13`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.0.6-composer-alpine`| **2.0.14**     |`alpine:3.13`    |
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.9-alpine`           | **1.6.9**       |`alpine:3.13`    |
-|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.16-management-alpine` | **3.8.16**       |`alpine:3.13`    |
-|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:13.3-alpine`             | **13.3**        |`alpine:3.13`    |
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.4.5`                      | **4.4.5**       |`ubuntu:bionic`  |
-|[PHPMyAdmin](https://github.com/docker-library/docs/tree/master/phpmyadmin)|`phpmyadmin:5.1.0`                | **5.1.0**       |`alpine:3.13`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.2.4-alpine`            | **6.2.4**           |`alpine:3.13`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.0.8-fpm-alpine`     | **8.0.8**      |`alpine:3.13`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.0.8-composer-alpine`| **2.1.3**     |`alpine:3.13`    |
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.9-alpine`           | **1.6.9**       |`alpine:3.14`    |
+|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.17-management-alpine` | **3.8.17**       |`alpine:3.13`    |
+|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:13.3-alpine`             | **13.3**        |`alpine:3.14`    |
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.4.6`                      | **4.4.6**       |`ubuntu:bionic`  |
+|[PHPMyAdmin](https://github.com/docker-library/docs/tree/master/phpmyadmin)|`phpmyadmin:5.1.1`                | **5.1.1**       |`alpine:3.14`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`alpine:3.11`    |
 
 ### 文件夹结构
@@ -269,7 +267,7 @@ https://docs.lnmp.khs1994.com
 
 * LNMP
 * [Docker Hub](https://hub.docker.com)
-* [Tencent Cloud Container Service](https://cloud.tencent.com/product/tke)
+* [Tencent Cloud Container Service](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 * [Let's Encrypt](https://letsencrypt.org/)
 * [acme.sh](https://github.com/acmesh-official/acme.sh)
 
@@ -296,9 +294,3 @@ https://docs.lnmp.khs1994.com
 本项目每日默认会将用户的系统和 IP 信息发送到数据收集服务器。建议用户保持开启状态来帮助提升本项目。
 
 你可以通过在 `.env` 文件中设置 `DATA_COLLECTION=false` 来禁用数据收集服务。
-
-## 云容器服务推广 :whale:
-
-**腾讯云 Kubernetes**
-
-* [腾讯云容器服务](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)

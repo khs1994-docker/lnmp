@@ -8,4 +8,4 @@ FROM nginx:alpine
 ENTRYPOINT ["sh","/docker-entrypoint.sh"]
 ```
 
-此时 `CMD` 为空，即生成的镜像不会继承 `nginx:alpine` 的 `CMD`。
+此时 `CMD` 为空，即生成的镜像不会继承基础镜像 `nginx:alpine` 的 `CMD`。

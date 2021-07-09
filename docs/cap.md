@@ -6,7 +6,7 @@
 
 **containerd**
 
-* https://github.com/containerd/containerd/blob/master/oci/spec.go#L93
+* https://github.com/containerd/containerd/blob/main/oci/spec.go#L93
 
 **CRI-O**
 
