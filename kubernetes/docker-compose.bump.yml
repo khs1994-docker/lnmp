@@ -19,7 +19,7 @@ services:
     image: calico/cni:v3.19.0
 
   ingress_nginx:
-    image: k8s.gcr.io/ingress-nginx/controller:v0.46.0
+    image: k8s.gcr.io/ingress-nginx/controller:v0.48.1
 
   ingress-kong:
     image: kong-docker-kubernetes-ingress-controller.bintray.io/kong-ingress-controller:0.9.1
