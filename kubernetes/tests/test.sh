@@ -12,7 +12,7 @@ sudo cp lnmp/app/index.php /var/lib/k8s/nfs/lnmp/app/laravel/public/
 # fi
 
 echo "==> Up nfs server"
-# fix travis-ci arm64
+# replace nfs-server image on arm64
 if ! [ $(go env GOARCH) = 'amd64' ];then
 #   sudo sed -i "s/erichough/klutchell/g" nfs-server/docker-compose.yml
 # fi

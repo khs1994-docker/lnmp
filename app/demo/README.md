@@ -14,7 +14,7 @@ Windows 用户建议使用 vsCode 远程开发，具体请查看 https://github.
 
 ## Create PHP Application by Composer
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php-demo.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php-demo) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/example.svg)](https://packagist.org/packages/khs1994/example) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/php-demo/all.svg)](https://github.com/khs1994-docker/php-demo/releases) [![Build Status](https://travis-ci.com/khs1994-docker/php-demo.svg?branch=master)](https://travis-ci.com/khs1994-docker/php-demo) [![StyleCI](https://github.styleci.io/repos/124168962/shield?branch=master)](https://styleci.io/repos/124168962)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php-demo.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php-demo) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/example.svg)](https://packagist.org/packages/khs1994/example) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/php-demo/all.svg)](https://github.com/khs1994-docker/php-demo/releases) [![StyleCI](https://github.styleci.io/repos/124168962/shield?branch=master)](https://styleci.io/repos/124168962)
 
 ```bash
 $ composer create-project --prefer-dist khs1994/example demo
@@ -58,7 +58,6 @@ $ cd demo
 | `.php_cs`         | [PHP 代码格式化工具](https://github.com/FriendsOfPHP/PHP-CS-Fixer) |
 | `.doctum.php`       | [PHP 文档生成工具](https://github.com/code-lts/doctum) |
 | `.styleci.yml`    | [`Style CI` PHP 代码格式化 CI 工具](https://styleci.io/) |
-| `.travis.yml`     | [`Travis` CI 工具](https://www.travis-ci.com) |
 
 ## 一、开发
 
@@ -234,8 +233,6 @@ $ git push origin dev:dev
 ## CI/CD 服务搭建
 
 CI/CD 可以到 [khs1994-docker/ci](https://github.com/khs1994-docker/ci) 查看。
-
-* Travis CI (公共的、仅支持 GitHub CI/CD)
 
 * Drone (私有化 CI/CD)
 

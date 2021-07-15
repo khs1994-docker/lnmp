@@ -4,6 +4,7 @@ metadata:
   name: test
 spec:
   securityContext:
+    fsGroup: 100
   shareProcessNamespace: true
   containers:
     - name: test
@@ -22,5 +23,4 @@ spec:
         value: AAAA
   volumes:
     - name: test
-      hostPath:
-        path: /tmp/t
+      emptyDir:

@@ -164,7 +164,7 @@ _tar(){
 TAR_IMAGE=khs1994/wsl
 TAR_TAG=khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-"${VERSION_CODENAME}"_amd64
 
-if [ "$ID" = 'centos' -o "$ID" = 'fedora' ];then
+if [ "$ID" = 'centos' -o "$ID" = 'fedora' -o "$ID" = 'rocky' ];then
   # rhel
   # TAR_IMAGE=khs1994/wsl
   TAR_TAG=khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64

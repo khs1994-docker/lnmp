@@ -83,7 +83,6 @@ PCIT:
 CI:
 - .appveyor.yml
 - .pcit.yml
-- .travis.yml
 - azure-pipelines.yml
 - renovate.json
 - .github/workflows/**/*

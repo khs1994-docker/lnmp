@@ -1,6 +1,6 @@
 # LNMP Docker
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://travis-ci.com/khs1994-docker/lnmp.svg?branch=20.10)](https://travis-ci.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=20.10)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=20.10)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
 
 [![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers)
 
@@ -13,7 +13,7 @@
 | Windows | [![Build status](https://ci.appveyor.com/api/projects/status/itgp61n808n80b8m/branch/20.10?svg=true)](https://ci.appveyor.com/project/khs1994-docker/lnmp/branch/20.10) |
 | Linux |  [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=20.10)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
 | macOS | ![CI](https://github.com/khs1994-docker/lnmp/workflows/CI/badge.svg?branch=20.10) |
-| Linux arm64v8 | [![Build Status](https://travis-ci.com/khs1994-docker/lnmp.svg?branch=20.10)](https://travis-ci.com/khs1994-docker/lnmp) |
+| Linux arm64v8 | - |
 
 <p align="center">
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
@@ -23,7 +23,7 @@
 
 * [支持文档](https://docs.lnmp.khs1994.com)
 
-* [【腾讯云】618云上GO！云服务器限时秒杀，1核2G首年95元！](https://cloud.tencent.com/act/cps/redirect?redirect=1443&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console)
+* [【腾讯云】云服务器限时秒杀，1核2G首年99元！](https://cloud.tencent.com/act/cps/redirect?redirect=1077&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console)
 
 * [项目演示](https://asciinema.org/a/215588)
 

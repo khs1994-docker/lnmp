@@ -23,15 +23,12 @@ module.exports = {
     },
     {
       text: '腾讯云服务器限时秒杀',
-      link: 'https://cloud.tencent.com/act/cps/redirect?redirect=1443&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console'
+      link: 'https://cloud.tencent.com/act/cps/redirect?redirect=1077&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console'
     },
-    {
-      text: 'Docker LNMP',
-      items: [{
-        text: '腾讯云自媒体',
-        link: 'https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh'
-      }]
-    }
+    // {
+    //   text: 'Docker LNMP',
+    //   items: []
+    // }
     ],
     sidebar: {
       '/ee/': [
