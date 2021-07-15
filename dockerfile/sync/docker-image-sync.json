@@ -16,8 +16,8 @@
     "dest": "library-mirror/node:14.16.0-alpine"
   },
   {
-    "source": "golang:1.16.5-alpine",
-    "dest": "library-mirror/golang:1.16.5-alpine"
+    "source": "golang:1.16.6-alpine",
+    "dest": "library-mirror/golang:1.16.6-alpine"
   },
   {
     "source": "golang:alpine",
@@ -116,12 +116,12 @@
     "dest": "library-mirror/kong:alpine"
   },
   {
-    "source": "library/kong:2.4.1",
-    "dest": "library-mirror/kong:2.4.1"
+    "source": "library/kong:2.5.0",
+    "dest": "library-mirror/kong:2.5.0"
   },
   {
-    "source": "library/kong:2.4.1-alpine",
-    "dest": "library-mirror/kong:2.4.1-alpine"
+    "source": "library/kong:2.5.0-alpine",
+    "dest": "library-mirror/kong:2.5.0-alpine"
   },
   {
     "source": "library/redis:alpine",

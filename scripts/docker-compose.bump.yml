@@ -44,13 +44,13 @@ services:
     image: minio/minio:RELEASE.2021-07-08T01-15-01Z
 
   kong:
-    image: kong:2.4.1-alpine
+    image: kong:2.5.0-alpine
 
   node:
     image: node:16.3.0-alpine
 
   go:
-    image: golang:1.16.5-alpine
+    image: golang:1.16.6-alpine
 
   alpine:
     image: alpine:3.14

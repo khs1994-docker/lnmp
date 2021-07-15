@@ -118,6 +118,7 @@ jobs:
         #echo "LNMP_PATH=$(pwd)" >> $GITHUB_ENV
     - name: lnmp-CLI
       run: |
+        sleep 10
         lnmp-php -v
         lnmp-composer --version
 
