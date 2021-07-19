@@ -15,8 +15,10 @@
       "mutagen.yml",
       "mutagen.example.yml"
     ],
-    "https://raw.githubusercontent.com/coreos/ignition/master/config/v3_1/schema/ignition.json": [
+    "kubernetes/coreos/ignition/butane-fcos.schema.json": [
       "*.bu",
+    ],
+    "https://raw.githubusercontent.com/coreos/ignition/main/config/v3_4_experimental/schema/ignition.json":[
       "*.ign"
     ],
     "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json":[
