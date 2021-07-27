@@ -1,4 +1,4 @@
-* https://github.com/kubernetes/ingress-nginx/tree/master/deploy/static/provider/cloud
+* https://github.com/kubernetes/ingress-nginx/tree/main/deploy/static/provider/cloud
 
 ```yaml
 - name: proxied-udp-53
