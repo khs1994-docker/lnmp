@@ -44,7 +44,7 @@ $ kubectl apply -k ingress/nginx/lnmp
 * https://tonybai.com/2018/06/25/the-kubernetes-ingress-practice-for-https-service/
 
 ```yaml
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/

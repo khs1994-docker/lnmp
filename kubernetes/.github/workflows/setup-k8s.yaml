@@ -450,7 +450,7 @@ jobs:
          HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | grep NodePort | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
          curl --version
          SERVER_IP=`cat .server_ip`
-         if [ $CI_KUBERNETES_VERSION = '1.22.0-rc.2' ];then
+         if [ $CI_KUBERNETES_VERSION = '1.22.0-rc.0' -o $CI_KUBERNETES_VERSION = '1.23.0-alpha.0' ];then
          curl ${SERVER_IP}:${HTTP_PORT} || true
          else
          curl ${SERVER_IP}:${HTTP_PORT}
@@ -563,7 +563,7 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.22.0-beta.2-config
+         BASE_BRANCH=v1.22.0-rc.0-config
          # BASE_BRANCH=master
          if [ $CI_KUBERNETES_VERSION != '1.23.0-alpha.0' ];then
            exit 0
