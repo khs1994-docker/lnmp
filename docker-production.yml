@@ -341,7 +341,7 @@ services:
       - backend
       - frontend
     extra_hosts:
-      - "api.github.com:140.82.114.5"
+      - "api.github.com:140.82.114.6"
     deploy:
       << : *default-deploy
       << : *default-labels
