@@ -204,7 +204,7 @@ $ ./lnmp-docker down
 |[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.21.1-alpine`           | **1.21.1**          |`alpine:3.13`    |
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.0.8-unit-alpine`| **1.24.0**          |`alpine:3.13`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.48-alpine`           | **2.4.48**          |`alpine:3.14`    |
-|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.25`                  | **8.0.25**          |`debian:buster-slim`|
+|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.26`                  | **8.0.26**          |`debian:buster-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.6.3`                | **10.6.3**          |`ubuntu:focal`  |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.2.5-alpine`            | **6.2.5**           |`alpine:3.13`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.0.8-fpm-alpine`     | **8.0.8**      |`alpine:3.13`    |
