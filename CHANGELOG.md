@@ -14,3 +14,4 @@
 
 * [PHP `8.0.8` `7.4.21` `7.3.29`](https://www.php.net/ChangeLog-8.php#8.0.8)
 * [NGINX `1.21.1`](https://nginx.org/en/CHANGES)
+* [Redis `6.2.5`](https://raw.githubusercontent.com/redis/redis/6.2/00-RELEASENOTES)
