@@ -6,7 +6,7 @@ on:
       LWPM_K8S_VERSION:
         description: k8s version
         required: true
-        default: 1.21.0
+        default: 1.22.0
 
 env:
   LWPM_K8S_VERSION: ${{ github.event.inputs.LWPM_K8S_VERSION }}
@@ -52,7 +52,7 @@ jobs:
           $NS="khs1994"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubectl@${env:LWPM_K8S_VERSION}
 
-          $env:DOCKER_USERNAME="906210846"
+          $env:DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
           rootfs $NS/kubectl ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
       - name: handle-kubernetes-server
         shell: pwsh
@@ -76,7 +76,7 @@ jobs:
           $NS="khs1994"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubernetes-server@${env:LWPM_K8S_VERSION}
 
-          $env:DOCKER_USERNAME="906210846"
+          $env:DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
           rootfs $NS/kubernetes-server ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
       - name: handle-kubernetes-node
         shell: pwsh
@@ -99,7 +99,7 @@ jobs:
           $NS="khs1994"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubernetes-node@${env:LWPM_K8S_VERSION}
 
-          $env:DOCKER_USERNAME="906210846"
+          $env:DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
           rootfs $NS/kubernetes-node ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
   trigger-coding-net-ci:
     needs: lwpm-dist-k8s-file

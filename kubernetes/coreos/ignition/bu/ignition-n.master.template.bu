@@ -431,7 +431,7 @@ storage:
       mode: 0644
       contents:
         inline: |
-          apiVersion: kubescheduler.config.k8s.io/v1alpha1
+          apiVersion: kubescheduler.config.k8s.io/v1beta1
           kind: KubeSchedulerConfiguration
           clientConnection:
             burst: 200

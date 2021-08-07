@@ -1043,15 +1043,30 @@ _crio_config(){
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
   print_info "config containerd ..."
-  $(_sudo) mkdir -p ${K8S_ROOT}/etc/cri-containerd/1.5
+  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/1.5
+  $(_sudo) mkdir -p $CONTAINERD_CONF_ROOT/certs.d
   # containerd config default > ${K8S_ROOT}/etc/cri-containerd/config.toml
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/1.5/config.toml \
-    | $(_sudo) tee ${K8S_ROOT}/etc/cri-containerd/1.5/config.toml
+    | $(_sudo) tee $CONTAINERD_CONF_ROOT/config.toml
 
   if ! [ "${LNMP_CN_ENV}" = 'false' ];then
-  $(_sudo) cp -r systemd/etc/cri-containerd/1.5/certs.d \
-                 ${K8S_ROOT}/etc/cri-containerd/1.5
+  $(_sudo) cp -r systemd/etc/cri-containerd/1.5/certs.d $CONTAINERD_CONF_ROOT
   fi
+
+  if [ -n "$GITHUB_ACTIONS" ];then
+    $(_sudo) mkdir $CONTAINERD_CONF_ROOT/certs.d/docker.io
+
+    cat <<EOF | $(_sudo) tee $CONTAINERD_CONF_ROOT/certs.d/docker.io/hosts.toml
+server = "https://docker.io"
+[host."https://mirror.gcr.io"]
+  capabilities = ["pull", "resolve"]
+#[host."https://dockerhub.azk8s.cn"]
+#  capabilities = ["pull", "resolve"]
+EOF
+  fi
+
+  $(_sudo) ls -la $CONTAINERD_CONF_ROOT/certs.d
+  $(_sudo) cat $CONTAINERD_CONF_ROOT/certs.d/docker.io/hosts.toml || true
 
   _cri_sysctl
 }

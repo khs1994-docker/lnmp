@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   k8s_apiserver:
-    image: k8s.gcr.io/kube-apiserver:v1.21.0
+    image: k8s.gcr.io/kube-apiserver:v1.22.0
 
   k8s_dashboard:
     image: kubernetesui/dashboard:v2.3.1
@@ -19,7 +19,7 @@ services:
     image: calico/cni:v3.19.0
 
   ingress_nginx:
-    image: k8s.gcr.io/ingress-nginx/controller:v0.48.1
+    image: k8s.gcr.io/ingress-nginx/controller:v1.0.0-beta.1
 
   ingress-kong:
     image: kong-docker-kubernetes-ingress-controller.bintray.io/kong-ingress-controller:0.9.1

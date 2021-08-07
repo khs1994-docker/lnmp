@@ -16,3 +16,4 @@
 * [NGINX `1.21.1`](https://nginx.org/en/CHANGES)
 * [Redis `6.2.5`](https://raw.githubusercontent.com/redis/redis/6.2/00-RELEASENOTES)
 * [MySQL `8.0.26`](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-26.html)
+* [Kubernetes `1.22.0`](https://github.com/kubernetes/kubernetes/releases/tag/v1.22.0)

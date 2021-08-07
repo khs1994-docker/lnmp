@@ -12,9 +12,9 @@
 
 ## ingress
 
-* ingress-nginx `0.48.1`
+* ingress-nginx `1.0.0-beta.1`
 
-* ingress-kong `1.0`
+* ingress-kong `1.3`
 
 ## CNI
 

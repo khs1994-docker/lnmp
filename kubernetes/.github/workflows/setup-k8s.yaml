@@ -38,61 +38,63 @@ jobs:
      matrix:
        include:
       # next next version
+      #  - os: ubuntu
+      #    dist: 20.04
+      #    CI_KUBERNETES_VERSION: 1.24.0-alpha.0
+      #    LNMP_K8S_GET: --url
+      #    GENERATE_CLI_HELP: "true"
+
+      # next version
        - os: ubuntu
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.23.0-alpha.0
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
 
-      # next version
-       - os: ubuntu
-         dist: 20.04
-         CI_KUBERNETES_VERSION: 1.22.0-rc.0
-         LNMP_K8S_GET: --url
-         GENERATE_CLI_HELP: "true"
-
        # current stable version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.21.0
+         CI_KUBERNETES_VERSION: 1.22.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --crio
          K8S_IMAGE_NS: khs1994
          K8S_IMAGE_REGISTRY: useccr.ccs.tencentyun.com
          UPLOAD_TO_CODING: "true"
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.21.0
+         CI_KUBERNETES_VERSION: 1.22.0
          LNMP_K8S_GET: --url
-         # GENERATE_CLI_HELP: "true"
+         #
+         GENERATE_CLI_HELP: "true"
+         #
          UPLOAD_TO_CODING: "true"
        # ipv6
        # - os: ubuntu
        #  dist: 20.04
-       #  CI_KUBERNETES_VERSION: 1.21.0
+       #  CI_KUBERNETES_VERSION: 1.22.0
        #  LNMP_K8S_GET: --url
        #  IPV6: "true"
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.21.0
+         CI_KUBERNETES_VERSION: 1.22.0
          LNMP_K8S_GET: --url
          CNI_CALICO_EBPF: 'true'
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.21.0
+         CI_KUBERNETES_VERSION: 1.22.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.21.0
+         CI_KUBERNETES_VERSION: 1.22.0
          LNMP_K8S_GET: --url
          K8S_ROOT: /opt/k8s-custom
        # old version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.20.8
+         CI_KUBERNETES_VERSION: 1.21.3
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.12
+         CI_KUBERNETES_VERSION: 1.20.8
          LNMP_K8S_GET: --url
      fail-fast: false
    steps:
@@ -116,6 +118,8 @@ jobs:
          key: khs1994-docker-lnmp-caches-20201101-0
      - run: |
          uname -a
+
+         docker pull dockerhub.azk8s.cn/library/nginx || true
 
          sudo mount bpffs /sys/fs/bpf -t bpf || true
          sudo mount -t bpf || true
@@ -232,11 +236,11 @@ jobs:
          test -n "$CMD_FAILED" && false || true
 
          sudo systemctl cat kube-scheduler
-         if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
-           echo "replace kube-scheduler config version" \
-           && echo "remove it when k8s version ge 1.19" \
-           && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kube-scheduler.config.yaml ; \
-         fi
+         # if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
+         #  echo "replace kube-scheduler config version" \
+         #  && echo "remove it when k8s version ge 1.19" \
+         #  && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kube-scheduler.config.yaml ; \
+         # fi
          sudo systemctl start kube-scheduler || CMD_FAILED=1
          test -n "$CMD_FAILED" && sudo journalctl -u kube-scheduler || true
          test -n "$CMD_FAILED" && false || true
@@ -378,10 +382,8 @@ jobs:
        run: |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
 
-         if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 21 ];then \
-           sudo install -m755 /usr/local/bin/kubectl ${K8S_ROOT:-/opt/k8s}/bin/kubectl
-           kubectl version --client || true
-         fi
+         sudo install -m755 ${K8S_ROOT:-/opt/k8s}/bin/kubectl /usr/local/bin/kubectl
+         kubectl version --client || true
 
          df -h
          ip addr
@@ -450,11 +452,7 @@ jobs:
          HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | grep NodePort | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
          curl --version
          SERVER_IP=`cat .server_ip`
-         if [ $CI_KUBERNETES_VERSION = '1.22.0-rc.0' -o $CI_KUBERNETES_VERSION = '1.23.0-alpha.0' ];then
-         curl ${SERVER_IP}:${HTTP_PORT} || true
-         else
          curl ${SERVER_IP}:${HTTP_PORT}
-         fi
 
          # test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
      - name: cleanup
@@ -510,7 +508,7 @@ jobs:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          BASE_BRANCH=master
-         if ! [ $CI_KUBERNETES_VERSION = '1.21.0' -a "$GENERATE_CLI_HELP" = "true" ];then
+         if ! [ $CI_KUBERNETES_VERSION = '1.22.0' -a "$GENERATE_CLI_HELP" = "true" ];then
            exit 0
          fi
 
@@ -536,16 +534,17 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.22.0-beta.2-config
+         BASE_BRANCH=v1.22.0-config
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.22.0-rc.0' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.23.0-alpha.0' ];then
            exit 0
          fi
 
          set -x
          cd /tmp
          rm -rf lnmp-k8s
-         git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+         git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s \
+         || git clone -b master --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
          cd lnmp-k8s
 
          stty size || true
@@ -563,16 +562,17 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.22.0-rc.0-config
+         BASE_BRANCH=v1.23.0-alpha.0-config
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.23.0-alpha.0' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.24.0-alpha.0' ];then
            exit 0
          fi
 
          set -x
          cd /tmp
          rm -rf lnmp-k8s
-         git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+         git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s \
+         || git clone -b master --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
          cd lnmp-k8s
 
          stty size || true
@@ -591,3 +591,5 @@ jobs:
 
     #  - name: Setup tmate session
     #    uses: mxschmitt/action-tmate@v3
+    #    if: ${{ failure() }}
+    #    timeout-minutes: 60
