@@ -1062,6 +1062,8 @@ server = "https://docker.io"
   capabilities = ["pull", "resolve"]
 #[host."https://dockerhub.azk8s.cn"]
 #  capabilities = ["pull", "resolve"]
+[host."https://registry-1.docker.io"]
+  capabilities = ["pull", "resolve"]
 EOF
   fi
 

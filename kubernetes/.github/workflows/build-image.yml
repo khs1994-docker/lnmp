@@ -25,13 +25,26 @@ jobs:
       - uses: docker-practice/actions-setup-docker@master
       - run: |
           echo ${DOCKER_PASSWORD} | docker login -u khs1994 --password-stdin
+          echo ${GHCR_IO_TOKEN} | docker login -u khs1994 --password-stdin ghcr.io
         env:
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       - run: |
           docker buildx build \
-          --cache-from=khs1994/k8s-cfssl:cache \
-          --cache-to=khs1994/k8s-cfssl:cache \
+          --cache-from=ghcr.io/khs1994/k8s-cfssl:cache \
+          --cache-to=ghcr.io/khs1994/k8s-cfssl:cache \
           -t khs1994/k8s-cfssl \
+          -t ghcr.io/khs1994/k8s-cfssl \
           --push \
           --platform linux/amd64,linux/arm64 \
           cfssl
+        name: build khs1994/k8s-cfssl
+      - name: build khs1994/fcos
+        run: |
+          docker buildx build \
+          --cache-from=ghcr.io/khs1994/fcos:cache \
+          --cache-to=ghcr.io/khs1994/fcos:cache \
+          -t khs1994/fcos \
+          -t ghcr.io/khs1994/fcos \
+          --push \
+          --platform linux/amd64,linux/arm64 \
+          coreos/server

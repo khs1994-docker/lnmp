@@ -29,6 +29,7 @@ services:
     volumes:
       - ./coreos/cert:/srv/cfssl
       - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
+      - ./cfssl/kube-scheduler.config.yaml:/kube-scheduler.config.yaml
     env_file:
       - ./coreos/.env.example
       - ./coreos/.env
@@ -39,6 +40,7 @@ services:
     volumes:
       - ./systemd/certs:/srv/cfssl
       - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
+      - ./cfssl/kube-scheduler.config.yaml:/kube-scheduler.config.yaml
     env_file:
       - ./systemd/.env.example
       - ./systemd/.env
@@ -48,6 +50,7 @@ services:
     volumes:
       - ./wsl2/certs:/srv/cfssl
       - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
+      - ./cfssl/kube-scheduler.config.yaml:/kube-scheduler.config.yaml
     env_file:
       - ./wsl2/.env.example
       - ./wsl2/.env
