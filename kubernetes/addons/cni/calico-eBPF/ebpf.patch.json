@@ -1,7 +1,7 @@
 [
   {
     "op": "add",
-    "path": "/spec/template/spec/containers/0/env/21",
+    "path": "/spec/template/spec/containers/0/env/22",
     "value": {
       "name": "FELIX_BPFENABLED",
       "value": "true"
