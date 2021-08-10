@@ -134,7 +134,9 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.19.7"
+$KUBERNETES_VERSION = "1.21.2"
+$KUBERNETES_COREDNS_VERSION = "1.8.0"
+$KUBERNETES_PAUSE_VERSION = "3.4.1"
 $EXEC_CMD_DIR = $PWD
 
 Function Test-Command($command) {
@@ -358,7 +360,7 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | down | ]
+  gcr.io               Up local k8s.gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | down | ]
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
@@ -1390,15 +1392,15 @@ XXX
   }
 
   gcr.io {
-    printInfo "Check gcr.io host config"
+    printInfo "Check k8s.gcr.io host config"
 
-    $GCR_IO_HOST = (ping gcr.io -n 1).split(" ")[9]
-    $GCR_IO_HOST_EN = (ping gcr.io -n 1).split(" ")[11].trim(":")
+    $GCR_IO_HOST = (ping k8s.gcr.io -n 1).split(" ")[9]
+    $GCR_IO_HOST_EN = (ping k8s.gcr.io -n 1).split(" ")[11].trim(":")
 
     if (!(($GCR_IO_HOST -eq "127.0.0.1") -or ($GCR_IO_HOST_EN -eq "127.0.0.1"))) {
       printWarning "Please set host on C:\Windows\System32\drivers\etc
 
-127.0.0.1 gcr.io k8s.gcr.io
+127.0.0.1 k8s.gcr.io
 "
 
       Edit-Hosts
@@ -1406,7 +1408,7 @@ XXX
       exit
     }
 
-    printInfo "gcr.io host config correct"
+    printInfo "k8s.gcr.io host config correct"
 
     if ('logs' -eq $args[1]) {
       docker logs $(docker container ls -f label=com.khs1994.lnmp.gcr.io -q) -f
@@ -1422,7 +1424,7 @@ XXX
     printInfo "This local server support Docker Desktop with Kubernetes v${KUBERNETES_VERSION}"
 
     if ('down' -eq $args[1]) {
-      Write-Warning "Stop gcr.io local server success"
+      Write-Warning "Stop k8s.gcr.io local server success"
       exit
     }
 
@@ -1440,7 +1442,7 @@ XXX
     # -v $pwd/config/registry/nginx.htpasswd:/etc/docker/registry/auth/nginx.htpasswd `
 
     if ('--no-pull' -eq $args[1]) {
-      printInfo "Up gcr.io Server Success"
+      printInfo "Up k8s.gcr.io Server Success"
       exit
     }
 
@@ -1449,9 +1451,8 @@ XXX
       "kube-scheduler:v${KUBERNETES_VERSION}", `
       "kube-proxy:v${KUBERNETES_VERSION}", `
       "etcd:3.4.13-0", `
-      "coredns:1.7.0", `
-      "pause:3.2", `
-      "pause:3.1"
+      "coredns:${KUBERNETES_COREDNS_VERSION}", `
+      "pause:${KUBERNETES_PAUSE_VERSION}"
 
     sleep 10
 
@@ -1481,7 +1482,7 @@ XXX
         continue;
       }
 
-      Get-GcrImage $image "gcr.io/google_containers"
+      Get-GcrImage $image "k8s.gcr.io/google_containers"
 
       if (Test-GcrImage $image) {
         continue;
