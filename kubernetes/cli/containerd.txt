@@ -1,5 +1,5 @@
 NAME:
-   containerd - 
+   containerd -
                     __        _                     __
   _________  ____  / /_____ _(_)___  ___  _________/ /
  / ___/ __ \/ __ \/ __/ __ `/ / __ \/ _ \/ ___/ __  /
@@ -13,10 +13,10 @@ USAGE:
    containerd [global options] command [command options] [arguments...]
 
 VERSION:
-   v1.5.0-rc.1
+   v1.5.5
 
 DESCRIPTION:
-   
+
 containerd is a high performance container runtime whose daemon can be started
 by using this command. If none of the *config*, *publish*, or *help* commands
 are specified, the default action of the **containerd** command is to start the
