@@ -49,10 +49,8 @@ systemd:
         RestartSec=5
         ExecStartPre=ls /etc/NetworkManager/system-connections/enp0s3.nmconnection
         ExecStartPre=ls /etc/NetworkManager/system-connections/enp0s8.nmconnection
-        ExecStartPre=ls /etc/NetworkManager/system-connections/enp0s9.nmconnection
         ExecStartPre=nmcli con up enp0s3
         ExecStartPre=nmcli con up enp0s8
-        ExecStartPre=nmcli con up enp0s9
         ExecStartPre=route add default gw ${DEFAULT_GATEWAY}
         ExecStartPre=ip route del default via 192.168.57.1
         ExecStart=sh -c "echo setup network"

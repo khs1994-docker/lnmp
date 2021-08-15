@@ -17,10 +17,10 @@
 
 ## 注意事项
 
-* 虚拟机内存 `3072M (3G)`，设置为 `2048M (2G)` 将无法启动
+* 虚拟机内存必须设置为 `3072M (3G)` 以上，否则将无法启动
 * 若使用虚拟机安装，建议电脑内存 **16G** 硬盘 **100G** 可用空间
 * `SELinux` 已关闭
-* `kubelet` 容器运行时为 `containerd`，可以改为 `docker`
+* `kubelet` 容器运行时为 `containerd`
 * `Etcd` `kube-nginx` 等部分服务运行方式为 `podman`
 * **bug:** 硬盘空间充足，但报硬盘空间不足错误，解决办法: ignition `storage.files.path` 不要列出大文件
 * **bug:** 异常关机（强制关机）可能导致 `podman` 运行出错，请删除镜像 `(例如：$ sudo podman rmi IMAGE_NAME)` 之后重启服务 `(例如：$ sudo systemctl restart etcd)`
@@ -115,14 +115,6 @@ $ ./coreos umount-iso N
 * `192.168.57.110`
 * `192.168.57.111`
 * `192.168.57.112`
-
-**安装 ipset (否则将不能启用 IPVS 模式)**
-
-每个节点都安装之后重启
-
-```bash
-$ sudo rpm-ostree install ipset
-```
 
 **修改 .kube 权限**
 

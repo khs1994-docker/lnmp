@@ -9,7 +9,7 @@ set -e
 tty=
 tty -s > /dev/null 2>&1 && tty=--tty || true
 
-readonly KUBERNETES_VERSION="1.21.2"
+readonly KUBERNETES_VERSION="1.21.3"
 readonly KUBERNETES_COREDNS_VERSION="1.8.0"
 readonly KUBERNETES_PAUSE_VERSION="3.4.1"
 readonly OS=`uname -s`
@@ -237,10 +237,17 @@ _test_gcr_image(){
 }
 
 _get_gcr_image(){
-  docker pull $2/$1
-  docker tag  $2/$1 k8s.gcr.io/$1
-  # docker push k8s.gcr.io/$image
-  docker rmi  $2/$1
+  if [ "$1" = "coredns/coredns:v${KUBERNETES_COREDNS_VERSION}" ];then
+    local IMAGE_AND_VERSION="coredns:v${KUBERNETES_COREDNS_VERSION}"
+    docker pull $2/$IMAGE_AND_VERSION
+    docker tag $2/$IMAGE_AND_VERSION k8s.gcr.io/coredns/$IMAGE_AND_VERSION
+    docker rmi $2/$IMAGE_AND_VERSION
+  else
+    docker pull $2/$1
+    docker tag  $2/$1 k8s.gcr.io/$1
+    # docker push k8s.gcr.io/$image
+    docker rmi $2/$1
+  fi
 }
 
 _gcr_io(){
@@ -286,8 +293,7 @@ _gcr_io(){
     kube-scheduler:v${KUBERNETES_VERSION} \
     kube-proxy:v${KUBERNETES_VERSION} \
     etcd:3.4.13-0 \
-    etcd:3.3.15-0 \
-    coredns:${KUBERNETES_COREDNS_VERSION} \
+    coredns/coredns:v${KUBERNETES_COREDNS_VERSION} \
     pause:${KUBERNETES_PAUSE_VERSION}"
 
     sleep 5

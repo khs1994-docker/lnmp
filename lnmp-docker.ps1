@@ -134,7 +134,7 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.21.2"
+$KUBERNETES_VERSION = "1.21.3"
 $KUBERNETES_COREDNS_VERSION = "1.8.0"
 $KUBERNETES_PAUSE_VERSION = "3.4.1"
 $EXEC_CMD_DIR = $PWD
@@ -1451,7 +1451,7 @@ XXX
       "kube-scheduler:v${KUBERNETES_VERSION}", `
       "kube-proxy:v${KUBERNETES_VERSION}", `
       "etcd:3.4.13-0", `
-      "coredns:${KUBERNETES_COREDNS_VERSION}", `
+      "coredns/coredns:v${KUBERNETES_COREDNS_VERSION}", `
       "pause:${KUBERNETES_PAUSE_VERSION}"
 
     sleep 10
@@ -1465,10 +1465,18 @@ XXX
     }
 
     function Get-GcrImage([string] $image, [string] $mirror) {
+      if ($image -eq "coredns/coredns:v${KUBERNETES_COREDNS_VERSION}") {
+        $image = "coredns:v${KUBERNETES_COREDNS_VERSION}"
+      }
       docker pull $mirror/$image
-      docker tag  $mirror/$image k8s.gcr.io/$image
+      if ($image -eq "coredns:v${KUBERNETES_COREDNS_VERSION}") {
+        docker tag $mirror/$image k8s.gcr.io/coredns/$image
+      }
+      else {
+        docker tag $mirror/$image k8s.gcr.io/$image
+      }
       # docker push k8s.gcr.io/$image
-      docker rmi  $mirror/$image
+      docker rmi $mirror/$image
     }
 
     # $ErrorActionPreference="SilentlyContinue"

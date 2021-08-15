@@ -22,3 +22,11 @@ $ sudo dnf install kernel-headers make kernel-devel
 
 $ sudo /sbin/vboxconfig
 ```
+
+## macOS
+
+```bash
+$ sudo "/Library/Application Support/VirtualBox/LaunchDaemons/VirtualBoxStartup.sh" restart
+```
+
+`System Preferences` -> `Security & Privacy` -> `allow execute kext (modules)`

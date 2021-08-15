@@ -124,7 +124,7 @@ for i in `seq ${NODE_NUM}` ; do
   if [ -f ignition-$i.bu ];then
     if [ $i = '3' ];then
       sed -i \
-      's/enp0s3/enp0s9/g' \
+      's/enp0s3/enp0s3/g' \
       ignition-$i.bu
     fi
     $(_butane) ignition-$i.bu > ignition-$i.ign

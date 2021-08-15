@@ -3,7 +3,7 @@ version: "3.9"
 #
 # @link https://www.ruanyifeng.com/blog/2016/07/yaml.html
 #
-# @link https://docs.docker.com/compose/overview/
+# @link https://docs.docker.com/compose/
 # @link https://docs.docker.com/compose/compose-file/#extension-fields
 # @link https://github.com/docker-library/docs
 #
