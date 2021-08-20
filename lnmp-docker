@@ -552,6 +552,13 @@ install_docker_compose(){
 }
 
 docker_compose(){
+  local docker_compose_v2
+  docker-compose --version | grep v2 -q && docker_compose_v2=1 || docker_compose_v2=0
+  if [ "$docker_compose_v2" = 1 ];then
+    print_info "Docker Compose is v2"
+    return
+  fi
+
   if [ "$1" = 'compose' ];then shift ; fi
 
   command -v docker-compose >/dev/null 2>&1 || local not_install=1
@@ -1888,14 +1895,13 @@ APP_ROOT=$(mkdir -p ${APP_ROOT:-./app}; cd ${APP_ROOT:-./app}; pwd)
 print_info "APP_ROOT is $APP_ROOT"
 
 if [ -d .git ];then
-  command -v git > /dev/null 2>&1 && BRANCH=`git rev-parse --abbrev-ref HEAD` || BRANCH="unknow(git not install)"
+  command -v git > /dev/null 2>&1 && BRANCH=`git rev-parse --abbrev-ref HEAD` || BRANCH="unknow"
   print_info "Branch is ${BRANCH}"
 fi
 
 _check_docker_version(){
-  if [ -z "${BRANCH}" ];then
-    return
-  fi
+  if [ -z "${BRANCH}" ];then return;fi
+  if [ "${BRANCH}" = "unknow" ];then return;fi
 
   DOCKER_VERSION_YY=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 1)
   DOCKER_VERSION_MM=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 2)
