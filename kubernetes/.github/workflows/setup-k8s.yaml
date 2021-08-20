@@ -525,7 +525,7 @@ jobs:
 
          git add .
          git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
-         && git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f \
+         && git push origin $(git branch --show-current):v$CI_KUBERNETES_VERSION-config -f \
          || true
 
          cd /tmp
@@ -555,7 +555,7 @@ jobs:
 
          git add .
          git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
-         && git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f \
+         && git push origin $(git branch --show-current):v$CI_KUBERNETES_VERSION-config -f \
          || true
 
      - name: Update k8s next next cli help info
@@ -583,7 +583,7 @@ jobs:
 
          git add .
          git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
-         && git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f \
+         && git push origin $(git branch --show-current):v$CI_KUBERNETES_VERSION-config -f \
          || true
 
 
