@@ -22,5 +22,5 @@
     "uninstall": "_cleanup \"C:\\php\"",
     "version": "(php -v).split(\" \")[1]"
   },
-  "version": "8.0.8"
+  "version": "8.0.9"
 }
