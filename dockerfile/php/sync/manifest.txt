@@ -1,9 +1,9 @@
-8.1.0alpha2-cli-alpine
-8.1.0alpha2-fpm-alpine
-8.1.0alpha2-unit-alpine
-8.1.0alpha2-composer-alpine
-8.1.0alpha2-swoole-alpine
-8.1.0alpha2-s6-alpine
+8.1.0beta2-cli-alpine
+8.1.0beta2-fpm-alpine
+8.1.0beta2-unit-alpine
+8.1.0beta2-composer-alpine
+8.1.0beta2-swoole-alpine
+8.1.0beta2-s6-alpine
 8.0.9-cli-alpine
 8.0.9-fpm-alpine
 8.0.9-unit-alpine
