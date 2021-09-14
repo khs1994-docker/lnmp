@@ -75,6 +75,8 @@ services:
     # - phpmyadmin:/var/www/html
     depends_on:
       - php8
+    # ports:
+    #   - 8022:8022
 
   swoole:
     << : *common

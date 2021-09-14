@@ -124,11 +124,13 @@ async function run() {
       '--version']).catch(() => { });
 
     core.startGroup('install docker')
-    await exec.exec('brew', ['update'])
+    // await exec.exec('brew', ['update'])
+    await exec.exec('wget', ['https://raw.githubusercontent.com/Homebrew/homebrew-cask/300b1dcc6d9f61cc93e9351e76066f0846beefe9/Casks/docker.rb']);
     await exec.exec('brew', [
       'install',
       '--cask',
-      DOCKER_CHANNEL !== 'stable' ? 'docker' : 'docker'
+      // DOCKER_CHANNEL !== 'stable' ? 'docker' : 'docker'
+      'docker.rb',
     ]);
     core.endGroup();
 
