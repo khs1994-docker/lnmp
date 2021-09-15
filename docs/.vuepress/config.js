@@ -122,7 +122,6 @@ module.exports = {
         title: '镜像构建',
         collapsable: false,
         children: [
-          '/build',
           '/manifest',
           '/buildx',
         ]

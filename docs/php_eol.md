@@ -1,6 +1,6 @@
 # 使用 EOL 的 PHP 版本
 
-**1. 在 `docker-lnmp.include.yml` 文件中增加以下内容，具体请查看 [自定义](custom.md)**
+**1. 在 `docker-lnmp.override.yml` 文件中增加以下内容，具体请查看 [自定义](custom.md)**
 
 ```yaml
 services:

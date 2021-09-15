@@ -15,9 +15,6 @@ x-common:
 #
 # $ ./lnmp-docker config > docker-compose.yaml
 #
-# # 自定义镜像
-# $ ./lnmp-docker build-config > docker-compose.build.yaml
-#
 
 services:
   ## https://docs.docker.com/compose/extends/

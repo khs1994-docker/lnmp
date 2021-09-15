@@ -19,3 +19,5 @@
 !Dockerfile
 !.dockerignore
 !deno
+docker-compose.override.yml
+docker-compose.override.yaml

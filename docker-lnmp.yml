@@ -8,6 +8,12 @@ version: "3.9"
 # @link https://github.com/docker-library/docs
 #
 
+x-common-labels:
+  &common-labels
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+
 x-common:
   &common
   restart: ${LNMP_RESTART:-always}
@@ -28,7 +34,8 @@ x-tmpfs:
 services:
   mysql:
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mysql:${LNMP_MYSQL_VERSION:-8.0.26}"
+    << : *common-labels
+    image: "${LNMP_LIBRARY_NS:-library}/mysql:${LNMP_MYSQL_VERSION:-8.0.26}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
       # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
@@ -69,7 +76,8 @@ services:
 
   redis:
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${LNMP_REDIS_VERSION:-6.2.5}-alpine"
+    << : *common-labels
+    image: "${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-6.2.5}-alpine"
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
@@ -100,7 +108,8 @@ services:
 
   memcached:
     << : *common
-    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.9}-alpine
+    << : *common-labels
+    image: ${LNMP_LIBRARY_NS:-library}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.9}-alpine
     ports:
       - "${LNMP_MEMCACHED_PORT:-127.0.0.1:11211}:11211"
     volumes:
@@ -114,7 +123,8 @@ services:
   php7:
     &php7
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.22}-fpm-alpine"
+    << : *common-labels
+    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.22}-fpm-alpine"
     volumes:
       - &bind_app ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       # fpm config
@@ -163,7 +173,8 @@ services:
   php8:
     &php8
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.9}-fpm-alpine"
+    << : *common-labels
+    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.9}-fpm-alpine"
     volumes:
       - *bind_app
       # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
@@ -204,8 +215,9 @@ services:
 
   composer:
     << : *common
+    << : *common-labels
     restart: "no"
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.0.9}-composer-alpine"
+    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.0.9}-composer-alpine"
     volumes:
       - *bind_app
       # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
@@ -221,7 +233,7 @@ services:
     << : *php7
     networks:
       - backend
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.22}-supervisord-alpine"
+    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.22}-supervisord-alpine"
     secrets:
       - source: supervisord_ini
         target: /etc/supervisor.d/supervisord.ini
@@ -231,7 +243,8 @@ services:
 
   phpmyadmin:
     << : *common
-    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.1.1}
+    << : *common-labels
+    image: ${LNMP_LIBRARY_NS:-library}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.1.1}
     environment:
       - PMA_HOST=mysql
     ports:
@@ -250,7 +263,8 @@ services:
 
   nginx:
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${LNMP_NGINX_VERSION:-1.21.1}-alpine"
+    << : *common-labels
+    image: "${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.21.1}-alpine"
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/tcp"
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/udp"
@@ -272,3 +286,32 @@ services:
     #   - php8
     healthcheck:
       test: ["CMD","nginx","-t"]
+
+networks:
+  frontend:
+    << : *common-labels
+  backend:
+    << : *common-labels
+
+volumes:
+  mysql-data:
+    << : *common-labels
+  redis-data:
+    << : *common-labels
+  zoneinfo-data:
+    << : *common-labels
+  phpmyadmin-data:
+    << : *common-labels
+  composer-cache-data:
+    << : *common-labels
+
+secrets:
+  db_root_password:
+    << : *common-labels
+    file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
+  supervisord_ini:
+    << : *common-labels
+    file: ./config/supervisord/supervisord.ini
+  # mysql_conf:
+  #  << : *common-labels
+  #   file: ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}

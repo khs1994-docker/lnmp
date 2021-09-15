@@ -18,7 +18,8 @@ x-common-label:
 services:
   rabbitmq:
     << : *common
-    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.9.0}-management-alpine
+    << : *common-label
+    image: ${LNMP_LIBRARY_NS:-library}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.9.0}-management-alpine
     volumes:
       - type: volume
         source: rabbitmq-data

@@ -19,7 +19,8 @@ services:
   postgresql:
     &postgresql
     << : *common
-    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${LNMP_POSTGRESQL_VERSION:-13.3}-alpine
+    << : *common-label
+    image: ${LNMP_LIBRARY_NS:-library}/postgres:${LNMP_POSTGRESQL_VERSION:-13.3}-alpine
     environment:
       # - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_PASSWORD=${LNMP_POSTGRES_PASSWORD:-mytest}

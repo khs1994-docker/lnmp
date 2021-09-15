@@ -74,7 +74,13 @@ fi
 
 print_info "Load env file [ $LNMP_ENV_FILE ]"
 
-_cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
+if [ -f docker-lnmp.include.yml ];then
+  cp docker-lnmp.include.yml docker-lnmp.override.yml
+  cp docker-lnmp.include.yml docker-lnmp.include.yml.backup
+  rm -rf docker-lnmp.include.yml
+fi
+
+_cp_only_not_exists docker-lnmp.override.example.yml docker-lnmp.override.yml
 _cp_only_not_exists docker-workspace.example.yml docker-workspace.yml
 _cp_only_not_exists lnmp-docker-custom-script.example lnmp-docker-custom-script
 
@@ -125,12 +131,9 @@ Commands:
   down                 Stop and remove LNMP Docker containers, networks
   acme.sh              Run original acme.sh command to issue SSL certificate
   backup               Backup MySQL databases
-  build                Build or rebuild your LNMP images (Only Support x86_64)
-  build-config         Validate and view the LNMP with your images Compose file
-  build-up             Create and start LNMP containers With your Build images
-  build-push           Pushes your images to Docker Registory
-  build-pull           Pull LNMP Docker Images Build By your self
-  build-up             Create and start LNMP containers With Self Build images
+  build                Build or rebuild your LNMP Docker Images (Only Support x86_64)
+  push                 Pushes LNMP Docker Images to Docker Registory
+  pull                 Pull LNMP Docker Images
   cleanup              Cleanup log files
   compose              Install docker-compose [ --official | -f ]
   composer             Exec composer command on Docker Container
@@ -339,13 +342,8 @@ _satis(){
 }
 
 _get_compose_options(){
-  local isBuild=0
   for compose_file in "$@"
   do
-    if [ $compose_file = "--build" ];then
-      isBuild=1
-      continue
-    fi
     options+=" -f $compose_file "
   done
 
@@ -369,27 +367,14 @@ _get_compose_options(){
       continue
     fi
 
-    if [ $isBuild -eq 1 ];then
-      if ! [ -f "$LREW_INCLUDE_ROOT/docker-compose.build.yml" ];then
-        options+=" -f $LREW_INCLUDE_ROOT/docker-compose.yml "
-        continue
-      fi
+    options+=" -f $LREW_INCLUDE_ROOT/docker-compose.yml "
 
-      options+=" -f $LREW_INCLUDE_ROOT/docker-compose.yml -f $LREW_INCLUDE_ROOT/docker-compose.build.yml "
-
-      continue
+    if [ -f "$LREW_INCLUDE_ROOT/docker-compose.override.yml" ];then
+      options+=" -f $LREW_INCLUDE_ROOT/docker-compose.override.yml "
     fi
-
-    if ! [ -f "$LREW_INCLUDE_ROOT/docker-compose.override.yml" ];then
-      options+=" -f $LREW_INCLUDE_ROOT/docker-compose.yml "
-      continue
-    fi
-    options+=" -f $LREW_INCLUDE_ROOT/docker-compose.yml -f $LREW_INCLUDE_ROOT/docker-compose.override.yml "
   done
 
   options+=" --env-file $LNMP_ENV_FILE "
-
-  options+=" -f docker-lnmp.include.yml "
 }
 
 env_status(){
@@ -1343,9 +1328,8 @@ For information please run $ docker service update --help
     fi
 
     if [ ${ARCH} = 'x86_64' ];then
-      _get_compose_options "docker-lnmp.yml" \
-                           "docker-lnmp.build.yml" \
-                           "--build"
+      _get_compose_options docker-lnmp.yml \
+                           docker-lnmp.override.yml
 
       exec docker-compose $options build $service --parallel
     else
@@ -1353,33 +1337,7 @@ For information please run $ docker service update --help
     fi
     ;;
 
-  build-up )
-    _docker_is_run
-    init
-
-    local service=${LNMP_SERVICES:-nginx mysql php8 redis}
-
-    if ! [ -z "$@" ];then
-      service="$@"
-    fi
-
-
-    _get_compose_options "docker-lnmp.yml" \
-                           "docker-lnmp.build.yml" \
-                           "--build"
-    exec docker-compose $options up -d --no-build $service
-    ;;
-
-  build-config )
-    logs
-    _get_compose_options "docker-lnmp.yml" \
-                           "docker-lnmp.build.yml" \
-                           "--build"
-
-    exec docker-compose $options config "$@"
-    ;;
-
-  build-push )
+  push )
     _docker_is_run; init
 
     local service=${LNMP_SERVICES:-nginx mysql php8 redis}
@@ -1388,15 +1346,14 @@ For information please run $ docker service update --help
       service="$@"
     fi
 
-    _get_compose_options "docker-lnmp.yml" \
-                         "docker-lnmp.build.yml" \
-                         "--build"
+    _get_compose_options docker-lnmp.yml \
+                         docker-lnmp.override.yml
 
     docker-compose $options build --parallel $service
     exec docker-compose $options push $service
     ;;
 
-  build-pull )
+  pull )
     _docker_is_run
 
     sleep 2
@@ -1407,9 +1364,8 @@ For information please run $ docker service update --help
       service="$@"
     fi
 
-    _get_compose_options "docker-lnmp.yml" \
-                         "docker-lnmp.build.yml" \
-                         "--build"
+    _get_compose_options docker-lnmp.yml \
+                         docker-lnmp.override.yml
 
     docker-compose $options pull $service
 

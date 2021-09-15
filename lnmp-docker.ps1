@@ -168,6 +168,12 @@ Function _cp_only_not_exists($src, $desc) {
 }
 
 Function New-InitFile() {
+  if (Test-Path docker-lnmp.include.yml) {
+    Copy-Item docker-lnmp.include.yml docker-lnmp.override.yml
+    Copy-Item docker-lnmp.include.yml docker-lnmp.include.yml.backup
+    Remove-Item -r -force docker-lnmp.include.yml
+  }
+
   _cp_only_not_exists kubernetes/nfs-server/.env.example kubernetes/nfs-server/.env
 
   _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
@@ -181,7 +187,7 @@ Function New-InitFile() {
     New-Item -ItemType File config/redis/redis.conf
   }
 
-  _cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
+  _cp_only_not_exists docker-lnmp.override.example.yml docker-lnmp.override.yml
 
   _cp_only_not_exists docker-workspace.example.yml docker-workspace.yml
 
@@ -317,11 +323,9 @@ Commands:
   up                   Up LNMP (Support x86_64 arm64v8)
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   backup               Backup MySQL databases
-  build                Build or rebuild your LNMP images (Only Support x86_64)
-  build-config         Validate and view the LNMP with your images Compose file
-  build-up             Create and start LNMP containers With your Build images
-  build-push           Pushes your images to Docker Registory
-  build-pull           Pull LNMP Docker Images Build By your self
+  build                Build or rebuild your LNMP Docker Images (Only Support x86_64)
+  push                 Pushes LNMP Docker Images to Docker Registory
+  pull                 Pull LNMP Docker Images
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
   compose              Install docker-compose [PATH]
@@ -521,7 +525,7 @@ Function satis() {
     --mount -v lnmp_composer-cache-data:/composer composer/satis
 }
 
-Function Get-ComposeOptions($compose_files, $isBuild = 0) {
+Function Get-ComposeOptions($compose_files) {
   $COMPOSE_FILE_ARRAY = @()
 
   Foreach ($compose_file in $compose_files) {
@@ -560,28 +564,15 @@ Function Get-ComposeOptions($compose_files, $isBuild = 0) {
       exit 1
     }
 
-    if ($isBuild) {
-      if (!(Test-Path "$LREW_INCLUDE_ROOT/docker-compose.build.yml")) {
-        $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
-        continue
-      }
-      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
-      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.build.yml"
-
-      continue
-    } # end build
-
-    if (!(Test-Path "$LREW_INCLUDE_ROOT/docker-compose.override.yml")) {
-      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
-      continue
-    }
     $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
-    $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.override.yml"
+
+    if (Test-Path "$LREW_INCLUDE_ROOT/docker-compose.override.yml") {
+      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.override.yml"
+    }
   }
 
   $options += "--env-file $LNMP_ENV_FILE"
 
-  $COMPOSE_FILE_ARRAY += "docker-lnmp.include.yml"
   $COMPOSE_FILE_ARRAY += "docker-workspace.yml"
 
   if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
@@ -870,46 +861,14 @@ switch -regex ($command) {
     }
 
     $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.build.yml" `
-      1
+      "docker-lnmp.override.yml"
 
     Write-Host "Build this service image: $services" -ForegroundColor Green
     sleep 3
     & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $service --parallel }
   }
 
-  build-config {
-
-    New-LogFile
-
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.build.yml" `
-      1
-
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options config $other }
-  }
-
-  build-up {
-    init
-
-    if ($other) {
-      $services = $other
-    }
-    else {
-      $services = ${LNMP_SERVICES}
-    }
-
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.build.yml" `
-      1
-
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d --no-build $services }
-
-    #@custom
-    __lnmp_custom_up $services
-  }
-
-  build-push {
+  push {
     $env:USE_WSL2_DOCKER_COMPOSE = '0'
 
     if ($other) {
@@ -920,15 +879,14 @@ switch -regex ($command) {
     }
 
     $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.build.yml" `
-      1
+      "docker-lnmp.override.yml"
 
     Write-Host "Push this service image: $services" -ForegroundColor Green
     sleep 3
     & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $service }
   }
 
-  build-pull {
+  pull {
     $env:USE_WSL2_DOCKER_COMPOSE = '0'
 
     if ($other) {
@@ -942,8 +900,7 @@ switch -regex ($command) {
     }
 
     $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.build.yml" `
-      1
+      "docker-lnmp.override.yml"
 
     docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services
 

@@ -4,10 +4,8 @@ complete -W "acme.sh \
         httpd-config \
         backup \
         build \
-        build-config \
-        build-push \
-        build-up \
-        build-pull \
+        push \
+        pull \
         cleanup \
         clusterkit \
         clusterkit-help \

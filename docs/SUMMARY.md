@@ -85,7 +85,6 @@
 
 ## 镜像构建
 
-* [使用自己的镜像](build.md)
 * [构建多架构镜像](manifest.md)
 
 ## Volumes
