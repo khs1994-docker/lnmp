@@ -60,10 +60,14 @@ Function _init($package = $null) {
 
   cp -r $PSScriptRoot/example $pkg_root
 
-  $items = "docker-compose.yml", "docker-compose.override.yml", "docker-compose.build.yml"
+  $items = "docker-compose.yml", "docker-compose.override.yml"
 
   Foreach ($item in $items) {
     $file = "$pkg_root/$item"
+
+    if(!(Test-Path $file)) {
+      continue
+    }
 
     @(Get-Content $file) -replace `
       'LREW_EXAMPLE_VENDOR', "LREW_$( $package -Replace('-','_'))_VENDOR".ToUpper() | Set-Content $file

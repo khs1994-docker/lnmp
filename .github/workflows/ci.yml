@@ -85,9 +85,6 @@ jobs:
         startsWith(matrix.os, 'ubuntu' )
     - name: Up
       run: |
-        ./lnmp-docker build-config > docker-compose.yml
-        docker-compose config -q
-
         ./lnmp-docker config > docker-compose.yml
         docker-compose config -q
 
