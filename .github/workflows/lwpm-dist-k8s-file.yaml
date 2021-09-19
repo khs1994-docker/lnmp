@@ -10,6 +10,9 @@ on:
 
 env:
   LWPM_K8S_VERSION: ${{ github.event.inputs.LWPM_K8S_VERSION }}
+  CODING_DOCKER_REGISTRY: pcit-docker.pkg.coding.net
+  CODING_DOCKER_USERNAME: khs1994-1601432822176
+  CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
 
 jobs:
   lwpm-dist-k8s-file:
@@ -54,6 +57,12 @@ jobs:
 
           $env:DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
           rootfs $NS/kubectl ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
+
+          $env:LWPM_DOCKER_USERNAME=$env:CODING_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
+          $NS="khs1994-docker/lwpm"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubectl@${env:LWPM_K8S_VERSION}
       - name: handle-kubernetes-server
         shell: pwsh
         env:
@@ -78,6 +87,12 @@ jobs:
 
           $env:DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
           rootfs $NS/kubernetes-server ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
+
+          $env:LWPM_DOCKER_USERNAME=$env:CODING_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
+          $NS="khs1994-docker/lwpm"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubernetes-server@${env:LWPM_K8S_VERSION}
       - name: handle-kubernetes-node
         shell: pwsh
         if: matrix.os == 'ubuntu'
@@ -101,6 +116,12 @@ jobs:
 
           $env:DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
           rootfs $NS/kubernetes-node ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
+
+          $env:LWPM_DOCKER_USERNAME=$env:CODING_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
+          $NS="khs1994-docker/lwpm"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubernetes-node@${env:LWPM_K8S_VERSION}
   trigger-coding-net-ci:
     needs: lwpm-dist-k8s-file
     name: trigger-coding-net-ci
