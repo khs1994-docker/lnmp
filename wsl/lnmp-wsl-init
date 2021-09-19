@@ -24,8 +24,6 @@ if [ -z "$COMPOSER_HOME" ];then echo "export COMPOSER_HOME=/tmp/composer" >> ~/.
 
 if [ -z "$DOCKER_BUILDKIT" ];then echo "export DOCKER_BUILDKIT=1" >> ~/.bashrc; fi
 
-if [ -z "$DOCKER_CLI_EXPERIMENTAL" ];then echo "export DOCKER_CLI_EXPERIMENTAL=enabled" >> ~/.bashrc; fi
-
 if [ -z "$DOCKER_HOST" ];then
   # echo "export DOCKER_HOST=127.0.0.1:2375" >> ~/.bashrc
   true

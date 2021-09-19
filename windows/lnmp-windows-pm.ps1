@@ -79,7 +79,6 @@ Import-Module $PSScriptRoot/sdk/dockerhub/utils/Get-SHA.psm1
 . $PSScriptRoot\sdk\dockerhub\DockerImageSpec\DockerImageSpec.ps1
 
 # 配置环境变量
-[environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL", "enabled", "User")
 [environment]::SetEnvironmentvariable("DOCKER_BUILDKIT", "1", "User")
 [environment]::SetEnvironmentvariable("APP_ENV", "$APP_ENV", "User")
 

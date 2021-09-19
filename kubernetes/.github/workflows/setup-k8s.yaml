@@ -18,7 +18,6 @@ jobs:
    if: |
      ! contains( github.event.head_commit.message, '[skip ci]')
    env:
-     DOCKER_CLI_EXPERIMENTAL: enabled
      CI_KUBERNETES_VERSION: ${{matrix.CI_KUBERNETES_VERSION}}
      LNMP_K8S_GET: ${{matrix.LNMP_K8S_GET}}
      K8S_IMAGE_NS: ${{matrix.K8S_IMAGE_NS}}
@@ -138,9 +137,9 @@ jobs:
 
          df -h
        name: os-metadata
-    #  - uses: actions/setup-go@v1
-    #    with:
-    #      go-version: '1.15'
+     - uses: actions/setup-go@v2
+       with:
+         go-version: '1.17'
      - name: Setup dns
        run: |
          pwd

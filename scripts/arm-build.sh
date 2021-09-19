@@ -14,7 +14,6 @@ build     [7.3.12] [ arm32v7 | arm64v8 ] [7.3/alpine] [TYPE: fpm | composer | ..
 }
 
 export DOCKER_BUILDKIT=1
-export DOCKER_CLI_EXPERIMENTAL=enabled
 
 build(){
   local version=$1

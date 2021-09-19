@@ -7,7 +7,7 @@
   "bug": "https://github.com/docker/for-win/issues",
   "github": "docker/docker-ce",
   "releases": "https://github.com/docker/docker-ce/releases",
-  "url": "https://desktop.docker.com/$(if($IsWindows){echo win}else{echo mac})/stable/${env:lwpm_architecture}/$(if($isWindows){echo Docker%20Desktop%20Installer.exe}else{echo Docker.dmg})",
+  "url": "https://desktop.docker.com/$(if($IsWindows){echo win}else{echo mac})/main/${env:lwpm_architecture}/$(if($isWindows){echo Docker%20Desktop%20Installer.exe}else{echo Docker.dmg})",
   "pre-url": "",
   "command": "docker",
   "scripts": {
