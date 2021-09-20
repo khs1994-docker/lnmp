@@ -24,7 +24,7 @@
 +  gid = 0
 +  level = ""
 +  uid = 0
- 
+
  [grpc]
    address = "/run/containerd/containerd.sock"
 -  tcp_address = ""
@@ -48,11 +48,11 @@
    uid = 0
 -  gid = 0
 -  level = ""
- 
+
  [metrics]
    address = ""
    grpc_histogram = false
- 
+
 -[cgroup]
 -  path = ""
 -
@@ -95,7 +95,7 @@
 -    max_concurrent_downloads = 3
 -    disable_proc_mount = false
 -    unset_seccomp_profile = ""
-+    sandbox_image = "k8s.gcr.io/pause:3.5"
++    sandbox_image = "k8s.gcr.io/pause:3.6"
 +    selinux_category_range = 1024
 +    stats_collect_period = 10
 +    stream_idle_timeout = "4h0m0s"
