@@ -19,7 +19,7 @@
           {
             "name": "registry-data",
             "mountPath": "/storage",
-            "subPath": ""
+            "subPath": "registry"
           }
         ]
       }

@@ -68,3 +68,10 @@ $ helm template harbor/harbor \
 ## 使用
 
 * 若使用私有证书请查看 https://docs.lnmp.khs1994.com/registry.html
+
+## hosts
+
+```bash
+x.x.x.x harbor.t.khs1994.com
+
+```

@@ -1,4 +1,3 @@
 resources:
 - harbor.yaml
-patchesStrategicMerge:
 - pvc.yaml

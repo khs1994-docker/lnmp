@@ -267,7 +267,7 @@ services:
     image: "${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.21.1}-alpine"
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/tcp"
-      - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/udp"
+      # - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/udp"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
       # - ./config/nginx:/etc/nginx/conf.d:ro,cached

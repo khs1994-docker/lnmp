@@ -43,22 +43,31 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: nginx
-          servicePort: 443
+          service:
+            name: nginx
+            port:
+              number: 443
   - host: www.t.khs1994.com
     http:
       paths:
       - path: /
+        pathType: Prefix
         # path: /test
         # 发送后端路径也是 /test
         backend:
-          serviceName: nginx
-          servicePort: 443
+          service:
+            name: nginx
+            port:
+              number: 443
   - host: laravel.t.khs1994.com
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: nginx
-          servicePort: 443
+          service:
+            name: nginx
+            port:
+              number: 443

@@ -22,3 +22,5 @@ platform:
     os: linux
   - architecture: amd64
     os: darwin
+  - architecture: arm64
+    os: darwin

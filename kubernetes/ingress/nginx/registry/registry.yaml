@@ -25,20 +25,29 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: registry
-          servicePort: http
+          service:
+            name: registry
+            port:
+              name: http
         path: /
+        pathType: Prefix
   - host: k8s.gcr.io
     http:
       paths:
       - backend:
-          serviceName: registry
-          servicePort: http
+          service:
+            name: registry
+            port:
+              name: http
         path: /
+        pathType: Prefix
   - host: registry.t.khs1994.com
     http:
       paths:
       - backend:
-          serviceName: registry
-          servicePort: http
+          service:
+            name: registry
+            port:
+              name: http
         path: /
+        pathType: Prefix
