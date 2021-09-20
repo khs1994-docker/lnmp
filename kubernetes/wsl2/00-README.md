@@ -8,8 +8,8 @@
 * 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data`（可选） WSL 发行版用于存储数据
 * 问题1: WSL2 暂时不能固定 IP,每次重启必须执行 `$ kubectl certificate approve csr-XXXX`
 * WSL2 IP 变化时必须重新执行 `./kube-wsl2windows k8s`
-* WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
-* 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 后使用本项目
+* WSL2 **不要** 自定义 DNS 服务器(不要自行编辑 /etc/resolv.conf)
+* 本项目与 **Docker 桌面版** 冲突，请先停止 **Docker 桌面版** 并执行 `$ wsl --shutdown` 后使用本项目
 
 ## master
 

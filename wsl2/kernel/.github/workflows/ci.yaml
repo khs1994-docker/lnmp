@@ -97,6 +97,8 @@ jobs:
 
         # kata container
         # CONFIG_VHOST_VSOCK=y
+
+        CONFIG_TIME_NS=y
         " >> Microsoft/config-wsl
 
         # sudo sed -i "s/microsoft-standard/microsoft-WSL2-standard/g" Microsoft/config-wsl

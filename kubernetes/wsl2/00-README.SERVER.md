@@ -5,10 +5,10 @@
 * `wsl2.k8s.khs1994.com` 解析到 WSL2 IP
 * `windows.k8s.khs1994.com` 解析到 Windows IP
 * k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(使用 netsh.exe 代理 wsl2 到 windows)`
-* WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
+* WSL2 **不要** 自定义 DNS 服务器(不要自行编辑 /etc/resolv.conf)
 * 新建 `wsl-k8s` WSL 发行版用于 k8s 运行
 * （可选）新建 `wsl-k8s-data` WSL 发行版用于存储数据
-* 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 后使用本项目
+* 本项目与 **Docker 桌面版** 冲突，请先停止 **Docker 桌面版** 并执行 `$ wsl --shutdown` 后使用本项目
 
 ## Master
 
@@ -33,7 +33,7 @@ $ . ../windows/sdk/dockerhub/rootfs
 
 $ wsl --import wsl-k8s `
     $env:LOCALAPPDATA\wsl-k8s `
-    $(rootfs library-mirror/ubuntu 20.04 -registry ccr.ccs.tencentyun.com) `
+    $(rootfs library-mirror/debian sid -registry ccr.ccs.tencentyun.com) `
     --version 2
 
 # 可选
@@ -42,7 +42,8 @@ $ wsl --import wsl-k8s-data `
     $(rootfs library-mirror/alpine -registry ccr.ccs.tencentyun.com) `
     --version 2
 
-# 测试，如果命令不能正确执行，请参考 README.CLEANUP.md 注销 wsl-k8s，重启机器之后再次尝试上面的步骤
+# 测试
+# 如果命令不能正确执行，请参考 README.CLEANUP.md 注销 wsl-k8s，重启机器之后再次尝试上面的步骤
 # 如果仍然遇到错误，请将上述命令改为 --version 1，再将 WSL1 转换为 WSL2 （$ wsl --set-version wsl-k8s 2）
 # 或者先让一个 WSL2 发行版处于运行状态（$ wsl -d ubuntu），再执行上述命令
 
@@ -58,9 +59,9 @@ $ wsl -d wsl-k8s-data -- uname -a
 ## WSL(wsl-k8s) 修改 APT 源并安装必要软件
 
 ```powershell
-# $ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sources.list
-$ wsl -d wsl-k8s -- sed -i "s/archive.ubuntu.com/mirrors.tencent.com/g" /etc/apt/sources.list
-$ wsl -d wsl-k8s -- sed -i "s/security.ubuntu.com/mirrors.tencent.com/g" /etc/apt/sources.list
+$ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sources.list
+# $ wsl -d wsl-k8s -- sed -i "s/archive.ubuntu.com/mirrors.tencent.com/g" /etc/apt/sources.list
+# $ wsl -d wsl-k8s -- sed -i "s/security.ubuntu.com/mirrors.tencent.com/g" /etc/apt/sources.list
 
 $ wsl -d wsl-k8s -- apt update
 
