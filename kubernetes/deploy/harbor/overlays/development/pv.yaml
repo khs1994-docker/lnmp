@@ -1,47 +1,14 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: harbor-chartmuseum
+  name: harbor
   labels:
     app: "harbor"
-    component: chartmuseum
 spec:
   accessModes:
     - ReadWriteOnce
   capacity:
     storage: 5Gi
   hostPath:
-    path: /var/lib/k8s/harbor/chartmuseum
-    type: DirectoryOrCreate
----
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: harbor-jobservice
-  labels:
-    app: "harbor"
-    component: jobservice
-spec:
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: 1Gi
-  hostPath:
-    path: /var/lib/k8s/harbor/jobservice
-    type: DirectoryOrCreate
----
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: harbor-registry
-  labels:
-    app: "harbor"
-    component: registry
-spec:
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: 5Gi
-  hostPath:
-    path: /var/lib/k8s/harbor/registry
+    path: /var/lib/k8s/harbor
     type: DirectoryOrCreate

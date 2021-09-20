@@ -390,66 +390,6 @@ data:
     log_level: info
     registry_config: "/etc/registry/config.yml"
 ---
-# Source: harbor/templates/chartmuseum/chartmuseum-pvc.yaml
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: harbor-chartmuseum
-  annotations:
-    helm.sh/resource-policy: keep
-  labels:
-    heritage: Helm
-    release: RELEASE-NAME
-    chart: harbor
-    app: "harbor"
-    component: chartmuseum
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
----
-# Source: harbor/templates/jobservice/jobservice-pvc.yaml
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: harbor-jobservice
-  annotations:
-    helm.sh/resource-policy: keep
-  labels:
-    heritage: Helm
-    release: RELEASE-NAME
-    chart: harbor
-    app: "harbor"
-    component: jobservice
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
-# Source: harbor/templates/registry/registry-pvc.yaml
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: harbor-registry
-  annotations:
-    helm.sh/resource-policy: keep
-  labels:
-    heritage: Helm
-    release: RELEASE-NAME
-    chart: harbor
-    app: "harbor"
-    component: registry
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
----
 # Source: harbor/templates/chartmuseum/chartmuseum-svc.yaml
 apiVersion: v1
 kind: Service
@@ -730,11 +670,11 @@ spec:
         volumeMounts:
         - name: chartmuseum-data
           mountPath: /chart_storage
-          subPath:
+          subPath: chartmuseum
       volumes:
       - name: chartmuseum-data
         persistentVolumeClaim:
-          claimName: harbor-chartmuseum
+          claimName: harbor
 ---
 # Source: harbor/templates/clair/clair-dpl.yaml
 apiVersion: apps/v1
@@ -1021,14 +961,14 @@ spec:
           subPath: config.yml
         - name: job-logs
           mountPath: /var/log/jobs
-          subPath:
+          subPath: jobservice
       volumes:
       - name: jobservice-config
         configMap:
           name: "harbor-jobservice"
       - name: job-logs
         persistentVolumeClaim:
-          claimName: harbor-jobservice
+          claimName: harbor
 ---
 # Source: harbor/templates/notary/notary-server.yaml
 apiVersion: apps/v1
@@ -1272,7 +1212,7 @@ spec:
         volumeMounts:
         - name: registry-data
           mountPath: /storage
-          subPath:
+          subPath: registry
         - name: registry-root-certificate
           mountPath: /etc/registry/root.crt
           subPath: tls.crt
@@ -1318,7 +1258,7 @@ spec:
         volumeMounts:
         - name: registry-data
           mountPath: /storage
-          subPath:
+          subPath: registry
         - name: registry-config
           mountPath: /etc/registry/config.yml
           subPath: config.yml
@@ -1340,7 +1280,7 @@ spec:
           name: "harbor-registry"
       - name: registry-data
         persistentVolumeClaim:
-          claimName: harbor-registry
+          claimName: harbor
 ---
 # Source: harbor/templates/database/database-ss.yaml
 apiVersion: apps/v1

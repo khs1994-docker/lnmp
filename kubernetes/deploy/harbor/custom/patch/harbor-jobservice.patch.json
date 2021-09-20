@@ -19,7 +19,7 @@
           {
             "name": "job-logs",
             "mountPath": "/var/log/jobs",
-            "subPath": ""
+            "subPath": "jobservice"
           }
         ]
       }
