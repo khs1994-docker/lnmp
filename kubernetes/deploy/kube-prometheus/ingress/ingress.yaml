@@ -3,6 +3,7 @@ apiVersion: networking.k8s.io/v1
 metadata:
   name: ingress
 spec:
+  ingressClassName: nginx
   tls:
   - hosts:
     - prometheus-alertmanager.t.khs1994.com
@@ -14,20 +15,29 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: alertmanager-main
-          servicePort: 9093
+          service:
+            name: alertmanager-main
+            port:
+            number: 9093
   - host: grafana.t.khs1994.com
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: grafana
-          servicePort: 3000
+          service:
+            name: grafana
+            port:
+              number: 3000
   - host: prometheus.t.khs1994.com
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: prometheus-k8s
-          servicePort: 9090
+          service:
+            name: prometheus-k8s
+            port:
+              number: 9090
