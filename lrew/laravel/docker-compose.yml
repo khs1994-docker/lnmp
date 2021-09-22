@@ -28,13 +28,13 @@ services:
     image: "khs1994/laravel:${LNMP_LARAVEL_TAG:-8}"
     volumes:
       # fpm config
-      - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
+      - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
       # php.ini
-      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
       # php.ini override
-      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
       # log,etc
-      - ./log/php:/var/log/php:cached
+      - ./log/php:/var/log/php
       - ./lrew/laravel/.env.development:/app/laravel-docker/.env.development
       - laravel_views_cache:/app/laravel-docker/storage/framework/views
       - type: volume

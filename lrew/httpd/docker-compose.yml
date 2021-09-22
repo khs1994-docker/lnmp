@@ -24,10 +24,10 @@ services:
       - "${LNMP_HTTPD_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_HTTPD_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/etc/httpd/${LNMP_HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf:cached
-      - ./config/${LNMP_HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d:cached
-      - ./log/httpd:/usr/local/apache2/logs:cached
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
+      - ./config/etc/httpd/${LNMP_HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
+      - ./config/${LNMP_HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d
+      - ./log/httpd:/usr/local/apache2/logs
     working_dir: /app
     networks:
       - frontend

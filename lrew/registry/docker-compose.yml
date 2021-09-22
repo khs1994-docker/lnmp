@@ -26,7 +26,7 @@ services:
     # ports:
     #   - "5000:5000"
     volumes:
-      - ./config/registry/${LNMP_REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro,cached
+      - ./config/registry/${LNMP_REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro
       - type: volume
         source: registry-data
         target: /var/lib/registry

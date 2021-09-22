@@ -48,13 +48,13 @@ services:
       - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
       - "${LNMP_MYSQL_PORT_X:-127.0.0.1:33060}:33060"
     volumes:
-      - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
+      - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
       # @link https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
-      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro,cached
+      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro
       - type: volume
         source: mysql-data
         target: ${LNMP_MYSQL_DATA:-/var/lib/mysql}
-      - ./log/mysql:/var/log/mysql:cached
+      - ./log/mysql:/var/log/mysql
       - ./scripts/backup/mysql:/backup
       - type: tmpfs
         target: /var/run/mysqld
@@ -81,14 +81,14 @@ services:
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
-      - ./config/redis/redis.conf:/redis.conf:ro,cached
-      # - redis-data:/data:cached
+      - ./config/redis/redis.conf:/redis.conf:ro
+      # - redis-data:/data
       - type: volume
         source: redis-data
         target: /data
         volume:
           nocopy: true
-      - ./log/redis:/var/log/redis:cached
+      - ./log/redis:/var/log/redis
       - << : *tmpfs
     # set config by command
     command: [
@@ -128,16 +128,16 @@ services:
     volumes:
       - &bind_app ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       # fpm config
-      - ./config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
+      - ./config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
       # php.ini
-      - ./config/php/php.ini:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini:ro
       # php.ini override
-      - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
       # log,etc
-      - ./log/php:/var/log/php:cached
+      - ./log/php:/var/log/php
       # supervisord
-      - ./log/supervisord.log:/var/log/supervisord.log:cached
-      - ./log/supervisord:/var/log/supervisord:cached
+      - ./log/supervisord.log:/var/log/supervisord.log
+      - ./log/supervisord:/var/log/supervisord
       # s6
       - ./config/s6/services.d:/etc/services.d
       - ./config/crontabs/root:/etc/crontabs/root
@@ -179,16 +179,16 @@ services:
       - *bind_app
       # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       # fpm config
-      - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
+      - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
       # php.ini
-      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
       # php.ini override
-      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
       # log,etc
-      - ./log/php8:/var/log/php:cached
+      - ./log/php8:/var/log/php
       # supervisord
-      # - ./log/supervisord.log:/var/log/supervisord.log:cached
-      # - ./log/supervisord:/var/log/supervisord:cached
+      # - ./log/supervisord.log:/var/log/supervisord.log
+      # - ./log/supervisord:/var/log/supervisord
       # s6
       - ./config/s6/services.d:/etc/services.d
       - ./config/crontabs/root:/etc/crontabs/root
@@ -224,8 +224,8 @@ services:
       - type: volume
         source: composer-cache-data
         target: /tmp/composer/cache
-      - ./config/composer/config.json:/tmp/composer/config.json:cached
-      # - ./config/composer/auth.json:/tmp/composer/auth.json:cached
+      - ./config/composer/config.json:/tmp/composer/config.json
+      # - ./config/composer/auth.json:/tmp/composer/auth.json
 
   # https://docs.docker.com/config/containers/multi-service_container/
   # http://supervisord.org/running.html
@@ -266,18 +266,18 @@ services:
     << : *common-labels
     image: "${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.21.1}-alpine"
     ports:
-      - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/tcp"
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/udp"
+      - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/tcp"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
-      # - ./config/nginx:/etc/nginx/conf.d:ro,cached
+      # - ./config/nginx:/etc/nginx/conf.d:ro
       - type: bind
         source: ./config/${LNMP_NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
       - *bind_app
       # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
-      - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
-      - ./log/nginx:/var/log/nginx:cached
+      - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./log/nginx:/var/log/nginx
       - << : *tmpfs
     working_dir: /app
     networks:

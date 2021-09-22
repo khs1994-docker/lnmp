@@ -21,11 +21,11 @@ services:
     << : *common-label
     image: ${LNMP_LIBRARY_NS:-library}/mongo:${LNMP_MONGODB_VERSION:-5.0.1}
     volumes:
-      - ./config/mongodb/${LNMP_MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro,cached
+      - ./config/mongodb/${LNMP_MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro
       - type: volume
         source: mongodb-data
         target: /data/db
-      - ./log/mongodb/mongo.log:/var/log/mongodb/mongo.log:cached
+      - ./log/mongodb/mongo.log:/var/log/mongodb/mongo.log
     ports:
       - "${LNMP_MONGODB_PORT:-127.0.0.1:27017}:27017"
     command: ["mongod","--config","/etc/mongod.conf"]

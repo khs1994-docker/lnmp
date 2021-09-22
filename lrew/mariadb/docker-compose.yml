@@ -31,13 +31,13 @@ services:
     ports:
       - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
-      - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:cached
+      - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf
       # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
-      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro,cached
+      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro
       - type: volume
         source: mariadb-data
         target: ${LNMP_MARIADB_DATA:-/var/lib/mysql}
-      - ./log/mariadb:/var/log/mysql:cached
+      - ./log/mariadb:/var/log/mysql
       - ./scripts/backup/mariadb:/backup
     command:
       - mysqld

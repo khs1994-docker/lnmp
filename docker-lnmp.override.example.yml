@@ -47,7 +47,7 @@ services:
   # composer:
   #   << : *php8
   #   volumes:
-  #     - ./config/composer/auth.json:/tmp/composer/auth.json:cached
+  #     - ./config/composer/auth.json:/tmp/composer/auth.json
 
   # nginx-unit:
   #   << : *php8
@@ -86,10 +86,10 @@ services:
     networks:
       - backend
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro,cached
-      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
-      - ./log/php:/var/log/php:cached
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
+      - ./log/php:/var/log/php
 
 # volumes:
   # git-sync-data:

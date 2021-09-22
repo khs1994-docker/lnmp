@@ -203,11 +203,7 @@ services:
         hard: 40000
     userns_mode: "host" # no Swarm mode
     volumes:
-      # https://blog.docker.com/2017/05/user-guided-caching-in-docker-for-mac/
-      # https://docs.docker.com/docker-for-mac/osxfs-caching/
-      # https://github.com/docker/for-mac/issues/77
-      # :cached is used for improving read speed
-      - ./config:/config:cached # consistent(default) delegated
+      - ./config:/config
       - redis-data:/data
       - type: volume
         source: mydata
