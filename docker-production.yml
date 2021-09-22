@@ -158,9 +158,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
   #     dockerfile: Dockerfile
-  #   image: "mariadb:10.6.3"
+  #   image: "mariadb:10.6.4"
   #   # image: username/lnmp-mariadb:tag
-  #   # image: khs1994/lnmp-mariadb:10.6.3
+  #   # image: khs1994/lnmp-mariadb:10.6.4
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
   #     MYSQL_DATABASE: test
@@ -505,9 +505,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./config/httpd
   #     dockerfile: Dockerfile
-  #   image: "httpd:2.4.48-alpine"
+  #   image: "httpd:2.4.49-alpine"
   #   # image: username/lnmp-httpd:tag
-  #   # image: khs1994/lnmp-httpd:2.4.48
+  #   # image: khs1994/lnmp-httpd:2.4.49
   #   ports:
   #     - "443:443"
   #     - "80:80"
