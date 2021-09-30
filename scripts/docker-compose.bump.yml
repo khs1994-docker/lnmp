@@ -26,7 +26,7 @@ services:
     image: rabbitmq:3.9.0-management-alpine
 
   postgresql:
-    image: postgres:13.3-alpine
+    image: postgres:14.0-alpine
 
   mongodb:
     image: mongo:5.0.1
