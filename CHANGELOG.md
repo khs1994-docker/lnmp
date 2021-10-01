@@ -11,3 +11,5 @@
 ### Changes:
 
 ### Updates:
+
+* [NGINX `1.21.2`](https://nginx.org/en/CHANGES)
