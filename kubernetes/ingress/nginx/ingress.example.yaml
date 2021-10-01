@@ -1,5 +1,5 @@
-apiVersion: networking.k8s.io/v1beta1
-# apiVersion: networking.k8s.io/v1 # k8s 1.19+
+# https://kubernetes.io/docs/concepts/services-networking/ingress/
+apiVersion: networking.k8s.io/v1 # k8s 1.19+
 kind: Ingress
 metadata:
   annotations:
@@ -23,12 +23,13 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: docker-registry
-          servicePort: 5000
-          # service:
-          #   name: docker-registry
-          #   port:
-          #     name:
-          #     number: 5000
+          # serviceName: docker-registry
+          # servicePort: 5000
+          service:
+            name: docker-registry
+            port:
+              # name:
+              number: 5000
         path: /
-        # pathType: Exact # Prefix
+        # https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types
+        pathType: Prefix # Exact | Prefix | ImplementationSpecific

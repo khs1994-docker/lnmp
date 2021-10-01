@@ -883,8 +883,8 @@ _conmon_install(){
 
   if [ -d conmon/.git ];then
     cd conmon
-    git fetch origin master --depth=1
-    git reset --hard origin/master
+    git fetch origin main --depth=1
+    git reset --hard origin/main
   else
     rm -rf conmon
     git clone --depth=1 https://github.com/containers/conmon
@@ -895,7 +895,7 @@ _conmon_install(){
   $(_sudo) make PREFIX=${K8S_ROOT}/usr/local install
 }
 
-# https://github.com/cri-o/cri-o/blob/master/install.md#build-and-install-cri-o-from-source
+# https://github.com/cri-o/cri-o/blob/main/install.md#build-and-install-cri-o-from-source
 _crio_install(){
   set +e
   command -v crio > /dev/null 2>&1
@@ -971,7 +971,7 @@ _crio_install(){
   fi
 
   git clone --depth=1 -b release-${CRIO_VERSION} ${CRIO_GIT} $go_path/src/github.com/cri-o/cri-o \
-    || git clone --depth=1 -b master ${CRIO_GIT} $go_path/src/github.com/cri-o/cri-o || true
+    || git clone --depth=1 -b main ${CRIO_GIT} $go_path/src/github.com/cri-o/cri-o || true
 
   if ! [ -d $go_path/src/github.com/cri-o/cri-o ];then
     exit 1
@@ -1043,15 +1043,32 @@ _crio_config(){
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
   print_info "config containerd ..."
-  $(_sudo) mkdir -p ${K8S_ROOT}/etc/cri-containerd/1.5
+  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/1.5
+  $(_sudo) mkdir -p $CONTAINERD_CONF_ROOT/certs.d
   # containerd config default > ${K8S_ROOT}/etc/cri-containerd/config.toml
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/1.5/config.toml \
-    | $(_sudo) tee ${K8S_ROOT}/etc/cri-containerd/1.5/config.toml
+    | $(_sudo) tee $CONTAINERD_CONF_ROOT/config.toml
 
   if ! [ "${LNMP_CN_ENV}" = 'false' ];then
-  $(_sudo) cp -r systemd/etc/cri-containerd/1.5/certs.d \
-                 ${K8S_ROOT}/etc/cri-containerd/1.5
+  $(_sudo) cp -r systemd/etc/cri-containerd/1.5/certs.d $CONTAINERD_CONF_ROOT
   fi
+
+  if [ -n "$GITHUB_ACTIONS" ];then
+    $(_sudo) mkdir $CONTAINERD_CONF_ROOT/certs.d/docker.io
+
+    cat <<EOF | $(_sudo) tee $CONTAINERD_CONF_ROOT/certs.d/docker.io/hosts.toml
+server = "https://docker.io"
+[host."https://mirror.gcr.io"]
+  capabilities = ["pull", "resolve"]
+#[host."https://dockerhub.azk8s.cn"]
+#  capabilities = ["pull", "resolve"]
+[host."https://registry-1.docker.io"]
+  capabilities = ["pull", "resolve"]
+EOF
+  fi
+
+  $(_sudo) ls -la $CONTAINERD_CONF_ROOT/certs.d
+  $(_sudo) cat $CONTAINERD_CONF_ROOT/certs.d/docker.io/hosts.toml || true
 
   _cri_sysctl
 }
@@ -1165,7 +1182,7 @@ _enable_wsl_k8s_systemd_target(){
 }
 
 _handle_etcd_not_support_arch(){
-  # https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/supported-platform.md
+  # https://etcd.io/docs/v3.5/op-guide/supported-platform/
   if [ "${GOARCH}" = 'arm64' ];then
     $(_sudo) sed -i -e "s/_ETCD_UNSUPPORTED_ARCH/ETCD_UNSUPPORTED_ARCH/g" \
         -e "s/__GOARCH__/${GOARCH}/g" \
@@ -1543,8 +1560,6 @@ if [ "${LNMP_CN_ENV}" = 'false' ];then
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers/pause#k8s.gcr.io/pause#g" \
                `grep registry.cn-hangzhou.aliyuncs.com/google_containers/pause -rl $PWD/systemd` || true
   # $(_sudo) sed -i "s#quay.mirror#quay.io#g" `grep quay.mirror -rl $PWD/systemd` || true
-  $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller#k8s.gcr.io/ingress-nginx/controller#g" \
-               `grep ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller -rl $PWD/addons` || true
   $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/gcr-mirror/metrics-server#k8s.gcr.io/metrics-server/metrics-server#g" \
                `grep ccr.ccs.tencentyun.com/gcr-mirror/metrics-server -rl $PWD/addons` || true
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers/pause#k8s.gcr.io/pause#g" \

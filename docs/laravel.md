@@ -69,15 +69,17 @@ _ide_helper.php
 ## Windows 运行 Laravel 响应缓慢的问题
 
 * Docker Desktop 上 Docker 运行在虚拟机，项目文件位于 Windows
-* Docker WSL2 上 Docker 运行在 WSL2(仍然是虚拟机)，项目文件位于 Windows
+* Docker Desktop(WSL2) 上 Docker 运行在 WSL2(仍然是虚拟机)，项目文件位于 Windows
 
-以上两种情况均为跨主机, 故存在文件性能问题。
+以上两种情况项目文件位于 Windows 均为跨主机, 故存在文件性能问题。
 
-**有以下几种解决思路**：
+这些情况下 `vendor` 目录可以使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_use-a-targeted-named-volume) 的说明和笔者提出的方案原理大致相同。
 
-1. `vendor` 目录使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_use-a-targeted-named-volume) 的说明和笔者提出的方案原理大致相同（不推荐使用）
+由于文件性能问题，不推荐将项目文件放置于 Windows。
 
-2. 或者将项目文件夹放置于 WSL2，使用 **vsCode remote WSL** WSL 远程开发(推荐使用)
+另一个方案是将项目文件夹放置于 WSL2，有以下两种方案：
+
+第一种方案是使用 **vsCode remote WSL** WSL 远程开发
 
 > 项目放置于 WSL2 也可以使用 PHPStorm，请参考 https://github.com/khs1994-docker/php-demo
 
@@ -91,7 +93,7 @@ _ide_helper.php
 $ code --install-extension ms-vscode-remote.remote-wsl
 ```
 
-**在 .env .env.ps1 中修改变量**
+**在 `.env` `.env.ps1` 中修改变量**
 
 ```bash
 # .env
@@ -164,7 +166,7 @@ $ wsl -d <WSL名称> -- wslpath "'$PWD'"
 # 将结果追加到 WSL2 中的 PATH 环境变量中
 ```
 
-3. 或者将项目文件夹放置于 WSL2，使用 **vsCode remote container** 容器远程开发(推荐使用)
+第二种方案是使用 **vsCode remote container** 容器远程开发
 
 **在 Docker 设置中启用 WSL2 集成**
 

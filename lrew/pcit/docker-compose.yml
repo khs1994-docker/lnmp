@@ -14,8 +14,8 @@ services:
     # restart: always
     image: pcit/pcit:unit
     volumes:
-      - ./pcit/key:/app/pcit/framework/storage/private_key:cached
-      - ./pcit/.env.${APP_ENV:-development}:/app/pcit/.env.${APP_ENV:-development}:cached
+      - ./pcit/key:/app/pcit/framework/storage/private_key
+      - ./pcit/.env.${APP_ENV:-development}:/app/pcit/.env.${APP_ENV:-development}
       - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
       - type: volume
         source: pcit-tmp
@@ -24,7 +24,7 @@ services:
       - backend
       - frontend
     extra_hosts:
-      - "api.github.com:140.82.114.5"
+      - "api.github.com:140.82.114.6"
     working_dir: /app/pcit
     command:
       - up
@@ -38,8 +38,8 @@ services:
     << : *pcit
     image: pcit/pcit:fpm
     volumes:
-      - ./pcit/key:/app/.pcit/framework/storage/private_key:cached
-      - ./pcit/.env.${APP_ENV:-development}:/app/.pcit/.env.${APP_ENV:-development}:cached
+      - ./pcit/key:/app/.pcit/framework/storage/private_key
+      - ./pcit/.env.${APP_ENV:-development}:/app/.pcit/.env.${APP_ENV:-development}
       - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
       - type: volume
         source: pcit-tmp

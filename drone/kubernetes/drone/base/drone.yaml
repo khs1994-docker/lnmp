@@ -33,7 +33,7 @@ spec:
         kubernetes.io/os: linux
       containers:
       - name: drone
-        image: drone/drone:2.0.3
+        image: drone/drone:2.3.1
         ports:
         - name: http
           containerPort: 80

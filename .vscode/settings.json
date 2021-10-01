@@ -1,7 +1,6 @@
 {
   // https://www.schemastore.org/json/
   "yaml.schemas": {
-    "http://json.schemastore.org/travis": ".travis.yml",
     "https://github.com/pcit-ce/pcit/raw/master/config/config.schema.json": [
       ".pcit.yml",
       ".pcit.yaml",
@@ -16,8 +15,10 @@
       "mutagen.yml",
       "mutagen.example.yml"
     ],
-    "https://raw.githubusercontent.com/coreos/ignition/master/config/v3_1/schema/ignition.json": [
+    "kubernetes/coreos/ignition/butane-fcos.schema.json": [
       "*.bu",
+    ],
+    "https://raw.githubusercontent.com/coreos/ignition/main/config/v3_4_experimental/schema/ignition.json":[
       "*.ign"
     ],
     "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json":[

@@ -19,7 +19,8 @@ services:
 
   mariadb:
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mariadb:${LNMP_MARIADB_VERSION:-10.6.1}"
+    << : *common-label
+    image: "${LNMP_LIBRARY_NS:-library}/mariadb:${LNMP_MARIADB_VERSION:-10.6.4}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -30,13 +31,13 @@ services:
     ports:
       - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
-      - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:cached
+      - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf
       # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
-      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro,cached
+      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro
       - type: volume
         source: mariadb-data
         target: ${LNMP_MARIADB_DATA:-/var/lib/mysql}
-      - ./log/mariadb:/var/log/mysql:cached
+      - ./log/mariadb:/var/log/mysql
       - ./scripts/backup/mariadb:/backup
     command:
       - mysqld

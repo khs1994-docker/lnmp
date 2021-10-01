@@ -22,9 +22,7 @@ lnmp/core:
 - secrets/**/*
 - .env.example
 - .env.example.ps1
-- docker-lnmp.build.yml
-- docker-lnmp.include.example.yml
-- docker-lnmp.override.yml
+- docker-lnmp.override.example.yml
 - docker-lnmp.yml
 - docker-windows.yml
 - bin/**/*
@@ -83,7 +81,6 @@ PCIT:
 CI:
 - .appveyor.yml
 - .pcit.yml
-- .travis.yml
 - azure-pipelines.yml
 - renovate.json
 - .github/workflows/**/*

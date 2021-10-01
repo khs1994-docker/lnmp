@@ -92,7 +92,6 @@ build_script:
   - ps: echo $env:DOCKER_HOST
   - ps: |
       [environment]::SetEnvironmentvariable("DOCKER_HOST","npipe:////./pipe/docker_engine","Process")
-      [environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL","enabled","Process")
       ls $HOME/.docker
   - pwsh: |
       docker-compose up -d $(./lnmp-docker services)

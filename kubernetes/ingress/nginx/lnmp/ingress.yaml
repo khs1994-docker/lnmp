@@ -13,7 +13,7 @@ data:
 
 ---
 
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/
@@ -31,6 +31,7 @@ metadata:
   labels:
     app: lnmp
 spec:
+  ingressClassName: nginx
   # 一个 Ingress 只能使用一个 secret
   tls:
   - hosts:
@@ -43,22 +44,31 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: nginx
-          servicePort: 443
+          service:
+            name: nginx
+            port:
+              number: 443
   - host: www.t.khs1994.com
     http:
       paths:
       - path: /
+        pathType: Prefix
         # path: /test
         # 发送后端路径也是 /test
         backend:
-          serviceName: nginx
-          servicePort: 443
+          service:
+            name: nginx
+            port:
+              number: 443
   - host: laravel.t.khs1994.com
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: nginx
-          servicePort: 443
+          service:
+            name: nginx
+            port:
+              number: 443

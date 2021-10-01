@@ -19,7 +19,7 @@
           {
             "name": "chartmuseum-data",
             "mountPath": "/chart_storage",
-            "subPath": ""
+            "subPath": "chartmuseum"
           }
         ]
       }

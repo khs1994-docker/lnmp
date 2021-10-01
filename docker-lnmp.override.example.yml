@@ -15,9 +15,6 @@ x-common:
 #
 # $ ./lnmp-docker config > docker-compose.yaml
 #
-# # 自定义镜像
-# $ ./lnmp-docker build-config > docker-compose.build.yaml
-#
 
 services:
   ## https://docs.docker.com/compose/extends/
@@ -31,11 +28,11 @@ services:
   # php8:
   #   &php8
   #   # ! change php8 default image
-  #   image: username/php:${LNMP_PHP8_VERSION:-8.0.8}-fpm-alpine
+  #   image: username/php:${LNMP_PHP8_VERSION:-8.0.9}-fpm-alpine
   #   # ! cn mirror image
-  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP8_VERSION:-8.0.8}-fpm-alpine
+  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP8_VERSION:-8.0.9}-fpm-alpine
   #   # ! s6
-  #   # image: khs1994/php:${LNMP_PHP8_VERSION:-8.0.8}-s6-alpine
+  #   # image: khs1994/php:${LNMP_PHP8_VERSION:-8.0.9}-s6-alpine
   #   # command: []
   #   # volumes:
   #   #   - ./config/s6/services.d:/etc/services.d
@@ -50,7 +47,7 @@ services:
   # composer:
   #   << : *php8
   #   volumes:
-  #     - ./config/composer/auth.json:/tmp/composer/auth.json:cached
+  #     - ./config/composer/auth.json:/tmp/composer/auth.json
 
   # nginx-unit:
   #   << : *php8
@@ -75,10 +72,12 @@ services:
     # - phpmyadmin:/var/www/html
     depends_on:
       - php8
+    # ports:
+    #   - 8022:8022
 
   swoole:
     << : *common
-    image: khs1994/php:${LNMP_PHP_VERSION:-8.0.8}-swoole-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-8.0.9}-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php
@@ -87,10 +86,10 @@ services:
     networks:
       - backend
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro,cached
-      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
-      - ./log/php:/var/log/php:cached
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
+      - ./log/php:/var/log/php
 
 # volumes:
   # git-sync-data:

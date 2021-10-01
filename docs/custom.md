@@ -20,18 +20,18 @@
 
 > **不想使用本项目默认的镜像，可以！**
 
-你可以全部或部分服务使用自己的镜像，请参考 [build](build.md)。某个服务使用自己的镜像请参考下方内容。
+你可以参考下一小节的 **自定义镜像** 使用自己的镜像。
 
-## 通过修改 `docker-lnmp.include.yml` 文件自定义本项目
+## 通过修改 `docker-lnmp.override.yml` 文件自定义本项目
 
-编辑 `docker-lnmp.include.yml` 文件，增加服务名，修改指令即可。
+编辑 `docker-lnmp.override.yml` 文件，增加服务名，修改指令即可。
 
 **建议每次修改之后执行 `$ lnmp-docker config > docker-compose.yaml` 查看配置是否正确，之后启动。**
 
 ### 自定义镜像
 
 ```yaml
-# docker-lnmp.include.yml
+# docker-lnmp.override.yml
 version: "3.9"
 
 services:
@@ -40,12 +40,32 @@ services:
     image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.5}-fpm-alpine
 ```
 
+你也可以加上 `build` 字段，先构建镜像再启动
+
+```yaml
+# docker-lnmp.override.yml
+version: "3.9"
+
+services:
+  php7:
+    image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.5}-fpm-alpine
+    # 增加 build 字段
+    build:
+      context: ./dockerfile/php/
+```
+
+```bash
+$ ./lnmp-docker build [SERVICE...]
+
+$ ./lnmp-docker up
+```
+
 ### 自定义数据卷
 
 > 例如我们想增加一个数据卷挂载，将本机 `/path/src` 挂载到 PHP 容器中的 `/path/target`
 
 ```yaml
-# docker-lnmp.include.yml
+# docker-lnmp.override.yml
 version: "3.9"
 
 services:
@@ -57,7 +77,7 @@ services:
 > 再例如 `MySQL` 默认将容器目录 `/var/lib/mysql` 映射到了宿主机中的数据卷，但我们想映射到宿主机的 `/path/mysql` 目录
 
 ```yaml
-# docker-lnmp.include.yml
+# docker-lnmp.override.yml
 version: "3.9"
 
 services:
@@ -69,7 +89,7 @@ services:
 ### 增加一个服务
 
 ```yaml
-# docker-lnmp.include.yml
+# docker-lnmp.override.yml
 version: "3.9"
 
 services:
@@ -89,4 +109,14 @@ $ lnmp-docker up SOFT_NAME SOFT_NAME2
 # $ lnmp-docker up kong-dashboard
 
 # $ lnmp-docker up kong kong-dashboard
+```
+
+## 使用自己的镜像(除使用官方镜像的服务以外)
+
+`.env` 文件更改以下变量
+
+```bash
+# LNMP_DOCKER_IMAGE_PREFIX=khs1994
+
+LNMP_DOCKER_IMAGE_PREFIX=username
 ```

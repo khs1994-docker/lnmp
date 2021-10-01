@@ -1,6 +1,6 @@
 # 使用 EOL 的 PHP 版本
 
-**1. 在 `docker-lnmp.include.yml` 文件中增加以下内容，具体请查看 [自定义](custom.md)**
+**1. 在 `docker-lnmp.override.yml` 文件中增加以下内容，具体请查看 [自定义](custom.md)**
 
 ```yaml
 services:
@@ -17,17 +17,17 @@ services:
     # 5.x 只支持 5.6.37 -- 5.6.40 其他版本请自行构建
     image: "khs1994/php:5.6.37-fpm-alpine"
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       # fpm config
-      - ./config/php5/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
+      - ./config/php5/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
       # php.ini
-      - ./config/php5/php.ini:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php5/php.ini:/usr/local/etc/php/php.ini:ro
       # php.ini override
-      - ./config/php5/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php5/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
       # log,etc
-      - ./log/php:/var/log/php:cached
-      - ./log/supervisord.log:/var/log/supervisord.log:cached
-      - ./log/supervisord:/var/log/supervisord:cached
+      - ./log/php:/var/log/php
+      - ./log/supervisord.log:/var/log/supervisord.log
+      - ./log/supervisord:/var/log/supervisord
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo

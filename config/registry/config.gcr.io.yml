@@ -28,7 +28,6 @@ http:
   tls:
      certificate: /etc/docker/registry/ssl/gcr.io.crt
      key: /etc/docker/registry/ssl/gcr.io.key
-# 类似 github webhooks ,给特定网址 post 一个 json 数据
 
 health:
   storagedriver:

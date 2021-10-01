@@ -2,13 +2,24 @@
 
 * CRI 默认为 `containerd`, 还有 `crio` `docker` 可供选择
 
-* Kubernetes `1.21.0`
+* Kubernetes `1.22.0`
+
+## v1.22.0
+
+* `node.k8s.io/v1beta1 RuntimeClass` is deprecated in v1.22+, unavailable in v1.25+
+
+## v1.21.0
+
+* `policy/v1beta1 PodDisruptionBudget` is deprecated in v1.21+, unavailable in v1.25+; use `policy/v1 PodDisruptionBudget`
+* `"audit.k8s.io/v1beta1"` is deprecated and will be removed in a future release, use `"audit.k8s.io/v1"` instead
+* `discovery.k8s.io/v1beta1 EndpointSlice` is deprecated in v1.21+, unavailable in v1.25+; use `discovery.k8s.io/v1 EndpointSlice`
 
 ## v1.19.0
 
 * `kubescheduler.config.k8s.io/v1alpha1` 替换为 `kubescheduler.config.k8s.io/v1beta1`
 * The Kubelet's `--volume-plugin-dir` option is now available via the Kubelet config file field `VolumePluginDir`.
 * `apiregistration.k8s.io/v1beta1` APIService is deprecated in v1.19+, unavailable in v1.22+; use `apiregistration.k8s.io/v1` APIService
+* `spec.template.metadata.annotations[seccomp.security.alpha.kubernetes.io/pod]`: deprecated since v1.19; use the `"seccompProfile"` field instead
 
 ## v1.17.0
 

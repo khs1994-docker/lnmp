@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add Sami
 - Add PHP-CS-Fixer
 - Add khsci
-- Support CI Drone CI Travis CI Style CI
+- Support CI Drone CI Style CI
 - Support Docker PHP
 
 ### Changed

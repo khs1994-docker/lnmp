@@ -22,3 +22,5 @@ server = "https://docker.io"
   skip_verify = false
 [host."https://ccr.ccs.tencentyun.com"]
   skip_verify = false
+[host."https://registry-1.docker.io"]
+  capabilities = ["pull", "resolve"]

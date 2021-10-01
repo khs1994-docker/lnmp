@@ -10,7 +10,7 @@ docker-compose
 docker-compose-Darwin-x86_64
 docker-compose-Linux-x86_64
 /docker-production.*.yml
-/docker-lnmp.include.yml
+/docker-lnmp.override.yml
 /docker-compose.yml
 /docker-compose.yaml
 /docker-compose.*.yml
@@ -25,7 +25,7 @@ docker-compose-Linux-x86_64
 .env
 .env.*
 
-.env.backup
+/*.backup
 .env.ps1
 
 !.env.example

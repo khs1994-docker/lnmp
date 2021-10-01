@@ -16,21 +16,21 @@ services:
     build:
       context: ./7.4/fpm
       args:
-        PHP_VERSION: 7.4.21
+        PHP_VERSION: 7.4.22
         IMAGE: alpine
         ALPINE_URL: mirrors.aliyun.com
       target: php
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_74:-7.4.21}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_74:-7.4.22}-fpm-alpine
 
   7_3_X:
     build:
       context: ./7.3/fpm
       args:
-        PHP_VERSION: ${PHP_VERSION_73:-7.3.29}
+        PHP_VERSION: ${PHP_VERSION_73:-7.3.30}
         IMAGE: php
         ALPINE_URL: mirrors.aliyun.com
       target: php
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_73:-7.3.29}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_73:-7.3.30}-fpm-alpine
 
   7_2_X:
     build:

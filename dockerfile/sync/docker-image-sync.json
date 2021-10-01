@@ -16,8 +16,8 @@
     "dest": "library-mirror/node:14.16.0-alpine"
   },
   {
-    "source": "golang:1.16.5-alpine",
-    "dest": "library-mirror/golang:1.16.5-alpine"
+    "source": "golang:1.16.6-alpine",
+    "dest": "library-mirror/golang:1.16.6-alpine"
   },
   {
     "source": "golang:alpine",
@@ -64,8 +64,8 @@
     "dest": "library-mirror/mysql:latest"
   },
   {
-    "source": "library/mysql:8.0.25",
-    "dest": "library-mirror/mysql:8.0.25"
+    "source": "library/mysql:8.0.26",
+    "dest": "library-mirror/mysql:8.0.26"
   },
   {
     "source": "library/mysql:5.7.33",
@@ -80,8 +80,8 @@
     "dest": "library-mirror/mariadb:latest"
   },
   {
-    "source": "library/mariadb:10.6.1",
-    "dest": "library-mirror/mariadb:10.6.1"
+    "source": "library/mariadb:10.6.4",
+    "dest": "library-mirror/mariadb:10.6.4"
   },
   {
     "source": "library/mariadb:10.5.9",
@@ -104,8 +104,8 @@
     "dest": "library-mirror/mongo:latest"
   },
   {
-    "source": "library/mongo:4.4.6",
-    "dest": "library-mirror/mongo:4.4.6"
+    "source": "library/mongo:5.0.1",
+    "dest": "library-mirror/mongo:5.0.1"
   },
   {
     "source": "library/kong:latest",
@@ -116,12 +116,12 @@
     "dest": "library-mirror/kong:alpine"
   },
   {
-    "source": "library/kong:2.4.1",
-    "dest": "library-mirror/kong:2.4.1"
+    "source": "library/kong:2.5.1",
+    "dest": "library-mirror/kong:2.5.1"
   },
   {
-    "source": "library/kong:2.4.1-alpine",
-    "dest": "library-mirror/kong:2.4.1-alpine"
+    "source": "library/kong:2.5.1-alpine",
+    "dest": "library-mirror/kong:2.5.1-alpine"
   },
   {
     "source": "library/redis:alpine",
@@ -136,8 +136,8 @@
     "dest": "library-mirror/redis:6.0.11-alpine"
   },
   {
-    "source": "library/redis:6.2.4-alpine",
-    "dest": "library-mirror/redis:6.2.4-alpine"
+    "source": "library/redis:6.2.5-alpine",
+    "dest": "library-mirror/redis:6.2.5-alpine"
   },
   {
     "source": "library/memcached:alpine",
@@ -156,16 +156,16 @@
     "dest": "library-mirror/nginx:1.20.0-alpine"
   },
   {
-    "source": "library/nginx:1.21.0-alpine",
-    "dest": "library-mirror/nginx:1.21.0-alpine"
+    "source": "library/nginx:1.21.1-alpine",
+    "dest": "library-mirror/nginx:1.21.1-alpine"
   },
   {
     "source": "library/httpd:alpine",
     "dest": "library-mirror/httpd:alpine"
   },
   {
-    "source": "library/httpd:2.4.48-alpine",
-    "dest": "library-mirror/httpd:2.4.48-alpine"
+    "source": "library/httpd:2.4.49-alpine",
+    "dest": "library-mirror/httpd:2.4.49-alpine"
   },
   {
     "source": "library/postgres:alpine",
@@ -180,16 +180,16 @@
     "dest": "library-mirror/rabbitmq:alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.17-alpine",
-    "dest": "library-mirror/rabbitmq:3.8.17-alpine"
+    "source": "library/rabbitmq:3.9.0-alpine",
+    "dest": "library-mirror/rabbitmq:3.9.0-alpine"
   },
   {
     "source": "library/rabbitmq:management-alpine",
     "dest": "library-mirror/rabbitmq:management-alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.17-management-alpine",
-    "dest": "library-mirror/rabbitmq:3.8.17-management-alpine"
+    "source": "library/rabbitmq:3.9.0-management-alpine",
+    "dest": "library-mirror/rabbitmq:3.9.0-management-alpine"
   },
   {
     "source": "library/phpmyadmin:latest",
@@ -234,7 +234,7 @@
     "source": "khs1994/tls"
   },
   {
-    "source": "khs1994/kube-nginx:1.21.0"
+    "source": "khs1994/kube-nginx:1.21.1"
   },
   {
     "source": "khs1994/kube-nginx"
@@ -249,7 +249,7 @@
     "source": "khs1994/nginx:alpine"
   },
   {
-    "source": "khs1994/nginx:1.21.0-alpine"
+    "source": "khs1994/nginx:1.21.1-alpine"
   },
   {
     "source": "khs1994/docker-image-sync:latest"

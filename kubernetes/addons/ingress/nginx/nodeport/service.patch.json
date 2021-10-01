@@ -14,10 +14,10 @@
     "path": "/spec/ports/-",
     "value": {
       "name": "tcp-ssh-22",
-      "port": 22,
+      "port": 8022,
       "protocol": "TCP",
-      "targetPort": 22,
-      "nodePort": 22
+      "targetPort": 8022,
+      "nodePort": 8022
     }
   },
   {

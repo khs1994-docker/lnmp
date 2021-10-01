@@ -12,7 +12,7 @@ data:
 ---
 
 kind: Ingress
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 metadata:
   name: ci
   labels:
@@ -20,7 +20,7 @@ metadata:
   # annotations:
 spec:
   # k8s v1.18.0+
-  # ingressClassName: nginx
+  ingressClassName: nginx
   tls:
   - hosts:
     - git.t.khs1994.com
@@ -34,41 +34,59 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: gogs
-          servicePort: http
+          service:
+            name: gogs
+            port:
+              name: http
   - host: gitea.t.khs1994.com
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: gitea
-          servicePort: http
+          service:
+            name: gitea
+            port:
+              name: http
   - host: drone.t.khs1994.com
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: drone
-          servicePort: http
+          service:
+            name: drone
+            port:
+              name: http
   - host: drone-runner-kubernetes.t.khs1994.com
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: drone-runner-kubernetes-dashboard
-          servicePort: dashboard
+          service:
+            name: drone-runner-kubernetes-dashboard
+            port:
+              name: dashboard
   - host: drone-runner-docker.t.khs1994.com
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: drone-runner-docker-dashboard
-          servicePort: dashboard
+          service:
+            name: drone-runner-docker-dashboard
+            port:
+              name: dashboard
   - host: s3.t.khs1994.com
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: minio
-          servicePort: console
+          service:
+            name: minio
+            port:
+              name: console

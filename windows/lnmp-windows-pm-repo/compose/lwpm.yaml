@@ -1,14 +1,21 @@
 name: compose
 version: 1.29.0
-pre-version: 1.29.0
+pre-version: 2.0.0-rc.1
 command: docker-compose
 url: https://github.com/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})
 url-mirror: https://download.fastgit.org/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})
+pre-url: https://github.com/docker/compose-cli/releases/download/v${VERSION}/docker-compose-${env:lwpm_os}-${env:lwpm_architecture}$(if($_IsWindows){echo .exe})
+pre-url-mirror: https://download.fastgit.org/docker/compose-cli/releases/download/v${VERSION}/docker-compose-${env:lwpm_os}-${env:lwpm_architecture}$(if($_IsWindows){echo .exe})
 scripts:
   install: |
-    Copy-Item -Force $filename C:\bin\docker-compose.exe
+    Copy-Item -Force $filename C:\bin\docker-compose$(if($_IsWindows){echo .exe})
+  preinstall:
+    - _mkdir $HOME/.docker/cli-plugins/
+    - Copy-Item -Force $filename $HOME/.docker/cli-plugins/docker-compose$(if($_IsWindows){echo .exe})
   uninstall: |
     _cleanup C:\bin\docker-compose.exe
+  preuninstall: |
+    _cleanup $HOME/.docker/cli-plugins/docker-compose$(if($_IsWindows){echo .exe})
   dist: |
     _mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}
 
@@ -22,13 +29,16 @@ scripts:
     -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename
   version: (docker-compose --version).split(' ')[2].trim(',')
   test: docker-compose --version
-  platform-reqs: if(!$IsLinux){echo $False}
 platform:
   - architecture: amd64
     os: windows
   - architecture: amd64
     os: darwin
+  - architecture: arm64
+    os: darwin
   - architecture: amd64
+    os: linux
+  - architecture: arm64
     os: linux
 path:
   - C:\bin

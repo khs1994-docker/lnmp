@@ -106,8 +106,6 @@ jobs:
 
           lnmp-php artisan -V
       - name: Build Docker Image
-        env:
-          DOCKER_CLI_EXPERIMENTAL: enabled
         run: |
           set -x
 

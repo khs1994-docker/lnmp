@@ -75,7 +75,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:8.0.8-fpm-alpine
+  image: khs1994/php:8.0.9-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
@@ -113,8 +113,8 @@ services:
       << : *default-build-debian
       context: ./dockerfile/mysql/
       dockerfile: Dockerfile
-    image: mysql:8.0.25
-    # image: khs1994/lnmp-mysql:8.0.25
+    image: mysql:8.0.26
+    # image: khs1994/lnmp-mysql:8.0.26
     # image: username/lnmp-mysql:tag
     environment:
       # MYSQL_ROOT_PASSWORD: mytest
@@ -158,9 +158,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
   #     dockerfile: Dockerfile
-  #   image: "mariadb:10.6.1"
+  #   image: "mariadb:10.6.4"
   #   # image: username/lnmp-mariadb:tag
-  #   # image: khs1994/lnmp-mariadb:10.6.1
+  #   # image: khs1994/lnmp-mariadb:10.6.4
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
   #     MYSQL_DATABASE: test
@@ -196,9 +196,9 @@ services:
       # << : *default-build-debian
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    image: redis:6.2.4-alpine
+    image: redis:6.2.5-alpine
     # image: username/lnmp-redis:tag
-    # image: khs1994/lnmp-redis:6.2.4
+    # image: khs1994/lnmp-redis:6.2.5
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
@@ -305,9 +305,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mongodb/
   #     dockerfile: Dockerfile
-  #   image: mongo:4.4.6
+  #   image: mongo:5.0.1
   #   # image: username/lnmp-mongodb:tag
-  #   # image: khs1994/lnmp-mongodb:4.4.6
+  #   # image: khs1994/lnmp-mongodb:5.0.1
   #   volumes:
   #     # - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db
@@ -341,7 +341,7 @@ services:
       - backend
       - frontend
     extra_hosts:
-      - "api.github.com:140.82.114.5"
+      - "api.github.com:140.82.114.6"
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -409,8 +409,8 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.21.0-alpine
-    # image: khs1994/nginx:1.21.0-alpine
+    image: nginx:1.21.1-alpine
+    # image: khs1994/nginx:1.21.1-alpine
     ports:
       - "443:443/tcp"
       - "443:443/udp"
@@ -505,9 +505,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./config/httpd
   #     dockerfile: Dockerfile
-  #   image: "httpd:2.4.48-alpine"
+  #   image: "httpd:2.4.49-alpine"
   #   # image: username/lnmp-httpd:tag
-  #   # image: khs1994/lnmp-httpd:2.4.48
+  #   # image: khs1994/lnmp-httpd:2.4.49
   #   ports:
   #     - "443:443"
   #     - "80:80"
@@ -590,6 +590,8 @@ services:
     command:
       - server
       - /data
+      - --console-address
+      - ':9090'
     environment:
       MINIO_ROOT_USER_FILE: minio-root-user
       MINIO_ROOT_PASSWORD_FILE: minio-root-password

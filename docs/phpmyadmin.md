@@ -15,7 +15,7 @@ phpmyadmin                   latest                         e8e3976e7f7f        
 ```
 
 ```yaml
-# docker-lnmp.include.yml
+# docker-lnmp.override.yml
 
 services:
   phpmyadmin:

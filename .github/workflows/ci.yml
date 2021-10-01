@@ -85,9 +85,6 @@ jobs:
         startsWith(matrix.os, 'ubuntu' )
     - name: Up
       run: |
-        ./lnmp-docker build-config > docker-compose.yml
-        docker-compose config -q
-
         ./lnmp-docker config > docker-compose.yml
         docker-compose config -q
 
@@ -118,6 +115,7 @@ jobs:
         #echo "LNMP_PATH=$(pwd)" >> $GITHUB_ENV
     - name: lnmp-CLI
       run: |
+        sleep 10
         lnmp-php -v
         lnmp-composer --version
 

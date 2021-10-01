@@ -54,7 +54,7 @@ $ kubectl config use-context minikube
 > 本项目可能会更新不及时，你可以自行找出 `Docker 桌面版` 需要哪些 k8s.gcr.io 镜像
 
 ```bash
-# 启动本地 gcr.io 服务器
+# 启动本地 k8s.gcr.io 服务器
 $ lnmp-docker gcr.io --no-pull
 
 # 在 docker 设置中启用 k8s
@@ -66,5 +66,8 @@ ERRO[0285] response completed with error                 err.code="manifest unkn
  http.response.duration=207.384ms http.response.status=404 http.response.written=97 vars.name=kube-apiserver vars.reference=v1.18.3
 
 # 此日志说明需要 k8s.gcr.io/kube-apiserver:v1.18.3
-# 在 `lnmp-docker(.ps1)` 中更新镜像(搜索 k8s.gcr.io)
+# 在 `lnmp-docker(.ps1)` 中更新以下变量的值
+# KUBERNETES_VERSION="1.21.2"
+# KUBERNETES_COREDNS_VERSION="1.8.0"
+# KUBERNETES_PAUSE_VERSION="3.4.1"
 ```

@@ -74,11 +74,10 @@ export PATH=$LNMP_PATH:$LNMP_PATH/bin:$PATH
 
 |场景|CLI|原始命令|
 |:--|:--|:-|
-|开发环境(使用拉取的镜像)  | `$ ./lnmp-docker up`           |`docker-compose -f docker-lnmp.yml -f docker-lnmp.override.yml up -d`                                                            |
-|开发环境(使用构建的镜像)  | `$ ./lnmp-docker build`        |`docker-compose -f docker-lnmp.yml -f docker-lnmp.build.yml up -d`         |
+|开发环境  | `$ ./lnmp-docker up`           |`docker-compose -f docker-lnmp.yml -f docker-lnmp.override.yml up -d`                                                            |
 |生产环境                 | `$ ./lnmp-docker swarm-deploy` |`docker stack -c docker-production.yml lnmp`                                   |
 
->`docker-compose.override.yaml` 是为了重写 `docker-compose.yaml`，执行 `docker-compose up -d` 会默认加载该文件。
+>`docker-lnmp.override.yaml` 是为了重写 `docker-lnmp.yaml`，执行 `docker-compose up -d` 会默认加载该文件。
 
 你可以使用 `config` 命令查看最终的 `docker compose` 配置文件。
 

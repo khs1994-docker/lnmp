@@ -20,14 +20,14 @@ services:
   example:
     << : *common
     << : *common-label
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/example:${LNMP_EXAMPLE_VERSION:-x.y.z}-alpine"
+    image: "example/example:${LNMP_EXAMPLE_VERSION:-x.y.z}-alpine"
     # ports:
     #   - "${LNMP_EXAMPLE_HTTPS_PORT:-0.0.0.0:443}:443"
     #   - "${LNMP_EXAMPLE_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/config/${LNMP_EXAMPLE_CONF:-example.conf}:/usr/local/etc/example.conf:cached
-      - ./log/example:/usr/local/apache2/logs:cached
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
+      - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/config/${LNMP_EXAMPLE_CONF:-example.conf}:/usr/local/etc/example.conf
+      - ./log/example:/usr/local/apache2/logs
     # env_file:
     #   - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env.example
     #   - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env

@@ -1,0 +1,31 @@
+{
+  "name": "php-cs-fixer",
+  "description": "A tool to automatically fix PHP Coding Standards issues",
+  "version": "3.0.0",
+  "pre-version": "3.0.0",
+  "homepage": "https://github.com/FriendsOfPHP/PHP-CS-Fixer",
+  "bug": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues",
+  "github": "FriendsOfPHP/PHP-CS-Fixer",
+  "releases": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases",
+  "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${VERSION}/php-cs-fixer.phar",
+  "url-mirror": "https://download.fastgit.org/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${VERSION}/php-cs-fixer.phar",
+  "command": "php-cs-fixer",
+  "download-filename": "php-cs-fixer-${VERSION}.phar",
+  "scripts": {
+    "version": "(php-cs-fixer --version).split(' ')[2]",
+    "install": [
+      "if($isWindows){_mkdir \"C:\\bin\\\"}",
+      "if($isWindows){Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\php-cs-fixer\"      \"C:\\bin\\\"}",
+      "if($isWindows){Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\php-cs-fixer.ps1\"  \"C:\\bin\\\"}",
+      "if($isWindows){Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\php-cs-fixer.bat\"  \"C:\\bin\\\"}",
+      "if($isWindows){Copy-item -r -force $filename                                   \"C:\\bin\\php-cs-fixer.phar\"}",
+      "if(!$IsWindows){sudo install -m755 $filename /usr/local/bin/php-cs-fixer}"
+    ],
+    "test": [
+      "printInfo $(php-cs-fixer --version) install success"
+    ],
+    "uninstall": [
+      "_sudo remove-item -r -force C:/bin/php-cs-fixer.phar"
+    ]
+  }
+}

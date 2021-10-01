@@ -126,6 +126,7 @@ rules:
         resources:
           - secrets
           - configmaps
+          - serviceaccounts/token
       - group: authentication.k8s.io
         resources:
           - tokenreviews

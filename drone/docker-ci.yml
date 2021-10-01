@@ -10,7 +10,7 @@ services:
 
   drone-server:
     << : *common
-    image: drone/drone:${CI_DRONE_VERSION:-2.0.3}
+    image: drone/drone:${CI_DRONE_VERSION:-2.3.1}
     volumes:
       - drone-data-v1:/data:rw
     networks:
@@ -74,7 +74,7 @@ services:
 
   mysql:
     << : *common
-    image: mysql:${CI_MYSQL_VERSION:-8.0.25}
+    image: mysql:${CI_MYSQL_VERSION:-8.0.26}
     env_file: secrets/mysql.env
     volumes:
       - mysql-data:/var/lib/mysql:rw
@@ -83,14 +83,14 @@ services:
 
   redis:
     << : *common
-    image: redis:${CI_REDIS_VERSION:-6.2.4}-alpine
+    image: redis:${CI_REDIS_VERSION:-6.2.5}-alpine
     volumes:
       - redis-data:/data
 
   nginx:
     << : *common
-    # image: khs1994/nginx:${CI_NGINX_VERSION:-1.21.0}-alpine
-    image: nginx:${CI_NGINX_VERSION:-1.21.0}-alpine
+    # image: khs1994/nginx:${CI_NGINX_VERSION:-1.21.1}-alpine
+    image: nginx:${CI_NGINX_VERSION:-1.21.1}-alpine
     networks:
       - frontend
     ports:

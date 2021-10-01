@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 20.10.8
+.VERSION 20.10.9
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -134,7 +134,9 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.19.7"
+$KUBERNETES_VERSION = "1.21.3"
+$KUBERNETES_COREDNS_VERSION = "1.8.0"
+$KUBERNETES_PAUSE_VERSION = "3.4.1"
 $EXEC_CMD_DIR = $PWD
 
 Function Test-Command($command) {
@@ -166,6 +168,12 @@ Function _cp_only_not_exists($src, $desc) {
 }
 
 Function New-InitFile() {
+  if (Test-Path docker-lnmp.include.yml) {
+    Copy-Item docker-lnmp.include.yml docker-lnmp.override.yml
+    Copy-Item docker-lnmp.include.yml docker-lnmp.include.yml.backup
+    Remove-Item -r -force docker-lnmp.include.yml
+  }
+
   _cp_only_not_exists kubernetes/nfs-server/.env.example kubernetes/nfs-server/.env
 
   _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
@@ -179,7 +187,7 @@ Function New-InitFile() {
     New-Item -ItemType File config/redis/redis.conf
   }
 
-  _cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
+  _cp_only_not_exists docker-lnmp.override.example.yml docker-lnmp.override.yml
 
   _cp_only_not_exists docker-workspace.example.yml docker-workspace.yml
 
@@ -315,11 +323,9 @@ Commands:
   up                   Up LNMP (Support x86_64 arm64v8)
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   backup               Backup MySQL databases
-  build                Build or rebuild your LNMP images (Only Support x86_64)
-  build-config         Validate and view the LNMP with your images Compose file
-  build-up             Create and start LNMP containers With your Build images
-  build-push           Pushes your images to Docker Registory
-  build-pull           Pull LNMP Docker Images Build By your self
+  build                Build or rebuild your LNMP Docker Images (Only Support x86_64)
+  push                 Pushes LNMP Docker Images to Docker Registory
+  pull                 Pull LNMP Docker Images
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
   compose              Install docker-compose [PATH]
@@ -358,7 +364,7 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | down | ]
+  gcr.io               Up local k8s.gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | down | ]
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
@@ -519,7 +525,7 @@ Function satis() {
     --mount -v lnmp_composer-cache-data:/composer composer/satis
 }
 
-Function Get-ComposeOptions($compose_files, $isBuild = 0) {
+Function Get-ComposeOptions($compose_files) {
   $COMPOSE_FILE_ARRAY = @()
 
   Foreach ($compose_file in $compose_files) {
@@ -558,28 +564,15 @@ Function Get-ComposeOptions($compose_files, $isBuild = 0) {
       exit 1
     }
 
-    if ($isBuild) {
-      if (!(Test-Path "$LREW_INCLUDE_ROOT/docker-compose.build.yml")) {
-        $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
-        continue
-      }
-      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
-      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.build.yml"
-
-      continue
-    } # end build
-
-    if (!(Test-Path "$LREW_INCLUDE_ROOT/docker-compose.override.yml")) {
-      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
-      continue
-    }
     $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
-    $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.override.yml"
+
+    if (Test-Path "$LREW_INCLUDE_ROOT/docker-compose.override.yml") {
+      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.override.yml"
+    }
   }
 
   $options += "--env-file $LNMP_ENV_FILE"
 
-  $COMPOSE_FILE_ARRAY += "docker-lnmp.include.yml"
   $COMPOSE_FILE_ARRAY += "docker-workspace.yml"
 
   if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
@@ -868,46 +861,14 @@ switch -regex ($command) {
     }
 
     $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.build.yml" `
-      1
+      "docker-lnmp.override.yml"
 
     Write-Host "Build this service image: $services" -ForegroundColor Green
     sleep 3
     & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $service --parallel }
   }
 
-  build-config {
-
-    New-LogFile
-
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.build.yml" `
-      1
-
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options config $other }
-  }
-
-  build-up {
-    init
-
-    if ($other) {
-      $services = $other
-    }
-    else {
-      $services = ${LNMP_SERVICES}
-    }
-
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.build.yml" `
-      1
-
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d --no-build $services }
-
-    #@custom
-    __lnmp_custom_up $services
-  }
-
-  build-push {
+  push {
     $env:USE_WSL2_DOCKER_COMPOSE = '0'
 
     if ($other) {
@@ -918,15 +879,14 @@ switch -regex ($command) {
     }
 
     $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.build.yml" `
-      1
+      "docker-lnmp.override.yml"
 
     Write-Host "Push this service image: $services" -ForegroundColor Green
     sleep 3
     & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $service }
   }
 
-  build-pull {
+  pull {
     $env:USE_WSL2_DOCKER_COMPOSE = '0'
 
     if ($other) {
@@ -940,8 +900,7 @@ switch -regex ($command) {
     }
 
     $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.build.yml" `
-      1
+      "docker-lnmp.override.yml"
 
     docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services
 
@@ -1390,15 +1349,15 @@ XXX
   }
 
   gcr.io {
-    printInfo "Check gcr.io host config"
+    printInfo "Check k8s.gcr.io host config"
 
-    $GCR_IO_HOST = (ping gcr.io -n 1).split(" ")[9]
-    $GCR_IO_HOST_EN = (ping gcr.io -n 1).split(" ")[11].trim(":")
+    $GCR_IO_HOST = (ping k8s.gcr.io -n 1).split(" ")[9]
+    $GCR_IO_HOST_EN = (ping k8s.gcr.io -n 1).split(" ")[11].trim(":")
 
     if (!(($GCR_IO_HOST -eq "127.0.0.1") -or ($GCR_IO_HOST_EN -eq "127.0.0.1"))) {
       printWarning "Please set host on C:\Windows\System32\drivers\etc
 
-127.0.0.1 gcr.io k8s.gcr.io
+127.0.0.1 k8s.gcr.io
 "
 
       Edit-Hosts
@@ -1406,7 +1365,7 @@ XXX
       exit
     }
 
-    printInfo "gcr.io host config correct"
+    printInfo "k8s.gcr.io host config correct"
 
     if ('logs' -eq $args[1]) {
       docker logs $(docker container ls -f label=com.khs1994.lnmp.gcr.io -q) -f
@@ -1422,7 +1381,7 @@ XXX
     printInfo "This local server support Docker Desktop with Kubernetes v${KUBERNETES_VERSION}"
 
     if ('down' -eq $args[1]) {
-      Write-Warning "Stop gcr.io local server success"
+      Write-Warning "Stop k8s.gcr.io local server success"
       exit
     }
 
@@ -1440,7 +1399,7 @@ XXX
     # -v $pwd/config/registry/nginx.htpasswd:/etc/docker/registry/auth/nginx.htpasswd `
 
     if ('--no-pull' -eq $args[1]) {
-      printInfo "Up gcr.io Server Success"
+      printInfo "Up k8s.gcr.io Server Success"
       exit
     }
 
@@ -1449,9 +1408,8 @@ XXX
       "kube-scheduler:v${KUBERNETES_VERSION}", `
       "kube-proxy:v${KUBERNETES_VERSION}", `
       "etcd:3.4.13-0", `
-      "coredns:1.7.0", `
-      "pause:3.2", `
-      "pause:3.1"
+      "coredns/coredns:v${KUBERNETES_COREDNS_VERSION}", `
+      "pause:${KUBERNETES_PAUSE_VERSION}"
 
     sleep 10
 
@@ -1464,10 +1422,18 @@ XXX
     }
 
     function Get-GcrImage([string] $image, [string] $mirror) {
+      if ($image -eq "coredns/coredns:v${KUBERNETES_COREDNS_VERSION}") {
+        $image = "coredns:v${KUBERNETES_COREDNS_VERSION}"
+      }
       docker pull $mirror/$image
-      docker tag  $mirror/$image k8s.gcr.io/$image
+      if ($image -eq "coredns:v${KUBERNETES_COREDNS_VERSION}") {
+        docker tag $mirror/$image k8s.gcr.io/coredns/$image
+      }
+      else {
+        docker tag $mirror/$image k8s.gcr.io/$image
+      }
       # docker push k8s.gcr.io/$image
-      docker rmi  $mirror/$image
+      docker rmi $mirror/$image
     }
 
     # $ErrorActionPreference="SilentlyContinue"
@@ -1481,7 +1447,7 @@ XXX
         continue;
       }
 
-      Get-GcrImage $image "gcr.io/google_containers"
+      Get-GcrImage $image "k8s.gcr.io/google_containers"
 
       if (Test-GcrImage $image) {
         continue;

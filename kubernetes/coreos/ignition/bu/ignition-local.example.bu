@@ -1,7 +1,7 @@
 # https://github.com/coreos/butane/blob/main/docs/config-fcos-v1_1.md
 # master
 variant: fcos
-version: 1.3.0
+version: 1.4.0
 ignition:
   config:
     merge:
@@ -237,10 +237,9 @@ systemd:
         --secure-port=10257 \
         --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/kube-controller-manager.pem \
         --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/kube-controller-manager-key.pem \
-        --port=0 \
         --authentication-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
         --client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
-        --requestheader-allowed-names="" \
+        --requestheader-allowed-names="aggregator" \
         --requestheader-client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --requestheader-extra-headers-prefix="X-Remote-Extra-" \
         --requestheader-group-headers=X-Remote-Group \
@@ -294,7 +293,7 @@ systemd:
         --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/kube-scheduler-key.pem \
         --authentication-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig \
         --client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
-        --requestheader-allowed-names="" \
+        --requestheader-allowed-names="aggregator" \
         --requestheader-client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --requestheader-extra-headers-prefix="X-Remote-Extra-" \
         --requestheader-group-headers=X-Remote-Group \
@@ -427,7 +426,7 @@ storage:
       mode: 0644
       contents:
         inline: |
-          apiVersion: kubescheduler.config.k8s.io/v1alpha1
+          apiVersion: kubescheduler.config.k8s.io/v1beta1
           kind: KubeSchedulerConfiguration
           clientConnection:
             burst: 200

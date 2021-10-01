@@ -1,6 +1,6 @@
 # {{ EXAMPLE_GIT_REPO_EXAMPLE }}
 
-[![GitHub stars](https://img.shields.io/github/stars/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}.svg?style=social&label=Stars)](https://github.com/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}) [![PHP from Packagist](https://img.shields.io/packagist/php-v/{{ EXAMPLE_COMPOSER_PROJECT_EXAMPLE }}.svg)](https://packagist.org/packages/{{ EXAMPLE_COMPOSER_PROJECT_EXAMPLE }}) [![GitHub (pre-)release](https://img.shields.io/github/release/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}/all.svg)](https://github.com/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}/releases) [![Build Status](https://travis-ci.com/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}.svg?branch=master)](https://travis-ci.com/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}) [![StyleCI](https://styleci.io/repos/{{ EXAMPLE_STYLECI_ID_EXAMPLE }}/shield?branch=master)](https://styleci.io/repos/{{ EXAMPLE_STYLECI_ID_EXAMPLE }})
+[![GitHub stars](https://img.shields.io/github/stars/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}.svg?style=social&label=Stars)](https://github.com/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}) [![PHP from Packagist](https://img.shields.io/packagist/php-v/{{ EXAMPLE_COMPOSER_PROJECT_EXAMPLE }}.svg)](https://packagist.org/packages/{{ EXAMPLE_COMPOSER_PROJECT_EXAMPLE }}) [![GitHub (pre-)release](https://img.shields.io/github/release/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}/all.svg)](https://github.com/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}/releases) [![StyleCI](https://styleci.io/repos/{{ EXAMPLE_STYLECI_ID_EXAMPLE }}/shield?branch=master)](https://styleci.io/repos/{{ EXAMPLE_STYLECI_ID_EXAMPLE }})
 
 {{ EXAMPLE_COMPOSER_DESCRIPT_EXAMPLE }}
 
@@ -42,8 +42,6 @@ require __DIR__.'/vendor/autoload.php';
 ## CI/CD
 
 * [Drone](https://blog.khs1994.com/categories/CI/Drone/)
-
-* [Travis CI](https://travis-ci.com/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }})
 
 * [Style CI](https://styleci.io/repos/{{ EXAMPLE_STYLECI_ID_EXAMPLE }})
 
