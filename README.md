@@ -207,7 +207,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.10-alpine`           | **1.6.10**       |`alpine:3.14`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.9.0-management-alpine` | **3.9.0**       |`alpine:3.13`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:13.3-alpine`             | **13.3**        |`alpine:3.14`    |
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:5.0.1`                      | **5.0.1**       |`ubuntu:bionic`  |
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:5.0.3`                      | **5.0.3**       |`ubuntu:bionic`  |
 |[PHPMyAdmin](https://github.com/docker-library/docs/tree/master/phpmyadmin)|`phpmyadmin:5.1.1`                | **5.1.1**       |`alpine:3.14`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`alpine:3.11`    |
 

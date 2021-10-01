@@ -104,8 +104,8 @@
     "dest": "library-mirror/mongo:latest"
   },
   {
-    "source": "library/mongo:5.0.1",
-    "dest": "library-mirror/mongo:5.0.1"
+    "source": "library/mongo:5.0.3",
+    "dest": "library-mirror/mongo:5.0.3"
   },
   {
     "source": "library/kong:latest",
@@ -128,8 +128,8 @@
     "dest": "library-mirror/redis:alpine"
   },
   {
-    "source": "library/redis:5.0.11-alpine",
-    "dest": "library-mirror/redis:5.0.11-alpine"
+    "source": "library/redis:5.0.31-alpine",
+    "dest": "library-mirror/redis:5.0.31-alpine"
   },
   {
     "source": "library/redis:6.0.11-alpine",
