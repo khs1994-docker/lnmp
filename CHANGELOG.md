@@ -12,4 +12,4 @@
 
 ### Updates:
 
-* [NGINX `1.21.2`](https://nginx.org/en/CHANGES)
+* [NGINX `1.21.3`](https://nginx.org/en/CHANGES)

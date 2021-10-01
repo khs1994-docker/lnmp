@@ -67,7 +67,7 @@ ERRO[0285] response completed with error                 err.code="manifest unkn
 
 # 此日志说明需要 k8s.gcr.io/kube-apiserver:v1.18.3
 # 在 `lnmp-docker(.ps1)` 中更新以下变量的值
-# KUBERNETES_VERSION="1.21.2"
+# KUBERNETES_VERSION="1.18.3"
 # KUBERNETES_COREDNS_VERSION="1.8.0"
 # KUBERNETES_PAUSE_VERSION="3.4.1"
 ```
