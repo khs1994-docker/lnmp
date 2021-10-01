@@ -160,12 +160,12 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_HOME=/tmp/composer \
-    COMPOSER_VERSION=2.1.5 \
+    COMPOSER_VERSION=2.1.8 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:2.1.5,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:2.1.8,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && { echo "memory_limit=-1"; \
          echo "date.timezone=${PHP_TIMEZONE:-PRC}"; \

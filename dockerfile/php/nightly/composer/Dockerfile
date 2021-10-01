@@ -23,12 +23,12 @@ ENV COMPOSER_DEP_APKS \
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_HOME=/tmp/composer \
     COMPOSER_NO_INTERACTION=1 \
-    COMPOSER_VERSION=2.1.5 \
+    COMPOSER_VERSION=2.1.8 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:2.1.5,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:2.1.8,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .composer_deps $COMPOSER_DEP_APKS \
     && { echo "memory_limit=-1"; \
