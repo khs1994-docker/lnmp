@@ -70,7 +70,7 @@ services:
   npm:
     << : *workspace
     << : *common
-    image: node:16.3.0-alpine
+    image: node:16.10.0-alpine
     entrypoint: npm
     command: [] # install | "run","dev" |
 
