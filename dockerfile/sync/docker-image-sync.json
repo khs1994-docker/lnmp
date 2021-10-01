@@ -144,8 +144,8 @@
     "dest": "library-mirror/memcached:alpine"
   },
   {
-    "source": "library/memcached:1.6.9-alpine",
-    "dest": "library-mirror/memcached:1.6.9-alpine"
+    "source": "library/memcached:1.6.10-alpine",
+    "dest": "library-mirror/memcached:1.6.10-alpine"
   },
   {
     "source": "library/nginx:alpine",
