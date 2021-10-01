@@ -172,8 +172,8 @@
     "dest": "library-mirror/postgres:alpine"
   },
   {
-    "source": "library/postgres:13.3-alpine",
-    "dest": "library-mirror/postgres:13.3-alpine"
+    "source": "library/postgres:14.0-alpine",
+    "dest": "library-mirror/postgres:14.0-alpine"
   },
   {
     "source": "library/rabbitmq:alpine",
