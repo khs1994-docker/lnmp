@@ -240,6 +240,7 @@ jobs:
           && echo "remove it when k8s version ge 1.23" \
           && sudo sed -i -e "s!^healthzBindAddress.*!#healthzBindAddress!g" \
                       -e "s!^metricsBindAddress.*!#metricsBindAddress!g" \
+                      -e "s!v1beta1!v1beta3!g" \
                       ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kube-scheduler.config.yaml ; \
          fi
          sudo systemctl start kube-scheduler || CMD_FAILED=1
