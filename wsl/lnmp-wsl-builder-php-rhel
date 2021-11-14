@@ -159,7 +159,7 @@ _install_epel(){
 }
 
 _install_remi(){
-  local fedora_stable_version_id=34
+  local fedora_stable_version_id=35
   local url
   url=https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
 
@@ -171,7 +171,7 @@ _install_remi(){
       $(_sudo) wget -N $url
       $(_sudo) rpm -Uvh remi-release-${fedora_stable_version_id}.rpm
 
-      sudo sed -i 's/$releasever/34/g' /etc/yum.repos.d/remi.repo /etc/yum.repos.d/remi-modular.repo
+      sudo sed -i 's/$releasever/35/g' /etc/yum.repos.d/remi.repo /etc/yum.repos.d/remi-modular.repo
 
       return
     fi
