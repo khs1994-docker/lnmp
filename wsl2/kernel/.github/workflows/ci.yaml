@@ -62,7 +62,7 @@ jobs:
 
         echo "
         # nfs
-        CONFIG_NFS_V4_1=y
+        # CONFIG_NFS_V4_1=y
         CONFIG_NFS_V4_2=y
 
         # iscsi
