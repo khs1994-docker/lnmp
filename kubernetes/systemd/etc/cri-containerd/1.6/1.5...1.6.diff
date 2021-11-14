@@ -1,0 +1,35 @@
+25a26
+>   tcp_tls_ca = ""
+41a43
+>     device_ownership_from_security_context = false
+66a69
+>       ip_pref = ""
+75a79,80
+>         cni_conf_dir = ""
+>         cni_max_conf_num = 0
+85a91,92
+>           cni_conf_dir = ""
+>           cni_max_conf_num = 0
+105a113,114
+>         cni_conf_dir = ""
+>         cni_max_conf_num = 0
+127a137,139
+>   [plugins."io.containerd.internal.v1.tracing"]
+>     sampling_ratio = 0.0
+>     service_name = "containerd"
+139a152
+>     sched_core = false
+148a162,163
+>     discard_blocks = false
+>     fs_type = ""
+154a170
+>     upperdir_label = false
+156a173,176
+>   [plugins."io.containerd.tracing.processor.v1.otlp"]
+>     endpoint = ""
+>     insecure = false
+> 
+171a192
+> 
+176a198
+> 
