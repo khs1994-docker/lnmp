@@ -184,8 +184,8 @@ $ code --install-extension ms-vscode-remote.remote-containers
 # .env
 APP_ROOT=/app
 
-# 增加 workspace 服务
-LNMP_SERVICES="nginx mysql php7 redis workspace"
+# 增加 vscode-remote-container-workspace 服务
+LNMP_SERVICES="nginx mysql php7 redis vscode-remote-container-workspace"
 ```
 
 ```powershell
@@ -203,7 +203,7 @@ $ ./lnmp-docker up
 
 **打开 vsCode**
 
-左下角 `打开远程窗口` -> `Remote-Containers: Attach to Running Container...` -> 选择 `lnmp_workspace_1` 容器 -> 出现新窗口 -> 左面选择打开文件夹 -> 输入 `/app`
+左下角 `打开远程窗口` -> `Remote-Containers: Attach to Running Container...` -> 选择 `lnmp_vscode-remote-container-workspace_1` 容器 -> 出现新窗口 -> 左面选择打开文件夹 -> 输入 `/app`
 
 在 vsCode 中点击菜单栏 `查看` -> `终端`
 

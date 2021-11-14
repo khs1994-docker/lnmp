@@ -8,9 +8,7 @@
 
 **本页面以 PHPStorm 为例进行介绍。**
 
-如果你使用的是 VSCode 请参考下面的链接。
-
-Windows 用户建议使用 vsCode 远程开发，具体请查看 https://github.com/khs1994-docker/lnmp/tree/master/vscode-remote
+如果你使用的是 VSCode 请参考 [这里](https://github.com/khs1994-docker/lnmp/tree/master/vscode-remote)
 
 ## Create PHP Application by Composer
 
@@ -51,13 +49,13 @@ $ cd demo
 | Filename            | Description                     |
 | :-------------      | :-------------                  |
 | `.github/workflows` | GitHub Actions CI 工具          |
-| `.gitattributes`  | git 打包时排除文件（例如 测试代码）|
-| `.drone.yml`      | [`Drone` CI 工具](https://github.com/khs1994-docker/ci) |
-| `.editorconfig`   | [定义文件格式规则（例如 缩进方式）](https://editorconfig.org/)|
-| `.pcit.yml`       | [`PCIT` CI 工具](https://ci.khs1994.com) |
-| `.php_cs`         | [PHP 代码格式化工具](https://github.com/FriendsOfPHP/PHP-CS-Fixer) |
+| `.gitattributes`    | git 打包时排除文件（例如 测试代码）|
+| `.drone.yml`        | [`Drone` CI 工具](https://github.com/khs1994-docker/ci) |
+| `.editorconfig`     | [定义文件格式规则（例如 缩进方式）](https://editorconfig.org/)|
+| `.pcit.yml`         | [`PCIT` CI 工具](https://ci.khs1994.com) |
+| `.php_cs`           | [PHP 代码格式化工具](https://github.com/FriendsOfPHP/PHP-CS-Fixer) |
 | `.doctum.php`       | [PHP 文档生成工具](https://github.com/code-lts/doctum) |
-| `.styleci.yml`    | [`Style CI` PHP 代码格式化 CI 工具](https://styleci.io/) |
+| `.styleci.yml`      | [`Style CI` PHP 代码格式化 CI 工具](https://styleci.io/) |
 
 ## 一、开发
 
@@ -70,8 +68,6 @@ $ cd demo
 * LNMP [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)
 
 * 将 Docker 化的常用命令所在文件夹加入 `PATH`，具体请查看 [这里](https://github.com/khs1994-docker/lnmp/tree/master/bin)。
-
-* IDE `PHPStorm` 或 `vsCode`
 
 * git 分支 `dev`
 
@@ -94,7 +90,7 @@ $ git remote add origin git@url.com:username/PROJECT_NAME.git
 
 $ git checkout -b dev
 
-$ echo -e "<?php\nphpinfo();" >> index.php
+$ echo -e "<?php\nphpinfo();" >> public/index.php
 ```
 
 ### 2. 新增 NGINX 配置
@@ -117,7 +113,7 @@ $ ./lnmp-docker up
 
 ### 5. PHPStorm 打开 PHP 项目
 
-注意打开的是 PHP 项目（避免文件层次过深，IDE 直接打开 PHP 项目），不是 `khs1994-docker/lnmp`！
+**注意** 打开的是 PHP 项目（避免文件层次过深，IDE 直接打开 PHP 项目），不是 `khs1994-docker/lnmp`！
 
 要配置 `khs1994-docker/lnmp` 建议使用另外的文本编辑器。
 
@@ -136,12 +132,15 @@ $ ./lnmp-docker up
 生成 `docker-compose.yml`
 
 ```bash
+# 在 khs1994-docker/lnmp 项目根目录执行
 $ lnmp-docker config > docker-compose.yml
 ```
 
-`PHPStorm 设置`-> `Languages & ...` -> `PHP` -> `CLI Interpreter` -> `点击后边三个点`
-     -> `左上角添加` -> `From Docker ...` -> `选择 Docker Compose`
-     -> `Configuration file(s)` -> `选择 docker-compose.yml`
+> [如果使用 Docker Compose V2，请使用 PHPStorm 2021.3 及以上版本](https://youtrack.jetbrains.com/issue/WI-61205)
+
+`PHPStorm 设置` -> `PHP` -> `CLI Interpreter` -> `点击后边三个点`
+     -> `点击左上角 + 号` -> `From Docker ...` -> `选择 Docker Compose`
+     -> `Configuration file(s)` -> `选择 docker-compose.yml(khs1994-docker/lnmp项目根目录)`
      -> `Services` -> `选择 workspace`
      -> `点击 OK 确认`
 
@@ -149,7 +148,7 @@ $ lnmp-docker config > docker-compose.yml
 
 具体请查看 https://github.com/khs1994-docker/lnmp/issues/260#issuecomment-373964173
 
-再点击 ok 之后跳转到了 `PHPStorm 设置`-> `Languages & ...` -> `PHP` -> `CLI Interpreter` 这个页面
+再点击 ok 之后跳转到了 `PHPStorm 设置`-> `PHP` -> `CLI Interpreter` 这个页面
 
 #### 配置本地路径与容器内路径对应关系
 
@@ -159,15 +158,14 @@ $ lnmp-docker config > docker-compose.yml
 
 由于 Windows 与 Linux 路径表示方法不同，我们必须另外添加路径对应关系。配置本地项目与容器目录之间的路径对应关系。
 
-假设本地项目目录位于 `C:/Users/username/app/demo` 对应的容器目录位于 `/app/demo`（假设本地项目目录位于 WSL2 `\\wsl$\Ubuntu\app\demo` 对应的容器目录位于 `/app/demo`）
+假设本地项目目录位于 `C:/Users/username/app/demo` 对应的容器目录位于 `/app/demo`
+假设本地项目目录位于 WSL2 `\\wsl$\Ubuntu\app\demo` 对应的容器目录位于 `/app/demo`
 
-`PHPStorm 设置`-> `Languages & ...` -> `PHP` -> `Path mappings` 添加一个条目 `C:/Users/username/app/demo` => `/app/demo`
+`PHPStorm 设置` -> `PHP` -> `Path mappings` 添加一个条目 `C:/Users/username/app/demo` => `/app/demo`
 
 ### 7. 设置 Xdebug
 
 请查看 https://github.com/khs1994-docker/lnmp/blob/master/docs/xdebug.md
-
-如果在 PhpStorm 中使用，无需开放端口，必须注释掉 `docker-compose.yml` 中的 `ports` 项
 
 ### 8. 依赖管理 Composer
 
@@ -189,7 +187,7 @@ $ lnmp-composer install [--ignore-platform-reqs]
 
 #### 在 PHPStorm 中使用
 
-`PHPStorm 设置`-> `Languages & ...` -> `PHP` ->`Test Frameworks` -> `左上角添加`
+`PHPStorm 设置` -> `PHP` ->`Test Frameworks` -> `左上角添加`
               -> `PHPUnit by Remote Interpreter` -> `选择第五步添加的 workspace`
               -> `点击 OK` -> `PHPUnit Library` -> `选择 Use Composer autoloader`
               -> `Path to script` -> 点击右边刷新按钮即可自动识别，或者手动 `填写 /app/PROJECT_NAME/vendor/autoload.php`
