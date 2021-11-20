@@ -313,7 +313,8 @@ $( $(_sudo) apt install -y libicu55 > /dev/null 2>&1 && echo libicu55) \
 $( $(_sudo) apt install -y libicu57 > /dev/null 2>&1 && echo libicu57) \
 $( $(_sudo) apt install -y libicu60 > /dev/null 2>&1 && echo libicu60) \
 $( $(_sudo) apt install -y libicu63 > /dev/null 2>&1 && echo libicu63) \
-libldap-2.4-2 \
+$( $(_sudo) apt install -y libldap-2.4-2 > /dev/null 2>&1 && echo libldap-2.4-2 ) \
+$( $(_sudo) apt install -y libldap-2.5-0 > /dev/null 2>&1 && echo libldap-2.5-0 ) \
 $( $(_sudo) apt install -y libffi6 > /dev/null 2>&1 && echo libffi6) \
 $( $(_sudo) apt install -y libffi7 > /dev/null 2>&1 && echo libffi7) \
 $( $(_sudo) apt install -y libonig4 > /dev/null 2>&1 && echo libonig4) \
