@@ -1,60 +1,60 @@
 [
   {
-    "source": "php:8.1.0RC1-cli-alpine"
+    "source": "php:8.1.0RC6-cli-alpine"
   },
   {
-    "source": "php:8.1.0RC1-fpm-alpine"
+    "source": "php:8.1.0RC6-fpm-alpine"
   },
   {
-    "source": "php:8.1.0RC1-unit-alpine"
+    "source": "php:8.1.0RC6-unit-alpine"
   },
   {
-    "source": "php:8.1.0RC1-composer-alpine"
+    "source": "php:8.1.0RC6-composer-alpine"
   },
   {
-    "source": "php:8.1.0RC1-swoole-alpine"
+    "source": "php:8.1.0RC6-swoole-alpine"
   },
   {
-    "source": "php:8.1.0RC1-s6-alpine"
+    "source": "php:8.1.0RC6-s6-alpine"
   },
   {
-    "source": "php:8.0.9-cli-alpine"
+    "source": "php:8.0.10-cli-alpine"
   },
   {
-    "source": "php:8.0.9-fpm-alpine"
+    "source": "php:8.0.10-fpm-alpine"
   },
   {
-    "source": "php:8.0.9-unit-alpine"
+    "source": "php:8.0.10-unit-alpine"
   },
   {
-    "source": "php:8.0.9-composer-alpine"
+    "source": "php:8.0.10-composer-alpine"
   },
   {
-    "source": "php:8.0.9-swoole-alpine"
+    "source": "php:8.0.10-swoole-alpine"
   },
   {
-    "source": "php:8.0.9-s6-alpine"
+    "source": "php:8.0.10-s6-alpine"
   },
   {
-    "source": "php:7.4.22-cli-alpine"
+    "source": "php:7.4.23-cli-alpine"
   },
   {
-    "source": "php:7.4.22-fpm-alpine"
+    "source": "php:7.4.23-fpm-alpine"
   },
   {
-    "source": "php:7.4.22-unit-alpine"
+    "source": "php:7.4.23-unit-alpine"
   },
   {
-    "source": "php:7.4.22-composer-alpine"
+    "source": "php:7.4.23-composer-alpine"
   },
   {
-    "source": "php:7.4.22-swoole-alpine"
+    "source": "php:7.4.23-swoole-alpine"
   },
   {
-    "source": "php:7.4.22-supervisord-alpine"
+    "source": "php:7.4.23-supervisord-alpine"
   },
   {
-    "source": "php:7.4.22-s6-alpine"
+    "source": "php:7.4.23-s6-alpine"
   },
   {
     "source": "php:7.3.30-cli-alpine"
