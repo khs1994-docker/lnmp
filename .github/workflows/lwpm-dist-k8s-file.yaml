@@ -6,7 +6,7 @@ on:
       LWPM_K8S_VERSION:
         description: k8s version
         required: true
-        default: 1.22.0
+        default: 1.23.0
 
 env:
   LWPM_K8S_VERSION: ${{ github.event.inputs.LWPM_K8S_VERSION }}
