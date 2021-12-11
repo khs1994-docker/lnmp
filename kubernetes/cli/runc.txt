@@ -27,10 +27,10 @@ USAGE:
    runc [global options] command [command options] [arguments...]
 
 VERSION:
-   1.0.1
-commit: v1.0.1-0-g4144b63
+   1.0.2
+commit: v1.0.2-0-g52b36a2
 spec: 1.0.2-dev
-go: go1.15.14
+go: go1.16.10
 libseccomp: 2.5.1
 
 COMMANDS:
