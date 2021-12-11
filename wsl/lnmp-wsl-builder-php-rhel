@@ -230,7 +230,15 @@ libxml2 \
 openssl \
 libsqlite3x \
 libxslt \
-$(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' -a "${REDHAT_SUPPORT_PRODUCT_VERSION}" != 'CentOS Stream' ];then echo libcurl-minimal; else echo libcurl ;fi ) \
+$( if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' -a "${REDHAT_SUPPORT_PRODUCT_VERSION}" != 'CentOS Stream' ];then \
+     echo libcurl-minimal; \
+   else \
+     if [ ${VERSION_ID} -ge 9 -a "${REDHAT_SUPPORT_PRODUCT_VERSION}" = 'CentOS Stream' ];then \
+       echo libcurl-minimal;
+     else \
+       echo libcurl; \
+     fi \
+   fi ) \
 $(if [ ${VERSION_ID} -ge 8 ];then echo libpq; else echo postgresql-libs ;fi ) \
 libmemcached \
 cyrus-sasl \
@@ -937,7 +945,7 @@ export VERSION_ID=`echo $VERSION_ID | cut -d '.' -f 1`
 
 $(_sudo) yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
-$(_sudo) yum install -y curl
+command -v curl > /dev/null || $(_sudo) yum install -y curl
 
 command -v pickle > /dev/null || _pickle
 command -v composer > /dev/null || _composer
