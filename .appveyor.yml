@@ -4,9 +4,10 @@ image: Visual Studio 2019
 branches:
   only:
   # - windows
-  - /^20.10$/
+  # - /^20.10$/
   - master
-  - /v*/
+  - "20.10"
+  # - /v*/
 
 # skip_non_tags: true
 clone_depth: 1
