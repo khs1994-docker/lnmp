@@ -64,22 +64,17 @@ build_script:
   - ps: Switch-DockerLinux
   # - ps: ./lnmp-docker wait-docker
   - ps: docker info
-  - ps: docker-compose --version
-  - ps: date
-  - ps: |
-      [environment]::SetEnvironmentvariable("Path", "C:\;$env:PATH","Process")
+  # - ps: |
+  #     [environment]::SetEnvironmentvariable("Path", "C:\;$env:PATH","Process")
   - ps: echo $env:PATH
-  - ps: ./lnmp-docker compose
-  - ps: get-command docker-compose
-  - ps: ./lnmp-docker compose C:\docker-compose.exe
-  - ps: date
   - ps: get-command docker-compose
   - ps: docker-compose --version
   - ps: |
       & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SharedDrives
   # - ps: ./lnmp-docker wait-docker
-  # - pwsh: Invoke-WebRequest -Uri https://github.com/docker/compose/releases/download/1.23.2/docker-compose-Windows-x86_64.exe -OutFile "C:\Program Files\Docker\Docker\Resources\bin\docker-compose.exe"
-  # - pwsh: docker-compose --version
+  - pwsh: Invoke-WebRequest -Uri https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Windows-x86_64.exe -OutFile "C:\Program Files\Docker\Docker\Resources\bin\docker-compose.exe"
+  - pwsh: docker-compose --version
+
   - pwsh: ./lnmp-docker
   - pwsh: icacls C:\Users\appveyor\lnmp /grant 'DockerExchange:f' /T | out-null
   - pwsh: icacls C:\Users\appveyor\lnmp\log /grant 'DockerExchange:f' /T
