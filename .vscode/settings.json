@@ -69,5 +69,10 @@
     "*.conflist": "json",
     "**/systemd/**/**.conf": "systemd-unit-file"
   },
-  "terminal.integrated.shell.windows": "pwsh.exe"
+  "terminal.integrated.shell.windows": "pwsh.exe",
+  "typescript.tsc.autoDetect": "off",
+  "grunt.autoDetect": "off",
+  "jake.autoDetect": "off",
+  "gulp.autoDetect": "off",
+  "npm.autoDetect": "off"
 }

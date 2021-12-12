@@ -12,10 +12,7 @@ Usage:
 
 Misc flags:
 
-      --config string            The path to the configuration file. The following flags can overwrite fields in this file:
-                                   --policy-config-file
-                                   --policy-configmap
-                                   --policy-configmap-namespace
+      --config string            The path to the configuration file.
       --master string            The address of the Kubernetes API server (overrides any value in kubeconfig)
       --write-config-to string   If set, write the configuration values to this file and exit.
 
@@ -28,17 +25,12 @@ Secure serving flags:
       --permit-port-sharing                    If true, SO_REUSEPORT will be used when binding the port, which allows more than one instance to bind on the same address and port. [default=false]
       --secure-port int                        The port on which to serve HTTPS with authentication and authorization. If 0, don't serve HTTPS at all. (default 10259)
       --tls-cert-file string                   File containing the default x509 Certificate for HTTPS. (CA cert, if any, concatenated after server cert). If HTTPS serving is enabled, and --tls-cert-file and --tls-private-key-file are not provided, a self-signed certificate and key are generated for the public address and saved to the directory specified by --cert-dir.
-      --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be used. 
-                                               Preferred values: TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256, TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384. 
+      --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be used.
+                                               Preferred values: TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256, TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384.
                                                Insecure values: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_ECDSA_WITH_RC4_128_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_RSA_WITH_RC4_128_SHA, TLS_RSA_WITH_AES_128_CBC_SHA256, TLS_RSA_WITH_RC4_128_SHA.
       --tls-min-version string                 Minimum TLS version supported. Possible values: VersionTLS10, VersionTLS11, VersionTLS12, VersionTLS13
       --tls-private-key-file string            File containing the default x509 private key matching --tls-cert-file.
       --tls-sni-cert-key namedCertKey          A pair of x509 certificate and private key file paths, optionally suffixed with a list of domain patterns which are fully qualified domain names, possibly with prefixed wildcard segments. The domain patterns also allow IP addresses, but IPs should only be used if the apiserver has visibility to the IP address requested by a client. If no domain patterns are provided, the names of the certificate are extracted. Non-wildcard matches trump over wildcard matches, explicit domain patterns trump over extracted names. For multiple key/certificate pairs, use the --tls-sni-cert-key multiple times. Examples: "example.crt,example.key" or "foo.crt,foo.key:*.foo.com,foo.com". (default [])
-
-Insecure serving flags:
-
-      --address string   DEPRECATED: the IP address on which to listen for the --port port (set to 0.0.0.0 or :: for listening in all interfaces and IP families). See --bind-address instead. This parameter is ignored if a config file is specified in --config.
-      --port int         DEPRECATED: the port on which to serve HTTP insecurely without authentication and authorization. If 0, don't serve plain HTTP at all. See --secure-port instead. This parameter is ignored if a config file is specified in --config.
 
 Authentication flags:
 
@@ -62,28 +54,24 @@ Authorization flags:
 
 Deprecated flags:
 
-      --contention-profiling                DEPRECATED: enable lock contention profiling, if profiling is enabled. This parameter is ignored if a config file is specified in --config.
-      --kube-api-burst int32                DEPRECATED: burst to use while talking with kubernetes apiserver. This parameter is ignored if a config file is specified in --config.
-      --kube-api-content-type string        DEPRECATED: content type of requests sent to apiserver. This parameter is ignored if a config file is specified in --config.
-      --kube-api-qps float32                DEPRECATED: QPS to use while talking with kubernetes apiserver. This parameter is ignored if a config file is specified in --config.
-      --kubeconfig string                   DEPRECATED: path to kubeconfig file with authorization and master location information. This parameter is ignored if a config file is specified in --config.
-      --lock-object-name string             DEPRECATED: define the name of the lock object. Will be removed in favor of leader-elect-resource-name. This parameter is ignored if a config file is specified in --config.
-      --lock-object-namespace string        DEPRECATED: define the namespace of the lock object. Will be removed in favor of leader-elect-resource-namespace. This parameter is ignored if a config file is specified in --config.
-      --policy-config-file string           DEPRECATED: file with scheduler policy configuration. This file is used if policy ConfigMap is not provided or --use-legacy-policy-config=true. Note: The predicates/priorities defined in this file will take precedence over any profiles define in ComponentConfig.
-      --policy-configmap string             DEPRECATED: name of the ConfigMap object that contains scheduler's policy configuration. It must exist in the system namespace before scheduler initialization if --use-legacy-policy-config=false. The config must be provided as the value of an element in 'Data' map with the key='policy.cfg'. Note: The predicates/priorities defined in this file will take precedence over any profiles define in ComponentConfig.
-      --policy-configmap-namespace string   DEPRECATED: the namespace where policy ConfigMap is located. The kube-system namespace will be used if this is not provided or is empty. Note: The predicates/priorities defined in this file will take precedence over any profiles define in ComponentConfig. (default "kube-system")
-      --profiling                           DEPRECATED: enable profiling via web interface host:port/debug/pprof/. This parameter is ignored if a config file is specified in --config.
-      --use-legacy-policy-config            DEPRECATED: when set to true, scheduler will ignore policy ConfigMap and uses policy config file. Note: The scheduler will fail if this is combined with Plugin configs
+      --contention-profiling           DEPRECATED: enable lock contention profiling, if profiling is enabled. This parameter is ignored if a config file is specified in --config. (default true)
+      --kube-api-burst int32           DEPRECATED: burst to use while talking with kubernetes apiserver. This parameter is ignored if a config file is specified in --config. (default 100)
+      --kube-api-content-type string   DEPRECATED: content type of requests sent to apiserver. This parameter is ignored if a config file is specified in --config. (default "application/vnd.kubernetes.protobuf")
+      --kube-api-qps float32           DEPRECATED: QPS to use while talking with kubernetes apiserver. This parameter is ignored if a config file is specified in --config. (default 50)
+      --kubeconfig string              DEPRECATED: path to kubeconfig file with authorization and master location information. This parameter is ignored if a config file is specified in --config.
+      --lock-object-name string        DEPRECATED: define the name of the lock object. Will be removed in favor of leader-elect-resource-name. This parameter is ignored if a config file is specified in --config. (default "kube-scheduler")
+      --lock-object-namespace string   DEPRECATED: define the namespace of the lock object. Will be removed in favor of leader-elect-resource-namespace. This parameter is ignored if a config file is specified in --config. (default "kube-system")
+      --profiling                      DEPRECATED: enable profiling via web interface host:port/debug/pprof/. This parameter is ignored if a config file is specified in --config. (default true)
 
 Leader election flags:
 
-      --leader-elect                             Start a leader election client and gain leadership before executing the main loop. Enable this when running replicated components for high availability.
-      --leader-elect-lease-duration duration     The duration that non-leader candidates will wait after observing a leadership renewal until attempting to acquire leadership of a led but unrenewed leader slot. This is effectively the maximum duration that a leader can be stopped before it is replaced by another candidate. This is only applicable if leader election is enabled.
-      --leader-elect-renew-deadline duration     The interval between attempts by the acting master to renew a leadership slot before it stops leading. This must be less than or equal to the lease duration. This is only applicable if leader election is enabled.
-      --leader-elect-resource-lock string        The type of resource object that is used for locking during leader election. Supported options are 'endpoints', 'configmaps', 'leases', 'endpointsleases' and 'configmapsleases'.
-      --leader-elect-resource-name string        The name of resource object that is used for locking during leader election.
-      --leader-elect-resource-namespace string   The namespace of resource object that is used for locking during leader election.
-      --leader-elect-retry-period duration       The duration the clients should wait between attempting acquisition and renewal of a leadership. This is only applicable if leader election is enabled.
+      --leader-elect                             Start a leader election client and gain leadership before executing the main loop. Enable this when running replicated components for high availability. (default true)
+      --leader-elect-lease-duration duration     The duration that non-leader candidates will wait after observing a leadership renewal until attempting to acquire leadership of a led but unrenewed leader slot. This is effectively the maximum duration that a leader can be stopped before it is replaced by another candidate. This is only applicable if leader election is enabled. (default 15s)
+      --leader-elect-renew-deadline duration     The interval between attempts by the acting master to renew a leadership slot before it stops leading. This must be less than or equal to the lease duration. This is only applicable if leader election is enabled. (default 10s)
+      --leader-elect-resource-lock string        The type of resource object that is used for locking during leader election. Supported options are 'endpoints', 'configmaps', 'leases', 'endpointsleases' and 'configmapsleases'. (default "leases")
+      --leader-elect-resource-name string        The name of resource object that is used for locking during leader election. (default "kube-scheduler")
+      --leader-elect-resource-namespace string   The namespace of resource object that is used for locking during leader election. (default "kube-system")
+      --leader-elect-retry-period duration       The duration the clients should wait between attempting acquisition and renewal of a leadership. This is only applicable if leader election is enabled. (default 2s)
 
 Feature gate flags:
 
@@ -98,55 +86,63 @@ Feature gate flags:
                                       AnyVolumeDataSource=true|false (ALPHA - default=false)
                                       AppArmor=true|false (BETA - default=true)
                                       CPUManager=true|false (BETA - default=true)
-                                      CPUManagerPolicyOptions=true|false (ALPHA - default=false)
+                                      CPUManagerPolicyAlphaOptions=true|false (ALPHA - default=false)
+                                      CPUManagerPolicyBetaOptions=true|false (BETA - default=true)
+                                      CPUManagerPolicyOptions=true|false (BETA - default=true)
                                       CSIInlineVolume=true|false (BETA - default=true)
                                       CSIMigration=true|false (BETA - default=true)
-                                      CSIMigrationAWS=true|false (BETA - default=false)
-                                      CSIMigrationAzureDisk=true|false (BETA - default=false)
+                                      CSIMigrationAWS=true|false (BETA - default=true)
+                                      CSIMigrationAzureDisk=true|false (BETA - default=true)
                                       CSIMigrationAzureFile=true|false (BETA - default=false)
-                                      CSIMigrationGCE=true|false (BETA - default=false)
+                                      CSIMigrationGCE=true|false (BETA - default=true)
                                       CSIMigrationOpenStack=true|false (BETA - default=true)
+                                      CSIMigrationPortworx=true|false (ALPHA - default=false)
                                       CSIMigrationvSphere=true|false (BETA - default=false)
                                       CSIStorageCapacity=true|false (BETA - default=true)
-                                      CSIVolumeFSGroupPolicy=true|false (BETA - default=true)
                                       CSIVolumeHealth=true|false (ALPHA - default=false)
                                       CSRDuration=true|false (BETA - default=true)
-                                      ConfigurableFSGroupPolicy=true|false (BETA - default=true)
                                       ControllerManagerLeaderMigration=true|false (BETA - default=true)
                                       CustomCPUCFSQuotaPeriod=true|false (ALPHA - default=false)
+                                      CustomResourceValidationExpressions=true|false (ALPHA - default=false)
                                       DaemonSetUpdateSurge=true|false (BETA - default=true)
                                       DefaultPodTopologySpread=true|false (BETA - default=true)
-                                      DelegateFSGroupToCSIDriver=true|false (ALPHA - default=false)
+                                      DelegateFSGroupToCSIDriver=true|false (BETA - default=true)
                                       DevicePlugins=true|false (BETA - default=true)
                                       DisableAcceleratorUsageMetrics=true|false (BETA - default=true)
                                       DisableCloudProviders=true|false (ALPHA - default=false)
-                                      DownwardAPIHugePages=true|false (BETA - default=false)
+                                      DisableKubeletCloudCredentialProviders=true|false (ALPHA - default=false)
+                                      DownwardAPIHugePages=true|false (BETA - default=true)
                                       EfficientWatchResumption=true|false (BETA - default=true)
                                       EndpointSliceTerminatingCondition=true|false (BETA - default=true)
-                                      EphemeralContainers=true|false (ALPHA - default=false)
+                                      EphemeralContainers=true|false (BETA - default=true)
                                       ExpandCSIVolumes=true|false (BETA - default=true)
                                       ExpandInUsePersistentVolumes=true|false (BETA - default=true)
                                       ExpandPersistentVolumes=true|false (BETA - default=true)
                                       ExpandedDNSConfig=true|false (ALPHA - default=false)
                                       ExperimentalHostUserNamespaceDefaulting=true|false (BETA - default=false)
-                                      GenericEphemeralVolume=true|false (BETA - default=true)
+                                      GRPCContainerProbe=true|false (ALPHA - default=false)
                                       GracefulNodeShutdown=true|false (BETA - default=true)
+                                      GracefulNodeShutdownBasedOnPodPriority=true|false (ALPHA - default=false)
                                       HPAContainerMetrics=true|false (ALPHA - default=false)
                                       HPAScaleToZero=true|false (ALPHA - default=false)
-                                      IPv6DualStack=true|false (BETA - default=true)
+                                      HonorPVReclaimPolicy=true|false (ALPHA - default=false)
+                                      IdentifyPodOS=true|false (ALPHA - default=false)
                                       InTreePluginAWSUnregister=true|false (ALPHA - default=false)
                                       InTreePluginAzureDiskUnregister=true|false (ALPHA - default=false)
                                       InTreePluginAzureFileUnregister=true|false (ALPHA - default=false)
                                       InTreePluginGCEUnregister=true|false (ALPHA - default=false)
                                       InTreePluginOpenStackUnregister=true|false (ALPHA - default=false)
+                                      InTreePluginPortworxUnregister=true|false (ALPHA - default=false)
+                                      InTreePluginRBDUnregister=true|false (ALPHA - default=false)
                                       InTreePluginvSphereUnregister=true|false (ALPHA - default=false)
                                       IndexedJob=true|false (BETA - default=true)
-                                      IngressClassNamespacedParams=true|false (BETA - default=true)
-                                      JobTrackingWithFinalizers=true|false (ALPHA - default=false)
+                                      JobMutableNodeSchedulingDirectives=true|false (BETA - default=true)
+                                      JobReadyPods=true|false (ALPHA - default=false)
+                                      JobTrackingWithFinalizers=true|false (BETA - default=true)
                                       KubeletCredentialProviders=true|false (ALPHA - default=false)
                                       KubeletInUserNamespace=true|false (ALPHA - default=false)
                                       KubeletPodResources=true|false (BETA - default=true)
-                                      KubeletPodResourcesGetAllocatable=true|false (ALPHA - default=false)
+                                      KubeletPodResourcesGetAllocatable=true|false (BETA - default=true)
                                       LocalStorageCapacityIsolation=true|false (BETA - default=true)
                                       LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (ALPHA - default=false)
                                       LogarithmicScaleDown=true|false (BETA - default=true)
@@ -156,35 +152,41 @@ Feature gate flags:
                                       NetworkPolicyEndPort=true|false (BETA - default=true)
                                       NodeSwap=true|false (ALPHA - default=false)
                                       NonPreemptingPriority=true|false (BETA - default=true)
+                                      OpenAPIEnums=true|false (ALPHA - default=false)
+                                      OpenAPIV3=true|false (ALPHA - default=false)
                                       PodAffinityNamespaceSelector=true|false (BETA - default=true)
+                                      PodAndContainerStatsFromCRI=true|false (ALPHA - default=false)
                                       PodDeletionCost=true|false (BETA - default=true)
                                       PodOverhead=true|false (BETA - default=true)
-                                      PodSecurity=true|false (ALPHA - default=false)
+                                      PodSecurity=true|false (BETA - default=true)
                                       PreferNominatedNode=true|false (BETA - default=true)
                                       ProbeTerminationGracePeriod=true|false (BETA - default=false)
                                       ProcMountType=true|false (ALPHA - default=false)
                                       ProxyTerminatingEndpoints=true|false (ALPHA - default=false)
                                       QOSReserved=true|false (ALPHA - default=false)
                                       ReadWriteOncePod=true|false (ALPHA - default=false)
+                                      RecoverVolumeExpansionFailure=true|false (ALPHA - default=false)
                                       RemainingItemCount=true|false (BETA - default=true)
                                       RemoveSelfLink=true|false (BETA - default=true)
                                       RotateKubeletServerCertificate=true|false (BETA - default=true)
                                       SeccompDefault=true|false (ALPHA - default=false)
+                                      ServerSideFieldValidation=true|false (ALPHA - default=false)
                                       ServiceInternalTrafficPolicy=true|false (BETA - default=true)
                                       ServiceLBNodePortControl=true|false (BETA - default=true)
                                       ServiceLoadBalancerClass=true|false (BETA - default=true)
                                       SizeMemoryBackedVolumes=true|false (BETA - default=true)
-                                      StatefulSetMinReadySeconds=true|false (ALPHA - default=false)
+                                      StatefulSetAutoDeletePVC=true|false (ALPHA - default=false)
+                                      StatefulSetMinReadySeconds=true|false (BETA - default=true)
                                       StorageVersionAPI=true|false (ALPHA - default=false)
                                       StorageVersionHash=true|false (BETA - default=true)
                                       SuspendJob=true|false (BETA - default=true)
-                                      TTLAfterFinished=true|false (BETA - default=true)
-                                      TopologyAwareHints=true|false (ALPHA - default=false)
+                                      TopologyAwareHints=true|false (BETA - default=false)
                                       TopologyManager=true|false (BETA - default=true)
                                       VolumeCapacityPriority=true|false (ALPHA - default=false)
                                       WinDSR=true|false (ALPHA - default=false)
                                       WinOverlay=true|false (BETA - default=true)
-                                      WindowsHostProcessContainers=true|false (ALPHA - default=false)
+                                      WindowsHostProcessContainers=true|false (BETA - default=true)
+                                      csiMigrationRBD=true|false (ALPHA - default=false)
 
 Metrics flags:
 
@@ -194,27 +196,29 @@ Metrics flags:
 
 Logs flags:
 
-      --experimental-logging-sanitization   [Experimental] When enabled prevents logging of fields tagged as sensitive (passwords, keys, tokens).
-                                            Runtime log sanitization may introduce significant computation overhead and therefore should not be enabled in production.
-      --logging-format string               Sets the log format. Permitted formats: "json", "text".
-                                            Non-default formats don't honor these flags: --add-dir-header, --alsologtostderr, --log-backtrace-at, --log-dir, --log-file, --log-file-max-size, --logtostderr, --one-output, --skip-headers, --skip-log-headers, --stderrthreshold, --vmodule, --log-flush-frequency.
-                                            Non-default choices are currently alpha and subject to change without warning. (default "text")
+      --experimental-logging-sanitization    [Experimental] When enabled prevents logging of fields tagged as sensitive (passwords, keys, tokens).
+                                             Runtime log sanitization may introduce significant computation overhead and therefore should not be enabled in production.
+      --log-flush-frequency duration         Maximum number of seconds between log flushes (default 5s)
+      --log-json-info-buffer-size quantity   [Experimental] In JSON format with split output streams, the info messages can be buffered for a while to increase performance. The default value of zero bytes disables buffering. The size can be specified as number of bytes (512), multiples of 1000 (1K), multiples of 1024 (2Ki), or powers of those (3M, 4G, 5Mi, 6Gi).
+      --log-json-split-stream                [Experimental] In JSON format, write error messages to stderr and info messages to stdout. The default is to write a single stream to stdout.
+      --logging-format string                Sets the log format. Permitted formats: "json", "text".
+                                             Non-default formats don't honor these flags: --add-dir-header, --alsologtostderr, --log-backtrace-at, --log-dir, --log-file, --log-file-max-size, --logtostderr, --one-output, --skip-headers, --skip-log-headers, --stderrthreshold, --vmodule.
+                                             Non-default choices are currently alpha and subject to change without warning. (default "text")
+  -v, --v Level                              number for the log level verbosity
+      --vmodule pattern=N,...                comma-separated list of pattern=N settings for file-filtered logging (only works for text log format)
 
 Global flags:
 
-      --add-dir-header                   If true, adds the file directory to the header of the log messages
-      --alsologtostderr                  log to standard error as well as files
+      --add-dir-header                   If true, adds the file directory to the header of the log messages (DEPRECATED: will be removed in a future release, see https://github.com/kubernetes/enhancements/tree/master/keps/sig-instrumentation/2845-deprecate-klog-specific-flags-in-k8s-components)
+      --alsologtostderr                  log to standard error as well as files (DEPRECATED: will be removed in a future release, see https://github.com/kubernetes/enhancements/tree/master/keps/sig-instrumentation/2845-deprecate-klog-specific-flags-in-k8s-components)
   -h, --help                             help for kube-scheduler
-      --log-backtrace-at traceLocation   when logging hits line file:N, emit a stack trace (default :0)
-      --log-dir string                   If non-empty, write log files in this directory
-      --log-file string                  If non-empty, use this log file
-      --log-file-max-size uint           Defines the maximum size a log file can grow to. Unit is megabytes. If the value is 0, the maximum file size is unlimited. (default 1800)
-      --log-flush-frequency duration     Maximum number of seconds between log flushes (default 5s)
-      --logtostderr                      log to standard error instead of files (default true)
-      --one-output                       If true, only write logs to their native severity level (vs also writing to each lower severity level)
-      --skip-headers                     If true, avoid header prefixes in the log messages
-      --skip-log-headers                 If true, avoid headers when opening log files
-      --stderrthreshold severity         logs at or above this threshold go to stderr (default 2)
-  -v, --v Level                          number for the log level verbosity
+      --log-backtrace-at traceLocation   when logging hits line file:N, emit a stack trace (default :0) (DEPRECATED: will be removed in a future release, see https://github.com/kubernetes/enhancements/tree/master/keps/sig-instrumentation/2845-deprecate-klog-specific-flags-in-k8s-components)
+      --log-dir string                   If non-empty, write log files in this directory (DEPRECATED: will be removed in a future release, see https://github.com/kubernetes/enhancements/tree/master/keps/sig-instrumentation/2845-deprecate-klog-specific-flags-in-k8s-components)
+      --log-file string                  If non-empty, use this log file (DEPRECATED: will be removed in a future release, see https://github.com/kubernetes/enhancements/tree/master/keps/sig-instrumentation/2845-deprecate-klog-specific-flags-in-k8s-components)
+      --log-file-max-size uint           Defines the maximum size a log file can grow to. Unit is megabytes. If the value is 0, the maximum file size is unlimited. (default 1800) (DEPRECATED: will be removed in a future release, see https://github.com/kubernetes/enhancements/tree/master/keps/sig-instrumentation/2845-deprecate-klog-specific-flags-in-k8s-components)
+      --logtostderr                      log to standard error instead of files (default true) (DEPRECATED: will be removed in a future release, see https://github.com/kubernetes/enhancements/tree/master/keps/sig-instrumentation/2845-deprecate-klog-specific-flags-in-k8s-components)
+      --one-output                       If true, only write logs to their native severity level (vs also writing to each lower severity level) (DEPRECATED: will be removed in a future release, see https://github.com/kubernetes/enhancements/tree/master/keps/sig-instrumentation/2845-deprecate-klog-specific-flags-in-k8s-components)
+      --skip-headers                     If true, avoid header prefixes in the log messages (DEPRECATED: will be removed in a future release, see https://github.com/kubernetes/enhancements/tree/master/keps/sig-instrumentation/2845-deprecate-klog-specific-flags-in-k8s-components)
+      --skip-log-headers                 If true, avoid headers when opening log files (DEPRECATED: will be removed in a future release, see https://github.com/kubernetes/enhancements/tree/master/keps/sig-instrumentation/2845-deprecate-klog-specific-flags-in-k8s-components)
+      --stderrthreshold severity         logs at or above this threshold go to stderr (default 2) (DEPRECATED: will be removed in a future release, see https://github.com/kubernetes/enhancements/tree/master/keps/sig-instrumentation/2845-deprecate-klog-specific-flags-in-k8s-components)
       --version version[=true]           Print version information and quit
-      --vmodule moduleSpec               comma-separated list of pattern=N settings for file-filtered logging

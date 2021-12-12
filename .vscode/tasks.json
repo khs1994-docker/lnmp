@@ -1,11 +1,12 @@
 {
   "version": "2.0.0",
+  // https://code.visualstudio.com/Docs/editor/tasks
   "tasks": [
     {
       "type": "shell",
-      "command": "lnmp-docker",
+      "command": "./lnmp-docker",
       "windows": {
-        "command": "lnmp-docker.ps1"
+        "command": "./lnmp-docker.ps1"
       },
       "args": [
         "config",

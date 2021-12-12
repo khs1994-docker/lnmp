@@ -20,7 +20,7 @@ services:
     &postgresql
     << : *common
     << : *common-label
-    image: ${LNMP_LIBRARY_NS:-library}/postgres:${LNMP_POSTGRESQL_VERSION:-13.3}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/postgres:${LNMP_POSTGRESQL_VERSION:-14.0}-alpine
     environment:
       # - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_PASSWORD=${LNMP_POSTGRES_PASSWORD:-mytest}

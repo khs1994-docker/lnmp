@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+        with:
+          fetch-depth: 2
+      - uses: docker-practice/actions-setup-docker@master
+      - uses: azure/docker-login@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: azure/docker-login@v1
+        with:
+          login-server: ghcr.io
+          username: khs1994
+          password: ${{ secrets.GHCR_IO_TOKEN }}
+      - run: |
+          export GITHUB_TAG=$(echo $GITHUB_REF | cut -d '/' -f 3)
+
+          # DOCKER_PUSH="--load"
+          DOCKER_PUSH="--push"
+          DOCKER_LATEST_TAG="dev"
+
+          if ! [ "$GITHUB_EVENT_NAME" = 'workflow_dispatch' ];then
+            DOCKER_IMAGES="-t ${DOCKER_IMAGE}:${GITHUB_TAG} \
+                           -t ${REGISTRY_MIRROR}/${DOCKER_IMAGE}:${GITHUB_TAG} \
+                          "
+            DOCKER_PUSH="--push"
+            DOCKER_LATEST_TAG="latest"
+          fi
+
+          docker buildx build \
+            -t ${DOCKER_IMAGE}:${DOCKER_LATEST_TAG} \
+            -t ${REGISTRY_MIRROR}/${DOCKER_IMAGE}:${DOCKER_LATEST_TAG} \
+            ${DOCKER_IMAGES} \
+            ${DOCKER_PUSH} \
+            --cache-from=ghcr.io/${DOCKER_IMAGE}:cache \
+            --cache-to=ghcr.io/${DOCKER_IMAGE}:cache \
+            .
+        env:
+          REGISTRY_MIRROR: ghcr.io
+          GITHUB_EVENT_NAME: ${{github.event_name}}
+          DOCKER_IMAGE: khs1994/kube-nginx
+        name: Build docker image

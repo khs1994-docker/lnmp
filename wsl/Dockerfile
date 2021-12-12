@@ -2,7 +2,7 @@ FROM debian:buster-slim
 
 ################################################################################
 
-ARG PHP_VERSION=8.0.9
+ARG PHP_VERSION=8.0.12
 
 ARG PHP_NUM=74
 
@@ -10,7 +10,7 @@ ARG PHP_PREFIX=/usr/local/php73
 
 ARG PHP_INI_DIR=/usr/local/etc/php73
 
-ARG COMPOSER_VERSION=2.1.8
+ARG COMPOSER_VERSION=2.1.14
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 

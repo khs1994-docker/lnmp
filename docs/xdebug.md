@@ -60,8 +60,8 @@ $ ./lnmp-docker restart php7
 ## 浏览器扩展
 
 * [火狐](https://github.com/BrianGilbert/xdebug-helper-for-firefox)
-
 * [Chrome](https://github.com/mac-cain13/xdebug-helper-for-chrome)
+* [Edge](https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen?hl=zh-CN)
 
 **在扩展配置中 IDE key 选择 PhpStorm**
 

@@ -59,7 +59,7 @@ fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=2.1.8
+export COMPOSER_VERSION=2.1.14
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
@@ -133,12 +133,12 @@ case "$1" in
      ;;
 
   nightly )
-    export PHP_NUM=81
+    export PHP_NUM=82
     export BUILD_FROM_GIT=1
     ;;
 
   * )
-    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 7.4 8.0 nightly"
+    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3[EOL] 7.4 8.0 8.1 nightly"
     exit 1
 esac
 }
@@ -313,7 +313,8 @@ $( $(_sudo) apt install -y libicu55 > /dev/null 2>&1 && echo libicu55) \
 $( $(_sudo) apt install -y libicu57 > /dev/null 2>&1 && echo libicu57) \
 $( $(_sudo) apt install -y libicu60 > /dev/null 2>&1 && echo libicu60) \
 $( $(_sudo) apt install -y libicu63 > /dev/null 2>&1 && echo libicu63) \
-libldap-2.4-2 \
+$( $(_sudo) apt install -y libldap-2.4-2 > /dev/null 2>&1 && echo libldap-2.4-2 ) \
+$( $(_sudo) apt install -y libldap-2.5-0 > /dev/null 2>&1 && echo libldap-2.5-0 ) \
 $( $(_sudo) apt install -y libffi6 > /dev/null 2>&1 && echo libffi6) \
 $( $(_sudo) apt install -y libffi7 > /dev/null 2>&1 && echo libffi7) \
 $( $(_sudo) apt install -y libonig4 > /dev/null 2>&1 && echo libonig4) \
@@ -1031,8 +1032,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=8.0.9
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=8.0.9
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=8.0.12
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=8.0.12
 
 _get_phpnum $PHP_VERSION
 

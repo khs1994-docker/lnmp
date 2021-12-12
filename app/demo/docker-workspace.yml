@@ -9,7 +9,7 @@ x-common:
 services:
   workspace:
     &workspace
-    image: khs1994/php:8.0.9-composer-alpine
+    image: khs1994/php:8.0.12-composer-alpine
     networks:
       - backend
     volumes:
@@ -51,26 +51,28 @@ services:
         target: /usr/local/etc/npmrc
       - npm-global-data:/tmp/node/npm
       - npm-cache-data:/tmp/node/.npm
-    # 如果在 PhpStorm 中使用，无需开放端口，必须注释掉 `ports` 项
-    # vsCode 运行在容器中，故必须开放 9003 供 xdebug 连接
-    ports:
-      # xdebug port
-      - 9003:9003
     command: /bin/sh -c "while sleep 1000; do :; done"
     environment:
       APP_ENV: development
       TZ: Asia/Shanghai
 
+  vscode-remote-container-workspace:
+    << : *workspace
+    ports:
+      # 如果 vsCode 运行在容器中，必须开放 9003 端口供 xdebug 连接
+      # xdebug port
+      - 9003:9003
+
   composer:
     << : *workspace
     << : *common
-    image: "khs1994/php:8.0.9-composer-alpine"
+    image: "khs1994/php:8.0.12-composer-alpine"
     command: [] # install | update
 
   npm:
     << : *workspace
     << : *common
-    image: node:16.3.0-alpine
+    image: node:16.10.0-alpine
     entrypoint: npm
     command: [] # install | "run","dev" |
 

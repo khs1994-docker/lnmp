@@ -49,7 +49,7 @@ if [ "${LNMP_CN_ENV}" != 'false' ];then
   PHP_GIT=https://github.com.cnpmjs.org/php/php-src
 fi
 
-export COMPOSER_VERSION=2.1.8
+export COMPOSER_VERSION=2.1.14
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
@@ -106,12 +106,12 @@ case "$1" in
     ;;
 
   nightly )
-    export PHP_NUM=81
+    export PHP_NUM=82
     export BUILD_FROM_GIT=1
     ;;
 
   * )
-    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 7.4 8.0 nightly"
+    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3[EOL] 7.4 8.0 8.1 nightly"
     exit 1
 esac
 }
@@ -159,7 +159,7 @@ _install_epel(){
 }
 
 _install_remi(){
-  local fedora_stable_version_id=34
+  local fedora_stable_version_id=35
   local url
   url=https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
 
@@ -171,7 +171,7 @@ _install_remi(){
       $(_sudo) wget -N $url
       $(_sudo) rpm -Uvh remi-release-${fedora_stable_version_id}.rpm
 
-      sudo sed -i 's/$releasever/34/g' /etc/yum.repos.d/remi.repo /etc/yum.repos.d/remi-modular.repo
+      sudo sed -i 's/$releasever/35/g' /etc/yum.repos.d/remi.repo /etc/yum.repos.d/remi-modular.repo
 
       return
     fi
@@ -230,7 +230,15 @@ libxml2 \
 openssl \
 libsqlite3x \
 libxslt \
-$(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' -a "${REDHAT_SUPPORT_PRODUCT_VERSION}" != 'CentOS Stream' ];then echo libcurl-minimal; else echo libcurl ;fi ) \
+$( if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' -a "${REDHAT_SUPPORT_PRODUCT_VERSION}" != 'CentOS Stream' ];then \
+     echo libcurl-minimal; \
+   else \
+     if [ ${VERSION_ID} -ge 9 -a "${REDHAT_SUPPORT_PRODUCT_VERSION}" = 'CentOS Stream' ];then \
+       echo libcurl-minimal;
+     else \
+       echo libcurl; \
+     fi \
+   fi ) \
 $(if [ ${VERSION_ID} -ge 8 ];then echo libpq; else echo postgresql-libs ;fi ) \
 libmemcached \
 cyrus-sasl \
@@ -910,10 +918,10 @@ command -v wget > /dev/null || $(_sudo) yum install -y wget
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
-    PHP_VERSION=8.0.9 ; fi
+    PHP_VERSION=8.0.12 ; fi
 
 if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
-    PHP_VERSION=8.0.9 ; fi
+    PHP_VERSION=8.0.12 ; fi
 
 _get_phpnum $PHP_VERSION
 
@@ -937,7 +945,7 @@ export VERSION_ID=`echo $VERSION_ID | cut -d '.' -f 1`
 
 $(_sudo) yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
-$(_sudo) yum install -y curl
+command -v curl > /dev/null || $(_sudo) yum install -y curl
 
 command -v pickle > /dev/null || _pickle
 command -v composer > /dev/null || _composer

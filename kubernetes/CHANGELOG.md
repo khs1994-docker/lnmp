@@ -4,6 +4,10 @@
 
 * Kubernetes `1.22.0`
 
+## v1.23.0
+
+* `kubescheduler.config.k8s.io/v1beta1` 替换为 `kubescheduler.config.k8s.io/v1beta3`
+
 ## v1.22.0
 
 * `node.k8s.io/v1beta1 RuntimeClass` is deprecated in v1.22+, unavailable in v1.25+

@@ -19,6 +19,6 @@
   },
   "url": "https://github.com/containerd/containerd/releases/download/v${VERSION}/containerd-${VERSION}-${env:lwpm_os}-amd64.tar.gz",
   "url-mirror": "https://download.fastgit.org/containerd/containerd/releases/download/v${VERSION}/containerd-${VERSION}-${env:lwpm_os}-amd64.tar.gz",
-  "version": "1.5.5",
-  "pre-version": "1.5.5"
+  "version": "1.5.8",
+  "pre-version": "1.5.8"
 }

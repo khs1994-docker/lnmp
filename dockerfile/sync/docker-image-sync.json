@@ -8,8 +8,8 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:16.3.0-alpine",
-    "dest": "library-mirror/node:16.3.0-alpine"
+    "source": "node:16.10.0-alpine",
+    "dest": "library-mirror/node:16.10.0-alpine"
   },
   {
     "source": "node:14.16.0-alpine",
@@ -104,8 +104,8 @@
     "dest": "library-mirror/mongo:latest"
   },
   {
-    "source": "library/mongo:5.0.1",
-    "dest": "library-mirror/mongo:5.0.1"
+    "source": "library/mongo:5.0.3",
+    "dest": "library-mirror/mongo:5.0.3"
   },
   {
     "source": "library/kong:latest",
@@ -128,8 +128,8 @@
     "dest": "library-mirror/redis:alpine"
   },
   {
-    "source": "library/redis:5.0.11-alpine",
-    "dest": "library-mirror/redis:5.0.11-alpine"
+    "source": "library/redis:5.0.31-alpine",
+    "dest": "library-mirror/redis:5.0.31-alpine"
   },
   {
     "source": "library/redis:6.0.11-alpine",
@@ -144,8 +144,8 @@
     "dest": "library-mirror/memcached:alpine"
   },
   {
-    "source": "library/memcached:1.6.9-alpine",
-    "dest": "library-mirror/memcached:1.6.9-alpine"
+    "source": "library/memcached:1.6.10-alpine",
+    "dest": "library-mirror/memcached:1.6.10-alpine"
   },
   {
     "source": "library/nginx:alpine",
@@ -156,8 +156,8 @@
     "dest": "library-mirror/nginx:1.20.0-alpine"
   },
   {
-    "source": "library/nginx:1.21.1-alpine",
-    "dest": "library-mirror/nginx:1.21.1-alpine"
+    "source": "library/nginx:1.21.3-alpine",
+    "dest": "library-mirror/nginx:1.21.3-alpine"
   },
   {
     "source": "library/httpd:alpine",
@@ -172,8 +172,8 @@
     "dest": "library-mirror/postgres:alpine"
   },
   {
-    "source": "library/postgres:13.3-alpine",
-    "dest": "library-mirror/postgres:13.3-alpine"
+    "source": "library/postgres:14.0-alpine",
+    "dest": "library-mirror/postgres:14.0-alpine"
   },
   {
     "source": "library/rabbitmq:alpine",
@@ -228,13 +228,13 @@
     "dest": "dockerpracticesig/docker_practice:us-en"
   },
   {
-    "source": "khs1994/acme:2.9.0"
+    "source": "khs1994/acme:3.0.0"
   },
   {
     "source": "khs1994/tls"
   },
   {
-    "source": "khs1994/kube-nginx:1.21.1"
+    "source": "khs1994/kube-nginx:1.21.3"
   },
   {
     "source": "khs1994/kube-nginx"
@@ -249,7 +249,7 @@
     "source": "khs1994/nginx:alpine"
   },
   {
-    "source": "khs1994/nginx:1.21.1-alpine"
+    "source": "khs1994/nginx:1.21.3-alpine"
   },
   {
     "source": "khs1994/docker-image-sync:latest"
