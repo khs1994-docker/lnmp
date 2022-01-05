@@ -56,9 +56,9 @@
 
 |名称|本机|容器|
 |--|--|--|
-|`docker.cnf`       |`./config/mysql/docker.cnf`       |`/etc/mysql/conf.d/docker.cnf` |
+|`docker.cnf`       |`./config/mysql/conf.d`          |`/etc/mysql/conf.d` |
 |`error.log`        |`./log/mysql/error.log`          |`/var/log/mysql/error.log`     |
-|`/var/lib/mysql/`  |`mysql-data`                      |`/var/lib/mysql`               |
+|`/var/lib/mysql/`  |`mysql-data`                     |`/var/lib/mysql`               |
 
 ### MariaDB
 

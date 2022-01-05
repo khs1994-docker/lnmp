@@ -187,6 +187,10 @@ Function New-InitFile() {
     New-Item -ItemType File config/redis/redis.conf
   }
 
+  if (!(Test-Path config/mysql/conf.d/my.cnf)) {
+    New-Item -ItemType File config/mysql/conf.d/my.cnf
+  }
+
   _cp_only_not_exists docker-lnmp.override.example.yml docker-lnmp.override.yml
 
   _cp_only_not_exists docker-workspace.example.yml docker-workspace.yml

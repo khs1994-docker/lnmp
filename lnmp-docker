@@ -96,6 +96,10 @@ if ! [ -f config/redis/redis.conf ];then
   echo "#" > config/redis/redis.conf
 fi
 
+if ! [ -f config/mysql/conf.d/my.cnf ];then
+  echo "#" > config/mysql/conf.d/my.cnf
+fi
+
 _cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
 _cp_only_not_exists config/php8/php-cli.example.ini config/php8/php-cli.ini
 _cp_only_not_exists config/php8/docker-php.example.ini config/php8/docker-php.ini

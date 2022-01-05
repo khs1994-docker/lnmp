@@ -20,17 +20,35 @@
 
 ## MySQL
 
-**1.** 示例配置文件：`./config/mysql/docker.cnf`
+**1.** 示例配置文件：`./config/mysql/conf.d/docker.cnf`
 
-**2.** 在示例配置文件夹内 `./config/mysql/` 复制 `docker.cnf` 为 `docker.my.cnf`
+**2.** 在示例配置文件夹内 `./config/mysql` 复制 `conf.d` 为 `conf.my.d`
 
-**3.** 在 `.env` 文件内修改 `LNMP_MYSQL_CONF` 变量值为 `docker.my.cnf`
+**3.** 在 `.env` 文件内修改 `LNMP_MYSQL_CONF_D` 变量值为 `conf.my.d`
+
+> Windows 用户注意事项
+
+```bash
+...
+mysqld: [Warning] World-writable config file '/etc/mysql/conf.d/docker.cnf' is ignored.
+...
+```
+
+由于 MySQL 会检查配置文件权限（如上），在 Windows 使用的开发者，首先请执行如下命令修改配置文件权限
+
+```bash
+$ docker exec -it <mysql 容器 ID> bash
+
+$ chmod 644 -R /etc/mysql/conf.d
+
+$ ./lnmp-docker restart mysql
+```
 
 ### 修改默认数据文件夹
 
-假设自定义文件夹为 `/var/lib/mysql-my` (必须为绝对路径)
+假设你想把数据放到为 `/var/lib/mysql-my`
 
-在 `docker.my.cnf` 中增加如下配置
+在 `conf.my.d/my.cnf` （新建该文件）中增加如下配置
 
 ```bash
 [mysqld]

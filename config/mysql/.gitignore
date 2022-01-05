@@ -3,3 +3,6 @@
 !default
 !docker.cnf
 !docker.production.cnf
+!conf.d
+conf.d/*
+!conf.d/docker.cnf

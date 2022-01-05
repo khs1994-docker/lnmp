@@ -31,7 +31,7 @@ services:
     ports:
       - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
-      - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf
+      - ./config/mariadb/${LNMP_MARIADB_CONF_D:-conf.d}:/etc/mysql/conf.d
       # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
       - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro
       - type: volume

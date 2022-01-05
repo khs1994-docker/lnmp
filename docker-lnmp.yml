@@ -48,7 +48,7 @@ services:
       - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
       - "${LNMP_MYSQL_PORT_X:-127.0.0.1:33060}:33060"
     volumes:
-      - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
+      - ./config/mysql/${LNMP_MYSQL_CONF_D:-conf.d}:/etc/mysql/conf.d
       # @link https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
       - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro
       - type: volume
