@@ -168,7 +168,7 @@ services:
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_80:-8.0.12}
-        - OS_TYPE=rockylinux/rockylinux:8
+        - OS_TYPE=rockylinux:8
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.12}-rocky-8_amd64
 
   wsl-php-builder-fc35-73:

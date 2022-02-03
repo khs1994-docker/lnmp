@@ -152,7 +152,11 @@ _download_src(){
 
 # 2. install packages
 
+# https://docs.fedoraproject.org/en-US/epel/
+
 _install_epel(){
+  if [ -f /etc/yum.repos.d/epel.repo ];then return; fi
+
   $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION_ID}.noarch.rpm
 
   $(_sudo) rpm -Uvh epel-release-latest-${VERSION_ID}.noarch.rpm
@@ -207,6 +211,7 @@ _libzip(){
 #
 
     if [ ${VERSION_ID} -ge 8 ];then
+      if [ ${VERSION_ID} -ge 9 ];then _install_epel;fi
       $(_sudo) dnf install -y pkgconf-pkg-config
       $(_sudo) dnf install -y libzip libzip-devel
 
@@ -228,7 +233,6 @@ _libzip(){
 zlib \
 libxml2 \
 openssl \
-libsqlite3x \
 libxslt \
 $( if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' -a "${REDHAT_SUPPORT_PRODUCT_VERSION}" != 'CentOS Stream' ];then \
      echo libcurl-minimal; \
@@ -240,7 +244,12 @@ $( if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' -a "${REDHAT_SUPPORT_PRODUCT_VE
      fi \
    fi ) \
 $(if [ ${VERSION_ID} -ge 8 ];then echo libpq; else echo postgresql-libs ;fi ) \
-libmemcached \
+$( if [ ${VERSION_ID} -ge 9 -a ${ID} != 'fedora' ];then \
+     echo "sqlite-libs"; \
+   else \
+     echo "libsqlite3x libmemcached aspell libc-client"; \
+   fi \
+) \
 cyrus-sasl \
 freetype \
 libpng \
@@ -255,19 +264,25 @@ libyaml \
 bzip2 \
 libexif \
 gmp \
-libc-client \
 readline \
 libicu \
 libXpm \
 libwebp \
 enchant \
 openldap \
-aspell \
 libffi \
 krb5-libs \
 oniguruma"
 
 # $(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then true; else echo libtidy ;fi ) \
+
+if [ ${VERSION_ID} -ge 9 -a ${ID} != 'fedora' ];then
+  $(_sudo) dnf --enablerepo=crb install -y \
+                                libmemcached-awesome \
+                                aspell
+  $(_sudo) dnf install -y https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
+  $(_sudo) dnf install -y libc-client
+fi
 
 $(_sudo) yum install -y ${PHP_DEP} rpm-build > /dev/null
 }
@@ -286,11 +301,15 @@ _install_php_build_dep(){
                    zlib-devel \
                    libxml2-devel \
                    openssl-devel \
-                   libsqlite3x-devel \
+                   $( if [ ${VERSION_ID} -ge 9 -a ${ID} != 'fedora' ];then \
+                        echo "sqlite-devel"; \
+                      else \
+                        echo "libsqlite3x-devel libmemcached-devel aspell-devel uw-imap-devel"; \
+                      fi \
+                    ) \
                    libxslt-devel \
                    libcurl-devel \
                    $(if [ ${VERSION_ID} -ge 8 ];then echo libpq-devel; else echo postgresql-devel ;fi ) \
-                   libmemcached-devel \
                    cyrus-sasl-devel \
                    freetype-devel \
                    libpng-devel \
@@ -310,7 +329,6 @@ _install_php_build_dep(){
                    bzip2-devel \
                    libexif-devel \
                    gmp-devel \
-                   libc-client-devel \
                    readline-devel \
                    libicu-devel \
                    libXpm-devel \
@@ -318,7 +336,6 @@ _install_php_build_dep(){
                    libwebp-devel \
                    enchant-devel \
                    openldap-devel \
-                   aspell-devel \
                    libffi-devel \
                    krb5-devel \
                    oniguruma-devel \
@@ -330,9 +347,23 @@ do
     echo $soft | $(_sudo) tee -a ${PHP_INSTALL_LOG}
 done
 
-if [ $VERSION_ID -ge 8 -a ${ID} != 'fedora' ];then
+if [ $VERSION_ID -eq 8 -a ${ID} != 'fedora' ];then
   $(_sudo) dnf install -y 'dnf-command(config-manager)'
   $(_sudo) dnf config-manager --enable powertools
+fi
+
+# if [ $VERSION_ID -ge 9 -a ${ID} != 'fedora' ];then
+#   $(_sudo) dnf install -y 'dnf-command(config-manager)'
+    # https://developers.redhat.com/blog/2018/11/15/introducing-codeready-linux-builder
+#   $(_sudo) dnf config-manager --enable crb
+# fi
+
+if [ ${VERSION_ID} -ge 9 -a ${ID} != 'fedora' ];then
+  $(_sudo) dnf --enablerepo=crb install -y \
+                                 libmemcached-awesome-devel \
+                                 aspell-devel
+  $(_sudo) dnf install -y https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
+  $(_sudo) dnf install -y uw-imap-devel
 fi
 
 $(_sudo) yum install -y ${DEP_SOFTS}
