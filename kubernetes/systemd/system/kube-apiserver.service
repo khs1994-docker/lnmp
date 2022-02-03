@@ -86,7 +86,6 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --feature-gates="IPv6DualStack=true" \
 #
 ;
---insecure-port=0 \
 # --logging-format=json \
 --v=2
 
