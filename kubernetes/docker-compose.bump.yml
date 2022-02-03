@@ -5,7 +5,7 @@ services:
     image: k8s.gcr.io/kube-apiserver:v1.23.0
 
   k8s_dashboard:
-    image: kubernetesui/dashboard:v2.3.1
+    image: kubernetesui/dashboard:v2.4.0
 
   coredns:
     image: k8s.gcr.io/coredns/coredns:v1.8.0
