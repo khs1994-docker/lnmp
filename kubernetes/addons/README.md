@@ -18,7 +18,7 @@
 
 ## CNI
 
-* [calico](https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/) `3.20`
+* [calico](https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/) `3.21`
 
 ## CI/CD
 
