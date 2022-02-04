@@ -41,7 +41,7 @@ $ ./lnmp-docker up
 
 ## PHP 相关的 vsCode 扩展
 
-* `felixfbecker.php-debug`
+* `xdebug.php-debug`
 * 更多扩展请查看 https://github.com/khs1994-docker/lnmp/blob/master/.devcontainer/devcontainer.json **extensions** 项
 
 ## 步骤

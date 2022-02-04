@@ -12,11 +12,12 @@
       // "ms-vscode-remote.vscode-remote-extensionpack",
       "ms-vscode-remote.remote-wsl",
       "ms-vscode-remote.remote-containers",
-      "ms-vscode.powershell",
+      // "ms-vscode-remote.remote-ssh",
+      "ms-vscode.powershell-preview",
       "editorconfig.editorconfig",
       "ivory-lab.jenkinsfile-support",
       // "ms-python.vscode-pylance",
-      "felixfbecker.php-debug",
+      "xdebug.php-debug",
       "mikestead.dotenv",
       "be5invis.toml"
   ]

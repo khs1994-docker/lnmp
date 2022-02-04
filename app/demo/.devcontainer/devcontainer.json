@@ -20,7 +20,7 @@
   // [Optional] If you are using SSH keys w/Git, copy them and set correct permissions
   // "postCreateCommand": "mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*"
   "extensions": [
-    "felixfbecker.php-debug",
+    "xdebug.php-debug",
     "editorconfig.editorconfig"
   ],
   "settings": {

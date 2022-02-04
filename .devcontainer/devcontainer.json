@@ -17,7 +17,7 @@
   "workspaceFolder": "/app",
   "shutdownAction": "stopCompose", // none stopCompose
   "extensions": [
-     "felixfbecker.php-debug",
+     "xdebug.php-debug",
      "editorconfig.editorconfig",
      // php doc
      "neilbrayfield.php-docblocker",
