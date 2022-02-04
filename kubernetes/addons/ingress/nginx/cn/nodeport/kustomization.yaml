@@ -1,9 +1,12 @@
 resources:
 - ../../nodeport
 images:
-  - name: k8s.gcr.io/ingress-nginx/controller:v1.0.0@sha256:0851b34f69f69352bf168e6ccf30e1e20714a264ab1ecd1933e4d8c0fc3215c6
-    newName: ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller
-    newTag: v1.0.0@sha256:0851b34f69f69352bf168e6ccf30e1e20714a264ab1ecd1933e4d8c0fc3215c6
-  - name: k8s.gcr.io/ingress-nginx/kube-webhook-certgen:v1.0@sha256:f3b6b39a6062328c095337b4cadcefd1612348fdd5190b1dcbcb9b9e90bd8068
-    newName: ccr.ccs.tencentyun.com/khs1994/nginx-ingress-kube-webhook-certgen
-    newTag: v1.0@sha256:f3b6b39a6062328c095337b4cadcefd1612348fdd5190b1dcbcb9b9e90bd8068
+  - name: k8s.gcr.io/ingress-nginx/controller:v1.1.1@sha256:0bc88eb15f9e7f84e8e56c14fa5735aaa488b840983f87bd79b1054190e660de
+    # newName: ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller
+    newTag: v1.1.1@sha256:0bc88eb15f9e7f84e8e56c14fa5735aaa488b840983f87bd79b1054190e660de
+    newName: registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-ingress-controller
+
+  - name: k8s.gcr.io/ingress-nginx/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+    # newName: ccr.ccs.tencentyun.com/khs1994/nginx-ingress-kube-webhook-certgen
+    newTag: v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+    newName: registry.cn-hangzhou.aliyuncs.com/google_containers/kube-webhook-certgen
