@@ -392,7 +392,7 @@ jobs:
 
          kubectl apply -f addons/coredns/coredns.yaml
          kubectl apply -k addons/dashboard
-         kubectl apply -k addons/metrics-server
+         kubectl apply -k addons/metrics-server/base
          kubectl apply -k addons/ingress/nginx/nodeport
 
          sleep 100

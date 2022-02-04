@@ -1,11 +1,11 @@
 # Metrics Server
 
-> 本文基于 0.5.x 版本。
+> 本文基于 0.6.x 版本。
 
 * https://github.com/kubernetes-sigs/metrics-server/tree/master/manifests/base
 
 ```bash
-$ kubectl apply -k addons/metrics-server
+$ kubectl apply -k addons/metrics-server/base
 ```
 
 ```bash
@@ -29,7 +29,7 @@ $ kubectl top pod -A
 unable to fully collect metrics: unable to fully scrape metrics from source kubelet_summary:node1: unable to fetch metrics from Kubelet node1 (192.168.199.100): Get https://192.168.199.100:10250/stats/summary?only_cpu_and_memory=true: x509: cannot validate certificate for 192.168.199.100 because it doesn't contain any IP SANs
 ```
 
-修改 `addons/metrics-server/metrics-server-deployment.yaml`,增加 `- --kubelet-insecure-tls`。
+修改 `addons/metrics-server/base/metrics-server-deployment.yaml`,增加 `- --kubelet-insecure-tls`。
 
 ```bash
 $ kubectl edit -n kube-system deployment/metrics-server

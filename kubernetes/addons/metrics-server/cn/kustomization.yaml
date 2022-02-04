@@ -1,0 +1,7 @@
+resources:
+  - "../base"
+images:
+  - name: k8s.gcr.io/metrics-server/metrics-server:v0.6.0
+    # newName: ccr.ccs.tencentyun.com/gcr-mirror/metrics-server
+    newName: registry.cn-hangzhou.aliyuncs.com/google_containers/metrics-server
+    newTag: v0.6.0
