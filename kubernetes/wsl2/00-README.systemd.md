@@ -62,7 +62,7 @@ $ Invoke-WSLK8S systemctl status kube-apiserver
 $ Invoke-WSLK8S systemctl status kube-controller-manager
 $ Invoke-WSLK8S systemctl status kube-scheduler
 
-$ Invoke-WSLK8S systemctl status cri-containerd@1.5
+$ Invoke-WSLK8S systemctl status cri-containerd@1.6
 $ Invoke-WSLK8S systemctl status kubelet@cri-containerd
 
 # 你也可以执行其他命令供调试
