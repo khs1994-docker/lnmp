@@ -48,7 +48,7 @@ virt-shutdown     [1|2|3]
 
 # write ssh pub
 
-if ! [ -f $HOME/.ssh/id_rsa.pub ];then 
+if ! [ -f $HOME/.ssh/id_rsa.pub ];then
    echo "please exec '$ ssh-keygen' generate id_rsa.pub file"
 
    exit 1
@@ -163,10 +163,8 @@ case "$1" in
       --boot1 dvd \
       --nic2 bridged \
       --nic1 hostonly \
-      --nic3 hostonly \
       --bridgeadapter2 $(test `uname -s` = 'Linux' && (ip route list | grep default | awk '{print $5}') || echo 'en0' ) \
-      --hostonlyadapter1 vboxnet1 \
-      --hostonlyadapter3 vboxnet2
+      --hostonlyadapter1 vboxnet1
 
       VBoxManage createmedium --filename "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi" --size 100000
 

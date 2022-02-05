@@ -132,7 +132,8 @@ systemd:
 
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStartPre=mkdir -p /opt/k8s/var/log/kubernetes
+        ExecStartPre=/usr/bin/env mkdir -p /opt/k8s/var/log/kubernetes/kube-apiserver
+        ExecStartPre=/usr/bin/env touch    /opt/k8s/var/log/kubernetes/kube-apiserver/audit.log
 
         ExecStart=/bin/podman run \
         --name kube-apiserver \
@@ -426,7 +427,7 @@ storage:
       mode: 0644
       contents:
         inline: |
-          apiVersion: kubescheduler.config.k8s.io/v1beta1
+          apiVersion: kubescheduler.config.k8s.io/v1beta3
           kind: KubeSchedulerConfiguration
           clientConnection:
             burst: 200
@@ -434,10 +435,8 @@ storage:
             qps: 100
           enableContentionProfiling: false
           enableProfiling: true
-          healthzBindAddress: {{IP_{{n}}}}:10251
           leaderElection:
             leaderElect: true
-          metricsBindAddress: {{IP_{{n}}}}:10251
     - path: ${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml
       mode: 0644
       contents:
