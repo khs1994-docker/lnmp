@@ -1,0 +1,14 @@
+# Server specifies the default server. When `host` is also specified,
+# those hosts are tried first.
+server = "https://k8s.gcr.io"
+# ca = "/etc/path/default"
+# [header]
+#   x-custom-1 = "custom header"
+[host."https://registry.cn-hangzhou.aliyuncs.com"]
+  capabilities = ["pull", "resolve"]
+  # capabilities = ["pull", "resolve", "push"]
+  # ca = "/etc/certs/mirror.pem"
+  # client = ["/etc/certs/client-1.pem", "/etc/certs/client-2.pem"]
+  skip_verify = false
+  # [host."https://registry.cn-hangzhou.aliyuncs.com".header]
+  #   x-custom-2 = ["value1", "value2"]

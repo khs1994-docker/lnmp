@@ -75,6 +75,11 @@ oom_score = 0
             SystemdCgroup = true
             # BinaryName = "runc"
             # BinaryName = "crun"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun]
+          runtime_type = "io.containerd.runc.v2"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun.options]
+            BinaryName = "crun"
+            SystemdCgroup = true
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1]
           # runtime_type = "io.containerd.runtime.v1.linux"
           runtime_type = "io.containerd.runc.v1"

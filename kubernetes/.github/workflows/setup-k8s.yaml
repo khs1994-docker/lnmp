@@ -390,9 +390,9 @@ jobs:
          df -h
          ip addr
 
-         kubectl apply -f addons/coredns/coredns.yaml
+         kubectl apply -k addons/coredns
          kubectl apply -k addons/dashboard
-         kubectl apply -k addons/metrics-server/base
+         kubectl apply -k addons/metrics-server
          kubectl apply -k addons/ingress/nginx/nodeport
 
          sleep 100

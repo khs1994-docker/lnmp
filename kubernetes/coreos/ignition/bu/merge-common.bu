@@ -17,7 +17,7 @@ systemd:
         [Service]
         Type=oneshot
         RemainAfterExit=yes
-        ExecStart=/usr/bin/rpm-ostree install --allow-inactive ipset
+        ExecStart=/usr/bin/rpm-ostree install --allow-inactive ipset conntrack-tools
         ExecStart=/bin/touch /var/lib/rpm-ostree-install-ipset.stamp
         ExecStart=/bin/systemctl --no-block reboot
 

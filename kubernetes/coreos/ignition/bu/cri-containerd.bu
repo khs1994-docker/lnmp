@@ -64,6 +64,10 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/etc/cri-containerd/1.6/config.toml
+    - path: /opt/k8s/etc/cri-containerd/1.6/certs.d/docker.io/hosts.toml
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/cri-containerd/certs.d/docker.io/hosts.toml
     - path: ${K8S_ROOT}/etc/cni/net.d/99-loopback.conf
       mode: 0644
       contents:

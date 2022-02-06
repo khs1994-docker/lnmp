@@ -1,0 +1,7 @@
+resources:
+- ../base
+images:
+- name: k8s.gcr.io/coredns/coredns
+  # newName: gcr.mirror/google-containers/coredns
+  newName: ccr.ccs.tencentyun.com/gcr-mirror/coredns
+  # newName: registry.cn-hangzhou.aliyuncs.com/google_containers/coredns

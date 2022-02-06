@@ -106,7 +106,6 @@ systemd:
           --election-timeout=2000
 
         ExecStop=/bin/podman stop etcd
-        ExecStopPost=/bin/podman container rm etcd
 
         # ExecStartPost
         # ExecReload：重启当前服务时执行的命令

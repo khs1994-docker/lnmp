@@ -83,11 +83,13 @@ $ ./coreos server
 ```bash
 # create VirtualBox vm
 # 安装第一个节点 N 为 1，以此类推
+# [local] 若为单节点则 N 为 1
 $ ./coreos new-vm N
 
 # 启动虚拟机，在终端执行以下命令
 
 # 节点 1 设置 NODE_NAME 为 1，以此类推
+# [local] 若为单节点则为 local
 $ curl 192.168.57.1:8080/bin/coreos.sh | NODE_NAME=1 bash
 
 # 关机
@@ -116,6 +118,14 @@ $ ./coreos umount-iso N
 $ sudo chown -R core:core ~/.kube
 ```
 
+## 签署 CSR
+
+```bash
+$ kubectl get csr
+
+$ kubectl certificate approve csr-xxxxx
+```
+
 **部署 CNI -- calico**
 
 ```bash
@@ -125,7 +135,11 @@ $ kubectl apply -f /home/core/calico.yaml
 **部署 CoreDNS**
 
 ```bash
-$ kubectl apply -f http://192.168.57.1:8080/addons/coredns/coredns.yaml
+# 项目目录 kubernetes 目录下执行
+$ kubectl kustomize addons/coredns/cn > addons/coredns/cn/coredns.yaml
+
+# 虚拟机终端执行
+$ kubectl apply -f http://192.168.57.1:8080/addons/coredns/cn/coredns.yaml
 ```
 
 ## 测试 k8s 集群功能
