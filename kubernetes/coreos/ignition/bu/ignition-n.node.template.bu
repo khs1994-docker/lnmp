@@ -89,7 +89,6 @@ systemd:
         --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
         --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
         --hostname-override=coreos{{n}} \
-        --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
         --v=2
 
@@ -184,7 +183,7 @@ storage:
           maxPods: 220
           podCIDR: "10.244.0.0/16"
           podPidsLimit: -1
-          resolvConf: /etc/resolv.conf
+          resolvConf: /run/systemd/resolve/resolv.conf
           maxOpenFiles: 1000000
           kubeAPIQPS: 1000
           kubeAPIBurst: 2000
@@ -206,10 +205,9 @@ storage:
           systemReservedCgroup: ""
           kubeReservedCgroup: ""
           enforceNodeAllocatable: ["pods"]
-          # volumePluginDir: ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+          volumePluginDir: ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
           featureGates:
             # AllAlpha: true
-            # BoundServiceAccountTokenVolume: false
     - path: ${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml
       mode: 0644
       contents:

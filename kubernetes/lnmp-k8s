@@ -1127,6 +1127,7 @@ encryption-config.yaml} \
 }
 
 # https://github.com/kubernetes/kubeadm/issues/273
+# https://www.cnblogs.com/k8s/p/12067580.html
 # 16.04 not use systemd-resolved
 # 18.04 use systemd-resolved
 
