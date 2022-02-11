@@ -165,5 +165,13 @@
     "registry": "k8s.gcr.io",
     "image": "pause",
     "ref": "3.6"
+  },
+  {
+    "source": "k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.3.0",
+    "dest": "gcr-mirror/kube-state-metrics:v2.3.0"
+  },
+  {
+    "source": "k8s.gcr.io/prometheus-adapter/prometheus-adapter:v0.9.1",
+    "dest": "gcr-mirror/prometheus-adapter:v0.9.1"
   }
 ]
