@@ -6,9 +6,9 @@ $ kubectl apply -k service
 
 ## 将 etcd 客户端证书放入 certs
 
-* ca.pem
-* cert.pem
-* key.pem
+* etcd-ca.pem
+* etcd-client.pem
+* etcd-client-key.pem
 
 ## 创建 prometheus-serviceMonitorEtcd
 

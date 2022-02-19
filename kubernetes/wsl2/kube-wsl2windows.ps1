@@ -20,7 +20,7 @@
 
   # kube-scheduler
 
-  ./kube-wsl2windows 10251 192.168.199.100:10251
+  ./kube-wsl2windows 10259 192.168.199.100:10259
 
   # kube-controller-manager
 
@@ -77,9 +77,10 @@ $WINDOWS_HOST = "0.0.0.0"
 
 if ($args[0] -eq 'k8s') {
   Start-wsl2windows 6443  ${WINDOWS_HOST}:16443
-  Start-wsl2windows 10251 ${WINDOWS_HOST}:10251
+  Start-wsl2windows 10259 ${WINDOWS_HOST}:10259
   Start-wsl2windows 10257 ${WINDOWS_HOST}:10257
   Start-wsl2windows 10249 ${WINDOWS_HOST}:10249
+  Start-wsl2windows 2379 ${WINDOWS_HOST}:2379
 
   Start-wsl2windows 2049  ${WINDOWS_HOST}:2049
 
@@ -93,7 +94,7 @@ if ($args[0] -eq 'k8s') {
 
 if ($args[0] -eq 'k8s-stop') {
   Stop-wsl2windows ${WINDOWS_HOST}:16443, `
-    ${WINDOWS_HOST}:10251, `
+    ${WINDOWS_HOST}:10259, `
     ${WINDOWS_HOST}:10257, `
     ${WINDOWS_HOST}:10249, `
     ${WINDOWS_HOST}:2049

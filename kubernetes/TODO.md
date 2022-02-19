@@ -4,7 +4,7 @@
 
 * 10248  kubelet         healthz
 * 10249  kube-proxy      metrics
-* 10251  kube-scheduler  metrics healthz(1.23移除)
+* 10251  kube-scheduler  metrics healthz(v1.23移除)
 * 10256  kube-proxy      healthz
 
 ## 移除 Docker 相关内容

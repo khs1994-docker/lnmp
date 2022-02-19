@@ -20,7 +20,7 @@ spec:
           service:
             name: alertmanager-main
             port:
-            number: 9093
+              number: 9093
   - host: grafana.t.khs1994.com
     http:
       paths:

@@ -4,8 +4,8 @@ namespace: monitoring
 secretGenerator:
   - name: etcd-client-tls
     files:
-      - certs/ca.pem
-      - certs/cert.pem
-      - certs/key.pem
+      - ca.pem=certs/etcd-ca.pem
+      - cert.pem=certs/etcd-client.pem
+      - key.pem=certs/etcd-client-key.pem
 generatorOptions:
   disableNameSuffixHash: true

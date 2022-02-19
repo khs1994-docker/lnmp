@@ -7,7 +7,5 @@ clientConnection:
   qps: 100
 enableContentionProfiling: false
 enableProfiling: true
-healthzBindAddress: ##NODE_IP##:10251
 leaderElection:
   leaderElect: true
-metricsBindAddress: ##NODE_IP##:10251
