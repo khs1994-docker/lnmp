@@ -2,15 +2,19 @@
   "name": "conmon",
   "platform": [
     {
-      "os": "linux",
-      "architecture": "amd64"
+      "architecture": "amd64",
+      "os": "linux"
+    },
+    {
+      "architecture": "arm64",
+      "os": "linux"
     }
   ],
   "scripts": {
     "dist": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/conmon `\n|| curl -L `\n  $url-${VERSION} `\n  -o $env:LWPM_PKG_ROOT/dist/conmon `\n",
     "platform-reqs": "if(!$IsLinux){echo $False}"
   },
-  "url": "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon",
-  "url-mirror": "https://download.fastgit.org/containers/conmon/releases/download/v${VERSION}/conmon",
-  "version": "2.0.24"
+  "url": "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}",
+  "url-mirror": "https://download.fastgit.org/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}",
+  "version": "2.0.27"
 }

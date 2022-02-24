@@ -2,17 +2,19 @@
   "name": "runc",
   "platform": [
     {
-      "architecture": "amd64",
-      "os": "linux"
+      "os": "linux",
+      "architecture": "amd64"
+    },
+    {
+      "os": "linux",
+      "architecture": "arm64"
     }
   ],
   "scripts": {
-    "platform-reqs": [
-      "if(!$IsLinux){echo $False}"
-    ],
-    "dist": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/runc\n"
+    "dist": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/runc\n",
+    "platform-reqs": "if(!$IsLinux){echo $False}"
   },
-  "url": "https://github.com/opencontainers/runc/releases/download/v${VERSION}/runc.amd64",
-  "url-mirror": "https://download.fastgit.org/opencontainers/runc/releases/download/v${VERSION}/runc.amd64",
-  "version": "1.0.1"
+  "url": "https://github.com/opencontainers/runc/releases/download/v${VERSION}/runc.${env:lwpm_architecture}",
+  "url-mirror": "https://download.fastgit.org/opencontainers/runc/releases/download/v${VERSION}/runc.${env:lwpm_architecture}",
+  "version": "1.1.0"
 }

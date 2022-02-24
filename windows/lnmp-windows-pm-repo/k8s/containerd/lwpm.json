@@ -1,24 +1,28 @@
 {
   "hash-url": {
-    "sha256": "https://github.com/containerd/containerd/releases/download/v${VERSION}/containerd-${VERSION}-${env:lwpm_os}-amd64.tar.gz.sha256sum"
+    "sha256": "https://github.com/containerd/containerd/releases/download/v${VERSION}/cri-containerd-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz.sha256sum"
   },
   "name": "containerd",
   "platform": [
     {
-      "os": "linux",
-      "architecture": "amd64"
+      "architecture": "amd64",
+      "os": "linux"
     },
     {
-      "os": "windows",
-      "architecture": "amd64"
+      "architecture": "arm64",
+      "os": "linux"
+    },
+    {
+      "architecture": "amd64",
+      "os": "windows"
     }
   ],
+  "pre-version": "1.6.0",
   "scripts": {
     "dist": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$filename\n",
     "platform-reqs": "if($IsMacOs){echo $False}"
   },
-  "url": "https://github.com/containerd/containerd/releases/download/v${VERSION}/containerd-${VERSION}-${env:lwpm_os}-amd64.tar.gz",
-  "url-mirror": "https://download.fastgit.org/containerd/containerd/releases/download/v${VERSION}/containerd-${VERSION}-${env:lwpm_os}-amd64.tar.gz",
-  "version": "1.5.8",
-  "pre-version": "1.5.8"
+  "url": "https://github.com/containerd/containerd/releases/download/v${VERSION}/cri-containerd-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz",
+  "url-mirror": "https://download.fastgit.org/containerd/containerd/releases/download/v${VERSION}/cri-containerd-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz",
+  "version": "1.6.0"
 }

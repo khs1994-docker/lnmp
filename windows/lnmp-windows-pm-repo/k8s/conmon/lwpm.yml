@@ -1,7 +1,7 @@
 name: conmon
-version: 2.0.24
-url: "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon"
-url-mirror: https://download.fastgit.org/containers/conmon/releases/download/v${VERSION}/conmon
+version: 2.0.27
+url: "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}"
+url-mirror: https://download.fastgit.org/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}
 scripts:
   dist: |
     _mkdir $env:LWPM_PKG_ROOT/dist
@@ -15,4 +15,6 @@ scripts:
   platform-reqs: if(!$IsLinux){echo $False}
 platform:
   - architecture: amd64
+    os: linux
+  - architecture: arm64
     os: linux
