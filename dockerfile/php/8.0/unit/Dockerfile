@@ -7,7 +7,7 @@ FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ENV NGINX_UNIT_VERSION=1.24.0
+ENV NGINX_UNIT_VERSION=1.26.1
 
 RUN set -x \
   && mkdir -p /usr/src/unit \
