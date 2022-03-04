@@ -27,12 +27,12 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 \
     # COMPOSER_MEMORY_LIMIT= \
     COMPOSER_PROCESS_TIMEOUT=300 \
     # COMPOSER_SELF_UPDATE_TARGET= \
-    COMPOSER_VERSION=2.2.4 \
+    COMPOSER_VERSION=2.2.7 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:2.2.4,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:2.2.7,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .composer_deps $COMPOSER_DEP_APKS \
     && { echo "memory_limit=-1"; \
@@ -48,7 +48,7 @@ RUN --mount=type=bind,from=composer:2.2.4,source=/usr/bin/composer,target=/opt/b
  #        exit(1); \
  #    }" \
  # && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
-    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/2.2/docker-entrypoint.sh \
+    && curl -fsSL https://raw.githubusercontent.com/composer/docker/622ed016babc9c89ab72f7fe6b037f6a312f0f0a/2.2/docker-entrypoint.sh \
          -o /docker-entrypoint.composer \
     && chmod +x /docker-entrypoint.composer \
     && cp -a /opt/bin/composer /usr/bin/composer \
