@@ -1,4 +1,5 @@
 # https://github.com/MicrosoftDocs/WSL/releases/tag/18945
+# https://github.com/MicrosoftDocs/WSL/blob/main/WSL/wsl-config.md#configuration-setting-for-wslconfig
 
 #
 # file path windows ~/.wslconfig
@@ -24,3 +25,18 @@ nestedVirtualization=true
 
 # time_in_ms
 vmIdleTimeout=10000
+
+# guiApplications=false
+
+# debugConsole=false
+
+# macAddress=FF:FF:FF:FF:FF:FF
+
+# dhcp
+
+# dhcpTimeout
+
+# ipv6=true
+
+# networkingMode=bridged
+# vmSwitch=替换成你创建的虚拟交换机名称
