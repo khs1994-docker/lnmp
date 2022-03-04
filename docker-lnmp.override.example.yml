@@ -11,7 +11,7 @@ x-common:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 #
-# 这里的文件具有最高优先级，可以通过以下命令查看最终的 compose 文件
+# 此文件具有最高优先级，可以通过以下命令查看最终的 compose 文件
 #
 # $ ./lnmp-docker config > docker-compose.yaml
 #

@@ -148,9 +148,9 @@ services:
           nocopy: false
       # if /run is tmpfs, s6 can't run
       # - type: tmpfs
-      #  target: /run
-        # tmpfs:
-        #   size: 1000
+      #   target: /run
+      #   tmpfs:
+      #     size: 1000
     networks:
       frontend:
         aliases:
