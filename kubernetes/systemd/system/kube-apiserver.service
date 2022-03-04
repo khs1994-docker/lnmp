@@ -72,7 +72,6 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --runtime-config=api/all=true \
 --enable-admission-plugins=NodeRestriction \
 --allow-privileged=true \
---apiserver-count=1 \
 --event-ttl=168h \
 --kubelet-certificate-authority=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
 --kubelet-client-certificate=${K8S_ROOT}/etc/kubernetes/pki/apiserver-kubelet-client.pem \
