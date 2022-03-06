@@ -1,6 +1,6 @@
 name: "php"
 description: "PHP is a popular general-purpose scripting language that is especially suited to web development"
-version: "8.0.13"
+version: "8.1.0"
 pre-version: "8.1.0"
 homepage: "https://www.php.net/"
 bug: "https://www.php.net/"
@@ -143,7 +143,7 @@ scripts:
     $global:PHP_PREFIX="C:\php-pre"
     }else{
     $VC_VERSION="nts-Win32-vs16"
-    $url="https://windows.php.net/downloads/releases/php-${VERSION}-${VC_VERSION}-x64.zip"
+    $url="https://windows.php.net/downloads/releases/archives/php-${VERSION}-${VC_VERSION}-x64.zip"
     $unzipDesc="php"
     $global:PHP_PREFIX="C:\php"
     }

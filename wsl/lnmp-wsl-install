@@ -59,7 +59,7 @@ NODE_VERSION=16.10.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=8.0.13
+PHP_VERSION=8.0.14
 
 MYSQL_DEB_VERSION=0.8.13-1
 
@@ -111,9 +111,9 @@ _php(){
   # command -v docker > /dev/null || exit 1
 
   # include redis memcached
-  # default install latest php version (8.0.13)
+  # default install latest php version (8.0.14)
 
-  PHP_VERSION=${1:-8.0.13}
+  PHP_VERSION=${1:-8.0.14}
 
   case ${PHP_VERSION} in
     5.6.* )
@@ -144,13 +144,17 @@ _php(){
       export PHP_NUM=80
       ;;
 
-    nightly )
+    8.1.* )
       export PHP_NUM=81
+      ;;
+
+    nightly )
+      export PHP_NUM=82
       PHP_VERSION=0.0.0
       ;;
 
     * )
-      echo "ONLY SUPPORT 5.6.x 7.0.x 7.1.x 7.2.x 7.3.x 7.4.x nightly"
+      echo "ONLY SUPPORT 5.6.x 7.0.x 7.1.x 7.2.x 7.3.x 7.4.x 8.0.x 8.1.x nightly"
       exit 1
   esac
 

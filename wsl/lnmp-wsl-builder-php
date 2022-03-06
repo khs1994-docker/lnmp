@@ -1032,8 +1032,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=8.0.13
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=8.0.13
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=8.0.14
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=8.0.14
 
 _get_phpnum $PHP_VERSION
 

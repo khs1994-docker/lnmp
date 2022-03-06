@@ -1,10 +1,10 @@
 # Changelog
 
-## v20.10.13
+## v20.10.14
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/v20.10.12...v20.10.13
+* https://github.com/khs1994-docker/lnmp/compare/v20.10.13...20.10
 
 ### Bug fixes:
 
@@ -12,4 +12,4 @@
 
 ### Updates:
 
-* [PHP `8.0.13` `7.4.26` `7.3.33`](https://www.php.net/ChangeLog-8.php#8.0.13)
+* [PHP `8.1.0` `8.0.14` `7.4.27`](https://www.php.net/ChangeLog-8.php#8.0.14)
