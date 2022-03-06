@@ -10,7 +10,7 @@ jobs:
   release:
     strategy:
       fail-fast: false
-      # max-parallel: 1
+      max-parallel: 5
       matrix:
         include:
           - JOB_NAME: wsl-php-builder-73
