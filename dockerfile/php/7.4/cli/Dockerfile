@@ -212,7 +212,8 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
   && docker-php-source extract \
-  && cp /usr/include/gnu-libiconv/*.h /usr/include \
+  && rm -vf /usr/include/iconv.h \
+  && ln -sv /usr/include/gnu-libiconv/*.h /usr/include/ \
   && cd /usr/src/php \
 # enchant-2.patch
   && curl -fsSL -o enchant-2.patch https://raw.githubusercontent.com/alpinelinux/aports/b315e28b96f16c2a8973a55a736e1e35482203dd/community/php7/enchant-2.patch \

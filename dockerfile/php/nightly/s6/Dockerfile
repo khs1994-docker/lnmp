@@ -12,7 +12,8 @@ RUN --mount=type=bind,from=khs1994/s6:3.1.0.1,source=/,target=/tmp/s6 \
     && tar -xvf /tmp/s6/s6-overlay-noarch.tar.xz -C / \
     && tar -xvf /tmp/s6/s6-overlay.tar.xz -C / \
 # https://github.com/MinchinWeb/docker-base/commit/f5e350dcf3523a424772a1e42a3dba3200d7a2aa
-    && ln -s /init /s6-init
+    && ln -s /init /s6-init \
+    && ln -s /command/elgetopt /usr/local/bin/
 
 VOLUME [ "/etc/services.d"]
 

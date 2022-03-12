@@ -272,7 +272,7 @@ jobs:
         docker buildx build --push \
         --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
         --build-arg USERNAME=${DOCKER_HUB_USERNAME} \
-        -t ${DOCKER_HUB_USERNAME}/php:7.1-custom custom/7.1
+        -t ${DOCKER_HUB_USERNAME}/php:8.1-custom custom/7.1
         echo "::endgroup::"
 
         echo "::group::Build full custom"
@@ -285,7 +285,7 @@ jobs:
         --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
         --build-arg USERNAME=${DOCKER_HUB_USERNAME} \
         --push \
-        -t ${DOCKER_HUB_USERNAME}/php:7.3-full-custom 7.3/fpm
+        -t ${DOCKER_HUB_USERNAME}/php:8.1-full-custom 8.1/fpm
         echo "::endgroup::"
       env:
         GITHUB_EVENT_NAME: ${{github.event_name}}

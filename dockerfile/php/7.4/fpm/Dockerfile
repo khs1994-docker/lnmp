@@ -110,7 +110,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          # tidyhtml-dev \
                          # libxslt-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
-        && apk add --no-cache --repository http://${ALPINE_URL}/alpine/v3.13/community/ gnu-libiconv=1.15-r3 \
+        && if ! [ -f /usr/bin/gnu-iconv ];then \
+              apk add --no-cache --repository http://${ALPINE_URL}/alpine/v3.13/community/ gnu-libiconv=1.15-r3;fi \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS patch \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
         && curl -fsSL -o /usr/local/bin/pickle \

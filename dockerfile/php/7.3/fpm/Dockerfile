@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:labs
 ARG PHP_VERSION=7.3.33
 
-FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.13 as php
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -78,7 +78,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          enchant2 \
                          c-client \
                          icu-libs \
-                         gnu-libiconv \
+                         # gnu-libiconv \
                          zstd-libs \
                          ${APK_EXTRA:-} \
                          " \
@@ -114,6 +114,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          # libxslt-dev \
                          # yaml-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
+        && if ! [ -f /usr/bin/gnu-iconv ];then \
+              apk add --no-cache --repository http://${ALPINE_URL}/alpine/v3.13/community/ gnu-libiconv=1.15-r3;fi \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS patch \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
         && curl -fsSL -o /usr/local/bin/pickle \
