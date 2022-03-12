@@ -31,4 +31,5 @@ chmod -R +x /etc/services.d
 
 # exec
 # exec $@
-exec s6-svscan -t0 /etc/services.d
+
+exec /command/s6-svscan -t0 /etc/services.d
