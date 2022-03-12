@@ -139,7 +139,8 @@ services:
       - ./log/supervisord.log:/var/log/supervisord.log
       - ./log/supervisord:/var/log/supervisord
       # s6
-      - ./config/s6/services.d:/etc/services.d
+      - ./config/s6/${S6_SERVICES_D:-services.d}:/etc/services.d
+      - ./config/s6/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
       - ./config/crontabs/root:/etc/crontabs/root
       - type: volume
         source: zoneinfo-data
@@ -190,7 +191,8 @@ services:
       # - ./log/supervisord.log:/var/log/supervisord.log
       # - ./log/supervisord:/var/log/supervisord
       # s6
-      - ./config/s6/services.d:/etc/services.d
+      - ./config/s6/${S6_SERVICES_D:-services.d}:/etc/services.d
+      - ./config/s6/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
       - ./config/crontabs/root:/etc/crontabs/root
       - type: volume
         source: zoneinfo-data
