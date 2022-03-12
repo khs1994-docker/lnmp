@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+if test -f ./setup; then
+    source ./setup
+fi
+
+mkdir -p /var/log/laravel-horizon
+chown nobody:nogroup /var/log/laravel-horizon
+
+exec php /app/laravel/artisan horizon
