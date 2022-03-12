@@ -5,7 +5,6 @@ FROM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine
 
 # 扩展源码在 PHP 源码
 ENV PHP_CORE_EXT \
-    wddx \
     xsl
 
 ENV PHP_PECL_EXT \

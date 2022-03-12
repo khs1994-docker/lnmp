@@ -268,7 +268,7 @@ jobs:
         echo "::group::Build full custom"
 
         docker buildx build \
-        --build-arg PHP_EXTENSION_EXTRA="wddx xsl" \
+        --build-arg PHP_EXTENSION_EXTRA="xsl" \
         --build-arg PECL_EXTENSION_EXTRA="imagick msgpack" \
         --build-arg APK_EXTRA="libxslt imagemagick-libs libgomp musl" \
         --build-arg APK_DEV_EXTRA="libxslt-dev imagemagick-dev imagemagick" \
