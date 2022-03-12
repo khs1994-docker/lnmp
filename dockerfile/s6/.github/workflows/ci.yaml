@@ -1,4 +1,6 @@
-on: push
+on:
+  - push
+  - workflow_dispatch
 
 name: ci
 
@@ -22,8 +24,8 @@ jobs:
           set -x
           docker buildx build \
           -t khs1994/s6 \
-          -t khs1994/s6:2.2.0.3 \
-          -t khs1994/s6:2 \
+          -t khs1994/s6:3.1.0.1 \
+          -t khs1994/s6:3 \
           --platform=linux/arm64,linux/arm/v7,linux/amd64 \
           --push \
           .
