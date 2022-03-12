@@ -47,7 +47,7 @@ ENV PHP_EXTENSION \
       ${PHP_EXTENSION_EXTRA:-}
 
 ENV PECL_EXTENSION \
-      mongodb \
+      mongodb@1.11.1 \
       igbinary \
       redis \
       memcached \

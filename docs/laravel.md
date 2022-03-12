@@ -102,6 +102,7 @@ APP_ROOT=/app
 
 ```powershell
 # .env.ps1
+# 请将 Ubuntu 换成你使用的 WSL2 名称
 $WSL2_DIST="Ubuntu"
 ```
 
@@ -190,6 +191,7 @@ LNMP_SERVICES="nginx mysql php7 redis vscode-remote-container-workspace"
 
 ```powershell
 # .env.ps1
+# 请将 Ubuntu 换成你使用的 WSL2 名称
 $WSL2_DIST="ubuntu"
 ```
 
