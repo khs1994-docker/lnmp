@@ -6,10 +6,11 @@ ARG BASE=fpm
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
-RUN --mount=type=bind,from=khs1994/s6:2.2.0.3,source=/,target=/tmp/s6 \
+RUN --mount=type=bind,from=khs1994/s6:3.1.0.1,source=/,target=/tmp/s6 \
     --network=none \
     set -x \
-    && tar -zxvf /tmp/s6/s6-overlay.tar.gz -C / \
+    && tar -xvf /tmp/s6/s6-overlay-noarch.tar.xz -C / \
+    && tar -xvf /tmp/s6/s6-overlay.tar.xz -C / \
 # https://github.com/MinchinWeb/docker-base/commit/f5e350dcf3523a424772a1e42a3dba3200d7a2aa
     && ln -s /init /s6-init
 
@@ -31,7 +32,7 @@ ENV S6_KEEP_ENV=0 \
 
 # ENTRYPOINT ["/s6-init"]
 
-ENTRYPOINT ["s6-svscan", "-t0", "/etc/services.d"]
+ENTRYPOINT ["/command/s6-svscan", "-t0", "/etc/services.d"]
 
 ARG VCS_REF="unknow"
 
