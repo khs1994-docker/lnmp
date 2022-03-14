@@ -35,7 +35,7 @@ services:
     image: phpmyadmin:5.1.1
 
   httpd:
-    image: httpd:2.4.49-alpine
+    image: httpd:2.4.53-alpine
 
   minio:
     image: minio/minio:RELEASE.2021-07-08T01-15-01Z
