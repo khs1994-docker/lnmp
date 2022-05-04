@@ -95,8 +95,8 @@
     "dest": "gcr-mirror/git-sync:v3.1.6"
   },
   {
-    "source": "quay.io/coreos/etcd:v3.5.1",
-    "dest": "quay-mirror/etcd:v3.5.1"
+    "source": "quay.io/coreos/etcd:v3.5.4",
+    "dest": "quay-mirror/etcd:v3.5.4"
   },
   {
     "source": "quay.io/coreos/flannel:v0.12.0-amd64",

@@ -40,7 +40,7 @@ $ set -x
 $ source ./wsl2/.env
 
 $ mkdir -p ${K8S_ROOT:?err}/bin
-$ cp -a kubernetes-release/release/v1.23.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin
+$ cp -a kubernetes-release/release/v1.24.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin
 ```
 
 在 `Windows` 中执行
