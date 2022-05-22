@@ -1,8 +1,8 @@
 {
   "name": "vim",
   "description": "Vi IMproved - enhanced vi editor",
-  "version": "8.2.1456",
-  "pre-version": "8.2.1456",
+  "version": "8.2.4995",
+  "pre-version": "8.2.4995",
   "homepage": "https://www.vim.org/",
   "bug": "https://github.com/vim/vim-win32-installer/issues",
   "github": "vim/vim-win32-installer",

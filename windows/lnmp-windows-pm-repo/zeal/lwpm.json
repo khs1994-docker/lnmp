@@ -11,7 +11,7 @@
   "url-mirror": "https://download.fastgit.org/zealdocs/zeal/releases/download/v${VERSION}/zeal-${VERSION}-windows-x64.msi",
   "command": "${env:ProgramFiles}\\Zeal\\zeal.exe",
   "scripts": {
-    "install": "Start-Process -FilePath $filename -wait",
+    "install": "Start-Process -FilePath 'C:\\windows\\system32\\msiexec.exe' -ArgumentList \"/i $filename /passive\" -Wait",
     "test": "ls 'C:\\Program Files\\Zeal\\zeal.exe'",
     "version": "echo ${VERSION}",
     "platform-reqs": [

@@ -1,17 +1,13 @@
 {
   "name": "vclib",
-  "description": "Microsoft Visual C++ Redistributable for Visual Studio 2019",
-  "version": "16.0.0",
-  "pre-version": "16.0.0",
-  "homepage": "https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads",
+  "description": "Microsoft Visual C++ 2015-2022 Redistributable (x64)",
+  "version": "17",
+  "pre-version": "17",
+  "homepage": "https://docs.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist",
   "bug": "",
   "github": "",
-  "releases": "",
-  "url": "https://aka.ms/vs/16/release/VC_redist.x64.exe",
-  "$comment": [
-    "https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads",
-    "https://www.microsoft.com/en-us/download/details.aspx?id=40784"
-  ],
+  "releases": "https://docs.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist",
+  "url": "https://aka.ms/vs/${VERSION}/release/vc_redist.x64.exe",
   "scripts": {
     "platform-reqs": "if(!$IsWindows){echo $False}",
     "install": [

@@ -628,6 +628,12 @@ function __homepage($soft) {
 
 function __releases($soft) {
   $lwpm = manifest $soft
+  if (!$lwpm.releases) {
+    if ($lwpm.github) {
+      Start-Process -FilePath "https://github.com/$($lwpm.github)/releases"
+      exit
+    }
+  }
   start-process $lwpm.releases
 }
 

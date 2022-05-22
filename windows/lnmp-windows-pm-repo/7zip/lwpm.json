@@ -1,13 +1,13 @@
 {
   "name": "7zip",
   "description": "7-Zip is a file archiver with a high compression ratio",
-  "version": "1900",
-  "pre-version": "2102",
+  "version": "2107",
+  "pre-version": "2107",
   "homepage": "https://www.7-zip.org/",
   "bug": "https://www.7-zip.org/support.html",
   "github": "",
-  "releases": "https://www.7-zip.org/download.html",
-  "url": "https://www.7-zip.org/a/7z${VERSION}-x64.exe",
+  "releases": "https://github.com/microsoft/winget-pkgs/tree/master/manifests/7/7zip/7zip",
+  "url": "https://www.7-zip.org/a/7z${VERSION}-x64.msi",
   "command": "7z.exe",
   "scripts": {
     "version": [
@@ -16,9 +16,12 @@
       "$VERSION_X + $VERSION_Y"
     ],
     "install": [
-      "Start-Process -FilePath $filename -wait"
+      "Start-Process -FilePath 'C:\\windows\\system32\\msiexec.exe' -ArgumentList \"/i $filename /passive\" -Wait"
     ],
-    "uninstall": "& $env:programFiles\\7-Zip\\Uninstall.exe",
+    "uninstall": [
+      "printinfo please uninstall 7-zip in settings",
+      "Start-Process ms-settings:appsfeatures"
+    ],
     "test": [
       "write-host 7-zip $((7z.exe).split(' ')[2]) already install"
     ],

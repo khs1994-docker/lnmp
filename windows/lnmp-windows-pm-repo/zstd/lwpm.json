@@ -1,8 +1,8 @@
 {
   "name": "zstd",
   "description": "Zstandard - Fast real-time compression algorithm",
-  "version": "1.4.9",
-  "pre-version": "1.4.9",
+  "version": "1.5.2",
+  "pre-version": "1.5.2",
   "homepage": "",
   "bug": "",
   "github": "facebook/zstd",
@@ -20,11 +20,13 @@
       ""
     ],
     "install": [
-      "_unzip $filename C:\\bin"
+      "_unzip $filename C:\\bin",
+      "_cleanup C:\\bin\\zstd",
+      "mv C:\\bin\\zstd-v${VERSION}-win64 C:\\bin\\zstd"
     ],
     "postinstall": "",
     "preuninstall": "",
-    "uninstall": "_cleanup C:\\bin\\zstd.exe",
+    "uninstall": "_cleanup C:\\bin\\zstd",
     "postuninstall": "",
     "pruneuninstall": "",
     "pretest": "",
@@ -33,6 +35,6 @@
     "version": "(zstd --version).split(' ')[6].trim(',').trim('v')"
   },
   "path": [
-    "C:\\bin"
+    "C:\\bin\\zstd"
   ]
 }

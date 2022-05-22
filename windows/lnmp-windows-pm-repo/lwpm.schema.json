@@ -304,6 +304,10 @@
       "type": "string",
       "description": "download filename"
     },
+    "winget-pkgs": {
+      "type": "string",
+      "description": "microsoft/winget-pkgs GitHub page"
+    },
     "$comment": {
       "type": [
         "string",

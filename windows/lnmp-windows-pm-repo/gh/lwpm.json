@@ -1,8 +1,8 @@
 {
   "name": "gh",
-  "description": "GitHub’s official command line tool",
-  "version": "1.12.1",
-  "pre-version": "1.12.1",
+  "description": "GitHub's official command line tool",
+  "version": "2.10.1",
+  "pre-version": "2.10.1",
   "homepage": "https://cli.github.com/",
   "bug": "https://github.com/cli/cli/issues",
   "github": "cli/cli",

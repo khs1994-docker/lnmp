@@ -1,12 +1,12 @@
 {
   "name": "idea",
   "description": "Manage your tools the easy way",
-  "version": "1.21.9712",
-  "pre-version": "1.21.9712",
+  "version": "1.24.11947",
+  "pre-version": "1.24.11947",
   "homepage": "https://www.jetbrains.com/",
   "bug": "",
   "github": "",
-  "releases": "",
+  "releases": "https://github.com/microsoft/winget-pkgs/tree/master/manifests/j/JetBrains/Toolbox",
   "url": "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${VERSION}.$(if($IsWindows){echo exe}else{echo dmg})",
   "command": "${env:APPDATA}\\..\\Local\\JetBrains\\Toolbox\\bin\\jetbrains-toolbox.exe",
   "scripts": {

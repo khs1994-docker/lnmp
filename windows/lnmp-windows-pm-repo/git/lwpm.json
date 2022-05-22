@@ -1,8 +1,8 @@
 {
   "name": "git",
   "description": "Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency",
-  "version": "2.31.1",
-  "pre-version": "2.31.1",
+  "version": "2.36.1",
+  "pre-version": "2.36.1",
   "homepage": "https://git-scm.com/",
   "bug": "https://git-scm.com/community",
   "github": "git/git",
