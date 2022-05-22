@@ -9,7 +9,7 @@ FROM alpine as downloader
 # Sami an API documentation generator https://github.com/FriendsOfPHP/Sami
 # Doctum, a PHP API documentation generator. Fork of Sami https://github.com/code-lts/doctum
 
-ARG DOCTUM_VERSION=5.4.1
+ARG DOCTUM_VERSION=5.5.1
 
 RUN set -x ; apk add --no-cache curl \
     && curl -fsSL https://doctum.long-term.support/releases/${DOCTUM_VERSION}/doctum.phar -o /usr/local/bin/doctum \

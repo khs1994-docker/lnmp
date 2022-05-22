@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:labs
 
-ARG PHP_VERSION=7.4.27
+ARG PHP_VERSION=8.0.14
 ARG USERNAME=khs1994
 ARG BASE=composer
 
@@ -8,7 +8,7 @@ FROM alpine as downloader
 
 # https://github.com/phpmd/phpmd
 
-ARG PHPMD_VERSION=2.9.1
+ARG PHPMD_VERSION=2.11.1
 
 RUN set -x ; apk add --no-cache curl \
     && curl -fsSL https://github.com/phpmd/phpmd/releases/download/${PHPMD_VERSION}/phpmd.phar \
