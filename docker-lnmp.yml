@@ -153,12 +153,14 @@ services:
       #   tmpfs:
       #     size: 1000
     networks:
-      frontend:
-        aliases:
-        - php
-      backend:
-        aliases:
-        - php
+      - frontend
+      - backend
+      # frontend:
+      #   aliases:
+      #   - php
+      # backend:
+      #   aliases:
+      #   - php
     expose:
       - "9000"
     command: php-fpm -R -F
@@ -201,8 +203,14 @@ services:
           nocopy: false
       - << : *tmpfs
     networks:
-      - frontend
-      - backend
+      # - frontend
+      # - backend
+      frontend:
+        aliases:
+        - php
+      backend:
+        aliases:
+        - php
     expose:
       - "9000"
     command: php-fpm -R -F
