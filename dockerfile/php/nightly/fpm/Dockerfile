@@ -306,7 +306,6 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            # opcache 已默认安装，需要自行载入
                            opcache \
                            zip \
-                           # iconv \
                            ffi \
                            ${PHP_EXTENSION_EXTRA:-} \
   && echo "extension=exif" > $PHP_INI_DIR/conf.d/docker-php-ext-z-exif.ini \
