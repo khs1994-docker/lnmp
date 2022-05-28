@@ -16,4 +16,4 @@ jobs:
           "envs": []
           }'
         env:
-          CODING_PASSWORD: ${{secrets.CODING_LWPM_K8S_CI_PASSWORD}}
+          CODING_PASSWORD: ${{secrets.CODING_CI_PCIT_PASSWORD}}

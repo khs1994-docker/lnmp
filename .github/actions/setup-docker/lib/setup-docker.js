@@ -102,7 +102,7 @@ async function run() {
   if (platform === 'win32') {
     core.debug('check platform');
     await exec.exec('echo',
-      [`Only Support Linux and macOS platform, this platform is ${os.platform()}`]);
+      [`::error::Only Support Linux and macOS platform, this platform is ${os.platform()}`]);
 
     return
   }
@@ -125,11 +125,12 @@ async function run() {
 
     core.startGroup('install docker')
     // await exec.exec('brew', ['update'])
-    await exec.exec('wget', ['https://raw.githubusercontent.com/Homebrew/homebrew-cask/300b1dcc6d9f61cc93e9351e76066f0846beefe9/Casks/docker.rb']);
+    // await exec.exec('wget', ['https://raw.githubusercontent.com/Homebrew/homebrew-cask/300b1dcc6d9f61cc93e9351e76066f0846beefe9/Casks/docker.rb']);
+    await exec.exec('wget', ['https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/docker.rb']);
     await exec.exec('brew', [
       'install',
       '--cask',
-      // DOCKER_CHANNEL !== 'stable' ? 'docker' : 'docker'
+      // DOCKER_CHANNEL !== 'stable' ? 'docker' : 'docker',
       'docker.rb',
     ]);
     core.endGroup();
@@ -147,79 +148,41 @@ async function run() {
     ]);
     core.endGroup();
 
-    // allow the app to run without confirmation
-    await exec.exec('xattr', [
-      '-d',
-      '-r',
-      'com.apple.quarantine',
-      '/Applications/Docker.app'
+    core.startGroup('start docker step1');
+    // https://github.com/docker/for-mac/issues/2359#issuecomment-943131345
+    await exec.exec('sudo',[
+      '/Applications/Docker.app/Contents/MacOS/Docker',
+      '--unattended',
+      '--install-privileged-components'
     ]);
-
-    // preemptively do docker.app's setup to avoid any gui prompts
-    core.startGroup('start docker');
+    core.endGroup();
+    core.startGroup('start docker step2');
+    await exec.exec('open',[
+      '-a',
+      '/Applications/Docker.app',
+      '--args',
+      '--unattended',
+      '--accept-license'
+    ]);
+    core.endGroup();
+    core.startGroup('wait docker running');
     await exec.exec('sudo', [
       'bash',
       '-c',
       `
 set -x
-
-VmnetdVersion=$(cat /Applications/Docker.app/Contents/Info.plist | tail -5 | head -1 | cut -d '>' -f 2 | cut -d '<' -f 1)
-
-cat <<EOF | tee /tmp/com.docker.vmnetd.plist
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>Label</key>
-	<string>com.docker.vmnetd</string>
-	<key>Program</key>
-	<string>/Library/PrivilegedHelperTools/com.docker.vmnetd</string>
-	<key>ProgramArguments</key>
-	<array>
-		<string>/Library/PrivilegedHelperTools/com.docker.vmnetd</string>
-	</array>
-	<key>RunAtLoad</key>
-	<true/>
-	<key>Sockets</key>
-	<dict>
-		<key>Listener</key>
-		<dict>
-			<key>SockPathMode</key>
-			<integer>438</integer>
-			<key>SockPathName</key>
-			<string>/var/run/com.docker.vmnetd.sock</string>
-		</dict>
-	</dict>
-	<key>Version</key>
-	<string>\${VmnetdVersion}</string>
-</dict>
-</plist>
-EOF
-
-sudo /bin/cp /Applications/Docker.app/Contents/Library/LaunchServices/com.docker.vmnetd /Library/PrivilegedHelperTools
-# sudo /bin/cp /Applications/Docker.app/Contents/Resources/com.docker.vmnetd.plist /Library/LaunchDaemons/
-sudo /bin/cp /tmp/com.docker.vmnetd.plist /Library/LaunchDaemons/
-sudo /bin/chmod 544 /Library/PrivilegedHelperTools/com.docker.vmnetd
-sudo /bin/chmod 644 /Library/LaunchDaemons/com.docker.vmnetd.plist
-sudo /bin/launchctl load /Library/LaunchDaemons/com.docker.vmnetd.plist
-open -g /Applications/Docker.app || exit
-
-sleep 60
-
-docker info > /dev/null || true
-
-sleep 30
-
-docker info > /dev/null || true
-# Wait for the server to start up, if applicable.
+command -v docker || echo 'test docker command 1: not found'
 i=0
-while ! docker system info &>/dev/null; do
+while ! /Applications/Docker.app/Contents/Resources/bin/docker system info &>/dev/null; do
 (( i++ == 0 )) && printf %s '-- Waiting for Docker to finish starting up...' || printf '.'
+command -v docker || echo 'test docker command loop: not found'
 sleep 1
+# wait 180s(3min)
+if [ $i -gt 180 ];then sudo /Applications/Docker.app/Contents/MacOS/com.docker.diagnose check;uname -a;system_profiler SPHardwareDataType;echo "::error::-- Wait docker start $i s too long, exit"; exit 1; fi
 done
-(( i )) && printf '\n'
-
-echo "-- Docker is ready."
+echo "::notice::-- Docker is ready.Wait time is $i s"
+uname -a || true
+system_profiler SPHardwareDataType || true
 `]);
     core.endGroup();
 
@@ -290,7 +253,7 @@ echo "-- Docker is ready."
     await exec.exec('sudo', [
       'sh',
       '-c',
-      "apt remove -y moby-buildx moby-cli moby-containerd moby-engine moby-runc"
+      "apt remove -y moby-buildx moby-cli moby-compose moby-containerd moby-engine moby-runc"
     ]).catch(() => { });
     core.endGroup();
 
@@ -367,7 +330,7 @@ echo "-- Docker is ready."
         `cat /etc/os-release | grep VERSION_ID | cut -d '=' -f 2`
       );
 
-      core.warning(`Docker ${DOCKER_VERSION} not available on ubuntu ${OS}, install latest docker version`);
+      core.warning(`Docker ${DOCKER_VERSION} not available on ubuntu ${OS}, will install latest docker version`);
     }
 
     message = 'install docker'

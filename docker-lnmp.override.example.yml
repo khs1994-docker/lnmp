@@ -75,7 +75,7 @@ services:
 
   swoole:
     << : *common
-    image: khs1994/php:${LNMP_PHP_VERSION:-8.0.14}-swoole-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-8.1.0}-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php

@@ -13,7 +13,7 @@ x-common:
 services:
   workspace:
     &workspace
-    image: khs1994/php:${LNMP_PHP_VERSION:-8.0.14}-composer-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-8.1.0}-composer-alpine
     networks:
       - backend
     volumes:
