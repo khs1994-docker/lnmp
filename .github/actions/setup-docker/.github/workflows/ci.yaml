@@ -27,14 +27,16 @@ jobs:
         os:
           - ubuntu-18.04
           - ubuntu-20.04
+          - ubuntu-22.04
           - ubuntu-latest
+          - macos-12
         include:
           # macOS
           - os: macos-latest
             docker_channel: stable
             docker_version: "20.10"
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
+    # timeout-minutes: 20
     steps:
       - uses: actions/checkout@main
         with:
@@ -52,6 +54,10 @@ jobs:
         with:
           docker_version: ${{ matrix.docker_version }}
           docker_channel: ${{ matrix.docker_channel }}
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@master
+        if: ${{ failure() }}
+        timeout-minutes: 60
       - name: Test
         run: |
           # set -x
@@ -69,7 +75,7 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
-    timeout-minutes: 20
+    # timeout-minutes: 20
     defaults:
       run:
         shell: bash --noprofile --norc -exo pipefail {0}
@@ -80,6 +86,10 @@ jobs:
       - name: setup docker(default)
         uses: ./
         # uses: docker-practice/actions-setup-docker@master
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@master
+        if: ${{ failure() }}
+        timeout-minutes: 60
       - run: docker version
       # Login docker hub or other docker registry
       # test docker login
@@ -133,6 +143,7 @@ jobs:
         os:
           - ubuntu-18.04
           - ubuntu-20.04
+          - ubuntu-22.04
           - ubuntu-latest
     runs-on: ${{ matrix.os }}
     defaults:
