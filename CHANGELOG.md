@@ -12,4 +12,4 @@
 
 ### Updates:
 
-* [PHP `8.1.1` `8.0.15` `7.4.28`](https://www.php.net/ChangeLog-8.php#8.1.1)
+* [PHP `8.1.1` `8.0.16` `7.4.28`](https://www.php.net/ChangeLog-8.php#8.1.1)

@@ -29,9 +29,9 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.15}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.16}
         - OS_TYPE=debian:buster-slim
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.15}-debian-buster_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.16}-debian-buster_amd64
 
   wsl-php-builder-nightly:
     build:
@@ -75,9 +75,9 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.15}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.16}
         - OS_TYPE=ubuntu:18.04
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.15}-ubuntu-bionic_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.16}-ubuntu-bionic_amd64
 
   wsl-php-builder-ubuntu2004-74:
     build:
@@ -93,9 +93,9 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.15}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.16}
         - OS_TYPE=ubuntu:20.04
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.15}-ubuntu-focal_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.16}-ubuntu-focal_amd64
 
   wsl-php-builder-ubuntu2004-nightly:
     build:
@@ -148,9 +148,9 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.15}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.16}
         - OS_TYPE=quay.io/centos/centos:stream8
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.15}-centos-8_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.16}-centos-8_amd64
 
   wsl-php-builder-rhel9-81:
     build:
@@ -193,9 +193,9 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.15}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.16}
         - OS_TYPE=fedora:35
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_8.0.15-fedora-35_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_8.0.16-fedora-35_amd64
 
   wsl-php-builder-fc35-nightly:
     build:

@@ -25,7 +25,7 @@
 
 * [`8.1.1-fpm-alpine` (8.1/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.1/8.1/fpm/Dockerfile)
 
-* [`8.0.15-fpm-alpine` (8.0/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.1/8.0/fpm/Dockerfile)
+* [`8.0.16-fpm-alpine` (8.0/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.1/8.0/fpm/Dockerfile)
 
 * [`7.4.28-fpm-alpine` (7.4/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.1/7.4/fpm/Dockerfile)
 
