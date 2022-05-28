@@ -77,7 +77,7 @@ services:
   redis:
     << : *common
     << : *common-labels
-    image: "${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-6.2.5}-alpine"
+    image: "${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-7.0.0}-alpine"
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:

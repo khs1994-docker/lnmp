@@ -196,9 +196,9 @@ services:
       # << : *default-build-debian
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    image: redis:6.2.5-alpine
+    image: redis:7.0.0-alpine
     # image: username/lnmp-redis:tag
-    # image: khs1994/lnmp-redis:6.2.5
+    # image: khs1994/lnmp-redis:7.0.0
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:

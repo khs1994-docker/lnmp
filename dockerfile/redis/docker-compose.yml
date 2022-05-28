@@ -6,4 +6,4 @@ services:
       context: .
       args:
         ALPINE_URL: mirrors.aliyun.com
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/redis:${TAG:-6.2.5}-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/redis:${TAG:-7.0.0}-alpine
