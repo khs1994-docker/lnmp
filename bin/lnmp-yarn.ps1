@@ -29,6 +29,6 @@ docker run -it --rm `
     ${LNMP_NODE_IMAGE} `
     $args
 
-    # --registry https://registry.npm.taobao.org `
+    # --registry https://registry.npmmirror.com `
     # --cache-folder /tmp/node/.yarn `
     # --global-folder /tmp/node/yarn `

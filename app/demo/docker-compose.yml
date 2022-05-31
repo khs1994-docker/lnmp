@@ -41,5 +41,5 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION:-8.1.1}
         - NODE_VERSION=${NODE_VERSION:-18.2.0}
-        - NODE_REGISTRY=https://registry.npm.taobao.org
+        - NODE_REGISTRY=https://registry.npmmirror.com
     image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION:-8.1.1}-pro-alpine

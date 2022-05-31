@@ -53,7 +53,7 @@ PG_MAJOR=10
 
 GO_PREFIX=/usr/local
 
-GO_VERSION=1.16.6
+GO_VERSION=1.18.2
 
 NODE_VERSION=18.2.0
 
@@ -496,7 +496,7 @@ _node(){
 
   source $HOME/.npmrc || true
 
-  test -z "$registry" && echo "registry=https://registry.npm.taobao.org" >> ~/.npmrc || true
+  test -z "$registry" && echo "registry=https://registry.npmmirror.com" >> ~/.npmrc || true
   test -z "$prefix" && echo "prefix=$HOME/.npm" >> ~/.npmrc || true
 }
 

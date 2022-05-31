@@ -21,7 +21,7 @@
       "if(!$IsWindows){sudo ln -sf /usr/local/node/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm}",
       "if(!$IsWindows){sudo ln -sf /usr/local/node/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx}",
       "if(!$ISWindows){sudo ln -sf /usr/local/node/bin/node /usr/local/bin/}",
-      "if(!$IsWindows){npm config set prefix ~/.npm ; npm config set registry https://registry.npm.taobao.org}",
+      "if(!$IsWindows){npm config set prefix ~/.npm ; npm config set registry https://registry.npmmirror.com}",
       "_cleanup node",
       "if(!$ISWindows){printInfo Please add [ $HOME/.npm/bin ] to PATH}",
 

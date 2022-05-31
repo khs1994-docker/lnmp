@@ -198,13 +198,13 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:3.0.0`           | **3.0.0**           |`alpine:3.14`    |
 |[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.21.3-alpine`           | **1.21.3**          |`alpine:3.13`    |
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.1.1-unit-alpine`| **1.26.1**          |`alpine:3.15`    |
-|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.49-alpine`           | **2.4.49**          |`alpine:3.14`    |
+|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.53-alpine`           | **2.4.53**          |`alpine:3.14`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.26`                  | **8.0.26**          |`debian:buster-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.6.4`                | **10.6.4**          |`ubuntu:focal`  |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:7.0.0-alpine`            | **7.0.0**           |`alpine:3.16`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.1.1-fpm-alpine`     | **8.1.1**       |`alpine:3.15`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.1.1-composer-alpine`| **2.2.7**      |`alpine:3.15`    |
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.10-alpine`           | **1.6.10**       |`alpine:3.14`    |
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.15-alpine`           | **1.6.15**       |`alpine:3.14`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.9.0-management-alpine` | **3.9.0**       |`alpine:3.13`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:14.0-alpine`             | **14.0**        |`alpine:3.14`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:5.0.3`                      | **5.0.3**       |`ubuntu:bionic`  |
