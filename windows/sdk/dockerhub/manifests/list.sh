@@ -24,7 +24,7 @@ curl -fsSL \
 -H "Authorization:Bearer $token" \
 -H "Accept:$header" \
 "https://$registry/v2/$image/manifests/$ref" \
--A "Docker-Client/20.10.1 (Linux)" \
+-A "Docker-Client/20.10.16 (Linux)" \
 -o $cache_file \
 -D $cache_file.header
 

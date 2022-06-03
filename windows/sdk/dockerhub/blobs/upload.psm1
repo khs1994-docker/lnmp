@@ -8,7 +8,7 @@ Function Test-Blob([string] $token, [string]$image, [string]$digest, [string]$re
       -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
       -Method 'HEAD' `
       -Uri "https://$registry/v2/$image/blobs/$digest" `
-      -UserAgent "Docker-Client/20.10.1 (Windows)"
+      -UserAgent "Docker-Client/20.10.16 (Windows)"
 
     write-host "==> Blob exists, skip upload" -ForegroundColor Yellow
 
@@ -58,7 +58,7 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
     -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
     -Method 'POST' `
     -Uri "https://$registry/v2/$image/blobs/uploads/" `
-    -UserAgent "Docker-Client/20.10.1 (Windows)"
+    -UserAgent "Docker-Client/20.10.16 (Windows)"
 
   $uuid = $result.Headers.'Location'
 
@@ -85,7 +85,7 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
       -Headers $headers `
       -Method 'Put' `
       -Infile $file `
-      -UserAgent "Docker-Client/20.10.1 (Windows)"
+      -UserAgent "Docker-Client/20.10.16 (Windows)"
 
     $response_digest = $response.Headers.'Docker-Content-Digest'
   }
@@ -102,7 +102,7 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
   #   -H "Authorization: Bearer $token" `
   #   -X PUT `
   #   --data-binary "@$file" `
-  #   -A "Docker-Client/20.10.1 (Windows)" `
+  #   -A "Docker-Client/20.10.16 (Windows)" `
   #   -D $env:TEMP/curl_resp_header.txt `
   #   "$uuid&digest=$digest"
 

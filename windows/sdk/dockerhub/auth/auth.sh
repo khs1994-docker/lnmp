@@ -6,7 +6,7 @@ getTokenServerAndService(){
   fi
 
   WWW_Authenticate=`curl -L https://$registry/v2/ \
--X GET -I -A "Docker-Client/20.10.1 (Linux)" | grep -i 'www\-authenticate' `
+-X GET -I -A "Docker-Client/20.10.16 (Linux)" | grep -i 'www\-authenticate' `
 
 if [ $? -eq 0 ];then
   realm=`echo $WWW_Authenticate | awk -F"," '{print $1}'`
@@ -72,12 +72,12 @@ if [ -n "${DOCKER_USERNAME}" -a -n "${DOCKER_PASSWORD}" ];then
   curl -fsSL -H "Authorization:basic $basic" \
 "${tokenServer}service=${tokenService}&scope=repository:${image}:${action}" \
 -o $token_file \
--A "Docker-Client/20.10.1 (Linux)"
+-A "Docker-Client/20.10.16 (Linux)"
 else
   curl -fsSL \
 "${tokenServer}service=${tokenService}&scope=repository:${image}:${action}" \
 -o $token_file \
--A "Docker-Client/20.10.1 (Linux)"
+-A "Docker-Client/20.10.16 (Linux)"
 fi
 
 token=`cat $token_file | jq '.token' | sed 's#"##g' `

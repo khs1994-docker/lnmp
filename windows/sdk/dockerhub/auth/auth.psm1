@@ -29,7 +29,7 @@ Function Get-TokenServerAndService([string]$registry = 'registry.hub.docker.com'
 
   try {
     $WWW_Authenticate = (Invoke-WebRequest https://$registry/v2/ `
-        -Method Get -MaximumRedirection 0 -UserAgent "Docker-Client/20.10.0 (Windows)" `
+        -Method Get -MaximumRedirection 0 -UserAgent "Docker-Client/20.10.16 (Windows)" `
     ).Headers['WWW-Authenticate']
   }
   catch {
@@ -152,12 +152,12 @@ function Get-DockerRegistryToken([string]$image,
     if ($credential) {
       $result = Invoke-WebRequest -Authentication Basic -credential $credential `
         "${tokenServer}?service=${tokenService}&scope=repository:${image}:${action}${query}" `
-        -UserAgent "Docker-Client/20.10.1 (Windows)"
+        -UserAgent "Docker-Client/20.10.16 (Windows)"
     }
     else {
       $result = Invoke-WebRequest `
         "${tokenServer}?service=${tokenService}&scope=repository:${image}:${action}${query}" `
-        -UserAgent "Docker-Client/20.10.1 (Windows)"
+        -UserAgent "Docker-Client/20.10.16 (Windows)"
     }
   }
   catch {

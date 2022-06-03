@@ -9,7 +9,7 @@ Function New-Manifest([string]$token, [string]$image, [string]$ref, [string]$man
   #   -X PUT `
   #   -D $env:TEMP/curl_resp_header.txt `
   #   --data-binary "@$manifest_json_path" `
-  #   -A "Docker-Client/20.10.1 (Windows)" `
+  #   -A "Docker-Client/20.10.16 (Windows)" `
   #   "https://$registry/v2/$image/manifests/$ref"
 
   $headers = @{}
@@ -22,7 +22,7 @@ Function New-Manifest([string]$token, [string]$image, [string]$ref, [string]$man
       -Headers $headers `
       -Method 'Put' `
       -Body $(Get-Content $manifest_json_path -raw) `
-      -UserAgent "Docker-Client/20.10.1 (Windows)"
+      -UserAgent "Docker-Client/20.10.16 (Windows)"
   }
   catch {
     write-host $_.Exception

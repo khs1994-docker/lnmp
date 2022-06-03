@@ -51,7 +51,7 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
       "https://$registry/v2/$image/blobs/$digest" `
       -PassThru `
       -OutFile $distTemp `
-      -UserAgent "Docker-Client/20.10.1 (Windows)"
+      -UserAgent "Docker-Client/20.10.16 (Windows)"
   }
   catch {
     $response = $_.Exception.Response
@@ -73,7 +73,7 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
           "$url" `
           -PassThru `
           -OutFile $distTemp `
-          -UserAgent "Docker-Client/20.10.1 (Windows)" > $null 2>&1
+          -UserAgent "Docker-Client/20.10.16 (Windows)" > $null 2>&1
       }
       catch {
         Write-Host $_.Exception

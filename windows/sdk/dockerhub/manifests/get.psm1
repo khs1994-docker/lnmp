@@ -26,7 +26,7 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
       "https://$registry/v2/$image/manifests/$ref" `
       -PassThru `
       -OutFile $cache_file `
-      -UserAgent "Docker-Client/20.10.1 (Windows)"
+      -UserAgent "Docker-Client/20.10.16 (Windows)"
   }
   catch {
     $result = $_.Exception.Response
