@@ -19,7 +19,7 @@ jobs:
       matrix:
         os:
         - ubuntu-latest
-        - macos-latest
+        - macos-12
     runs-on: ubuntu-latest
     services:
       redis:

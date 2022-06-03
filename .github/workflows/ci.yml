@@ -27,7 +27,7 @@ jobs:
         matrix:
           os:
           - ubuntu-latest
-          - macos-latest
+          - macos-12
     needs: skip
     runs-on: ${{ matrix.os }}
     defaults:
