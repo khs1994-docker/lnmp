@@ -204,12 +204,12 @@
     "dest": "library-mirror/phpmyadmin:fpm-alpine"
   },
   {
-    "source": "library/phpmyadmin:5.1.1",
-    "dest": "library-mirror/phpmyadmin:5.1.1"
+    "source": "library/phpmyadmin:5.2.0",
+    "dest": "library-mirror/phpmyadmin:5.2.0"
   },
   {
-    "source": "library/phpmyadmin:5.1.1-fpm-alpine",
-    "dest": "library-mirror/phpmyadmin:5.1.1-fpm-alpine"
+    "source": "library/phpmyadmin:5.2.0-fpm-alpine",
+    "dest": "library-mirror/phpmyadmin:5.2.0-fpm-alpine"
   },
   {
     "source": "minio/minio:RELEASE.2021-07-08T01-15-01Z",

@@ -254,7 +254,7 @@ services:
   phpmyadmin:
     << : *common
     << : *common-labels
-    image: ${LNMP_LIBRARY_NS:-library}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.1.1}
+    image: ${LNMP_LIBRARY_NS:-library}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.2.0}
     environment:
       - PMA_HOST=mysql
     ports:

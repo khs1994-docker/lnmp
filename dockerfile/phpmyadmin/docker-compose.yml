@@ -6,4 +6,4 @@ services:
       context: .
       args:
         ALPINE_URL: mirrors.aliyun.com
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/phpmyadmin:${TAG:-5.1.1}
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/phpmyadmin:${TAG:-5.2.0}
