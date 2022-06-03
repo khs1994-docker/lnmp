@@ -42,25 +42,29 @@ scripts:
     $PHP_BIN="${PHP_PREFIX}/php.exe"
 
     Function _install_ext($PHP_PREFIX){
-    $PHP_CACERT_DATE="2021-01-19"
+    $PHP_CACERT_DATE="2022-04-26"
 
     $PHP_INI="${PHP_PREFIX}/php.ini"
     $PHP_BIN="${PHP_PREFIX}/php.exe"
 
-    $extensions='xdebug',`
+    # https://windows.php.net/downloads/pecl/releases/xdebug/
+    $extensions='xdebug@3.1.3',`
          'redis',`
          'mongodb',`
          'igbinary'
 
+    $GITHUB_DOWNLOAD_URL="github.com"
+    $GITHUB_DOWNLOAD_URL="download.fastgit.org"
+
     _downloader `
-      https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar `
+      https://${GITHUB_DOWNLOAD_URL}/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar `
       pickle `
       pickle
 
     copy-item -r -force pickle C:\bin
 
     _downloader `
-      https://github.com/deemru/php-cgi-spawner/releases/download/1.1.23/php-cgi-spawner.exe `
+      https://${GITHUB_DOWNLOAD_URL}/deemru/php-cgi-spawner/releases/download/1.1.23/php-cgi-spawner.exe `
       php-cgi-spawner.exe `
       php-cgi-spawner
 
@@ -70,10 +74,10 @@ scripts:
     cp php-cgi-spawner.exe C:\php
     }
 
-    # https://curl.haxx.se/docs/caextract.html
+    # https://curl.se/docs/caextract.html
     # https://github.com/khs1994-docker/lnmp/issues/339
     _downloader `
-      https://curl.haxx.se/ca/cacert-${PHP_CACERT_DATE}.pem `
+      https://curl.se/ca/cacert-${PHP_CACERT_DATE}.pem `
       cacert-${PHP_CACERT_DATE}.pem `
       cacert-${PHP_CACERT_DATE}.pem
 
