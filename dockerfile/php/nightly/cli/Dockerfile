@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-FROM --platform=$TARGETPLATFORM alpine:3.15
+FROM --platform=$TARGETPLATFORM alpine:3.16
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

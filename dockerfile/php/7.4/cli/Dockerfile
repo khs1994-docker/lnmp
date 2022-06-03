@@ -3,7 +3,7 @@ ARG PHP_VERSION=7.4.28
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
 
-FROM --platform=$TARGETPLATFORM alpine:3.15
+FROM --platform=$TARGETPLATFORM alpine:3.16
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
