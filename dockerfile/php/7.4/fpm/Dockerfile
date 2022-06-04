@@ -45,11 +45,12 @@ ENV PHP_EXTENSION \
 
 ENV PECL_EXTENSION \
       igbinary \
-      redis \
+      # redis \
+      https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       memcached \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       # xdebug-beta \
-      https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
+      https://github.com/kjdev/php-ext-zstd/archive/0.11.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org

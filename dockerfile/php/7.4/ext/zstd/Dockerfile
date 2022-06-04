@@ -12,7 +12,7 @@ ARG APK_EXTRA="zstd-libs"
 
 ARG APK_DEV_EXTRA="zstd-dev "
 
-ENV EXT_VERSION=0.9.0
+ENV EXT_VERSION=0.11.0
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 

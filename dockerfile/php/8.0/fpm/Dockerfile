@@ -47,8 +47,7 @@ ENV PHP_EXTENSION \
 ENV PECL_EXTENSION \
       # mongodb \
       # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
-      # igbinary \
-      https://github.com/igbinary/igbinary/archive/master.tar.gz \
+      igbinary \
       # redis \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       memcached \
@@ -56,7 +55,7 @@ ENV PECL_EXTENSION \
       # xdebug-beta \
       # yaml \
       # https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
-      https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
+      https://github.com/kjdev/php-ext-zstd/archive/0.11.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
