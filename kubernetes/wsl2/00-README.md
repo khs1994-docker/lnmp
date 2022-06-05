@@ -21,43 +21,53 @@
 
 请查看 [README.KERNEL.md](README.KERNEL.md)
 
-## 设置 PATH
+## SWAP 设置为 0
 
 ```bash
-$ wsl -d wsl-k8s
+# ~/.wslconfig
+[wsl2]
+swap=0
+```
 
-$ vim ~/.bashrc
+## 设置 PATH
+
+```powershell
+$ wsl -d wsl-k8s -- vim ~/.bashrc
 
 export PATH=/wsl/wsl-k8s-data/k8s/bin:$PATH
 ```
 
+## 设置 systemd
+
+请查看 [00-README.systemd.init.md](00-README.systemd.init.md)
+
 ## 复制文件
 
-```bash
-$ wsl -d wsl-k8s
-
-$ set -x
-$ source ./wsl2/.env
-
-$ mkdir -p ${K8S_ROOT:?err}/bin
-$ cp -a kubernetes-release/release/v1.24.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin
-```
-
-在 `Windows` 中执行
-
 ```powershell
+$env:WSLENV="K8S_ROOT/u"
+$env:K8S_ROOT="/wsl/wsl-k8s-data/k8s"
+
+$ wsl -d wsl-k8s -- sh -xc 'mkdir -p ${K8S_ROOT:?err}/bin'
+$ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v1.24.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin'
+
 $ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","etcd-client.pem","etcd-client-key.pem","ca.pem","ca-key.pem"
 
-$ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
+$ foreach($item in $items){cp \\wsl$\wsl-k8s\wsl\wsl-k8s-data\k8s\etc\kubernetes\pki\$item systemd/certs}
+
+$items="kubectl.kubeconfig","etcd-client.pem","etcd-client-key.pem","ca.pem","ca-key.pem","admin.pem","admin-key.pem"
+
+$ foreach($item in $items){cp \\wsl$\wsl-k8s\wsl\wsl-k8s-data\k8s\etc\kubernetes\pki\$item wsl2/certs}
 ```
 
 ## join
 
-```bash
-$ wsl -d wsl-k8s
-
-$ debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin
+```powershell
+$ wsl -d wsl-k8s -- sh -xc 'debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin'
 ```
+
+## 切换 IPTABLES 模式
+
+请查看 [README.switch.iptables.md](README.switch.iptables.md)
 
 ## 启动 K8S
 
@@ -69,7 +79,15 @@ $ debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin
 
 ## kubectl
 
-请查看 [00-README.kubectl.md](00-README.kubectl.md)
+```bash
+$ wsl -d wsl-k8s
+
+$ kubectl
+```
+
+```powershell
+./wsl2/bin/kubectl-config-set-cluster
+```
 
 ## crictl
 

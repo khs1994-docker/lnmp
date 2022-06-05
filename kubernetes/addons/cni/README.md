@@ -29,7 +29,8 @@ $ sudo mount bpffs /sys/fs/bpf -t bpf
 
 ```bash
 # 修改 calico-eBPF/kubernetes.yaml 并部署
-$ kubectl apply -f calico-eBPF/kubernetes.yaml
+$ kubectl apply -f addons/cni/calico-eBPF/kubernetes.yaml
+$ kubectl apply -k addons/cni/calico-eBPF
 ```
 
 **禁用 eBPF**

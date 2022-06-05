@@ -11,7 +11,12 @@ Function Invoke-CrictlCrio() {
 }
 
 Function Invoke-Kubectl() {
-  C:\bin\kubectl --kubeconfig $PSScriptRoot\..\certs\kubectl.kubeconfig $args
+  if (Get-Command kubectl) {
+    kubectl.exe --kubeconfig $PSScriptRoot\..\certs\kubectl.kubeconfig $args
+  }
+  else {
+    C:\bin\kubectl --kubeconfig $PSScriptRoot\..\certs\kubectl.kubeconfig $args
+  }
 }
 
 Function Get-WSL2IP() {

@@ -1,7 +1,5 @@
 kubectl-*
-!kubectl-get-csr.ps1
 !kubectl-config-set-cluster.ps1
-!kubectl-config-sync.ps1
 minikube*
 !minikube.md
 

@@ -34,6 +34,15 @@ jobs:
           -t ghcr.io/khs1994/k8s-cfssl \
           --push \
           --platform linux/amd64,linux/arm64 \
+          --target dump \
+          cfssl
+
+          docker buildx build \
+          --cache-from=ghcr.io/khs1994/k8s-cfssl:cache \
+          -t khs1994/k8s-cfssl:all-in-one \
+          -t ghcr.io/khs1994/k8s-cfssl:all-in-one \
+          --push \
+          --platform linux/amd64,linux/arm64 \
           cfssl
         name: build khs1994/k8s-cfssl
       - name: build khs1994/fcos
