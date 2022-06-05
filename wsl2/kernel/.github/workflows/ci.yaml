@@ -54,12 +54,6 @@ jobs:
             https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl-5.10
         fi
 
-        if [ $ref = "master" ];then
-          # curl -L -o feature-dxgkrnl.diff https://github.com/microsoft/WSL2-Linux-Kernel/commit/a11b238a0398ea063c555d8c9fab3d3ed95882fa.patch
-          curl -L -o feature-dxgkrnl.diff https://github.com/nathanchance/WSL2-Linux-Kernel/commit/7e3c16ef15554d7efd7ce946d335b9f8f93e6b92.patch
-          patch -p1 < feature-dxgkrnl.diff
-        fi
-
         echo "
         # nfs
         # CONFIG_NFS_V4_1=y
