@@ -11,7 +11,7 @@ services:
     image: kubernetesui/dashboard:v2.5.0
 
   coredns:
-    image: k8s.gcr.io/coredns/coredns:v1.8.0
+    image: k8s.gcr.io/coredns/coredns:v1.9.3
 
   pause:
     image: k8s.gcr.io/pause:3.6
