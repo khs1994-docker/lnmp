@@ -51,9 +51,9 @@ services:
 **2. 编辑 `.env` 文件，在 `LNMP_SERVICES` 变量中增加软件名 `php5`**
 
 ```diff
-- LNMP_SERVICES="nginx mysql php7 redis" # 默认配置
+- LNMP_SERVICES="nginx mysql php8 redis" # 默认配置
 
-+ LNMP_SERVICES="nginx mysql php7 redis php5" # 增加 php5
++ LNMP_SERVICES="nginx mysql php8 redis php5" # 增加 php5
 ```
 
 **3. 新建 `config/php5` 文件夹**

@@ -30,7 +30,7 @@ jobs:
       - uses: khs1994-docker/actions-setup-lnmp@master
         with:
           lnmp_branch: "20.10"
-          lnmp_services: "nginx mysql php7 redis minio"
+          lnmp_services: "nginx mysql php8 redis minio"
           lrew_include: "minio"
       - name: Init LNMP
         run: |
@@ -120,7 +120,7 @@ jobs:
               \
               --build-arg NODE_REGISTRY=https://registry.npmjs.org \
               --target=laravel \
-              -t khs1994/laravel:8 \
+              -t khs1994/laravel:9 \
               -f Dockerfile.cdn . \
 
           docker buildx build --load \
@@ -128,13 +128,13 @@ jobs:
               \
               --build-arg NODE_REGISTRY=https://registry.npmjs.org \
               --target=laravel-rootless \
-              -t khs1994/laravel:8-rootless \
+              -t khs1994/laravel:9-rootless \
               -f Dockerfile.cdn . \
       - name: Up LNMP
         run: |
           set -x
 
-          export LNMP_SERVICES='nginx mysql php7 redis minio laravel'
+          export LNMP_SERVICES='nginx mysql php8 redis minio laravel'
           export LREW_INCLUDE='minio laravel'
 
           lnmp-docker up
@@ -169,11 +169,11 @@ jobs:
             curl -k https://laravel-docker.t.khs1994.com/test/schedule/result
           echo ::endgroup::
 
-          docker run -i --rm --entrypoint=sh khs1994/laravel:8 -c "ls -la /app/laravel-docker"
+          docker run -i --rm --entrypoint=sh khs1994/laravel:9 -c "ls -la /app/laravel-docker"
 
       - name: Connect and Test Rootless
         run: |
-          echo 'LNMP_LARAVEL_TAG=8-rootless' >> $LNMP_PATH/.env
+          echo 'LNMP_LARAVEL_TAG=9-rootless' >> $LNMP_PATH/.env
           lnmp-docker up
 
           sleep 30
@@ -207,6 +207,6 @@ jobs:
             curl -k https://laravel-docker.t.khs1994.com/test/rootless/result
           echo ::endgroup::
 
-          docker run -i --rm --entrypoint=sh khs1994/laravel:8-rootless -c "ls -la /app/laravel-docker"
+          docker run -i --rm --entrypoint=sh khs1994/laravel:9-rootless -c "ls -la /app/laravel-docker"
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3

@@ -24,7 +24,7 @@ version: "3.9"
 services:
 
   # open more port
-  php7:
+  php8:
     ports:
       - "10001:10001"
 ```

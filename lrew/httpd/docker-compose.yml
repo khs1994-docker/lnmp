@@ -32,4 +32,4 @@ services:
     networks:
       - frontend
     depends_on:
-      - php7
+      - php8

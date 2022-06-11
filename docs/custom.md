@@ -9,11 +9,11 @@
 编辑 `.env` 文件，在 `LNMP_SERVICES` 变量中增加软件名
 
 ```diff
-- LNMP_SERVICES="nginx mysql php7 redis" # 默认配置
+- LNMP_SERVICES="nginx mysql php8 redis" # 默认配置
 
-+ LNMP_SERVICES="httpd mysql php7 redis" # 使用 httpd 代替 nginx
++ LNMP_SERVICES="httpd mysql php8 redis" # 使用 httpd 代替 nginx
 
-+ LNMP_SERVICES="httpd mysql php7 redis mongodb" # 增加 mongodb
++ LNMP_SERVICES="httpd mysql php8 redis mongodb" # 增加 mongodb
 ```
 
 ## 使用自己的镜像
@@ -35,9 +35,9 @@
 version: "3.9"
 
 services:
-  php7:
+  php8:
     # 想修改哪个配置在这里重写即可，例如想使用自己的 PHP 镜像或国内镜像，那么增加 `image` 指令即可
-    image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.5}-fpm-alpine
+    image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-8.1.1}-fpm-alpine
 ```
 
 你也可以加上 `build` 字段，先构建镜像再启动
@@ -47,8 +47,8 @@ services:
 version: "3.9"
 
 services:
-  php7:
-    image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.5}-fpm-alpine
+  php8:
+    image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-8.1.1}-fpm-alpine
     # 增加 build 字段
     build:
       context: ./dockerfile/php/
@@ -69,7 +69,7 @@ $ ./lnmp-docker up
 version: "3.9"
 
 services:
-  php7:
+  php8:
     volumes:
       - /path/src:/path/target
 ```

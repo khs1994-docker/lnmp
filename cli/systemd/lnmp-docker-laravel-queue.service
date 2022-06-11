@@ -14,9 +14,9 @@ Environment=PATH=/data/lnmp:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/s
 EnvironmentFile=/data/lnmp/.env
 
 ExecStartPre=/usr/bin/docker info
-ExecStart=/data/lnmp/lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
+ExecStart=/data/lnmp/lnmp-docker php8-cli php /app/laravel/artisan queue:work --tries=3
 ExecReload=/bin/kill -s HUP $MAINPID
-ExecStop=/data/lnmp/lnmp-docker php7-cli php /app/laravel/artisan queue:restart
+ExecStop=/data/lnmp/lnmp-docker php8-cli php /app/laravel/artisan queue:restart
 
 [Install]
 WantedBy=multi-user.target

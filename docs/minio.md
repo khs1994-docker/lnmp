@@ -8,7 +8,7 @@
 在 `.env` 文件中将 `minio` 包含进来
 
 ```bash
-LNMP_SERVICES="nginx mysql php7 redis minio"
+LNMP_SERVICES="nginx mysql php8 redis minio"
 LREW_INCLUDE="minio pcit"
 ```
 

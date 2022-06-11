@@ -79,7 +79,7 @@ jobs:
 
         # command -v docker-compose
         # sudo rm -rf $(command -v docker-compose) || true
-        # export LNMP_SERVICES="nginx mariadb php7 redis"
+        # export LNMP_SERVICES="nginx mariadb php8 redis"
         # export LREW_INCLUDE="mariadb"
       if: |
         startsWith(matrix.os, 'ubuntu' )
