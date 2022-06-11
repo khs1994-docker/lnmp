@@ -350,7 +350,9 @@ ENV PECL_BUILD_DEPS \
       libmemcached-dev \
       pcre2-dev \
       zlib-dev \
-      zstd-dev
+      zstd-dev \
+# https://github.com/xdebug/xdebug/pull/835
+      linux-headers
 
 ENV PECL_RUN_DEPS \
       libmemcached-libs \

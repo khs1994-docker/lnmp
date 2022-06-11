@@ -106,6 +106,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libwebp-dev \
                          icu-dev \
                          zstd-dev \
+# https://github.com/xdebug/xdebug/pull/835
+                         linux-headers \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \

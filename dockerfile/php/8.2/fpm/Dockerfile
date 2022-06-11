@@ -92,6 +92,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          c-client \
                          icu-libs \
                          zstd-libs \
+# https://github.com/xdebug/xdebug/pull/835
+                         linux-headers \
                          libavif \
                          ${APK_EXTRA:-} \
                          " \

@@ -94,6 +94,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          icu-libs \
                          # gnu-libiconv \
                          zstd-libs \
+# https://github.com/xdebug/xdebug/pull/835
+                         linux-headers \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
