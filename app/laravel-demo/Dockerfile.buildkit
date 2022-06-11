@@ -38,7 +38,7 @@ RUN --mount=type=cache,target=/app/node_modules,id=laravel-docker_node_modules \
 
 COPY resources/ /app/resources/
 
-COPY webpack.mix.js webpack.config.js tailwind.config.js /app/
+COPY webpack.mix.js tailwind.config.js /app/
 
 RUN --mount=type=cache,target=/app/node_modules,id=laravel-docker_node_modules \
       set -x ; \

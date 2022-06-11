@@ -1,7 +1,5 @@
 const mix = require('laravel-mix');
 
-require('laravel-mix-versionhash');
-
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -13,15 +11,25 @@ require('laravel-mix-versionhash');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js').vue().js('resources/js/a.js', 'public/js').vue()
+mix.js('resources/js/app.js', 'public/js').vue()
+    .js('resources/js/a.js', 'public/js').vue()
     .postCss('resources/css/app.css', 'public/css', [
-        require('postcss-import'),
         require('tailwindcss'),
     ])
-    .webpackConfig(require('./webpack.config'));
+    .alias({
+      '@': 'resources/js',
+    });
 
 // if (mix.inProduction()) {
 //     mix.version();
 // }
 
-mix.versionHash();
+mix.version();
+
+mix.then(() => {
+  const convertToFileHash = require("laravel-mix-make-file-hash");
+  convertToFileHash({
+      publicPath: "public",
+      manifestFilePath: "public/mix-manifest.json"
+  });
+});

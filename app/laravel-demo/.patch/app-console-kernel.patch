@@ -1,6 +1,6 @@
 --- a/app/Console/Kernel.php
 +++ b/app/Console/Kernel.php
-@@ -25,6 +25,10 @@ class Kernel extends ConsoleKernel
+@@ -16,6 +16,10 @@
      protected function schedule(Schedule $schedule)
      {
          // $schedule->command('inspire')->hourly();

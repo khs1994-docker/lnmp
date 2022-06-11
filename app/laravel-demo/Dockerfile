@@ -33,7 +33,7 @@ RUN set -x ; cd /app \
 
 COPY resources/ /app/resources/
 
-COPY webpack.mix.js webpack.config.js tailwind.config.js /app/
+COPY webpack.mix.js tailwind.config.js /app/
 
 RUN set -x ; cd /app \
 # File.exists('./artisan'); 如果 artisan 文件存在，则说明是 laravel 项目
