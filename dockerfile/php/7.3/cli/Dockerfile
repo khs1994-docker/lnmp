@@ -166,8 +166,8 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
           $PHPIZE_DEPS \
           coreutils \
           curl-dev \
-          libedit-dev \
           openssl-dev \
+          readline-dev \
           libsodium-dev \
           libxml2-dev \
           sqlite-dev \
@@ -236,9 +236,9 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
     --with-sodium=shared \
     \
     --with-curl=shared \
-    --with-libedit \
     --with-openssl=shared \
       --with-system-ciphers \
+    --with-readline \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     --with-password-argon2 \

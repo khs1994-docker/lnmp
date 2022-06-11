@@ -161,15 +161,17 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
   && cp /opt/bin/docker-php-entrypoint /usr/local/bin \
   && apk add --no-cache --virtual .build-deps \
           $PHPIZE_DEPS \
+          argon2-dev \
           coreutils \
           curl-dev \
-          libedit-dev \
-          openssl-dev \
+          gnu-libiconv-dev \
           libsodium-dev \
           libxml2-dev \
           linux-headers \
+          oniguruma-dev \
+          openssl-dev \
+          readline-dev \
           sqlite-dev \
-          argon2-dev \
           cyrus-sasl-dev \
           postgresql-dev \
           libzip-dev \
@@ -194,8 +196,6 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
           # tidyhtml-dev \
           # net-snmp-dev \
           openldap-dev \
-          gnu-libiconv-dev \
-          oniguruma-dev \
           # libavif-dev \
           ${APK_DEV_EXTRA:-} \
   \
@@ -237,9 +237,9 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
     --with-sodium=shared \
     \
     --with-curl=shared \
-    --with-libedit \
     --with-openssl=shared \
       --with-system-ciphers \
+    --with-readline \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     --with-password-argon2 \

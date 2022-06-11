@@ -1,0 +1,300 @@
+on:
+  push:
+    branches:
+    - master
+    tags:
+    - '*'
+  workflow_dispatch:
+    inputs:
+      PHP_VERSION:
+        description: php version
+        required: true
+        default: "8.2.0alpha1"
+
+name: PHP_8.2
+
+env:
+  PHP_CUSTOM_VERSION: ${{ github.event.inputs.PHP_VERSION }}
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -exo pipefail {0}
+
+jobs:
+  build:
+    name: Build
+    strategy:
+      max-parallel: 1
+      matrix:
+        # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
+        TYPE: [CLI, FPM, COMPOSER, S6, UNIT, SWOOLE]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+      with:
+        fetch-depth: 2
+    - run: |
+        env
+        docker --version
+        docker-compose --version
+      name: 'manifest'
+    # - run: |
+    #     sudo rm /usr/local/bin/docker-compose
+    #     curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+    #     sudo install -m755 docker-compose /usr/local/bin
+    #   name: 'Setup Docker Compose'
+    #   env:
+    #     DOCKER_COMPOSE_VERSION: 1.29.0
+    - run: |
+        echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+        # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
+        echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-east-1.aliyuncs.com
+        echo ${GHCR_IO_TOKEN} | docker login -u khs1994 --password-stdin ghcr.io
+        echo ${CODING_DOCKER_PASSWORD} | docker login -u khs1994-1601432822176 --password-stdin pcit-docker.pkg.coding.net
+      name: 'Docker Login'
+      env:
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+        TENCENT_DOCKER_USERNAME: ${{secrets.TENCENT_DOCKER_USERNAME}}
+        ALIYUN_DOCKER_USERNAME: ${{secrets.ALIYUN_DOCKER_USERNAME}}
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        GHCR_IO_TOKEN: ${{secrets.GHCR_IO_TOKEN}}
+        CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: test
+        docker_version: "20.10"
+    - run: |
+        docker --version
+        docker-compose --version
+        docker buildx version
+        docker
+      name: 'install-after-manifest'
+    - run: |
+        cp .env.example .env
+
+        if [ -n "${PHP_CUSTOM_VERSION}" ];then
+          export PHP_TAG_VERSION=$PHP_CUSTOM_VERSION
+        fi
+
+        echo $GITHUB_REF | grep -q 'refs/tags/' && IS_TAG_EVENT=1 || true
+
+        if ! [ -n "${IS_TAG_EVENT}" -o "${GITHUB_EVENT_NAME}" = 'workflow_dispatch' ];then \
+          export PLATFORM=linux/amd64; \
+          if [ "$PHP_VERSION" = 8_X_X -o "$PHP_VERSION" = nightly ];then \
+            export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
+            IS_PUSH=--push; \
+            mirror="${add_mirror}"; \
+          else \
+            IS_PUSH=--push; \
+            DOCKER_HUB_USERNAME=$DOCKER_HUB_USERNAME_TEST; \
+          fi; \
+        else \
+          IS_PUSH=--push \
+          && mirror="${add_mirror}"; \
+        fi
+
+        VCS_REF=`git rev-parse --short HEAD`
+        CACHE_IMAGE=ghcr.io/${DOCKER_HUB_USERNAME}/php
+        # CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
+
+        options="--build-arg USERNAME=$DOCKER_HUB_USERNAME \
+        --build-arg VCS_REF=$VCS_REF \
+        --build-arg PHP_VERSION=$PHP_TAG_VERSION \
+        --cache-from=khs1994/php:${FOLDER}-arm-${TYPE,,}-cache \
+        --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
+        --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
+
+        if [ "$TYPE" = "UNIT" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine \
+          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-unit-alpine ";done) \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/unit
+          echo ::endgroup::
+        fi
+
+        if [ "$TYPE" = "SUPERVISORD" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine \
+          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-supervisord-alpine ";done) \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/supervisord
+          echo ::endgroup::
+        fi
+
+        if [ "$TYPE" = "COMPOSER" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine \
+          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-composer-alpine ";done) \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer
+          echo ::endgroup::
+        fi
+
+        if [ "$TYPE" = "SINGLE" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine \
+          ${IS_PUSH} ${FOLDER}/single
+          echo ::endgroup::
+        fi
+
+        if [ "$TYPE" = "SWOOLE" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine \
+          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-swoole-alpine ";done) \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/swoole
+          echo ::endgroup::
+        fi
+
+        if [ "$TYPE" = "FPM" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine \
+          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-fpm-alpine ";done) \
+          ${fpmTagOptions} \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/fpm
+          echo ::endgroup::
+        fi
+
+        if [ "$TYPE" = "CLI" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine \
+          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-cli-alpine ";done) \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli
+          echo ::endgroup::
+        fi
+
+        if [ "$TYPE" = "S6" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-s6-alpine \
+          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-s6-alpine ";done) \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/s6
+          echo ::endgroup::
+        fi
+
+        if [ "$TYPE" = "PPM" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ppm-alpine \
+          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-ppm-alpine ";done) \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/ppm
+          echo ::endgroup::
+        fi
+
+        ######
+
+        if [ "$TYPE" = "COMPOSER" ];then
+            echo "::group::Build php-cs-fixer"
+            docker buildx build \
+              -t $DOCKER_HUB_USERNAME/php:php-cs-fixer \
+              $(for item in `echo $mirror`;do echo " -t ${item}:php-cs-fixer ";done) \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
+              --cache-from=$DOCKER_HUB_USERNAME/php:php-cs-fixer-cache \
+              --cache-to=$DOCKER_HUB_USERNAME/php:php-cs-fixer-cache \
+              --platform ${PLATFORM} ${IS_PUSH} php-cs-fixer
+            echo "::endgroup::"
+
+            echo "::group::Build doctum"
+            docker buildx build \
+              -t $DOCKER_HUB_USERNAME/php:doctum \
+              $(for item in `echo $mirror`;do echo " -t ${item}:doctum ";done) \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
+              --cache-from=$DOCKER_HUB_USERNAME/php:doctum-cache \
+              --cache-to=$DOCKER_HUB_USERNAME/php:doctum-cache \
+              --platform ${PLATFORM} ${IS_PUSH} doctum
+            echo "::endgroup::"
+
+            echo "::group::Build phpdox"
+            docker buildx build \
+              -t $DOCKER_HUB_USERNAME/php:phpdox \
+              $(for item in `echo $mirror`;do echo " -t ${item}:phpdox ";done) \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
+              --cache-from=$DOCKER_HUB_USERNAME/php:phpdox-cache \
+              --cache-to=$DOCKER_HUB_USERNAME/php:phpdox-cache \
+              --platform ${PLATFORM} ${IS_PUSH} phpdox
+            echo "::endgroup::"
+
+            echo "::group::Build phploc"
+            docker buildx build \
+              -t $DOCKER_HUB_USERNAME/php:phploc \
+              $(for item in `echo $mirror`;do echo " -t ${item}:phploc ";done) \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
+              --cache-from=$DOCKER_HUB_USERNAME/php:phploc-cache \
+              --cache-to=$DOCKER_HUB_USERNAME/php:phploc-cache \
+              --platform ${PLATFORM} ${IS_PUSH} phploc
+            echo "::endgroup::"
+
+            echo "::group::Build phpcpd"
+            docker buildx build \
+              -t $DOCKER_HUB_USERNAME/php:phpcpd \
+              $(for item in `echo $mirror`;do echo " -t ${item}:phpcpd ";done) \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
+              --cache-from=$DOCKER_HUB_USERNAME/php:phpcpd-cache \
+              --cache-to=$DOCKER_HUB_USERNAME/php:phpcpd-cache \
+              --platform ${PLATFORM} ${IS_PUSH} phpcpd
+            echo "::endgroup::"
+
+            echo "::group::Build phpmd"
+            docker buildx build \
+              -t $DOCKER_HUB_USERNAME/php:phpmd \
+              $(for item in `echo $mirror`;do echo " -t ${item}:phpmd ";done) \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
+              --cache-from=$DOCKER_HUB_USERNAME/php:phpmd-cache \
+              --cache-to=$DOCKER_HUB_USERNAME/php:phpmd-cache \
+              --platform ${PLATFORM} ${IS_PUSH} phpmd
+            echo "::endgroup::"
+        fi
+
+        if [ "$TYPE" != "FPM-dont-build" ];then exit 0; fi
+
+        echo "::group::Build custom 7.0"
+        docker buildx build --push \
+        --build-arg PHP_VERSION=7.0.33 \
+        --build-arg USERNAME=khs1994 \
+        -t ${DOCKER_HUB_USERNAME}/php:7.0-custom custom/7.0
+        echo "::endgroup::"
+
+        echo "::group::Build custom 7.1+"
+        docker buildx build --push \
+        --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
+        --build-arg USERNAME=${DOCKER_HUB_USERNAME} \
+        -t ${DOCKER_HUB_USERNAME}/php:8.1-custom custom/7.1
+        echo "::endgroup::"
+
+        echo "::group::Build full custom"
+
+        docker buildx build \
+        --build-arg PHP_EXTENSION_EXTRA="xsl" \
+        --build-arg PECL_EXTENSION_EXTRA="imagick msgpack" \
+        --build-arg APK_EXTRA="libxslt imagemagick-libs libgomp musl" \
+        --build-arg APK_DEV_EXTRA="libxslt-dev imagemagick-dev imagemagick" \
+        --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
+        --build-arg USERNAME=${DOCKER_HUB_USERNAME} \
+        --push \
+        -t ${DOCKER_HUB_USERNAME}/php:8.1-full-custom 8.1/fpm
+        echo "::endgroup::"
+      env:
+        GITHUB_EVENT_NAME: ${{github.event_name}}
+        DOCKER_HUB_USERNAME: khs1994
+        DOCKER_HUB_USERNAME_TEST: lrew
+        PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v7
+        PHP_VERSION: 8_2_X
+        FOLDER: "8.2"
+        PHP_TAG_VERSION: "8.2.0alpha1"
+        TYPE: ${{ matrix.TYPE }}
+        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php ghcr.io/khs1994/php
+      name: 'Build Image'

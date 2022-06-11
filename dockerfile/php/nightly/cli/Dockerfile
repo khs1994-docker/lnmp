@@ -41,6 +41,7 @@ ENV PHPIZE_DEPS \
 RUN set -ex \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && apk add --no-cache \
+                 ca-certificates \
                  curl \
                  tar \
                  xz \
@@ -196,12 +197,13 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           argon2-dev \
           coreutils \
           curl-dev \
-          libedit-dev \
+          gnu-libiconv-dev \
           libsodium-dev \
           libxml2-dev \
           linux-headers \
           oniguruma-dev \
           openssl-dev \
+          readline-dev \
           sqlite-dev \
           cyrus-sasl-dev \
           postgresql-dev \
@@ -230,7 +232,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           libavif-dev \
           \
           bison \
-          gnu-libiconv-dev \
           ${APK_DEV_EXTRA:-} \
   \
   && rm -vf /usr/include/iconv.h \
@@ -265,9 +266,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     --with-sodium=shared \
     \
     --with-curl=shared \
-    --with-libedit \
     --with-openssl=shared \
       --with-system-ciphers \
+    --with-readline \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     --with-password-argon2 \

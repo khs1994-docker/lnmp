@@ -1,5 +1,23 @@
 [
   {
+    "source": "php:8.2.0alpha1-cli-alpine"
+  },
+  {
+    "source": "php:8.2.0alpha1-fpm-alpine"
+  },
+  {
+    "source": "php:8.2.0alpha1-unit-alpine"
+  },
+  {
+    "source": "php:8.2.0alpha1-composer-alpine"
+  },
+  {
+    "source": "php:8.2.0alpha1-swoole-alpine"
+  },
+  {
+    "source": "php:8.2.0alpha1-s6-alpine"
+  },
+  {
     "source": "php:8.1.1-cli-alpine"
   },
   {
@@ -55,24 +73,6 @@
   },
   {
     "source": "php:7.4.28-s6-alpine"
-  },
-  {
-    "source": "php:7.3.33-cli-alpine"
-  },
-  {
-    "source": "php:7.3.33-fpm-alpine"
-  },
-  {
-    "source": "php:7.3.33-unit-alpine"
-  },
-  {
-    "source": "php:7.3.33-composer-alpine"
-  },
-  {
-    "source": "php:7.3.33-swoole-alpine"
-  },
-  {
-    "source": "php:7.3.33-supervisord-alpine"
   },
   {
     "source": "php:nightly-cli-alpine"
