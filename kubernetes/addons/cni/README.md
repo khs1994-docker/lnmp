@@ -1,4 +1,5 @@
 * https://docs.projectcalico.org/manifests/calico.yaml
+* https://projectcalico.docs.tigera.io/manifests/csi-driver.yaml
 
 ## 目录说明
 

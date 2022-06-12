@@ -22,6 +22,7 @@ After=cri-dockerd.service
 Conflicts=wsl-k8s-shutdown.target
 
 After=etc-containers.mount \
+etc-calico.mount \
 var-lib-cni.mount \
 var-lib-k8s.mount \
 var-lib-kubelet.mount \
@@ -30,6 +31,7 @@ var-log-containers.mount \
 var-log-pods.mount
 
 BindsTo=etc-containers.mount \
+etc-calico.mount \
 var-lib-cni.mount \
 var-lib-k8s.mount \
 var-lib-kubelet.mount \
@@ -60,8 +62,8 @@ ExecStartPre=/opt/k8s/bin/kubeadm version
 ExecStartPre=-/usr/bin/env swapoff -a
 ExecStartPre=-/opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
 
-; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-; /opt/k8s/var/lib/kubelet /var/lib/kubelet
+ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+/opt/k8s/var/lib/kubelet /var/lib/kubelet
 ; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
 ; /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
@@ -69,7 +71,7 @@ ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
 
 ExecStartPre=-/usr/bin/env mount --make-shared /
 ExecStartPre=-/usr/bin/env mount --make-shared /sys
-; ExecStartPre=-/usr/bin/env mount --make-shared /var/lib/kubelet
+ExecStartPre=-/usr/bin/env mount --make-shared /var/lib/kubelet
 
 ; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
 ; ${K8S_ROOT}/var/lib/k8s /var/lib/k8s
