@@ -14,7 +14,7 @@ services:
     image: k8s.gcr.io/coredns/coredns:v1.8.0
 
   pause:
-    image: k8s.gcr.io/pause:3.6
+    image: k8s.gcr.io/pause:3.7
     # https://github.com/kubernetes/kubernetes/tree/master/build/pause
 
   calico:

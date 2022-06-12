@@ -160,8 +160,8 @@
     "ref": "3.4.16-0"
   },
   {
-    "source": "k8s.gcr.io/pause:3.6",
-    "dest": "gcr-mirror/pause:3.6",
+    "source": "k8s.gcr.io/pause:3.7",
+    "dest": "gcr-mirror/pause:3.7",
     "registry": "k8s.gcr.io",
     "image": "pause",
     "ref": "3.6"

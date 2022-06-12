@@ -6,5 +6,5 @@
 
 ```bash
 # $ sudo ./k3s server --help
-$ sudo ./k3s server --pause-image "registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.5"
+$ sudo ./k3s server --pause-image "registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.7"
 ```
