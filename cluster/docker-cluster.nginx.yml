@@ -35,7 +35,7 @@ services:
         source: ./config/${LNMP_NGINX_CONF_D:-nginx}/demo-ssl
         target: /etc/nginx/conf.d/demo-ssl
       - type: bind
-        source: ./config/${LNMP_NGINX_CONF_D:-nginx}/demo-fzjh.config
+        source: ./config/${LNMP_NGINX_CONF_D:-nginx}/demo.config/fzjh.config
         target: /etc/nginx/conf.d/fzjh.conf
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
