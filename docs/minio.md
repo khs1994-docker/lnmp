@@ -14,7 +14,7 @@ LREW_INCLUDE="minio pcit"
 
 ### 配置 NGINX
 
-将 `config/nginx/minio.config` 复制为 `config/nginx/minio.conf`
+将 `config/nginx/demo.config/minio.config` 复制为 `config/nginx/minio.conf`
 
 ### 其他配置
 

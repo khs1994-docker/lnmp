@@ -88,20 +88,3 @@ $ gpg -o filename --export-secret-keys <GPG-key-id>
 $ gpg --import filename
 $ gpg --import filename.pub
 ```
-
-## X.509 Key
-
-* https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification/telling-git-about-your-signing-key
-
-git 2.19 +
-
-```bash
-$ git config --global gpg.x509.program smimesign
-$ git config --global gpg.format x509
-```
-
-git 2.18 -
-
-```bash
-$ git config --global gpg.program smimesign
-```

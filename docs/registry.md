@@ -23,7 +23,7 @@ $ docker run --init --rm \
 # 部分 nginx 可能不能解密，你可以替换为下面的命令
 # -mbn $username $password > config/nginx/auth/docker_registry.htpasswd
 
-$ cp config/nginx/demo-registry.config config/nginx/registry.conf
+$ cp config/nginx/demo.config/docker-registry.config config/nginx/docker-registry.conf
 
 # 4. 编辑 config/nginx/registry.conf 文件
 # 替换 REGISTRY_DOMAIN 为 docker.t.khs1994.com

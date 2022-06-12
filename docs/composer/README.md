@@ -12,22 +12,21 @@ $ composer install \
 
 **国内镜像**
 
-* https://github.com/Webysther/packagist-mirror
-
 ```bash
-# 每 5min 更新
+# https://developer.aliyun.com/composer
 $ composer config -g repos.packagist composer https://mirrors.aliyun.com/composer/
 
-$ composer config -g repos.packagist composer https://mirrors.huaweicloud.com/repository/php/
+$ composer config -g repos.packagist composer https://repo.huaweicloud.com/repository/php/
 
-# 不推荐
+# https://mirrors.cloud.tencent.com/help/composer.html
 $ composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/
 ```
 
-**过时**
+**过时的镜像（无法使用）**
 
 * https://packagist.mirrors.sjtug.sjtu.edu.cn
 * https://packagist.phpcomposer.com
+* https://php.cnpkg.org
 
 **取消配置**
 
@@ -35,6 +34,9 @@ $ composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/
 $ composer config -g --unset repos.packagist
 ```
 
-* https://developer.aliyun.com/composer
-* https://mirrors.sjtug.sjtu.edu.cn/packagist/
-* https://mirrors.cloud.tencent.com/composer/
+**测试命令**
+
+```powershell
+$MIRROR="mirrors.aliyun.com/composer/"
+docker run -it --rm khs1994/php:8.1.1-composer-alpine sh -cx "composer config -g repos.packagist composer https://$MIRROR ; composer require laravel/laravel"
+```
