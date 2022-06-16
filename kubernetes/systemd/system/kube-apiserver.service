@@ -82,7 +82,7 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --service-cluster-ip-range=10.254.0.0/16,fd00::/108 \
 --service-node-port-range="1-65535" \
 --logtostderr=true \
---feature-gates="IPv6DualStack=true" \
+# --feature-gates="IPv6DualStack=true" \
 #
 ;
 # --logging-format=json \

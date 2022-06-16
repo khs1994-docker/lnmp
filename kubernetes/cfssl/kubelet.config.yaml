@@ -76,6 +76,6 @@ systemReservedCgroup: ""
 kubeReservedCgroup: ""
 enforceNodeAllocatable: ["pods"]
 # volumePluginDir: /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
-featureGates:
+# featureGates:
   # AllAlpha: true
-  IPv6DualStack: true
+  # IPv6DualStack: true

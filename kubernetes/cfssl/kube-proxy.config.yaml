@@ -18,5 +18,5 @@ iptables:
 ipvs:
   scheduler: rr
   excludeCIDRs: []
-featureGates:
-  IPv6DualStack: true
+# featureGates:
+#   IPv6DualStack: true
