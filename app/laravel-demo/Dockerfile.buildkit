@@ -27,7 +27,7 @@ ARG NODE_REGISTRY=https://registry.npmjs.org
 
 # COPY package.json webpack.mix.js yarn.lock /app/
 # COPY package.json webpack.mix.js package-lock.json /app/
-COPY package.json /app/
+COPY --link package.json /app/
 
 RUN --mount=type=cache,target=/app/node_modules,id=laravel-docker_node_modules \
     --mount=type=cache,target=/root/.npm,id=npm_caches \
@@ -36,9 +36,9 @@ RUN --mount=type=cache,target=/app/node_modules,id=laravel-docker_node_modules \
       # && yarn install \
       && npm install --registry=${NODE_REGISTRY}
 
-COPY resources/ /app/resources/
+COPY --link resources/ /app/resources/
 
-COPY webpack.mix.js tailwind.config.js /app/
+COPY --link webpack.mix.js tailwind.config.js /app/
 
 RUN --mount=type=cache,target=/app/node_modules,id=laravel-docker_node_modules \
       set -x ; \
@@ -53,8 +53,8 @@ RUN --mount=type=cache,target=/app/node_modules,id=laravel-docker_node_modules \
 FROM ${DOCKER_HUB_USERNAME}/php:8.1.1-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
-COPY composer.json /app/
-COPY database/ /app/database/
+COPY --link composer.json /app/
+COPY --link database/ /app/database/
 
 ARG CI=true
 
@@ -75,11 +75,11 @@ RUN --mount=type=cache,target=/tmp,id=laravel_caches \
 # $ docker build -t khs1994/laravel:TAG --target=laravel .
 FROM ${DOCKER_HUB_USERNAME}/php:${PHP_VERSION}-s6-alpine as laravel
 
-COPY . /app/laravel-docker/
-COPY --from=composer /app/vendor/ /app/laravel-docker/vendor/
-COPY --from=frontend /app/public/js/ /app/laravel-docker/public/js/
-COPY --from=frontend /app/public/css/ /app/laravel-docker/public/css/
-COPY --from=frontend /app/public/mix-manifest.json /app/laravel-docker/public/mix-manifest.json
+COPY --link . /app/laravel-docker/
+COPY --from=composer --link /app/vendor/ /app/laravel-docker/vendor/
+COPY --from=frontend --link /app/public/js/ /app/laravel-docker/public/js/
+COPY --from=frontend --link /app/public/css/ /app/laravel-docker/public/css/
+COPY --from=frontend --link /app/public/mix-manifest.json /app/laravel-docker/public/mix-manifest.json
 
 VOLUME /app/laravel-docker/storage/framework/views
 
@@ -129,7 +129,7 @@ ENTRYPOINT [ "sh", "/app/laravel-docker/.docker-rootless/docker-entrypoint.sh" ]
 
 FROM nginx:${NGINX_VERSION} as nginx
 
-COPY --from=laravel /app/laravel-docker/public /app/laravel-docker/public
+COPY --from=laravel --link /app/laravel-docker/public /app/laravel-docker/public
 
 ADD https://raw.githubusercontent.com/khs1994-docker/lnmp-nginx-conf-demo/master/wait-for-php.sh /wait-for-php.sh
 

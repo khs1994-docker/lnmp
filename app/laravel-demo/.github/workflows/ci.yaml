@@ -84,6 +84,7 @@ jobs:
       - name: Build Docker Image
         env:
           DOCKER_CLI_EXPERIMENTAL: enabled
+          EVENT_NAME: ${{ github.event_name }}
         run: |
           cd ../laravel
           docker buildx build --load \
@@ -97,6 +98,11 @@ jobs:
               --target=laravel-rootless \
               -t khs1994/laravel:9-rootless \
               -f Dockerfile.buildkit .
+
+          if [ $EVENT_NAME = 'push' ];then
+            docker push khs1994/laravel:9
+            docker push khs1994/laravel:9-rootless
+          fi
       - name: Up LNMP
         run: |
           lnmp-docker up
