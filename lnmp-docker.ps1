@@ -191,6 +191,10 @@ Function New-InitFile() {
     New-Item -ItemType File config/mysql/conf.d/my.cnf
   }
 
+  if (!(Test-Path config/mariadb/conf.d/my.cnf)) {
+    New-Item -ItemType File config/mariadb/conf.d/my.cnf
+  }
+
   _cp_only_not_exists docker-lnmp.override.example.yml docker-lnmp.override.yml
 
   _cp_only_not_exists docker-workspace.example.yml docker-workspace.yml
@@ -366,9 +370,6 @@ PHP Tools:
 
 Composer:
   satis                Build Satis
-
-Kubernets:
-  gcr.io               Up local k8s.gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | down | ]
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
@@ -588,10 +589,10 @@ Function Get-ComposeOptions($compose_files) {
 
     $env:COMPOSE_FILE = $COMPOSE_FILE_ARRAY_FULL_PATH -join ';'
 
-    $env:WSLENV = 'COMPOSE_FILE/l'
+    $env:WSLENV = 'COMPOSE_FILE/ul'
 
     #@debug
-    # printInfo $(wsl -d ${WSL2_DIST} -- sh -c "echo Load compose files: `$COMPOSE_FILE")
+    printInfo $(wsl -d ${WSL2_DIST} -- sh -c 'echo Load compose files: $COMPOSE_FILE')
   }
   else {
     $env:COMPOSE_FILE = $COMPOSE_FILE_ARRAY -join ';'
@@ -696,9 +697,11 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
 
     $COMPOSE_BIN = "/mnt/wsl/docker-desktop/cli-tools/usr/bin/docker-compose"
 
+    echo $args
+
     $cmd = convert_args_to_string_if_use_wsl2 $args
 
-    wsl -d $WSL2_DIST command -v $COMPOSE_BIN `> /dev/null `|`| exit 1
+    wsl -d $WSL2_DIST -- sh -c "command -v $COMPOSE_BIN > /dev/null || exit 1"
 
     if ($?) {
       wsl -d $WSL2_DIST -- sh -xc "$COMPOSE_BIN $cmd"
@@ -787,6 +790,7 @@ if (!(Test-Path lnmp-docker-custom-script.ps1)) {
 
 printInfo "Exec custom script"
 
+. ./lnmp-docker-custom-script.example.ps1
 . ./lnmp-docker-custom-script.ps1
 
 if (Test-Command docker) {
@@ -890,28 +894,6 @@ switch -regex ($command) {
     & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $service }
   }
 
-  pull {
-    $env:USE_WSL2_DOCKER_COMPOSE = '0'
-
-    if ($other) {
-      $services = $other
-    }
-    else {
-      $services = ${LNMP_SERVICES}
-      if ($services.GetType() -eq [String]) {
-        $services = $services.split(' ')
-      }
-    }
-
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml"
-
-    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services
-
-    #@custom
-    __lnmp_custom_pull
-  }
-
   cleanup {
     cleanup
     #@custom
@@ -950,10 +932,13 @@ switch -regex ($command) {
     $options = Get-ComposeOptions "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
+    #@custom
+    __lnmp_custom_pre_up $services
+
     & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up --no-build -d $services }
 
     #@custom
-    __lnmp_custom_up $services
+    __lnmp_custom_post_up $services
   }
 
   "^pull$" {
@@ -975,7 +960,7 @@ switch -regex ($command) {
     docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services
 
     #@custom
-    __lnmp_custom_pull
+    __lnmp_custom_post_pull
   }
 
   "^down$" {
@@ -987,7 +972,7 @@ switch -regex ($command) {
     docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} down --remove-orphans
 
     #@custom
-    __lnmp_custom_down
+    __lnmp_custom_post_down
   }
 
   env {
@@ -1350,125 +1335,6 @@ XXX
 
   wait-docker {
     Wait-Docker
-  }
-
-  gcr.io {
-    printInfo "Check k8s.gcr.io host config"
-
-    $GCR_IO_HOST = (ping k8s.gcr.io -n 1).split(" ")[9]
-    $GCR_IO_HOST_EN = (ping k8s.gcr.io -n 1).split(" ")[11].trim(":")
-
-    if (!(($GCR_IO_HOST -eq "127.0.0.1") -or ($GCR_IO_HOST_EN -eq "127.0.0.1"))) {
-      printWarning "Please set host on C:\Windows\System32\drivers\etc
-
-127.0.0.1 k8s.gcr.io
-"
-
-      Edit-Hosts
-
-      exit
-    }
-
-    printInfo "k8s.gcr.io host config correct"
-
-    if ('logs' -eq $args[1]) {
-      docker logs $(docker container ls -f label=com.khs1994.lnmp.gcr.io -q) -f
-      exit
-    }
-
-    try {
-      docker container rm -f `
-      $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > $null 2>&1
-    }
-    catch {}
-
-    printInfo "This local server support Docker Desktop with Kubernetes v${KUBERNETES_VERSION}"
-
-    if ('down' -eq $args[1]) {
-      Write-Warning "Stop k8s.gcr.io local server success"
-      exit
-    }
-
-    mkdir -Force $LNMP_CACHE/registry | out-null
-
-    docker run -it -d `
-      -p 443:443 `
-      -p 80:80 `
-      -v $pwd/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml `
-      -v $pwd/config/registry:/etc/docker/registry/ssl `
-      -v $LNMP_CACHE/registry:/var/lib/registry `
-      --label com.khs1994.lnmp.gcr.io `
-      registry
-
-    # -v $pwd/config/registry/nginx.htpasswd:/etc/docker/registry/auth/nginx.htpasswd `
-
-    if ('--no-pull' -eq $args[1]) {
-      printInfo "Up k8s.gcr.io Server Success"
-      exit
-    }
-
-    $images = "kube-controller-manager:v${KUBERNETES_VERSION}", `
-      "kube-apiserver:v${KUBERNETES_VERSION}", `
-      "kube-scheduler:v${KUBERNETES_VERSION}", `
-      "kube-proxy:v${KUBERNETES_VERSION}", `
-      "etcd:3.4.13-0", `
-      "coredns/coredns:v${KUBERNETES_COREDNS_VERSION}", `
-      "pause:${KUBERNETES_PAUSE_VERSION}"
-
-    sleep 10
-
-    function Test-GcrImage([string] $image) {
-      if ($(docker image ls -q k8s.gcr.io/$image)) {
-        return $true
-      }
-
-      return $false
-    }
-
-    function Get-GcrImage([string] $image, [string] $mirror) {
-      if ($image -eq "coredns/coredns:v${KUBERNETES_COREDNS_VERSION}") {
-        $image = "coredns:v${KUBERNETES_COREDNS_VERSION}"
-      }
-      docker pull $mirror/$image
-      if ($image -eq "coredns:v${KUBERNETES_COREDNS_VERSION}") {
-        docker tag $mirror/$image k8s.gcr.io/coredns/$image
-      }
-      else {
-        docker tag $mirror/$image k8s.gcr.io/$image
-      }
-      # docker push k8s.gcr.io/$image
-      docker rmi $mirror/$image
-    }
-
-    # $ErrorActionPreference="SilentlyContinue"
-
-    foreach ($image in $images) {
-      printInfo "Handle ${image} ..."
-
-      if (Test-GcrImage $image) {
-        printInfo "k8s.gcr.io/$image exists"
-
-        continue;
-      }
-
-      Get-GcrImage $image "k8s.gcr.io/google_containers"
-
-      if (Test-GcrImage $image) {
-        continue;
-      }
-
-      # 一些镜像 aliyun 可能不存在，从第二个镜像下载
-
-      printError "Download from mirror error, try other mirror"
-
-      Get-GcrImage $image "ccr.ccs.tencentyun.com/gcr-mirror"
-    }
-
-    try {
-      docker container rm -f `
-      $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > $null 2>&1
-    }
-    catch {}
   }
 
   composer {

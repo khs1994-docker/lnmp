@@ -54,19 +54,19 @@
 
 ### MySQL
 
-| 名称                | 本机                      | 容器                         |
-| ----------------- | ----------------------- | -------------------------- |
-| `conf.d`          | `./config/mysql/conf.d` | `/etc/mysql/conf.d`        |
-| `error.log`       | `./log/mysql/error.log` | `/var/log/mysql/error.log` |
-| `/var/lib/mysql/` | `mysql-data`            | `/var/lib/mysql`           |
+| 名称                | 本机                             | 容器                         |
+| ----------------- | ------------------------------ | -------------------------- |
+| `my.cnf`          | `./config/mysql/conf.d/my.cnf` | `/etc/mysql/conf.d/my.cnf` |
+| `error.log`       | `./log/mysql/error.log`        | `/var/log/mysql/error.log` |
+| `/var/lib/mysql/` | `mysql-data`                   | `/var/lib/mysql`           |
 
 ### MariaDB
 
-| 名称                | 本机                        | 容器                         |
-| ----------------- | ------------------------- | -------------------------- |
-| `conf.d`          | `./config/mariadb/conf.d` | `/etc/mysql/conf.d`        |
-| `error.log`       | `./log/mysql/error.log`   | `/var/log/mysql/error.log` |
-| `/var/lib/mysql/` | `mariadb-data`            | `/var/lib/mysql`           |
+| 名称                | 本机                               | 容器                         |
+| ----------------- | -------------------------------- | -------------------------- |
+| `my.cnf`          | `./config/mariadb/conf.d/my.cnf` | `/etc/mysql/conf.d/my.cnf` |
+| `error.log`       | `./log/mysql/error.log`          | `/var/log/mysql/error.log` |
+| `/var/lib/mysql/` | `mariadb-data`                   | `/var/lib/mysql`           |
 
 ### PostgreSQL
 

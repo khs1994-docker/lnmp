@@ -86,6 +86,7 @@ _cp_only_not_exists lnmp-docker-custom-script.example lnmp-docker-custom-script
 
 print_info "Exec custom scripts"
 
+. ./lnmp-docker-custom-script.example
 . ./lnmp-docker-custom-script
 
 _cp_only_not_exists config/php/php.development.ini config/php/php.ini
@@ -98,6 +99,14 @@ fi
 
 if ! [ -f config/mysql/conf.d/my.cnf ];then
   echo "#" > config/mysql/conf.d/my.cnf
+  chown root:root config/mysql/conf.d/my.cnf || true
+  chmod 644       config/mysql/conf.d/my.cnf || true
+fi
+
+if ! [ -f config/mariadb/conf.d/my.cnf ];then
+  echo "#" > config/mariadb/conf.d/my.cnf
+  chown root:root config/mariadb/conf.d/my.cnf || true
+  chmod 644       config/mariadb/conf.d/my.cnf || true
 fi
 
 _cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
@@ -147,7 +156,6 @@ Commands:
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   help                 Display this help message
   nfs                  Up NFS server [ down | ]
-  pull                 Pull LNMP Docker Images
   restore              Restore MySQL databases
   restart              Restart LNMP services
   services             List services
@@ -1357,26 +1365,6 @@ For information please run $ docker service update --help
     exec docker-compose $options push $service
     ;;
 
-  pull )
-    _docker_is_run
-
-    sleep 2
-
-    local service=${LNMP_SERVICES:-nginx mysql php8 redis}
-
-    if ! [ -z "$@" ];then
-      service="$@"
-    fi
-
-    _get_compose_options docker-lnmp.yml \
-                         docker-lnmp.override.yml
-
-    docker-compose $options pull $service
-
-    #@custom
-    __lnmp_custom_pull $service 2>/dev/null || true
-    ;;
-
   service* )
       echo ${LNMP_SERVICES:-nginx mysql php8 redis}
     ;;
@@ -1402,11 +1390,13 @@ For information please run $ docker service update --help
 
     _get_compose_options docker-lnmp.yml \
                          docker-lnmp.override.yml
+    #@custom
+    __lnmp_custom_pre_up "$@" 2>/dev/null || true
 
     docker-compose $options up $opt --no-build ${service}
 
     #@custom
-    __lnmp_custom_up "$@" 2>/dev/null || true
+    __lnmp_custom_post_up "$@" 2>/dev/null || true
 
     sleep 5; print_info "Test nginx configuration file..."
 
@@ -1509,7 +1499,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
     init; docker-compose $options down --remove-orphans
     #@custom
-    __lnmp_custom_down "$@" 2>/dev/null || true
+    __lnmp_custom_post_down "$@" 2>/dev/null || true
     ;;
 
   pull )
@@ -1522,7 +1512,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     docker-compose $options pull ${LNMP_SERVICES:-nginx mysql php8 redis}
 
     #@custom
-    __lnmp_custom_pull "$@" 2>/dev/null || true
+    __lnmp_custom_post_pull "$@" 2>/dev/null || true
     ;;
 
   compose )
