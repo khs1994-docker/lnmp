@@ -1,0 +1,10 @@
+/*
+!/demo
+!/s6-overlay
+!/services.d
+!/.gitignore
+/s6-overlay/*
+!/s6-overlay/s6-rc.d
+!/s6-overlay/scripts/
+/s6-overlay/scripts/*
+!/s6-overlay/scripts/laravel-prepare

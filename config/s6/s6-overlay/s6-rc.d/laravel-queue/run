@@ -1,0 +1,9 @@
+#!/command/execlineb -P
+
+#!/usr/bin/env sh
+
+# if test -f ./setup; then
+#     source ./setup
+# fi
+
+php /app/laravel/artisan queue:work redis --sleep=3 --tries=3

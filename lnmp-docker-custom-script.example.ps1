@@ -19,7 +19,8 @@ function __lnmp_custom_pre_up() {
     'chown root:root config/mysql/conf.d/my.cnf; \
      chmod 644       config/mysql/conf.d/my.cnf; \
      chown root:root config/mariadb/conf.d/my.cnf; \
-     chmod 644       config/mariadb/conf.d/my.cnf;
+     chmod 644       config/mariadb/conf.d/my.cnf; \
+     chmod +x -R     config/s6/s6-overlay;
     '
 }
 

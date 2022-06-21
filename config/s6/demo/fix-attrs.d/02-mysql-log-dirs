@@ -1,0 +1,5 @@
+
+# path recurse account fmode dmode
+/var/log/mysql-error-logs true nobody,32768:32768 0644 2700
+/var/log/mysql-general-logs true nobody,32768:32768 0644 2700
+/var/log/mysql-slow-query-logs true nobody,32768:32768 0644 2700

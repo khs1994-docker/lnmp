@@ -29,10 +29,12 @@ ENV S6_KEEP_ENV=0 \
     S6_CMD_WAIT_FOR_SERVICES=0  \
     S6_CMD_WAIT_FOR_SERVICES_MAXTIME=5000 \
     S6_READ_ONLY_ROOT=0 \
-    S6_SYNC_DISKS=0
-# ENTRYPOINT ["/s6-init"]
+    S6_SYNC_DISKS=0 \
+    PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-ENTRYPOINT ["/command/s6-svscan", "-t0", "/etc/services.d"]
+ENTRYPOINT ["/s6-init"]
+
+# ENTRYPOINT ["/command/s6-svscan", "-t0", "/etc/services.d"]
 
 ARG VCS_REF="unknow"
 

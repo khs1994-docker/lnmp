@@ -107,6 +107,8 @@ if ! [ -f config/mariadb/conf.d/my.cnf ];then
   chmod 644       config/mariadb/conf.d/my.cnf || true
 fi
 
+chmod +x -R       config/s6/s6-overlay || true
+
 _cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
 _cp_only_not_exists config/php8/php-cli.example.ini config/php8/php-cli.ini
 _cp_only_not_exists config/php8/docker-php.example.ini config/php8/docker-php.ini

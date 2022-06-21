@@ -1,0 +1,3 @@
+#!/command/execlineb -S0
+
+/run/s6/basedir/bin/halt

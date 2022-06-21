@@ -139,19 +139,14 @@ services:
       - ./log/supervisord.log:/var/log/supervisord.log
       - ./log/supervisord:/var/log/supervisord
       # s6
-      - ./config/s6/${S6_SERVICES_D:-services.d}:/etc/services.d
-      - ./config/s6/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
+      - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
+      - ./config/s6/s6-overlay/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
       - ./config/crontabs/root:/etc/crontabs/root
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo
         volume:
           nocopy: false
-      # if /run is tmpfs, s6 can't run
-      # - type: tmpfs
-      #   target: /run
-      #   tmpfs:
-      #     size: 1000
     networks:
       - frontend
       - backend
@@ -161,9 +156,10 @@ services:
       # backend:
       #   aliases:
       #   - php
+    tmpfs: /run:exec
     expose:
       - "9000"
-    command: php-fpm -R -F
+    # command: php-fpm -R -F
     # command: php-fpm -F
     environment:
       - &lnmp_docker_version LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v20.10} x86_64 With Pull Docker Image
@@ -171,6 +167,7 @@ services:
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
+      - PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       # - PHP_INI_SCAN_DIR=:/usr/local/etc/php/conf.d
 
   php8:
@@ -193,15 +190,14 @@ services:
       # - ./log/supervisord.log:/var/log/supervisord.log
       # - ./log/supervisord:/var/log/supervisord
       # s6
-      - ./config/s6/${S6_SERVICES_D:-services.d}:/etc/services.d
-      - ./config/s6/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
+      - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
+      - ./config/s6/s6-overlay/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
       - ./config/crontabs/root:/etc/crontabs/root
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo
         volume:
           nocopy: false
-      - << : *tmpfs
     networks:
       # - frontend
       # - backend
@@ -211,9 +207,10 @@ services:
       backend:
         aliases:
         - php
+    tmpfs: /run:exec
     expose:
       - "9000"
-    command: php-fpm -R -F
+    # command: php-fpm -R -F
     # command: php-fpm -F
     environment:
       - *lnmp_docker_version
@@ -221,6 +218,7 @@ services:
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
+      - PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       # - XDEBUG_MODE
 
   composer:
