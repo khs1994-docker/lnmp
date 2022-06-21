@@ -19,27 +19,25 @@ readonly ARCH=`uname -m`
 if [ $OS != 'Darwin' ] && [ $OS != 'Linux' ];then \
     echo -e "\n\033[31mError \033[0m  Please use ./lnmp-docker.ps1 on PowerShell in Windows"; exit 1; fi
 
-std="stderr"
-
 if [ "$quite" = "true" -o "$QUITE" = "true" -o "$1" = "services" -o "$1" = "env-file" ];then
-  std="null"
+  quite='1'
 fi
 
 print_info(){
-  echo -e "\033[32mINFO \033[0m  $@\n" > /dev/${std}
+  test "$quite" = '1' && true || echo -e "\033[32mINFO \033[0m  $@\n" >&2
 }
 
 print_error(){
-  echo -e "\033[31mERROR\033[0m \a $@\n" > /dev/${std}
+  test "$quite" = '1' && true || echo -e "\033[31mERROR\033[0m \a $@\n" >&2
   export exit_by_error=1
 }
 
 print_warning(){
-  echo -e "\033[33mWARNING\033[0m \a $@\n" > /dev/${std}
+  test "$quite" = '1' && true || echo -e "\033[33mWARNING\033[0m \a $@\n" >&2
 }
 
 notsupport(){
-  print_error "Not Support ${OS} ${ARCH}\n" > /dev/${std}
+  print_error "Not Support ${OS} ${ARCH}\n"
   exit 1
 }
 
@@ -1380,13 +1378,11 @@ For information please run $ docker service update --help
 
     local service=${LNMP_SERVICES:-nginx mysql php8 redis}
 
+    if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;shift;fi
+
     if ! [ -z "$@" ];then
       service="$@"
     fi
-
-    # echo $service
-
-    if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
 
     _get_compose_options docker-lnmp.yml \
                          docker-lnmp.override.yml
@@ -1397,6 +1393,8 @@ For information please run $ docker service update --help
 
     #@custom
     __lnmp_custom_post_up "$@" 2>/dev/null || true
+
+    echo $service | grep -q 'nginx' && true || exit 0
 
     sleep 5; print_info "Test nginx configuration file..."
 
