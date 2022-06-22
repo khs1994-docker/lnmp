@@ -53,7 +53,7 @@ services:
       - npm-cache-data:/tmp/node/.npm
     command: /bin/sh -c "while sleep 1000; do :; done"
     environment:
-      APP_ENV: development
+      APP_ENV: ${APP_ENV:-development}
       TZ: Asia/Shanghai
 
   vscode-remote-container-workspace:
