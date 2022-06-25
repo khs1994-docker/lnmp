@@ -106,7 +106,7 @@ server {
   }
 
   location ~ .*\.php(\/.*)*$ {
-    fastcgi_pass   php8:9000;
+    fastcgi_pass   php7:9000;
     include        fastcgi.conf;
   }
 }
