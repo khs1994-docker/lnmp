@@ -1281,8 +1281,12 @@ main() {
   swarm-deploy )
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       _docker_is_run
-      rm -rf app/.pcit
-      pcit_init
+
+      if [ "$PRODUCTION_COMPOSE_FILE" = 'docker-production.yml' ];then
+        rm -rf app/.pcit
+        pcit_init
+      fi
+
       docker stack deploy -c ${PRODUCTION_COMPOSE_FILE} lnmp
 
       sleep 2; docker stack ps lnmp
