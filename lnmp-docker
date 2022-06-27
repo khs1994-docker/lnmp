@@ -1892,8 +1892,6 @@ if [ $# = 0 ];then help; exit 0; fi
 # 生产环境 compose 文件
 PRODUCTION_COMPOSE_FILE='docker-production.yml'
 
-if [ `ls docker-production.*.yml > /dev/null 2>&1` ];then
-  PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml`
-fi
+ls docker-production.*.yml > /dev/null 2>&1 && PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml` || true
 
 main "$@"
