@@ -8,4 +8,6 @@
 #     source ./setup
 # fi
 
-/usr/sbin/crond -fS
+with-contenv
+
+/usr/sbin/crond -fS -d 8

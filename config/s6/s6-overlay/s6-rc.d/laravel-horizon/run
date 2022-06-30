@@ -6,4 +6,6 @@
 #     source ./setup
 # fi
 
+with-contenv
+
 php /app/laravel/artisan horizon

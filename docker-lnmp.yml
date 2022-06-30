@@ -141,7 +141,8 @@ services:
       # s6
       - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
       - ./config/s6/s6-overlay/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
-      - ./config/crontabs/root:/etc/crontabs/root
+      - ./config/crontabs/root:/etc/crontabs/root.s6
+      - php7-var-log:/var/log
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo
@@ -192,7 +193,8 @@ services:
       # s6
       - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
       - ./config/s6/s6-overlay/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
-      - ./config/crontabs/root:/etc/crontabs/root
+      - ./config/crontabs/root:/etc/crontabs/root.s6
+      - php8-var-log:/var/log
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo
@@ -311,6 +313,10 @@ volumes:
   phpmyadmin-data:
     << : *common-labels
   composer-cache-data:
+    << : *common-labels
+  php8-var-log:
+    << : *common-labels
+  php7-var-log:
     << : *common-labels
 
 secrets:

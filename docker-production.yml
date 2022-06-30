@@ -39,8 +39,7 @@ x-common:
   read_only: false
   # dns:
   #   - 114.114.114.114
-  tmpfs:
-    - /run
+  tmpfs: /run:exec
 
 x-deploy:
   &default-deploy
@@ -83,6 +82,11 @@ x-php-common:
       target: /usr/share/zoneinfo
       volume:
         nocopy: false
+    # s6
+    - ./config/s6/s6-overlay/s6-rc.d:/etc/s6-overlay/s6-rc.d
+    - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
+    - ./config/crontabs/root:/etc/crontabs/root.s6
+    - php-var-log:/var/log
   environment:
     - APP_ENV=production
   configs:
@@ -360,6 +364,9 @@ services:
     << : *common
     << : *default-labels
     << : *default-php
+    # image: khs1994/php:8.1.1-s6-alpine
+    # entrypoint:
+    #   - /s6-init
     build:
       << : *default-build
       # << : *default-build-debian
@@ -368,13 +375,14 @@ services:
       dockerfile: Dockerfile
       # args:
       #   foo: bar
-    command: php-fpm -R -F
+    # command: php-fpm -R -F
     networks:
       - frontend
       - backend
     environment:
       - APP_ENV=production
       - LNMP_DOCKER_VERSION=v20.10 x86_64 Docker Swarm
+      - PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     # logging: *default-logging
     deploy:
       << : *default-deploy
@@ -637,6 +645,8 @@ volumes:
   pcit-tmp:
     << : *default-labels
   minio-data:
+    << : *default-labels
+  php-var-log:
     << : *default-labels
 
 secrets:
