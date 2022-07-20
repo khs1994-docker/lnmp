@@ -211,9 +211,18 @@ _libzip(){
 #
 
     if [ ${VERSION_ID} -ge 8 ];then
-      if [ ${VERSION_ID} -ge 9 ];then _install_epel;fi
+      $(_sudo) dnf install -y libzip
+
+      if [ ${VERSION_ID} -eq 8 ];then
+        $(_sudo) dnf install -y libzip-devel
+      fi
+
+      if [ ${VERSION_ID} -ge 9 ];then
+        _install_epel
+        $(_sudo) dnf --enablerepo=crb install -y libzip-devel
+      fi
+
       $(_sudo) dnf install -y pkgconf-pkg-config
-      $(_sudo) dnf install -y libzip libzip-devel
 
       return
     fi
@@ -919,7 +928,7 @@ cp -a %{buildroot}/../../RPMS/x86_64/\${RPM_NAME} ~
 
 cat /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
-QA_RPATHS=$(( 0x0001|0x0010 )) rpmbuild -bb /tmp/khs1994-wsl-php${PHP_NUM}.spec
+QA_RPATHS=$(( 0x0001|0x0010|0x0020 )) rpmbuild -bb /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
 RPM_NAME=khs1994-wsl-php${PHP_NUM}-${PHP_PKG_VERSION}-${rpm_release_name}.x86_64.rpm
 

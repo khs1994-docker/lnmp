@@ -308,7 +308,8 @@ $( $(_sudo) apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 $( $(_sudo) apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
 $( _test_pkg libenchant1c2a ) \
 $( _test_pkg libenchant-2-2 ) \
-libssl1.1 \
+$( $(_sudo) apt install -y libssl1.1 > /dev/null 2>&1 && echo libssl1.1 ) \
+$( $(_sudo) apt install -y libssl3 > /dev/null 2>&1 && echo libssl3 ) \
 $( $(_sudo) apt install -y libicu55 > /dev/null 2>&1 && echo libicu55) \
 $( $(_sudo) apt install -y libicu57 > /dev/null 2>&1 && echo libicu57) \
 $( $(_sudo) apt install -y libicu60 > /dev/null 2>&1 && echo libicu60) \

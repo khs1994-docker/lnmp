@@ -173,6 +173,8 @@ services:
         - OS_TYPE=quay.io/centos/centos:stream9
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.1}-centos-9_amd64
 
+# https://github.com/docker-library/docs/tree/master/rockylinux
+
   wsl-php-builder-rocky8-81:
     build:
       context: .
@@ -182,10 +184,19 @@ services:
         - OS_TYPE=rockylinux:8
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.1}-rocky-8_amd64
 
+  wsl-php-builder-rocky9-81:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_81:-8.1.1}
+        - OS_TYPE=rockylinux:9
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.1}-rocky-9_amd64
+
 # fedora
 # https://github.com/docker-library/docs/tree/master/fedora
 
-  wsl-php-builder-fc36-74:
+  wsl-php-builder-fc35-74:
     build:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
@@ -194,7 +205,7 @@ services:
         - OS_TYPE=fedora:36
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.28}-fedora-36_amd64
 
-  wsl-php-builder-fc36-80:
+  wsl-php-builder-fc35-80:
     build:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
