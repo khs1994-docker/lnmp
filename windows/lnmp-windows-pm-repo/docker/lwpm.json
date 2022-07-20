@@ -1,8 +1,8 @@
 {
   "name": "docker",
   "description": "Docker: the open-source application container engine",
-  "version": "20.10.16",
-  "pre-version": "20.10.16",
+  "version": "20.10.17",
+  "pre-version": "20.10.17",
   "homepage": "https://www.docker.com/",
   "bug": "https://github.com/docker/for-win/issues",
   "github": "docker/docker-ce",
