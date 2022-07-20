@@ -10,4 +10,6 @@
 
 with-contenv
 
-/usr/sbin/crond -fS -d 8
+/usr/sbin/crond -f -d 8
+
+# edit crond config on `~/lnmp/config/crontabs/root`

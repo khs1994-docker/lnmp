@@ -3,15 +3,11 @@
 * https://github.com/just-containers/s6-overlay
 * https://github.com/skarnet/s6
 
-## 文件作用
+## 日志
 
-`run`     服务如何启动
+* https://github.com/just-containers/s6-overlay#logging
 
-`down`    如果 `down` 文件存在，则 S6 不会启动该服务
-
-`finish`  程序退出后的操作
-
-`log/run` 启动日志服务
+## `services.d` 废弃，请参考 `s6-overlay`
 
 ## 参考链接
 
