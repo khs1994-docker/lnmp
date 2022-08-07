@@ -18,10 +18,10 @@ jobs:
     strategy:
       matrix:
         repo: ["microsoft/WSL2-Linux-Kernel","torvalds/linux"]
-        ref: ["master","linux-msft-wsl-5.10.y"]
+        ref: ["master","linux-msft-wsl-5.15.y"]
         exclude:
         - repo: "torvalds/linux"
-          ref: "linux-msft-wsl-5.10.y"
+          ref: "linux-msft-wsl-5.15.y"
         - repo: microsoft/WSL2-Linux-Kernel
           ref: master
       fail-fast: false
@@ -49,7 +49,7 @@ jobs:
 
         mkdir -p Microsoft/
 
-        if [ $ref = "linux-msft-wsl-5.10.y" -o $ref = "master" ];then
+        if [ $ref = "linux-msft-wsl-5.15.y" -o $ref = "master" ];then
           curl -fsSL -o Microsoft/config-wsl \
             https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl-5.10
         fi
