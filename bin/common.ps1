@@ -18,7 +18,7 @@ function wslpath($WIN_PATH) {
 
 $LNMP_USER = "root:root"
 
-if ($IsWindows -and $PWD.ProviderPath.StartsWith('\\wsl.localhost\')) {
+if ($IsWindows -and $PWD.ProviderPath.StartsWith('\\wsl$\')) {
   $LNMP_USER = "1000:1000"
 }
 
