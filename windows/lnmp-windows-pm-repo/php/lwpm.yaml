@@ -135,6 +135,11 @@ scripts:
       }
     }
 
+    mkdir -f $home\lnmp\windows\logs\php | out-null
+    new-item $home\lnmp\windows\logs\php\php_errors.log -ErrorAction "SilentlyContinue"
+    remove-item C:\logs\php\php_errors.log
+    _ln      $home\lnmp\windows\logs\php\php_errors.log C:\logs\php\php_errors.log
+
   get-version: |-
     if(!($VERSION)){
     $VERSION=$stable_version
@@ -151,3 +156,20 @@ scripts:
     $unzipDesc="php"
     $global:PHP_PREFIX="C:\php"
     }
+  preinstall:
+    - |
+      # https://docs.microsoft.com/zh-cn/cpp/windows/redistributing-visual-cpp-files?view=msvc-170#install-the-redistributable-packages
+      # check vclib installed
+      if(!(Test-Path 'HKLM:\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\X64')){
+        PrintError 'Please install vclib first, exec $ lpm install vclib'
+
+        exit 1
+      }
+
+      if((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\X64').Installed -ne 1){
+        PrintError 'Please install vclib first, exec $ lpm install vclib'
+
+        exit 1
+      }
+
+      printInfo 'vclib already installed, continue ...'

@@ -38,18 +38,47 @@ scripts:
 
     mkdir -f $home\lnmp\windows\logs\nginx | out-null
 
-    _ln $home\lnmp\windows\logs\nginx C:\nginx\logs
+    new-item $home\lnmp\windows\logs\nginx\access.log -ErrorAction "SilentlyContinue"
+    new-item $home\lnmp\windows\logs\nginx\error.log -ErrorAction "SilentlyContinue"
+    _ln $home\lnmp\windows\logs\nginx\access.log C:\nginx\logs\access.log
+    _ln $home\lnmp\windows\logs\nginx\error.log C:\nginx\logs\error.log
 
     if(Test-Path $home/Downloads/lnmp-docker-cache/nginx.conf.backup){
-    Copy-Item $home/Downloads/lnmp-docker-cache/nginx.conf.backup C:\nginx\conf\nginx.conf
+      Copy-Item $home/Downloads/lnmp-docker-cache/nginx.conf.backup C:\nginx\conf\nginx.conf
     }
 
     Get-Process nginx -ErrorAction "SilentlyContinue" | out-null
-
-    if (!($?)){
-    echo ' ' | out-file -Append $home\lnmp\windows\logs\nginx\access.log -ErrorAction "SilentlyContinue"
-    echo ' ' | out-file -Append $home\lnmp\windows\logs\nginx\error.log -ErrorAction "SilentlyContinue"
-    }
   uninstall: |
+    Get-Process nginx -ErrorAction "SilentlyContinue" | out-null
+    if ($?){
+      PrintError 'Please stop nginx first, exec $.\windows\lnmp-wnamp.ps1 stop nginx'
+
+      exit 1
+    }
     _cleanup C:\nginx
   platform-reqs: if(!$IsWindows){echo $False}
+  preinstall:
+    - |
+      # https://docs.microsoft.com/zh-cn/cpp/windows/redistributing-visual-cpp-files?view=msvc-170#install-the-redistributable-packages
+      # check vclib installed
+      if(!(Test-Path 'HKLM:\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\X64')){
+        PrintError 'Please install vclib first, exec $ lpm install vclib'
+
+        exit 1
+      }
+
+      if((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\X64').Installed -ne 1){
+        PrintError 'Please install vclib first, exec $ lpm install vclib'
+
+        exit 1
+      }
+
+      printInfo 'vclib already installed, continue ...'
+
+      Get-Process nginx -ErrorAction "SilentlyContinue" | out-null
+
+      if ($?){
+        PrintError 'Please stop nginx first, exec $.\windows\lnmp-wnamp.ps1 stop nginx'
+
+        exit 1
+      }

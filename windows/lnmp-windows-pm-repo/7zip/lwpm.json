@@ -1,8 +1,8 @@
 {
   "name": "7zip",
   "description": "7-Zip is a file archiver with a high compression ratio",
-  "version": "2200",
-  "pre-version": "2200",
+  "version": "2201",
+  "pre-version": "2201",
   "homepage": "https://www.7-zip.org/",
   "bug": "https://www.7-zip.org/support.html",
   "github": "",

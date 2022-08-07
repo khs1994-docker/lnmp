@@ -938,7 +938,7 @@ function _yaml_to_json_and_sort($yaml) {
 
 function _toJson($soft) {
   if (!(_command ConvertFrom-Yaml)) {
-    printError Please install ConvertFrom-Yaml by exec $ Install-Module powershell-yaml
+    printError Please install ConvertFrom-Yaml by exec $ Install-Module powershell-yaml -Scope CurrentUser
     Set-Location $EXEC_CMD_DIR
     exit 1
   }
