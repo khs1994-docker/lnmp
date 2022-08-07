@@ -1,19 +1,5 @@
 # K8s on Docker Desktop
 
-## gcr.io Local Server
-
-修改 Hosts
-
-```bash
-127.0.0.1 k8s.gcr.io gcr.io
-```
-
-### 拉取镜像
-
-```bash
-$ lnmp-docker gcr.io
-```
-
 ## 故障排查
 
 如果一直启动失败，可以删除以下文件夹之后重新启动 Docker
@@ -48,26 +34,3 @@ $ kubectl config use-context minikube
 ## 相关项目
 
 * https://github.com/AliyunContainerService/k8s-for-docker-desktop
-
-## 开发者
-
-> 本项目可能会更新不及时，你可以自行找出 `Docker 桌面版` 需要哪些 k8s.gcr.io 镜像
-
-```bash
-# 启动本地 k8s.gcr.io 服务器
-$ lnmp-docker gcr.io --no-pull
-
-# 在 docker 设置中启用 k8s
-# 查看日志
-$ lnmp-docker gcr.io logs
-
-# 根据日志找出 Docker 桌面版 会拉取哪些镜像,例如
-ERRO[0285] response completed with error                 err.code="manifest unknown" err.detail="unknown tag=v1.18.3" err.message="manifest unknown" go.version=go1.11.2 http.request.host=k8s.gcr.io http.request.id=ec12c017-08cf-46cc-8780-22c351d8712b http.request.method=GET http.request.remoteaddr="172.17.0.1:37926" http.request.uri="/v2/kube-apiserver/manifests/v1.18.3" http.request.useragent="docker/19.03.12 go/go1.13.10 git-commit/48a66213fe kernel/5.8.0-rc3-microsoft-standard os/linux arch/amd64 UpstreamClient(Go-http-client/1.1)" http.response.contenttype="application/json; charset=utf-8"
- http.response.duration=207.384ms http.response.status=404 http.response.written=97 vars.name=kube-apiserver vars.reference=v1.18.3
-
-# 此日志说明需要 k8s.gcr.io/kube-apiserver:v1.18.3
-# 在 `lnmp-docker(.ps1)` 中更新以下变量的值
-# KUBERNETES_VERSION="1.18.3"
-# KUBERNETES_COREDNS_VERSION="1.8.0"
-# KUBERNETES_PAUSE_VERSION="3.4.1"
-```
