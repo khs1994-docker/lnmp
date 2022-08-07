@@ -212,6 +212,8 @@ services:
           nocopy: true
         bind:
           propagation: rprivate
+          create_host_path: true
+          selinux: z # z (shared) or Z (private)
       - type: bind
         source: ${APP_ROOT:-./app}
         target: /app
