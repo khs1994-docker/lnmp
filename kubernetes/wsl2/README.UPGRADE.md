@@ -1,8 +1,9 @@
 # 如何更新
 
-## 修改 `.env`
+## 修改 `~/lnmp/kubernetes/.env`
 
 ```bash
+# x.y.z 为 K8S 版本号
 KUBERNETES_VERSION=x.y.z
 ```
 
@@ -21,12 +22,7 @@ $ cd ~/lnmp/kubernetes
 
 $ ./wsl2/bin/kube-check
 
-$ wsl -d wsl-k8s
-```
-
-```bash
-$ ./lnmp-k8s kubernetes-server --url
-# $ ./lnmp-k8s kubernetes-server
+$ wsl -d wsl-k8s -- ./lnmp-k8s kubernetes-server --url
 ```
 
 ## 更新(复制二进制文件)
@@ -41,4 +37,6 @@ $ Remove-Item \\wsl$\wsl-k8s\non-systemd
 $ wsl -d wsl-k8s
 ```
 
-**开始使用**
+## 启动 K8S
+
+请查看 [02-README.systemd.md](02-README.systemd.md)
