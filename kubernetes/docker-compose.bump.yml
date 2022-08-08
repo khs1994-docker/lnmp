@@ -18,7 +18,7 @@ services:
     # https://github.com/kubernetes/kubernetes/tree/master/build/pause
 
   calico:
-    image: calico/cni:v3.23.1
+    image: calico/cni:v3.23.3
 
   ingress_nginx:
     image: k8s.gcr.io/ingress-nginx/controller:v1.1.1
