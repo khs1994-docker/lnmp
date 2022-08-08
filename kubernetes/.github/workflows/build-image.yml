@@ -23,15 +23,18 @@ jobs:
       - run: |
           echo ${DOCKER_PASSWORD} | docker login -u khs1994 --password-stdin
           echo ${GHCR_IO_TOKEN} | docker login -u khs1994 --password-stdin ghcr.io
+          echo ${CODING_DOCKER_PASSWORD} | docker login -u khs1994-1601432822176 --password-stdin pcit-docker.pkg.coding.net
         env:
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
           GHCR_IO_TOKEN: ${{ secrets.GHCR_IO_TOKEN }}
+          CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
       - run: |
           docker buildx build \
           --cache-from=ghcr.io/khs1994/k8s-cfssl:cache \
           --cache-to=ghcr.io/khs1994/k8s-cfssl:cache \
           -t khs1994/k8s-cfssl \
           -t ghcr.io/khs1994/k8s-cfssl \
+          -t pcit-docker.pkg.coding.net/khs1994-docker/khs1994/k8s-cfssl \
           --push \
           --platform linux/amd64,linux/arm64 \
           --target dump \
@@ -41,6 +44,7 @@ jobs:
           --cache-from=ghcr.io/khs1994/k8s-cfssl:cache \
           -t khs1994/k8s-cfssl:all-in-one \
           -t ghcr.io/khs1994/k8s-cfssl:all-in-one \
+          -t pcit-docker.pkg.coding.net/khs1994-docker/khs1994/k8s-cfssl:all-in-one \
           --push \
           --platform linux/amd64,linux/arm64 \
           cfssl
@@ -52,6 +56,7 @@ jobs:
           --cache-to=ghcr.io/khs1994/fcos:cache \
           -t khs1994/fcos \
           -t ghcr.io/khs1994/fcos \
+          -t pcit-docker.pkg.coding.net/khs1994-docker/khs1994/fcos \
           --push \
           --platform linux/amd64,linux/arm64 \
           coreos/server
