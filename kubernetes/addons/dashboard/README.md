@@ -48,21 +48,15 @@ $ kubectl config set-credentials docker-desktop --token="${TOKEN}"
 ### 自行部署的 Kubernetes
 
 ```bash
-$ kubectl create sa dashboard-admin -n kube-system
+$ kubectl create sa dashboard-admin -n kubernetes-dashboard
 
-$ kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
+$ kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard-admin
 
-$ ADMIN_SECRET=$(kubectl get secrets -n kube-system | grep dashboard-admin | awk '{print $1}')
+$ DASHBOARD_LOGIN_TOKEN=$(kubectl -n kubernetes-dashboard create token dashboard-admin)
 
-# PS> $ADMIN_SECRET=(kubectl get secrets -n kube-system | select-string -Pattern dashboard-admin).line.split(' ')[0]
+# PS> $DASHBOARD_LOGIN_TOKEN=(kubectl -n kubernetes-dashboard create token dashboard-admin)
 
-# dashboard-admin-token-nzlbv
-
-$ DASHBOARD_LOGIN_TOKEN=$(kubectl describe secret -n kube-system ${ADMIN_SECRET} | grep -E '^token' | awk '{print $2}')
-
-# PS> $DASHBOARD_LOGIN_TOKEN=(kubectl describe secret -n kube-system ${ADMIN_SECRET} | select-string token:).Line.split(':')[1].trim()
-
-echo ${DASHBOARD_LOGIN_TOKEN}
+$ echo ${DASHBOARD_LOGIN_TOKEN}
 ```
 
 ## 创建使用 token 的 KubeConfig 文件
