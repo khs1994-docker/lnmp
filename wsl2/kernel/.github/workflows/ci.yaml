@@ -45,7 +45,7 @@ jobs:
         fi
 
         sudo apt update
-        sudo apt install -y build-essential flex bison libssl-dev libelf-dev rsync
+        sudo apt install -y build-essential flex bison libssl-dev libelf-dev rsync dwarves
 
         mkdir -p Microsoft/
 
