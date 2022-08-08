@@ -24,7 +24,7 @@ services:
     image: registry.k8s.io/ingress-nginx/controller:v1.3.0
 
   ingress-kong:
-    image: kong-docker-kubernetes-ingress-controller.bintray.io/kong-ingress-controller:0.9.1
+    image: kong/kubernetes-ingress-controller:2.5.0
 
   metrics_server:
     image: k8s.gcr.io/metrics-server/metrics-server:v0.6.0
