@@ -1,0 +1,11 @@
+/*
+!crond
+!crond-log
+!laravel-horizon
+!laravel-horizon-log
+!laravel-prepare
+!laravel-queue
+!laravel-queue-log
+!php-fpm
+!user
+!.gitignore

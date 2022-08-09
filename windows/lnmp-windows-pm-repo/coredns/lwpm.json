@@ -1,8 +1,8 @@
 {
   "name": "coredns",
   "description": "CoreDNS is a DNS server that chains plugins",
-  "version": "1.8.0",
-  "pre-version": "1.8.0",
+  "version": "1.9.3",
+  "pre-version": "1.9.3",
   "homepage": "https://coredns.io/",
   "bug": "https://github.com/coredns/coredns/issues",
   "github": "coredns/coredns",

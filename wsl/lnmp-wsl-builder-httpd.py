@@ -13,7 +13,7 @@ $ lnmp-wsl-builder-httpd.py [HTTPD_VERSION] [SUDO_PASSWORD]
 
 Example:
 
-$ lnmp-wsl-builder-httpd.py 2.4.49 sudopasswd
+$ lnmp-wsl-builder-httpd.py 2.4.53 sudopasswd
 
   ''')
 

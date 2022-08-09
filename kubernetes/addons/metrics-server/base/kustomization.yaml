@@ -1,0 +1,7 @@
+resources:
+- apiservice.yaml
+- deployment.yaml
+- rbac.yaml
+- service.yaml
+commonLabels:
+  k8s-app: metrics-server

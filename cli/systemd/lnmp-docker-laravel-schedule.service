@@ -16,4 +16,4 @@ Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/o
 
 EnvironmentFile=/data/lnmp/.env
 
-ExecStart=/data/lnmp/lnmp-docker php7-cli php /app/laravel/artisan schedule:run
+ExecStart=/data/lnmp/lnmp-docker php8-cli php /app/laravel/artisan schedule:run

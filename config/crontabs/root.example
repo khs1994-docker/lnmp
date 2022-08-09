@@ -8,3 +8,6 @@
 
 # laravel scheduler
 * * * * * cd /app/laravel && /usr/local/bin/php artisan schedule:run >> /dev/null 2>&1
+
+# laravel scheduler debug
+# * * * * * cd /app/laravel && /usr/local/bin/php artisan schedule:run

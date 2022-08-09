@@ -1,0 +1,32 @@
+kind: ServiceMonitor
+apiVersion: monitoring.coreos.com/v1
+metadata:
+  labels:
+    app.kubernetes.io/name: etcd
+  name: etcd
+  namespace: monitoring
+spec:
+  endpoints:
+  - interval: 30s
+    port: https-metrics
+    scheme: https
+    tlsConfig:
+      ca:
+        secret:
+          key: ca.pem
+          name: etcd-client-tls
+      cert:
+        secret:
+          key: cert.pem
+          name: etcd-client-tls
+      keySecret:
+        key: key.pem
+        name: etcd-client-tls
+      insecureSkipVerify: true
+  jobLabel: app.kubernetes.io/name
+  namespaceSelector:
+    matchNames:
+    - kube-system
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: etcd

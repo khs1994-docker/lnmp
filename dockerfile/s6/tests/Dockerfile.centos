@@ -4,12 +4,12 @@ ARG TAG=8
 
 FROM --platform=$TARGETPLATFORM centos:${TAG}
 
-RUN --mount=type=bind,from=khs1994/s6:2.2.0.3,source=/,target=/tmp/s6 \
+RUN --mount=type=bind,from=khs1994/s6:3.1.0.1,source=/,target=/tmp/s6 \
     set -x \
-    && tar -zxvf /tmp/s6/s6-overlay.tar.gz -C / --exclude='./bin' \
-    && tar -zxvf /tmp/s6/s6-overlay.tar.gz -C /usr ./bin \
+    && tar -xvf /tmp/s6/s6-overlay-noarch.tar.xz -C / \
+    && tar -xvf /tmp/s6/s6-overlay.tar.xz -C / \
     && ln -s /init /s6-init
 
-RUN set -x ; uname -a ; /bin/s6-ls /
+RUN set -x ; uname -a ; /command/s6-ls /
 
 ENTRYPOINT ["/s6-init"]

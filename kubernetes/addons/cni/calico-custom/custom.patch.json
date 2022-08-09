@@ -9,7 +9,7 @@
   },
   {
     "op": "replace",
-    "path": "/spec/template/spec/containers/0/env/16",
+    "path": "/spec/template/spec/containers/0/env/17",
     "value": {
       "name": "IP_AUTODETECTION_METHOD",
       "value": "interface=eth0"
@@ -17,7 +17,7 @@
   },
   {
     "op": "replace",
-    "path": "/spec/template/spec/containers/0/env/17",
+    "path": "/spec/template/spec/containers/0/env/18",
     "value": {
       "name": "IP6_AUTODETECTION_METHOD",
       "value": "interface=eth0"
@@ -25,7 +25,7 @@
   },
   {
     "op": "add",
-    "path": "/spec/template/spec/containers/0/env/18",
+    "path": "/spec/template/spec/containers/0/env/19",
     "value": {
       "name": "CALICO_IPV6POOL_CIDR",
       "value": "$(CALICO_IPV6POOL_CIDR)"
@@ -33,7 +33,7 @@
   },
   {
     "op": "add",
-    "path": "/spec/template/spec/containers/0/env/19",
+    "path": "/spec/template/spec/containers/0/env/20",
     "value": {
       "name": "FELIX_PROMETHEUSMETRICSENABLED",
       "value": "true"
@@ -41,7 +41,7 @@
   },
   {
     "op": "add",
-    "path": "/spec/template/spec/containers/0/env/20",
+    "path": "/spec/template/spec/containers/0/env/21",
     "value": {
       "name": "_IP6",
       "value": "autodetect"
@@ -49,7 +49,7 @@
   },
   {
     "op": "add",
-    "path": "/spec/template/spec/containers/0/env/21",
+    "path": "/spec/template/spec/containers/0/env/22",
     "value": {
       "name": "_FELIX_IPV6SUPPORT",
       "value": "true"
@@ -57,17 +57,12 @@
   },
   {
     "op": "replace",
-    "path": "/spec/template/spec/volumes/5/hostPath/path",
+    "path": "/spec/template/spec/volumes/7/hostPath/path",
     "value": "/opt/k8s/opt/cni/bin"
   },
   {
     "op": "replace",
-    "path": "/spec/template/spec/volumes/6/hostPath/path",
+    "path": "/spec/template/spec/volumes/8/hostPath/path",
     "value": "/opt/k8s/etc/cni/net.d"
-  },
-  {
-    "op": "replace",
-    "path": "/spec/template/spec/volumes/10/hostPath/path",
-    "value": "/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/nodeagent~uds"
   }
 ]

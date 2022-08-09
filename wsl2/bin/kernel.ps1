@@ -1,5 +1,3 @@
-$tips = "You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2\config\.wslconfig"
-
 $WSL_DIST = 'wsl-k8s'
 $defaultKernelVersion = $(Write-Output $(Get-Content $PSScriptRoot/../kernel.version))
 $kernelversion = $defaultKernelVersion
@@ -14,8 +12,6 @@ if ($env:WSL_KERNEL_VERSION) {
 
 if ($args.Length -eq 0) {
   "WSL2 kernel download/update tool
-
-$tips
 
 COMMAND:
 
@@ -74,6 +70,12 @@ _downloader $deb "https://${GITHUB_RELEASE}/khs1994/WSL2-Linux-Kernel/releases/d
 if (!(Test-Path $home/.wslconfig)) {
   cp $PSScriptRoot/../config/.wslconfig $home/.wslconfig
 }
+
+$tips="
+Please set kernel path in ${HOME}\.wslconfig
+
+kernel=$($HOME.replace('\','\\'))\\.wsl\\kernel-${kernelversion}-microsoft-standard-WSL2.img
+"
 
 if ($args[0] -eq 'download') {
   cd $EXEC_CMD_DIR

@@ -41,7 +41,14 @@ $ git config --global user.signingkey <GPG-key-id>
 $ git config --local commit.gpgsign true
 # $ git config --global commit.gpgsign true
 
-# Windows 设置 gpg 绝对路径
+# Windows 报错
+# gpg: directory '/c/Users/<USERNAME>/.gnupg' created
+# gpg: keybox '/c/Users/<USERNAME>/.gnupg/pubring.kbx' created
+# gpg: skipped "<GPG-key-id>": No secret key
+# gpg: signing failed: No secret key
+# error: gpg failed to sign the data
+# fatal: failed to write commit object
+# 解决办法 设置 gpg 绝对路径
 # $ git config --global gpg.program "C:\Program Files (x86)\gnupg\bin\gpg.exe"
 
 # Linux 可能会遇到错误
@@ -78,22 +85,6 @@ $ gpg -o filename --export-secret-keys <GPG-key-id>
 **可以通过以下命令导入**
 
 ```bash
-$ gpg --import filename(.pub)
-```
-
-## X.509 Key
-
-* https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification/telling-git-about-your-signing-key
-
-git 2.19 +
-
-```bash
-$ git config --global gpg.x509.program smimesign
-$ git config --global gpg.format x509
-```
-
-git 2.18 -
-
-```bash
-$ git config --global gpg.program smimesign
+$ gpg --import filename
+$ gpg --import filename.pub
 ```

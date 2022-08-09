@@ -8,7 +8,7 @@
   "path": [
     "C:\\Apache24\\bin"
   ],
-  "pre-version": "2.4.49",
+  "pre-version": "2.4.53",
   "releases": "https://httpd.apache.org/download.cgi",
   "scripts": {
     "install": [
@@ -39,5 +39,5 @@
     "version": "($(httpd -v) -split \" \")[2].trim(\"Apache/\")"
   },
   "url": "https://www.apachelounge.com/download/VS16/binaries/httpd-${VERSION}-win64-VS16.zip",
-  "version": "2.4.49"
+  "version": "2.4.53"
 }

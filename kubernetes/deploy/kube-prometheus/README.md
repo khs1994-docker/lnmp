@@ -6,8 +6,17 @@
 $ git clone --depth=1 git@github.com:prometheus-operator/kube-prometheus
 ```
 
+替换 `k8s.gcr.io` 镜像
+
+* k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.3.0
+* ccr.ccs.tencentyun.com/gcr-mirror/kube-state-metrics:v2.3.0
+
+* k8s.gcr.io/prometheus-adapter/prometheus-adapter:v0.9.1
+* ccr.ccs.tencentyun.com/gcr-mirror/prometheus-adapter:v0.9.1
+
 ```bash
-$ kubectl apply -f kube-prometheus/manifests/setup
+# https://github.com/prometheus-operator/kube-prometheus/issues/1533
+$ kubectl apply -f kube-prometheus/manifests/setup --server-side
 
 # 等待 20s
 
@@ -38,7 +47,7 @@ $ kubectl apply -k kustomize/storage
 
 ## 默认只监控 `kube-system` 和 `monitoring` NS 中的服务
 
-* https://github.com/prometheus-operator/kube-prometheus#adding-additional-namespaces-to-monitor
+* https://github.com/prometheus-operator/kube-prometheus/blob/main/docs/customizations/monitoring-additional-namespaces.md
 
 监控其他命名空间必须应用 RBAC，可以参考 `monitoring-demo/istiod/rbac.yaml`
 

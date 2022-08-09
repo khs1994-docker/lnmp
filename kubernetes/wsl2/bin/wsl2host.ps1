@@ -116,7 +116,7 @@ $wsl2_ip wsl2 wsl.k8s.khs1994.com wsl2.k8s.khs1994.com $WSL2_DOMAIN
 # add wsl2host by khs1994-docker/lnmp BEGIN
 $wsl2_ip wsl2 wsl.k8s.khs1994.com wsl2.k8s.khs1994.com $WSL2_DOMAIN
 "
-
+  $ErrorActionPreference = "SilentlyContinue"
   for ($i = 1; $i -le 20; $i++) {
     if (get-variable WSL2_DOMAIN_${i}) {
       $hosts = (get-variable WSL2_DOMAIN_${i}).value

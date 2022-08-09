@@ -1,7 +1,7 @@
 name: mysql
 description: MySQL Server, the world's most popular open source database, and MySQL Cluster, a real-time, open source transactional database"
-version: "8.0.26"
-pre-version: "8.0.26"
+version: "8.0.28"
+pre-version: "8.0.28"
 homepage: "http://www.mysql.com/"
 bug: ""
 github: "mysql/mysql-server"
@@ -65,5 +65,22 @@ scripts:
     _cleanup C:\mysql
   version: (mysql --version).split(" ")[3]
   platform-reqs: if(!$IsWindows){echo $False}
+  preinstall:
+    - |
+      # https://docs.microsoft.com/zh-cn/cpp/windows/redistributing-visual-cpp-files?view=msvc-170#install-the-redistributable-packages
+      # check vclib installed
+      if(!(Test-Path 'HKLM:\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\X64')){
+        PrintError 'Please install vclib first, exec $ lpm install vclib'
+
+        exit 1
+      }
+
+      if((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\X64').Installed -ne 1){
+        PrintError 'Please install vclib first, exec $ lpm install vclib'
+
+        exit 1
+      }
+
+      printInfo 'vclib already installed, continue ...'
 path: ["C:\\mysql\\bin"]
 command: mysql

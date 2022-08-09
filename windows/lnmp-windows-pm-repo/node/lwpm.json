@@ -1,8 +1,8 @@
 {
   "name": "node",
   "description": "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine",
-  "version": "14.16.0",
-  "pre-version": "16.10.0",
+  "version": "16.15.0",
+  "pre-version": "18.2.0",
   "homepage": "https://nodejs.org/en/",
   "bug": "https://github.com/nodejs/node/issues",
   "github": "nodejs/node",
@@ -21,7 +21,7 @@
       "if(!$IsWindows){sudo ln -sf /usr/local/node/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm}",
       "if(!$IsWindows){sudo ln -sf /usr/local/node/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx}",
       "if(!$ISWindows){sudo ln -sf /usr/local/node/bin/node /usr/local/bin/}",
-      "if(!$IsWindows){npm config set prefix ~/.npm ; npm config set registry https://registry.npm.taobao.org}",
+      "if(!$IsWindows){npm config set prefix ~/.npm ; npm config set registry https://registry.npmmirror.com}",
       "_cleanup node",
       "if(!$ISWindows){printInfo Please add [ $HOME/.npm/bin ] to PATH}",
 

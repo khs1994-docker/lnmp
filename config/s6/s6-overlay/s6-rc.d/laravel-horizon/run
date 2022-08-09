@@ -1,0 +1,11 @@
+#!/command/execlineb -P
+
+#!/usr/bin/env sh
+
+# if test -f ./setup; then
+#     source ./setup
+# fi
+
+with-contenv
+
+php /app/laravel/artisan horizon

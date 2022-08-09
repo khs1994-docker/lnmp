@@ -50,7 +50,7 @@ $ composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
 ```bash
 # ~/.npmrc
 
-registry=https://registry.npm.taobao.org
+registry=https://registry.npmmirror.com
 ```
 
 ## pip

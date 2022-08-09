@@ -1,16 +1,16 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=8.1.0
+ARG PHP_VERSION=8.1.3
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
 
-FROM --platform=$TARGETPLATFORM alpine:3.14
+FROM --platform=$TARGETPLATFORM alpine:3.16
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=8.1.0
+ARG PHP_VERSION=8.1.3
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -42,6 +42,7 @@ ENV PHPIZE_DEPS \
 RUN set -ex \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && apk add --no-cache \
+                 ca-certificates \
                  curl \
                  tar \
                  xz \
@@ -161,15 +162,17 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
   && cp /opt/bin/docker-php-entrypoint /usr/local/bin \
   && apk add --no-cache --virtual .build-deps \
           $PHPIZE_DEPS \
+          argon2-dev \
           coreutils \
           curl-dev \
-          libedit-dev \
-          openssl-dev \
+          gnu-libiconv-dev \
           libsodium-dev \
           libxml2-dev \
           linux-headers \
+          oniguruma-dev \
+          openssl-dev \
+          readline-dev \
           sqlite-dev \
-          argon2-dev \
           cyrus-sasl-dev \
           postgresql-dev \
           libzip-dev \
@@ -194,11 +197,10 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
           # tidyhtml-dev \
           # net-snmp-dev \
           openldap-dev \
-          gnu-libiconv-dev \
-          oniguruma-dev \
           # libavif-dev \
           ${APK_DEV_EXTRA:-} \
   \
+  && rm -vf /usr/include/iconv.h \
   && export CFLAGS="$PHP_CFLAGS" \
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
@@ -236,9 +238,9 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
     --with-sodium=shared \
     \
     --with-curl=shared \
-    --with-libedit \
     --with-openssl=shared \
       --with-system-ciphers \
+    --with-readline \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     --with-password-argon2 \
@@ -305,7 +307,6 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
                            curl \
                            zip \
                            ffi \
-                           # iconv \
                            ${PHP_EXTENSION_EXTRA:-} \
   && echo "extension=exif" > $PHP_INI_DIR/conf.d/docker-php-ext-z-exif.ini \
   && echo "extension=gd" > $PHP_INI_DIR/conf.d/docker-php-ext-z-gd.ini \
@@ -342,7 +343,9 @@ ENV PECL_BUILD_DEPS \
       # yaml-dev \
       pcre2-dev \
       zlib-dev \
-      zstd-dev
+      zstd-dev \
+# https://github.com/xdebug/xdebug/pull/835
+      linux-headers
 
 ENV PECL_RUN_DEPS \
       libmemcached-libs \
@@ -361,7 +364,7 @@ ENV PECL_EXTENSION \
       # xdebug-beta \
       # yaml \
       # https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
-      https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
+      https://github.com/kjdev/php-ext-zstd/archive/0.11.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=upstream,source=/usr/local/bin,target=/opt/bin,rw \

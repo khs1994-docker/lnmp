@@ -5,6 +5,10 @@
 
 * 如果使用测试版系统，出现错误，可以尝试测试版的 `VirtualBox`，下载地址已在上方列出。
 
+**virtualbox 国内镜像地址**
+
+* https://mirror.tuna.tsinghua.edu.cn/help/virtualbox/
+
 ## 解决错误
 
 ```bash
@@ -25,8 +29,12 @@ $ sudo /sbin/vboxconfig
 
 ## macOS
 
+每次安装后执行如下命令：
+
 ```bash
 $ sudo "/Library/Application Support/VirtualBox/LaunchDaemons/VirtualBoxStartup.sh" restart
 ```
 
-`System Preferences` -> `Security & Privacy` -> `allow execute kext (modules)`
+如果出现错误，请按如下方法操作，再次执行上述命令：
+
+`System Preferences` -> `Security & Privacy` -> `点击左下角 锁 图标解锁` -> `allow execute kext (modules)`

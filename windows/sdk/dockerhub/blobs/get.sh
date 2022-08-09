@@ -57,7 +57,7 @@ get(){
   -H "Authorization: Bearer $token" \
   -H "Accept:application/vnd.docker.image.rootfs.diff.tar.gzip" \
   "https://$registry/v2/$image/blobs/$digest" \
-  -A "Docker-Client/20.10.1 (Linux)" \
+  -A "Docker-Client/20.10.16 (Linux)" \
   -o $distTemp
 
   _sha256_checker $distTemp && getDist "${dist}" $distTemp

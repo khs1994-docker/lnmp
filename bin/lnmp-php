@@ -8,10 +8,6 @@ test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
 
 if [ "$debug" = 'true' ];then set -x; fi
 
-if ! [ "${APP_ENV}" = "production" ];then
-  APP_ENV=development
-fi
-
 if [ $# = 0 ];then
   COMMAND=-h
 else
@@ -60,7 +56,7 @@ if [ "$1" = '-S' ];then
     --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
     --network $network \
     --env-file $ScriptRoot/../config/composer/.env \
-    -e APP_ENV=${APP_ENV} \
+    -e APP_ENV=${APP_ENV:-development} \
     -e TZ=${TZ} \
     -p $ADDR:$PORT:$PORT \
     ${LNMP_PHP_IMAGE}:${LNMP_PHP_IMAGE_TAG} \
@@ -98,6 +94,6 @@ exec docker run --init -i ${tty} --rm \
   --network $network \
   --env-file $ScriptRoot/../config/composer/.env \
   -e TZ=${TZ} \
-  -e APP_ENV=${APP_ENV} \
+  -e APP_ENV=${APP_ENV:-development} \
   ${LNMP_PHP_IMAGE}:${LNMP_PHP_IMAGE_TAG} \
   gosu ${LNMP_USER:-root:root} php -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log $COMMAND

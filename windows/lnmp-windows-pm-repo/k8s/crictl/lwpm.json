@@ -3,11 +3,11 @@
   "name": "crictl",
   "platform": [
     {
-      "hash": {
-        "sha256": "5045bcc6d8b0e6004be123ab99ea06e5b1b2ae1e586c968fcdf85fccd4d67ae1"
-      },
       "architecture": "amd64",
-      "os": "windows"
+      "os": "windows",
+      "hash": {
+        "sha256": "9c5a270f1c23878f247fb9846b8046cb3fd3cd55066ea767d68dfc9c30a7871c"
+      }
     },
     {
       "architecture": "amd64",
@@ -24,15 +24,13 @@
   ],
   "scripts": {
     "dist": "_mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename\n",
-    "install": "tar -zxf $filename -C C:\\bin",
-    "test": "printInfo $(crictl --version) install success",
+    "install": "if($IsWindows){tar -zxf $filename -C C:\\bin}else{sudo tar -zxf $filename -C /usr/local/bin}",
+    "platform-reqs": "if($IsMacOs){echo $False}",
+    "test": "crictl --version",
     "uninstall": "_cleanup C:\\bin\\crictl.exe",
-    "version": "(crictl --version).split(' ')[2].trim('v')",
-    "platform-reqs": [
-      "if($IsMacOs){echo $False}"
-    ]
+    "version": "(crictl --version).split(' ')[2].trim('v')"
   },
   "url": "https://github.com/kubernetes-sigs/cri-tools/releases/download/v${VERSION}/crictl-v${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz",
   "url-mirror": "https://download.fastgit.org/kubernetes-sigs/cri-tools/releases/download/v${VERSION}/crictl-v${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz",
-  "version": "1.22.0"
+  "version": "1.23.0"
 }

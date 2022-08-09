@@ -44,6 +44,7 @@ ENV PHPIZE_DEPS \
 RUN set -ex \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && apk add --no-cache \
+                 ca-certificates \
                  curl \
                  tar \
                  xz \
@@ -212,7 +213,8 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
   && docker-php-source extract \
-  && cp /usr/include/gnu-libiconv/*.h /usr/include \
+  && rm -vf /usr/include/iconv.h \
+  && ln -sv /usr/include/gnu-libiconv/*.h /usr/include/ \
   && cd /usr/src/php \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   && ./configure \
@@ -376,7 +378,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/local/bin,target=/opt/bin,rw \
       && echo "--with-libzstd" > /tmp/zstd.configure.options \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
       && pickle install \
-         xdebug \
+         xdebug@3.1.5 \
 # https://github.com/tideways/php-xhprof-extension.git
          https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
          -n --defaults --no-write --strip --cleanup \

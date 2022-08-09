@@ -36,7 +36,7 @@ Function _stop($soft) {
   switch ($soft) {
     "nginx" {
       printInfo "Stop nginx..." Red
-      start-process "taskkill" -ArgumentList "/F", "/IM", "nginx.exe" -Verb RunAs
+      start-process "nginx" -ArgumentList "-s", "stop", "-p", "${NGINX_PATH}" -Verb RunAs
       Write-Host "
       "
     }
@@ -127,6 +127,10 @@ Function _start($soft) {
       php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9300 1
       php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9400 1
       php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9500 1
+      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9600 1
+      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9700 1
+      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9800 1
+      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9900 1
       Write-Host "
        "
     }
@@ -139,6 +143,10 @@ Function _start($soft) {
       php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9300 1
       php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9400 1
       php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9500 1
+      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9600 1
+      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9700 1
+      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9800 1
+      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9900 1
       Write-Host "
       "
     }
@@ -288,6 +296,15 @@ foreach ($soft in $other) {
     "restart" {
       switch ($soft) {
         { $_ -in $WINDOWS_SOFT } {
+          if ($soft -eq 'nginx') {
+            if (Test-Path "${NGINX_PATH}/logs/nginx.pid") {
+              start-process "nginx" -ArgumentList "-s", "reload", "-p", "${NGINX_PATH}" -Verb RunAs
+            }
+            else {
+              _start $soft
+            }
+            break
+          }
           _stop $soft
           _start $soft
           break

@@ -1,0 +1,9 @@
+#!/usr/bin/execlineb -P
+s6-setuidgid daemon
+myservice
+
+#!/bin/sh
+exec s6-setuidgid daemon myservice
+
+#!/command/execlineb -P
+nginx -g "daemon off;"

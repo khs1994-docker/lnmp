@@ -42,7 +42,7 @@ services:
     # command: php-fpm -F
     environment:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v20.10} PHP_EOL VERSION
-      - APP_ENV=development
+      - APP_ENV=${APP_ENV:-development}
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
@@ -51,9 +51,9 @@ services:
 **2. 编辑 `.env` 文件，在 `LNMP_SERVICES` 变量中增加软件名 `php5`**
 
 ```diff
-- LNMP_SERVICES="nginx mysql php7 redis" # 默认配置
+- LNMP_SERVICES="nginx mysql php8 redis" # 默认配置
 
-+ LNMP_SERVICES="nginx mysql php7 redis php5" # 增加 php5
++ LNMP_SERVICES="nginx mysql php8 redis php5" # 增加 php5
 ```
 
 **3. 新建 `config/php5` 文件夹**

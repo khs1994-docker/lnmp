@@ -72,7 +72,6 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --runtime-config=api/all=true \
 --enable-admission-plugins=NodeRestriction \
 --allow-privileged=true \
---apiserver-count=1 \
 --event-ttl=168h \
 --kubelet-certificate-authority=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
 --kubelet-client-certificate=${K8S_ROOT}/etc/kubernetes/pki/apiserver-kubelet-client.pem \
@@ -83,10 +82,9 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --service-cluster-ip-range=10.254.0.0/16,fd00::/108 \
 --service-node-port-range="1-65535" \
 --logtostderr=true \
---feature-gates="IPv6DualStack=true" \
+# --feature-gates="IPv6DualStack=true" \
 #
 ;
---insecure-port=0 \
 # --logging-format=json \
 --v=2
 

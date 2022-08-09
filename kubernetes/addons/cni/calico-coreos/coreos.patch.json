@@ -1,18 +1,18 @@
 [
   {
     "op": "replace",
-    "path": "/spec/template/spec/containers/0/env/16",
+    "path": "/spec/template/spec/containers/0/env/17",
     "value": {
       "name": "IP_AUTODETECTION_METHOD",
-      "value": ""
+      "value": "interface=enp0s3"
     }
   },
   {
     "op": "replace",
-    "path": "/spec/template/spec/containers/0/env/17",
+    "path": "/spec/template/spec/containers/0/env/18",
     "value": {
       "name": "IP6_AUTODETECTION_METHOD",
-      "value": ""
+      "value": "interface=enp0s3"
     }
   }
 ]

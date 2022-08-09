@@ -1,0 +1,24 @@
+on:
+  workflow_dispatch:
+
+name: Sync To Coding.net
+
+jobs:
+  trigger-coding-net-ci:
+    name: trigger-coding-net-ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: trigger-coding.net-ci
+        env:
+          CODING_PASSWORD: ${{secrets.CODING_CI_PCIT_PASSWORD}}
+        run: |
+          set -x
+          curl -u pto8bv6hoj8e:${CODING_PASSWORD} \
+          -v -X POST  'https://pcit.coding.net/api/cci/job/234051/trigger' \
+          -H 'Content-Type: application/json' \
+          -d "
+          {
+            \"ref\": \"master\",
+            \"envs\": [
+            ]
+          }"

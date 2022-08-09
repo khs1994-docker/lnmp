@@ -1,5 +1,5 @@
 name: kubectl
-version: 1.23.0
+version: 1.24.0
 # url: "https://mirror.azure.cn/kubernetes/kubectl/v${VERSION}/bin/linux/amd64/kubectl"
 url: "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/kubernetes-client-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz"
 scripts:

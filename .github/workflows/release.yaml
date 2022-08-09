@@ -10,53 +10,59 @@ jobs:
   release:
     strategy:
       fail-fast: false
-      # max-parallel: 1
+      max-parallel: 3
       matrix:
         include:
-          - JOB_NAME: wsl-php-builder-73
-            DIST_FILE: khs1994-wsl-php73_7.3.32-debian-buster_amd64.deb
           - JOB_NAME: wsl-php-builder-74
-            DIST_FILE: khs1994-wsl-php74_7.4.25-debian-buster_amd64.deb
+            DIST_FILE: khs1994-wsl-php74_7.4.29-debian-buster_amd64.deb
           - JOB_NAME: wsl-php-builder-80
-            DIST_FILE: khs1994-wsl-php80_8.0.12-debian-buster_amd64.deb
+            DIST_FILE: khs1994-wsl-php80_8.0.17-debian-buster_amd64.deb
+          - JOB_NAME: wsl-php-builder-81
+            DIST_FILE: khs1994-wsl-php81_8.1.3-debian-buster_amd64.deb
           - JOB_NAME: wsl-php-builder-nightly
-            DIST_FILE: khs1994-wsl-php812_0.0.0-debian-buster_amd64.deb
-          - JOB_NAME: wsl-php-builder-debian11-80
-            DIST_FILE: khs1994-wsl-php80_8.0.12-debian-bullseye_amd64.deb
-          - JOB_NAME: wsl-php-builder-ubuntu1804-73
-            DIST_FILE: khs1994-wsl-php73_7.3.32-ubuntu-bionic_amd64.deb
+            DIST_FILE: khs1994-wsl-php82_0.0.0-debian-buster_amd64.deb
+          - JOB_NAME: wsl-php-builder-debian11-81
+            DIST_FILE: khs1994-wsl-php81_8.1.3-debian-bullseye_amd64.deb
           - JOB_NAME: wsl-php-builder-ubuntu1804-74
-            DIST_FILE: khs1994-wsl-php74_7.4.25-ubuntu-bionic_amd64.deb
+            DIST_FILE: khs1994-wsl-php74_7.4.29-ubuntu-bionic_amd64.deb
           - JOB_NAME: wsl-php-builder-ubuntu1804-80
-            DIST_FILE: khs1994-wsl-php80_8.0.12-ubuntu-bionic_amd64.deb
+            DIST_FILE: khs1994-wsl-php80_8.0.17-ubuntu-bionic_amd64.deb
+          - JOB_NAME: wsl-php-builder-ubuntu1804-81
+            DIST_FILE: khs1994-wsl-php81_8.1.3-ubuntu-bionic_amd64.deb
           - JOB_NAME: wsl-php-builder-ubuntu2004-74
-            DIST_FILE: khs1994-wsl-php74_7.4.25-ubuntu-focal_amd64.deb
-          - JOB_NAME: wsl-php-builder-ubuntu2110-80
-            DIST_FILE: khs1994-wsl-php80_8.0.12-ubuntu-impish_amd64.deb
-          - JOB_NAME: wsl-php-builder-ubuntu2004-nightly
-            DIST_FILE: khs1994-wsl-php82_0.0.0-ubuntu-focal_amd64.deb
-          - JOB_NAME: wsl-php-builder-rhel7-73
-            DIST_FILE: khs1994-wsl-php73-7.3.32-1.el7.centos.x86_64.rpm
-          - JOB_NAME: wsl-php-builder-rhel8-73
-            DIST_FILE: khs1994-wsl-php73-7.3.32-1.el8.centos.x86_64.rpm
+            DIST_FILE: khs1994-wsl-php74_7.4.29-ubuntu-focal_amd64.deb
+          - JOB_NAME: wsl-php-builder-ubuntu2004-80
+            DIST_FILE: khs1994-wsl-php80_8.0.17-ubuntu-focal_amd64.deb
+          - JOB_NAME: wsl-php-builder-ubuntu2004-81
+            DIST_FILE: khs1994-wsl-php81_8.1.3-ubuntu-focal_amd64.deb
+          - JOB_NAME: wsl-php-builder-ubuntu2204-81
+            DIST_FILE: khs1994-wsl-php81_8.1.3-ubuntu-jammy_amd64.deb
+          - JOB_NAME: wsl-php-builder-ubuntu2204-nightly
+            DIST_FILE: khs1994-wsl-php82_0.0.0-ubuntu-jammy_amd64.deb
+          - JOB_NAME: wsl-php-builder-rhel7-74
+            DIST_FILE: khs1994-wsl-php74-7.4.29-1.el7.centos.x86_64.rpm
           - JOB_NAME: wsl-php-builder-rhel8-74
-            DIST_FILE: khs1994-wsl-php74-7.4.25-1.el8.centos.x86_64.rpm
+            DIST_FILE: khs1994-wsl-php74-7.4.29-1.el8.centos.x86_64.rpm
           - JOB_NAME: wsl-php-builder-rhel8-80
-            DIST_FILE: khs1994-wsl-php80-8.0.12-1.el8.centos.x86_64.rpm
-          - JOB_NAME: wsl-php-builder-rhel9-80
-            DIST_FILE: khs1994-wsl-php80-8.0.12-1.el9.centos.x86_64.rpm
-          - JOB_NAME: wsl-php-builder-rocky8-80
-            DIST_FILE: khs1994-wsl-php80-8.0.12-1.el8.rocky.x86_64.rpm
-          - JOB_NAME: wsl-php-builder-fc35-73
-            DIST_FILE: khs1994-wsl-php73-7.3.32-1.fc35.x86_64.rpm
+            DIST_FILE: khs1994-wsl-php80-8.0.17-1.el8.centos.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-rhel8-81
+            DIST_FILE: khs1994-wsl-php81-8.1.3-1.el8.centos.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-rhel9-81
+            DIST_FILE: khs1994-wsl-php81-8.1.3-1.el9.centos.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-rocky8-81
+            DIST_FILE: khs1994-wsl-php81-8.1.3-1.el8.rocky.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-rocky9-81
+            DIST_FILE: khs1994-wsl-php81-8.1.3-1.el9.rocky.x86_64.rpm
           - JOB_NAME: wsl-php-builder-fc35-74
-            DIST_FILE: khs1994-wsl-php74-7.4.25-1.fc35.x86_64.rpm
+            DIST_FILE: khs1994-wsl-php74-7.4.29-1.fc35.x86_64.rpm
           - JOB_NAME: wsl-php-builder-fc35-80
-            DIST_FILE: khs1994-wsl-php80-8.0.12-1.fc35.x86_64.rpm
-          - JOB_NAME: wsl-php-builder-fc35-nightly
-            DIST_FILE: khs1994-wsl-php82-0.0.0-1.fc35.x86_64.rpm
+            DIST_FILE: khs1994-wsl-php80-8.0.17-1.fc35.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc36-81
+            DIST_FILE: khs1994-wsl-php81-8.1.3-1.fc36.x86_64.rpm
           - JOB_NAME: wsl-php-builder-fc36-nightly
             DIST_FILE: khs1994-wsl-php82-0.0.0-1.fc36.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc37-nightly
+            DIST_FILE: khs1994-wsl-php82-0.0.0-1.fc37.x86_64.rpm
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -72,7 +78,7 @@ jobs:
     - name: Create release
       if: github.event_name != 'workflow_dispatch'
       run: |
-        if [ "$JOB_NAME" != 'wsl-php-builder-73' ];then
+        if [ "$JOB_NAME" != 'wsl-php-builder-81' ];then
           exit 0
         fi
 

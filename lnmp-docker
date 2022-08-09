@@ -19,27 +19,25 @@ readonly ARCH=`uname -m`
 if [ $OS != 'Darwin' ] && [ $OS != 'Linux' ];then \
     echo -e "\n\033[31mError \033[0m  Please use ./lnmp-docker.ps1 on PowerShell in Windows"; exit 1; fi
 
-std="stderr"
-
 if [ "$quite" = "true" -o "$QUITE" = "true" -o "$1" = "services" -o "$1" = "env-file" ];then
-  std="null"
+  quite='1'
 fi
 
 print_info(){
-  echo -e "\033[32mINFO \033[0m  $@\n" > /dev/${std}
+  test "$quite" = '1' && true || echo -e "\033[32mINFO \033[0m  $@\n" >&2
 }
 
 print_error(){
-  echo -e "\033[31mERROR\033[0m \a $@\n" > /dev/${std}
+  test "$quite" = '1' && true || echo -e "\033[31mERROR\033[0m \a $@\n" >&2
   export exit_by_error=1
 }
 
 print_warning(){
-  echo -e "\033[33mWARNING\033[0m \a $@\n" > /dev/${std}
+  test "$quite" = '1' && true || echo -e "\033[33mWARNING\033[0m \a $@\n" >&2
 }
 
 notsupport(){
-  print_error "Not Support ${OS} ${ARCH}\n" > /dev/${std}
+  print_error "Not Support ${OS} ${ARCH}\n"
   exit 1
 }
 
@@ -86,6 +84,7 @@ _cp_only_not_exists lnmp-docker-custom-script.example lnmp-docker-custom-script
 
 print_info "Exec custom scripts"
 
+. ./lnmp-docker-custom-script.example
 . ./lnmp-docker-custom-script
 
 _cp_only_not_exists config/php/php.development.ini config/php/php.ini
@@ -95,6 +94,20 @@ _cp_only_not_exists config/php/zz-docker.example.conf config/php/zz-docker.conf
 if ! [ -f config/redis/redis.conf ];then
   echo "#" > config/redis/redis.conf
 fi
+
+if ! [ -f config/mysql/conf.d/my.cnf ];then
+  echo "#" > config/mysql/conf.d/my.cnf
+  chown root:root config/mysql/conf.d/my.cnf || true
+  chmod 644       config/mysql/conf.d/my.cnf || true
+fi
+
+if ! [ -f config/mariadb/conf.d/my.cnf ];then
+  echo "#" > config/mariadb/conf.d/my.cnf
+  chown root:root config/mariadb/conf.d/my.cnf || true
+  chmod 644       config/mariadb/conf.d/my.cnf || true
+fi
+
+chmod +x -R       config/s6/s6-overlay || true
 
 _cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
 _cp_only_not_exists config/php8/php-cli.example.ini config/php8/php-cli.ini
@@ -143,7 +156,6 @@ Commands:
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   help                 Display this help message
   nfs                  Up NFS server [ down | ]
-  pull                 Pull LNMP Docker Images
   restore              Restore MySQL databases
   restart              Restart LNMP services
   services             List services
@@ -1269,8 +1281,12 @@ main() {
   swarm-deploy )
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       _docker_is_run
-      rm -rf app/.pcit
-      pcit_init
+
+      if [ "$PRODUCTION_COMPOSE_FILE" = 'docker-production.yml' ];then
+        rm -rf app/.pcit
+        pcit_init
+      fi
+
       docker stack deploy -c ${PRODUCTION_COMPOSE_FILE} lnmp
 
       sleep 2; docker stack ps lnmp
@@ -1353,26 +1369,6 @@ For information please run $ docker service update --help
     exec docker-compose $options push $service
     ;;
 
-  pull )
-    _docker_is_run
-
-    sleep 2
-
-    local service=${LNMP_SERVICES:-nginx mysql php8 redis}
-
-    if ! [ -z "$@" ];then
-      service="$@"
-    fi
-
-    _get_compose_options docker-lnmp.yml \
-                         docker-lnmp.override.yml
-
-    docker-compose $options pull $service
-
-    #@custom
-    __lnmp_custom_pull $service 2>/dev/null || true
-    ;;
-
   service* )
       echo ${LNMP_SERVICES:-nginx mysql php8 redis}
     ;;
@@ -1388,21 +1384,23 @@ For information please run $ docker service update --help
 
     local service=${LNMP_SERVICES:-nginx mysql php8 redis}
 
+    if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;shift;fi
+
     if ! [ -z "$@" ];then
       service="$@"
     fi
 
-    # echo $service
-
-    if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
-
     _get_compose_options docker-lnmp.yml \
                          docker-lnmp.override.yml
+    #@custom
+    __lnmp_custom_pre_up "$@" 2>/dev/null || true
 
     docker-compose $options up $opt --no-build ${service}
 
     #@custom
-    __lnmp_custom_up "$@" 2>/dev/null || true
+    __lnmp_custom_post_up "$@" 2>/dev/null || true
+
+    echo $service | grep -q 'nginx' && true || exit 0
 
     sleep 5; print_info "Test nginx configuration file..."
 
@@ -1505,7 +1503,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
     init; docker-compose $options down --remove-orphans
     #@custom
-    __lnmp_custom_down "$@" 2>/dev/null || true
+    __lnmp_custom_post_down "$@" 2>/dev/null || true
     ;;
 
   pull )
@@ -1518,7 +1516,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     docker-compose $options pull ${LNMP_SERVICES:-nginx mysql php8 redis}
 
     #@custom
-    __lnmp_custom_pull "$@" 2>/dev/null || true
+    __lnmp_custom_post_pull "$@" 2>/dev/null || true
     ;;
 
   compose )
@@ -1894,8 +1892,6 @@ if [ $# = 0 ];then help; exit 0; fi
 # 生产环境 compose 文件
 PRODUCTION_COMPOSE_FILE='docker-production.yml'
 
-if [ `ls docker-production.*.yml > /dev/null 2>&1` ];then
-  PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml`
-fi
+ls docker-production.*.yml > /dev/null 2>&1 && PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml` || true
 
 main "$@"

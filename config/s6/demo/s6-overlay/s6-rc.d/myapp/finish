@@ -1,0 +1,14 @@
+#!/usr/bin/execlineb -S0
+
+# s6-svscanctl -t /var/run/s6/services
+/run/s6/basedir/bin/halt
+
+#!/bin/sh
+
+if test "$1" -eq 256 ; then
+  e=$((128 + $2))
+else
+  e="$1"
+fi
+
+echo "$e" > /run/s6-linux-init-container-results/exitcode

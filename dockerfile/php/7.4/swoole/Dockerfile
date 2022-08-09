@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=7.4.25
+ARG PHP_VERSION=7.4.29
 ARG USERNAME=khs1994
 ARG BASE=cli
 
@@ -22,11 +22,12 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-ENV SWOOLE_VERSION=4.6.7
+ENV SWOOLE_VERSION=v4.8.10
+# ENV SWOOLE_VERSION=master
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN --mount=type=bind,from=php:7.4.25-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.4.29-alpine,source=/usr/local/bin,target=/opt/bin,rw \
     set -x \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     && apk add --no-cache --virtual .pecl_build_deps \
@@ -37,7 +38,7 @@ RUN --mount=type=bind,from=php:7.4.25-alpine,source=/usr/local/bin,target=/opt/b
     && echo " \
            --enable-openssl \
            --enable-http2" > /tmp/swoole.configure.options \
-    && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
+    && pickle install https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz \
          -n --defaults --strip --cleanup \
     && apk del --no-network .pecl_build_deps \
     && rm -rf /tmp/* \

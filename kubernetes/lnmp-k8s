@@ -433,11 +433,13 @@ _gvisor_containerd_conf(){
     return
   fi
 print_info "config containerd with gvisor(runsc) ..."
-# containerd 1.5.x
-cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.5/config.toml
+# containerd 1.6.x
+cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.6/config.toml
+
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
   # privileged_without_host_devices = false
+
   [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc.options]
     SystemdCgroup = false
 EOF
@@ -500,12 +502,7 @@ _runc_install(){
     return
   fi
 
-  if ! [ "$GOARCH" = 'amd64' ];then
-    # print_info "install runc ..."
-    print_info "runc not found, please install docker-ce first"
-
-    return
-  fi
+  print_info "install runc ..."
 
   local file_name=runc.${GOARCH}
   local url_official=https://github.com/opencontainers/runc/releases/download/v${RUNC_VERSION}
@@ -533,16 +530,6 @@ _crun_containerd_conf(){
 
     return
   fi
-print_info "config containerd with crun ..."
-# containerd 1.5.x
-cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.5/config.toml
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun]
-  runtime_type = "io.containerd.runc.v2"
-  # privileged_without_host_devices = false
-  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun.options]
-    SystemdCgroup = true
-    BinaryName = "crun"
-EOF
 }
 
 _crun_crio_conf(){
@@ -618,21 +605,15 @@ _containerd_install(){
   fi
 
   if [ -f ${K8S_ROOT}/bin/cri-containerd -a ! "$1" = "--dry-run" ];then \
-    print_info "containerd 1.5 already install"; \
+    print_info "containerd 1.6 already install"; \
     ${K8S_ROOT}/bin/cri-containerd --version;return; fi
 
-  print_info "install containerd 1.5 ..."
+  print_info "install containerd 1.6 ..."
 
-  if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
-    local url_official="https://github.com/docker-practice/containerd/releases/download/nightly"
-    local url="https://download.fastgit.org/docker-practice/containerd/releases/download/nightly"
-    CONTAINERD_VERSION="nightly"
-  else
-    local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
-    local url="https://download.fastgit.org/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
-  fi
+  local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
+  local url="https://download.fastgit.org/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
 
-  local TAR_FILE="containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
+  local TAR_FILE="cri-containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
     url=${CODING_URL}/${TAR_FILE}?version=${CONTAINERD_VERSION}
@@ -648,7 +629,7 @@ _containerd_install(){
     local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
     local sha256_remote=`curl -fsSL ${sha256sum_url} | cut -d " " -f 1` || true
 
-    if [ $sha256 != "$sha256_remote" -a "$GOARCH" = 'amd64' ];then
+    if [ $sha256 != "$sha256_remote" ];then
       $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
       $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
     fi
@@ -663,10 +644,11 @@ _containerd_install(){
 
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
 
-  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/cri-containerd
-  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/cri-containerd-shim
-  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
-  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
+  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd              ${K8S_ROOT}/bin/cri-containerd
+  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd-shim         /usr/local/bin/cri-containerd-shim
+  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd-shim-runc-v1 /usr/local/bin/
+  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd-shim-runc-v2 /usr/local/bin/
+  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/sbin/runc                   /usr/bin/
 
   _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} ${CONTAINERD_VERSION}
   $(_sudo) $(_curl) ${sha256sum_url} -o ${TMP_ROOT}/${TAR_FILE}.sha256sum
@@ -1043,14 +1025,14 @@ _crio_config(){
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
   print_info "config containerd ..."
-  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/1.5
+  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/1.6
   $(_sudo) mkdir -p $CONTAINERD_CONF_ROOT/certs.d
   # containerd config default > ${K8S_ROOT}/etc/cri-containerd/config.toml
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/1.5/config.toml \
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/1.6/config.toml \
     | $(_sudo) tee $CONTAINERD_CONF_ROOT/config.toml
 
   if ! [ "${LNMP_CN_ENV}" = 'false' ];then
-  $(_sudo) cp -r systemd/etc/cri-containerd/1.5/certs.d $CONTAINERD_CONF_ROOT
+  $(_sudo) cp -r systemd/etc/cri-containerd/1.6/certs.d $CONTAINERD_CONF_ROOT
   fi
 
   if [ -n "$GITHUB_ACTIONS" ];then
@@ -1145,6 +1127,7 @@ encryption-config.yaml} \
 }
 
 # https://github.com/kubernetes/kubeadm/issues/273
+# https://www.cnblogs.com/k8s/p/12067580.html
 # 16.04 not use systemd-resolved
 # 18.04 use systemd-resolved
 
@@ -1291,7 +1274,7 @@ _k8s_install_systemd(){
     _enable_wsl_k8s_systemd_target kube-apiserver.service
     _enable_wsl_k8s_systemd_target kube-controller-manager.service
     _enable_wsl_k8s_systemd_target kube-scheduler.service
-    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@1.5.service
+    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@1.6.service
     _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
     _enable_wsl_k8s_systemd_target etcd.service
 
@@ -1523,7 +1506,7 @@ $ $(_sudo) systemctl start kubelet@cri-containerd
 $ $(_sudo) systemctl start kubelet@crio
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
-$ $(_sudo) systemctl start cri-containerd@1.5 (Containerd runtime only)
+$ $(_sudo) systemctl start cri-containerd@1.6 (Containerd runtime only)
 $ $(_sudo) systemctl start cri-o (CRI-O runtime only)
 "
 }
@@ -1532,7 +1515,7 @@ _local_cleanup(){
   $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
-    docker cri-containerd@1.5 crio || true
+    docker cri-containerd@1.6 crio || true
 
   set +e
   $(_sudo) rm -rf ${K8S_ROOT}
@@ -1560,10 +1543,6 @@ if [ "${LNMP_CN_ENV}" = 'false' ];then
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers/pause#k8s.gcr.io/pause#g" \
                `grep registry.cn-hangzhou.aliyuncs.com/google_containers/pause -rl $PWD/systemd` || true
   # $(_sudo) sed -i "s#quay.mirror#quay.io#g" `grep quay.mirror -rl $PWD/systemd` || true
-  $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/gcr-mirror/metrics-server#k8s.gcr.io/metrics-server/metrics-server#g" \
-               `grep ccr.ccs.tencentyun.com/gcr-mirror/metrics-server -rl $PWD/addons` || true
-  $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers/pause#k8s.gcr.io/pause#g" \
-               `grep registry.cn-hangzhou.aliyuncs.com/google_containers/pause -rl $PWD/addons` || true
   print_info "[end] CN mirror disabled"
 fi
 

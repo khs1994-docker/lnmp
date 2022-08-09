@@ -14,7 +14,7 @@
 
 可以在 `lnmp-docker-custom-script` 或 `lnmp-docker-custom-script.ps1` (Windows) 中编写自定义脚本。
 
-**例如：** 你需要在执行 `lnmp-docker up` 命令后执行一些操作那么可以编写 `__lnmp_custom_up` 函数。
+**例如：** 你需要在执行 `lnmp-docker up` 命令前执行一些操作那么可以编写 `__lnmp_custom_pre_up` 函数，命令后执行一些操作那么可以编写 `__lnmp_custom_post_up` 函数。
 
 ## 命令行补全
 

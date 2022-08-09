@@ -1,0 +1,4 @@
+#!/bin/sh
+exec logutil-service /var/log/myapp
+
+# exec logutil-service -f /var/run/myfifo /var/log/myapp

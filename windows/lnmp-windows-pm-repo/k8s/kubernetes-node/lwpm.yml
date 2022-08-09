@@ -1,5 +1,5 @@
 name: kubernetes-node
-version: 1.23.0
+version: 1.24.0
 url: "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/kubernetes-node-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz"
 scripts:
   platform-reqs: if($IsMacOS){echo $False}

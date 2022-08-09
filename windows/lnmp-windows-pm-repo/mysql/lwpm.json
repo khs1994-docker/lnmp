@@ -8,17 +8,20 @@
   "path": [
     "C:\\mysql\\bin"
   ],
-  "pre-version": "8.0.26",
+  "pre-version": "8.0.28",
   "releases": "https://github.com/mysql/mysql-server/releases",
   "scripts": {
     "install": "_cleanup mysql\n_unzip $filename mysql\n\n_mkdir C:\\mysql\nCopy-item -r -force \"mysql\\mysql-${VERSION}-winx64\\*\" \"C:\\mysql\\\"\n\n_cleanup mysql\n",
     "platform-reqs": "if(!$IsWindows){echo $False}",
     "postinstall": "if(!(Test-Path C:\\mysql\\data)){\nWrite-Host \"mysql is init ...\"\n\nmysqld --initialize\n\n# 安装服务\n\n_sudo mysqld --install\n\n# 禁止开机启动\n\n_sudo set-service mysql -StartupType Manual\n}\n\nif (!(Test-Path C:/mysql/my.cnf)){\nCopy-Item $env:LWPM_PKG_ROOT/../../config/my.cnf C:/mysql/my.cnf\n}\n\n$mysql_password=($(select-string `\n\"A temporary password is generated for\" C:\\mysql\\data\\*.err) -split \" \")[12]\n\nWrite-host \"\n\nPlease exec command start(or init) mysql\n\n$ net start mysql\n\n$ C:\\mysql\\bin\\mysql.exe -uroot -p`\"$mysql_password`\"\n\nmysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest';\n\nmysql> FLUSH PRIVILEGES;\n\nmysql> GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION;\n\n# add remote login user\n\nmysql> CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password';\n\nmysql> GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION;\n\"\n",
+    "preinstall": [
+      "# https://docs.microsoft.com/zh-cn/cpp/windows/redistributing-visual-cpp-files?view=msvc-170#install-the-redistributable-packages\n# check vclib installed\nif(!(Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\X64')){\n  PrintError 'Please install vclib first, exec $ lpm install vclib'\n\n  exit 1\n}\n\nif((Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\X64').Installed -ne 1){\n  PrintError 'Please install vclib first, exec $ lpm install vclib'\n\n  exit 1\n}\n\nprintInfo 'vclib already installed, continue ...'\n"
+    ],
     "test": "printInfo mysql (mysql --version).split(\" \")[3] install success",
     "uninstall": "_sudo mysqld --remove\n_cleanup C:\\mysql\n",
     "version": "(mysql --version).split(\" \")[3]"
   },
   "url": "https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip",
   "url-mirror": "https://mirrors.huaweicloud.com/mysql/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip",
-  "version": "8.0.26"
+  "version": "8.0.28"
 }

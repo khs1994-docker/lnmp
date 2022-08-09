@@ -628,6 +628,12 @@ function __homepage($soft) {
 
 function __releases($soft) {
   $lwpm = manifest $soft
+  if (!$lwpm.releases) {
+    if ($lwpm.github) {
+      Start-Process -FilePath "https://github.com/$($lwpm.github)/releases"
+      exit
+    }
+  }
   start-process $lwpm.releases
 }
 
@@ -932,7 +938,7 @@ function _yaml_to_json_and_sort($yaml) {
 
 function _toJson($soft) {
   if (!(_command ConvertFrom-Yaml)) {
-    printError Please install ConvertFrom-Yaml by exec $ Install-Module powershell-yaml
+    printError Please install ConvertFrom-Yaml by exec $ Install-Module powershell-yaml -Scope CurrentUser
     Set-Location $EXEC_CMD_DIR
     exit 1
   }

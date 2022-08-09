@@ -30,14 +30,14 @@ init              Download CoreOS ISO files [qemu]
 server            Up CoreOS install local server
 cert              Generate Self-Signed Certificates
 
-add-node          Create node ignition yaml file [N] [master|node]
+add-node          Create node ignition butane file [N] [master|node]
 
 new-vm            Create new VirtualBox vm [N]
 
 cleanup           Cleanup Cache
 
 mount-iso         Mount ISO [N]
-remove-iso        Remove ISO [N]
+umount-iso        umount ISO [N]
 
 virt-install      [1|2|3]
 virt-destroy      [1|2|3]
@@ -48,7 +48,7 @@ virt-shutdown     [1|2|3]
 
 # write ssh pub
 
-if ! [ -f $HOME/.ssh/id_rsa.pub ];then 
+if ! [ -f $HOME/.ssh/id_rsa.pub ];then
    echo "please exec '$ ssh-keygen' generate id_rsa.pub file"
 
    exit 1
@@ -110,7 +110,7 @@ if [ "$1" = 'init' ];then _init $2; exit; fi
 case "$1" in
 
   server )
-  if ! [ -f cert/server-cert.pem ];then
+  if ! [ -f cert/apiserver.pem ];then
     cd ..
     docker-compose up cfssl
     cd -
@@ -138,14 +138,14 @@ case "$1" in
 
     if [ -n "$3" ];then TYPE=$3;fi
 
-    cp ignition/example/ignition-n.${TYPE:-master}.template.yaml ignition/ignition-$2.yaml
+    cp ignition/example/ignition-n.${TYPE:-master}.template.bu ignition/ignition-$2.bu
     if [ `uname -s` = 'Darwin' ];then
-      /usr/bin/sed -i '' "s#{{n}}#$2#g" ignition/ignition-$2.yaml
+      /usr/bin/sed -i '' "s#{{n}}#$2#g" ignition/ignition-$2.bu
     else
-      sed -i "s#{{n}}#$2#g" ignition/ignition-$2.yaml
+      sed -i "s#{{n}}#$2#g" ignition/ignition-$2.bu
     fi
   ;;
-
+  # https://docs.fedoraproject.org/en-US/fedora-coreos/provisioning-virtualbox/
   new-vm )
       if [ -z $2 ];then
 
@@ -155,30 +155,48 @@ case "$1" in
 
       # $ VBoxManage list ostypes
 
-      VBoxManage createvm --name "coreos"$2 --ostype 'Linux26_64' --register
+      VM_NAME="coreos"$2
 
-      VBoxManage modifyvm "coreos"$2 \
+      VBoxManage createvm --name ${VM_NAME} --ostype 'Fedora_64' --register
+
+      VBoxManage modifyvm ${VM_NAME} \
       --memory 3072 \
       --acpi on \
       --boot1 dvd \
       --nic2 bridged \
       --nic1 hostonly \
-      --nic3 hostonly \
       --bridgeadapter2 $(test `uname -s` = 'Linux' && (ip route list | grep default | awk '{print $5}') || echo 'en0' ) \
-      --hostonlyadapter1 vboxnet1 \
-      --hostonlyadapter3 vboxnet2
+      --hostonlyadapter1 vboxnet1
 
-      VBoxManage createmedium --filename "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi" --size 100000
+      VBoxManage createmedium --filename "$HOME/VirtualBox VMs/${VM_NAME}/${VM_NAME}.vdi" \
+          --size 100000 --format VDI
 
-      VBoxManage storagectl "coreos"$2 --name "IDE Controller" --add ide --controller PIIX4
+      VBoxManage storagectl ${VM_NAME} --name SATA --add sata --controller IntelAhci \
+          --portcount 30 --bootable on
 
-      VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
-          --nonrotational on --port 0 --device 0 --type hdd --medium "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi"
+      VBoxManage storageattach ${VM_NAME} --storagectl SATA \
+          --nonrotational on --port 0 --device 0 --type hdd \
+          --medium "$HOME/VirtualBox VMs/${VM_NAME}/${VM_NAME}.vdi"
 
-      VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
-          --port 0 --device 1 --type dvddrive --medium current/fedora-coreos-${FCOS_VERSION}-live.x86_64.iso
+      FCOS_ISO_PATH=current/fedora-coreos-${FCOS_VERSION}-live.x86_64.iso
 
-      echo "==> Please checkout coreos$2 config, then start it"
+      VBoxManage storagectl ${VM_NAME} --name IDE --add ide --controller PIIX4 \
+          --hostiocache on --portcount 2 --bootable on
+
+      VBoxManage storageattach ${VM_NAME} --storagectl IDE \
+          --port 1 --device 0 --type dvddrive --medium $FCOS_ISO_PATH
+
+      echo "==> Please checkout ${VM_NAME} config, then start it"
+  ;;
+
+  vm-log )
+    echo "==> please exec this command on VM shutdown"
+
+    VM_NAME="coreos"$2
+    VM_LOG=$HOME/${VM_NAME}.log
+
+    vboxmanage modifyvm "${VM_NAME}" --uart1 '0x3F8' '4'
+    vboxmanage modifyvm "${VM_NAME}" --uartmode1 file "${VM_LOG}"
   ;;
 
   cleanup )
@@ -186,14 +204,14 @@ case "$1" in
   ;;
 
   umount-iso )
-      VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
-          --port 0 --device 1 --type dvddrive --medium none
+      VBoxManage storageattach "coreos"$2 --storagectl IDE \
+          --port 1 --device 0 --type dvddrive --medium emptydrive
 
   ;;
 
   mount-iso )
-      VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
-          --port 0 --device 1 --type dvddrive --medium current/fedora-coreos-${FCOS_VERSION}-live.x86_64.iso
+      VBoxManage storageattach "coreos"$2 --storagectl IDE \
+          --port 1 --device 0 --type dvddrive --medium current/fedora-coreos-${FCOS_VERSION}-live.x86_64.iso
 
   ;;
 

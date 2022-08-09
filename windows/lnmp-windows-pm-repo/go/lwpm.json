@@ -1,8 +1,8 @@
 {
   "name": "go",
   "description": "Go is an open source programming language that makes it easy to build simple, reliable, and efficient software",
-  "version": "1.16.6",
-  "pre-version": "1.16.6",
+  "version": "1.18.2",
+  "pre-version": "1.18.2",
   "homepage": "https://golang.google.cn/",
   "bug": "https://github.com/golang/go/issues",
   "github": "golang/go",

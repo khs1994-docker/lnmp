@@ -9,7 +9,7 @@ spec:
   selector:
     component: kube-scheduler # 与scheduler的pod标签一直
   ports:
-  - name: http-metrics
-    port: 10251
-    targetPort: 10251
+  - name: https-metrics
+    port: 10259
+    targetPort: 10259
     protocol: TCP

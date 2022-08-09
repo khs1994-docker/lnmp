@@ -25,5 +25,9 @@
 socket = /run/mysqld/mysqld.sock
 
 # Import all .cnf files from configuration directory
-!includedir /etc/mysql/conf.d/
+[mariadbd]
+skip-host-cache
+skip-name-resolve
+
 !includedir /etc/mysql/mariadb.conf.d/
+!includedir /etc/mysql/conf.d/

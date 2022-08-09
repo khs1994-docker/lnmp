@@ -1,4 +1,6 @@
-on: push
+on:
+  - push
+  - workflow_dispatch
 
 name: ci
 
@@ -22,14 +24,13 @@ jobs:
           set -x
           docker buildx build \
           -t khs1994/s6 \
-          -t khs1994/s6:2.2.0.3 \
-          -t khs1994/s6:2 \
+          -t khs1994/s6:3.1.0.1 \
+          -t khs1994/s6:3 \
           --platform=linux/arm64,linux/arm/v7,linux/amd64 \
           --push \
           .
       - run: docker run --rm ubuntu   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
       - run: docker run --rm centos:7 sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
-      - run: docker run --rm centos:8 sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
       - run: docker run --rm centos   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
       - run: docker run --rm fedora   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
 
@@ -61,10 +62,4 @@ jobs:
           --platform=linux/arm64,linux/arm/v7,linux/amd64 \
           -f tests/Dockerfile.centos \
           --build-arg TAG=7 \
-          tests
-      - name: test centos:8
-        run: |
-          docker buildx build -t test \
-          --platform=linux/arm64,linux/amd64 \
-          -f tests/Dockerfile.centos \
           tests

@@ -1,8 +1,8 @@
 {
   "name": "etcd",
   "description": "Distributed reliable key-value store for the most critical data of a distributed system",
-  "version": "3.5.1",
-  "pre-version": "3.5.1",
+  "version": "3.5.4",
+  "pre-version": "3.5.4",
   "homepage": "https://etcd.io/",
   "bug": "https://github.com/etcd-io/etcd/issues",
   "github": "etcd-io/etcd",

@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+# Since the privileges are dropped automatically, there is no need to switch users with s6-setuidgid
+# You should ensure the log folder either:
+# * exists, and is writable by the nobody user
+# * does not exist, but the parent folder is writable by the nobody user.
+
+/etc/s6-overlay/scripts/laravel-prepare

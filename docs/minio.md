@@ -8,13 +8,13 @@
 在 `.env` 文件中将 `minio` 包含进来
 
 ```bash
-LNMP_SERVICES="nginx mysql php7 redis minio"
+LNMP_SERVICES="nginx mysql php8 redis minio"
 LREW_INCLUDE="minio pcit"
 ```
 
 ### 配置 NGINX
 
-将 `config/nginx/minio.config` 复制为 `config/nginx/minio.conf`
+将 `config/nginx/demo.config/minio.config` 复制为 `config/nginx/minio.conf`
 
 ### 其他配置
 

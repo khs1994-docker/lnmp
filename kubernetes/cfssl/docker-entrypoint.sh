@@ -2,6 +2,11 @@
 
 set -ex
 
+cd /srv/cfssl
+
+if [ -f /.env.example ];then source /.env.example;fi
+if [ -f /.env ];then source /.env;fi
+
 env
 
 _ca(){

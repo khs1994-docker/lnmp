@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=8.0.12
+ARG PHP_VERSION=8.0.17
 
-FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.13 as php
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.15 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -47,8 +47,7 @@ ENV PHP_EXTENSION \
 ENV PECL_EXTENSION \
       # mongodb \
       # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
-      # igbinary \
-      https://github.com/igbinary/igbinary/archive/master.tar.gz \
+      igbinary \
       # redis \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       memcached \
@@ -56,7 +55,7 @@ ENV PECL_EXTENSION \
       # xdebug-beta \
       # yaml \
       # https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
-      https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
+      https://github.com/kjdev/php-ext-zstd/archive/0.11.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
@@ -93,8 +92,10 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          enchant2 \
                          c-client \
                          icu-libs \
-                         gnu-libiconv \
+                         # gnu-libiconv \
                          zstd-libs \
+# https://github.com/xdebug/xdebug/pull/835
+                         linux-headers \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
@@ -129,6 +130,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          # libxslt-dev \
                          # yaml-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
+        && if ! [ -f /usr/bin/gnu-iconv ];then \
+              apk add --no-cache --repository http://${ALPINE_URL}/alpine/v3.13/community/ gnu-libiconv=1.15-r3;fi \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
         && curl -fsSL -o /usr/local/bin/pickle \

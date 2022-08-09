@@ -13,7 +13,7 @@ defaults:
 jobs:
   setup-k8s:
    # runs-on: ubuntu-${{matrix.dist}}
-   runs-on: ubuntu-20.04
+   runs-on: ubuntu-22.04
    timeout-minutes: 20
    if: |
      ! contains( github.event.head_commit.message, '[skip ci]')
@@ -39,61 +39,62 @@ jobs:
       # next next version
       #  - os: ubuntu
       #    dist: 20.04
-      #    CI_KUBERNETES_VERSION: 1.25.0-alpha.1
+      #    CI_KUBERNETES_VERSION: 1.26.0-alpha.1
       #    LNMP_K8S_GET: --url
       #    GENERATE_CLI_HELP: "true"
 
       # next version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.24.0-alpha.1
+         CI_KUBERNETES_VERSION: 1.25.0-beta.0
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
 
        # current stable version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.23.0
+         CI_KUBERNETES_VERSION: 1.24.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --crio
          K8S_IMAGE_NS: khs1994
          K8S_IMAGE_REGISTRY: useccr.ccs.tencentyun.com
          UPLOAD_TO_CODING: "true"
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.23.0
+         CI_KUBERNETES_VERSION: 1.24.0
          LNMP_K8S_GET: --url
          #
-         GENERATE_CLI_HELP: "true"
+         # GENERATE_CLI_HELP: "true"
          #
          UPLOAD_TO_CODING: "true"
        # ipv6
        # - os: ubuntu
        #  dist: 20.04
-       #  CI_KUBERNETES_VERSION: 1.23.0
+       #  CI_KUBERNETES_VERSION: 1.24.0
        #  LNMP_K8S_GET: --url
        #  IPV6: "true"
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.23.0
+         CI_KUBERNETES_VERSION: 1.24.0
          LNMP_K8S_GET: --url
          CNI_CALICO_EBPF: 'true'
+      # v1.24.0+ not support docker
+      #  - os: ubuntu
+      #    dist: 20.04
+      #    CI_KUBERNETES_VERSION: 1.24.0
+      #    LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.23.0
-         LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
-       - os: ubuntu
-         dist: 20.04
-         CI_KUBERNETES_VERSION: 1.23.0
+         CI_KUBERNETES_VERSION: 1.24.0
          LNMP_K8S_GET: --url
          K8S_ROOT: /opt/k8s-custom
        # old version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.22.4
+         CI_KUBERNETES_VERSION: 1.23.6
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.21.7
+         CI_KUBERNETES_VERSION: 1.22.9
          LNMP_K8S_GET: --url
      fail-fast: false
    steps:
@@ -139,7 +140,7 @@ jobs:
        name: os-metadata
      - uses: actions/setup-go@v2
        with:
-         go-version: '1.17'
+         go-version: '^1.18'
      - name: Setup dns
        run: |
          pwd
@@ -257,7 +258,7 @@ jobs:
 
          sudo systemctl cat docker
 
-         sudo systemctl cat cri-containerd@1.5
+         sudo systemctl cat cri-containerd@1.6
 
          sudo systemctl cat cri-o || true
          sudo cat /etc/sysconfig/crio || true
@@ -273,7 +274,7 @@ jobs:
          sudo rm -rf /etc/crio/crio.conf.d/00-default.conf || true
 
          test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
-           && (sudo systemctl daemon-reload ; sudo systemctl start cri-containerd@1.5) || true
+           && (sudo systemctl daemon-reload ; sudo systemctl start cri-containerd@1.6) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" \
            && (sudo systemctl restart docker || sudo journalctl -u docker) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
@@ -310,8 +311,8 @@ jobs:
          # sudo systemctl status kube-proxy
          # sudo systemctl status kubelet${KUBELET_SERVICE}
 
-         kubectl version
-         kubectl cluster-info
+         kubectl version || true
+         kubectl cluster-info || true
 
          sleep 30
 
@@ -322,7 +323,7 @@ jobs:
 
          sudo journalctl -u kube-proxy
          sudo journalctl -u kubelet${KUBELET_SERVICE}
-         sudo journalctl -u cri-containerd@1.5 || true
+         sudo journalctl -u cri-containerd@1.6 || true
          sudo journalctl -u cri-o || true
 
          kubectl get csr
@@ -390,7 +391,7 @@ jobs:
          df -h
          ip addr
 
-         kubectl apply -f addons/coredns/coredns.yaml
+         kubectl apply -k addons/coredns
          kubectl apply -k addons/dashboard
          kubectl apply -k addons/metrics-server
          kubectl apply -k addons/ingress/nginx/nodeport
@@ -509,8 +510,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=master
-         if ! [ $CI_KUBERNETES_VERSION = '1.23.0' -a "$GENERATE_CLI_HELP" = "true" ];then
+         # BASE_BRANCH=master
+         BASE_BRANCH=v1.23.0-config
+         if ! [ $CI_KUBERNETES_VERSION = '1.24.0' -a "$GENERATE_CLI_HELP" = "true" ];then
            exit 0
          fi
 
@@ -536,9 +538,10 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.23.0-config
+         # BASE_BRANCH=v1.24.0-config
+         BASE_BRANCH=v1.25.0-alpha.1-config
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.24.0-alpha.1' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.25.0-beta.0' ];then
            exit 0
          fi
 
@@ -564,9 +567,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.24.0-alpha.1-config
+         BASE_BRANCH=v1.25.0-beta.0
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.25.0-alpha.1' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.26.0-alpha.1' ];then
            exit 0
          fi
 

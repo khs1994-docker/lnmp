@@ -36,7 +36,6 @@ FROM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine
 
 # 扩展源码在 PHP 源码
 ENV PHP_CORE_EXT \
-    wddx \
     xsl
 
 # pecl 扩展
@@ -105,7 +104,7 @@ RUN set -x \
 ```bash
 # 这里只列出基本参数，其他参数按需自行添加
 $ docker buildx build \
-  --build-arg PHP_EXTENSION_EXTRA="wddx xsl" \
+  --build-arg PHP_EXTENSION_EXTRA="xsl" \
   --build-arg PECL_EXTENSION_EXTRA="imagick msgpack" \
   --build-arg APK_EXTRA="libxslt imagemagick-libs musl" \
   --build-arg APK_DEV_EXTRA="libxslt-dev imagemagick imagemagick-dev" \

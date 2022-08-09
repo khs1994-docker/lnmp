@@ -1,16 +1,16 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=7.3.32
+ARG PHP_VERSION=7.3.33
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
 
-FROM --platform=$TARGETPLATFORM alpine:3.14
+FROM --platform=$TARGETPLATFORM alpine:3.15
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=7.3.32
+ARG PHP_VERSION=7.3.33
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -42,6 +42,7 @@ ENV PHPIZE_DEPS \
 RUN set -ex \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && apk add --no-cache \
+                 ca-certificates \
                  curl \
                  tar \
                  xz \
@@ -143,7 +144,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
 ENV PHP_VERSION=${PHP_VERSION}
-# ENV PHP_URL="https://www.php.net/get/php-7.3.32.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.3.32.tar.xz.asc/from/this/mirror"
+# ENV PHP_URL="https://www.php.net/get/php-7.3.33.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.3.33.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -166,8 +167,8 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
           $PHPIZE_DEPS \
           coreutils \
           curl-dev \
-          libedit-dev \
           openssl-dev \
+          readline-dev \
           libsodium-dev \
           libxml2-dev \
           sqlite-dev \
@@ -205,7 +206,8 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
   && docker-php-source extract \
-  && cp /usr/include/gnu-libiconv/*.h /usr/include \
+  && rm -vf /usr/include/iconv.h \
+  && ln -sv /usr/include/gnu-libiconv/*.h /usr/include/ \
   && cd /usr/src/php \
 # enchant-2.patch
   && curl -fsSL -o enchant-2.patch https://raw.githubusercontent.com/alpinelinux/aports/3.12-stable/community/php7/enchant-2.patch \
@@ -235,9 +237,9 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
     --with-sodium=shared \
     \
     --with-curl=shared \
-    --with-libedit \
     --with-openssl=shared \
       --with-system-ciphers \
+    --with-readline \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     --with-password-argon2 \
@@ -377,7 +379,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/local/bin,target=/opt/bin,rw \
       && echo "--with-libzstd" > /tmp/zstd.configure.options \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
       && pickle install \
-         xdebug \
+         xdebug@3.1.5 \
 # https://github.com/tideways/php-xhprof-extension.git
          https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
          -n --defaults --no-write --strip --cleanup \

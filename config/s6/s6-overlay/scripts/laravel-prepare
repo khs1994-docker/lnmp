@@ -1,0 +1,16 @@
+#!/bin/sh -e
+
+mkdir -p /var/log/laravel-horizon
+chown nobody:nogroup /var/log/laravel-horizon
+chmod 02755 /var/log/laravel-horizon
+
+mkdir -p /var/log/laravel-queue
+chown nobody:nogroup /var/log/laravel-queue
+chmod 02755 /var/log/laravel-queue
+
+mkdir -p /var/log/crond
+chown nobody:nogroup /var/log/crond
+chmod 02755 /var/log/crond
+
+cp /etc/crontabs/root.s6 /etc/crontabs/root
+chown root:root /etc/crontabs/root

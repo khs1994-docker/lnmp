@@ -3,7 +3,7 @@
 exec podman run --rm --network host --privileged \
   -v ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/pki:${K8S_ROOT:-/opt/k8s}/etc/kubernetes/pki \
   -e ETCDCTL_API \
-  quay.io/coreos/etcd:v${ETCD_VERSION:-3.5.1} \
+  quay.io/coreos/etcd:v${ETCD_VERSION:-3.5.4} \
   etcdctl \
   --endpoints=$etcd_endpoints \
   --cacert="${K8S_ROOT:-/opt/k8s}/etc/kubernetes/pki/etcd-ca.pem" \

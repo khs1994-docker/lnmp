@@ -1,6 +1,6 @@
 59 */2 * * * curl https://api.khs1994.com/wechat/getAccessToken > /tmp/wx-accesston.txt
 30 0 * * * /data/lnmp/bash/backup.sh
 
-* * * * * /usr/local/bin/docker exec -i $( docker container ls --format '{{.ID}}' -f label=com.khs1994.com -f label=com.docker.compose.service=php7 -n 1 ) sh -c "php /app/path-to-your-project/artisan schedule:run >> /dev/null 2>&1"
+* * * * * /usr/local/bin/docker exec -i $( docker container ls --format '{{.ID}}' -f label=com.khs1994.com -f label=com.docker.compose.service=php8 -n 1 ) sh -c "php /app/path-to-your-project/artisan schedule:run >> /dev/null 2>&1"
 
-* * * * * /usr/local/bin/docker exec -i $( docker container ls --format '{{.ID}}' -f label=com.khs1994.com -f label=com.docker.swarm.service.name=lnmp_php7 -n 1 ) sh -c "php /app/path-to-your-project/artisan schedule:run >> /dev/null 2>&1"
+* * * * * /usr/local/bin/docker exec -i $( docker container ls --format '{{.ID}}' -f label=com.khs1994.com -f label=com.docker.swarm.service.name=lnmp_php8 -n 1 ) sh -c "php /app/path-to-your-project/artisan schedule:run >> /dev/null 2>&1"

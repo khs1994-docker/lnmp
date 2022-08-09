@@ -1,3 +1,4 @@
 /*
 !.gitignore
 !*.temp
+!etc/wsl.conf

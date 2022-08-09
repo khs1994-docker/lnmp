@@ -9,7 +9,7 @@ if [ -n "${NODE_NAME}"];then
   NODE_NAME="$1"
 fi
 
-FCOS_VERSION=34.20210808.1.0
+FCOS_VERSION=35.20220131.1.0
 
 if [ -z "${NODE_NAME}" ];then
   echo "Please input NODE_NAME
@@ -39,5 +39,6 @@ sleep 5
 
 sudo coreos-installer install \
       /dev/sda \
+      --insecure-ignition \
       --ignition-file $IGNITION_FILE_NAME \
       --image-url http://${SERVER_HOST:-192.168.57.1}:${port:-8080}/current/fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz

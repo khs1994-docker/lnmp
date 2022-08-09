@@ -34,7 +34,7 @@ jobs:
       - uses: khs1994-docker/actions-setup-lnmp@master
         with:
           lnmp_branch: "20.10"
-          lnmp_services: "laravel nginx mysql php7 redis"
+          lnmp_services: "laravel nginx mysql php8 redis"
           lrew_include: "laravel"
       - name: Init LNMP
         run: |
@@ -71,8 +71,11 @@ jobs:
           ls -la resources/views
 
           lnmp-npm install
-          lnmp-npm install laravel-mix-versionhash --save
+          lnmp-npm install laravel-mix-make-file-hash --save
           lnmp-npm run dev
+
+          ls public/js
+          ls public/css
       - name: Test Laravel
         run: |
           cd ../laravel
@@ -81,19 +84,25 @@ jobs:
       - name: Build Docker Image
         env:
           DOCKER_CLI_EXPERIMENTAL: enabled
+          EVENT_NAME: ${{ github.event_name }}
         run: |
           cd ../laravel
           docker buildx build --load \
               --build-arg NODE_REGISTRY=https://registry.npmjs.org \
               --target=laravel \
-              -t khs1994/laravel:8 \
+              -t khs1994/laravel:9 \
               -f Dockerfile.buildkit .
 
           docker buildx build --load \
               --build-arg NODE_REGISTRY=https://registry.npmjs.org \
               --target=laravel-rootless \
-              -t khs1994/laravel:8-rootless \
+              -t khs1994/laravel:9-rootless \
               -f Dockerfile.buildkit .
+
+          if [ $EVENT_NAME = 'push' ];then
+            docker push khs1994/laravel:9
+            docker push khs1994/laravel:9-rootless
+          fi
       - name: Up LNMP
         run: |
           lnmp-docker up
@@ -127,10 +136,10 @@ jobs:
             curl -k https://laravel-docker.t.khs1994.com/test/schedule/result
           echo ::endgroup::
 
-          docker run -i --rm --entrypoint=sh khs1994/laravel:8 -c "ls -la /app/laravel-docker"
+          docker run -i --rm --entrypoint=sh khs1994/laravel:9 -c "ls -la /app/laravel-docker"
       - name: Connect and Test Rootless
         run: |
-          echo 'LNMP_LARAVEL_TAG=8-rootless' >> $LNMP_PATH/.env
+          echo 'LNMP_LARAVEL_TAG=9-rootless' >> $LNMP_PATH/.env
           lnmp-docker up
 
           sleep 30
@@ -164,6 +173,6 @@ jobs:
             curl -k https://laravel-docker.t.khs1994.com/test/rootless/result
           echo ::endgroup::
 
-          docker run -i --rm --entrypoint=sh khs1994/laravel:8-rootless -c "ls -la /app/laravel-docker"
+          docker run -i --rm --entrypoint=sh khs1994/laravel:9-rootless -c "ls -la /app/laravel-docker"
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3

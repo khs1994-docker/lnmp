@@ -175,7 +175,7 @@ $ docker container ls -a -f label=com.khs1994.lnmp
 $ ./lnmp-docker restart
 
 # 重启指定软件
-$ ./lnmp-docker restart nginx php7
+$ ./lnmp-docker restart nginx php8
 ```
 
 ## 停止
@@ -200,20 +200,20 @@ $ ./lnmp-docker down
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:3.0.0`            | **3.0.0**           |`alpine:3.14`    |
+|[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:3.0.0`            | **3.0.0**           |`alpine:3.16`    |
 |[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.21.3-alpine`           | **1.21.3**          |`alpine:3.13`    |
-|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.0.12-unit-alpine`| **1.24.0**          |`alpine:3.13`    |
-|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.49-alpine`           | **2.4.49**          |`alpine:3.14`    |
-|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.26`                  | **8.0.26**          |`debian:buster-slim`|
+|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.1.3-unit-alpine`| **1.27.0**          |`alpine:3.16`    |
+|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.53-alpine`           | **2.4.53**          |`alpine:3.16`    |
+|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.28`                  | **8.0.28**          |`debian:buster-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.6.4`                | **10.6.4**          |`ubuntu:focal`  |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.2.5-alpine`            | **6.2.5**           |`alpine:3.13`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.0.12-fpm-alpine`     | **8.0.12**      |`alpine:3.13`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.0.12-composer-alpine`| **2.1.14**     |`alpine:3.13`    |
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.10-alpine`           | **1.6.10**       |`alpine:3.14`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:7.0.0-alpine`            | **7.0.0**           |`alpine:3.16`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.1.3-fpm-alpine`     | **8.1.3**      |`alpine:3.16`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.1.3-composer-alpine`| **2.2.7**     |`alpine:3.16`    |
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.15-alpine`           | **1.6.15**       |`alpine:3.16`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.9.0-management-alpine` | **3.9.0**       |`alpine:3.13`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:14.0-alpine`             | **14.0**        |`alpine:3.14`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:5.0.3`                      | **5.0.3**       |`ubuntu:bionic`  |
-|[PHPMyAdmin](https://github.com/docker-library/docs/tree/master/phpmyadmin)|`phpmyadmin:5.1.1`                | **5.1.1**       |`alpine:3.14`    |
+|[PHPMyAdmin](https://github.com/docker-library/docs/tree/master/phpmyadmin)|`phpmyadmin:5.2.0`                | **5.2.0**       |`alpine:3.16`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`alpine:3.11`    |
 
 ### 文件夹结构

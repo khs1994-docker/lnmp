@@ -48,16 +48,14 @@
 ## 重启容器
 
 ```bash
-$ ./lnmp-docker restart php7
+$ ./lnmp-docker restart php8
 ```
 
 ## 在 `IDE` 设置中配置 `Xdebug`
 
 `Preferenences` -> `Languages & ...`-> `PHP` -> `Debug`-> `xdebug`-> `Debug port 9003`(默认为 `9000`，这里改为 `9003`)
 
-> `9003` 端口务必与 `./config/php/docker-xdebug.ini` 一致。
-
-## 浏览器扩展
+## [浏览器扩展](https://www.jetbrains.com/help/phpstorm/2022.1/browser-debugging-extensions.html)
 
 * [火狐](https://github.com/BrianGilbert/xdebug-helper-for-firefox)
 * [Chrome](https://github.com/mac-cain13/xdebug-helper-for-chrome)
@@ -67,7 +65,7 @@ $ ./lnmp-docker restart php7
 
 ## 使用步骤
 
-* 1.IDE 中点击工具栏电话图标
+* 1.IDE 中开启调试 `Run` -> `Start Listening for PHP Debug Connections`(如果是 `Stop Listening ...` 说明已经开启了调试)
 
 * 2.编写代码
 

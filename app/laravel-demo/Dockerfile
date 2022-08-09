@@ -11,15 +11,15 @@
 # !! 搜索 /app/laravel-docker 替换为自己的项目目录 !!
 # 此 Dockerfile 专为 CI 环境设计（国外），请通过 --build-arg ARG=value 设置国内镜像
 #
-# $ docker build --target=laravel -t khs1994/laravel:7 --build-arg NODE_REGISTRY=https://registry.npm.taobao.org --build-arg CI=false .
+# $ docker build --target=laravel -t khs1994/laravel:7 --build-arg NODE_REGISTRY=https://registry.npmmirror.com --build-arg CI=false .
 
-ARG NODE_VERSION=16.10.0
-ARG PHP_VERSION=8.0.12
+ARG NODE_VERSION=18.2.0
+ARG PHP_VERSION=8.1.3
 ARG NGINX_VERSION=1.21.3-alpine
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建
-FROM node:${NODE_VERSION:-16.10.0}-alpine as frontend
+FROM node:${NODE_VERSION:-18.2.0}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
@@ -33,7 +33,7 @@ RUN set -x ; cd /app \
 
 COPY resources/ /app/resources/
 
-COPY webpack.mix.js webpack.config.js tailwind.config.js /app/
+COPY webpack.mix.js tailwind.config.js /app/
 
 RUN set -x ; cd /app \
 # File.exists('./artisan'); 如果 artisan 文件存在，则说明是 laravel 项目
@@ -43,7 +43,7 @@ RUN set -x ; cd /app \
       && npm run production
 
 # 2.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME}/php:8.0.12-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME}/php:8.1.3-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
 COPY composer.json /app/

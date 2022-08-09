@@ -6,7 +6,7 @@ on:
       LWPM_K8S_VERSION:
         description: k8s version
         required: true
-        default: 1.23.0
+        default: 1.24.0
 
 env:
   LWPM_K8S_VERSION: ${{ github.event.inputs.LWPM_K8S_VERSION }}
@@ -129,7 +129,7 @@ jobs:
     steps:
       - name: trigger-coding.net-ci
         env:
-          CODING_PASSWORD: ${{secrets.CODING_LWPM_K8S_CI_PASSWORD}}
+          CODING_PASSWORD: ${{secrets.CODING_CI_PCIT_PASSWORD}}
         run: |
           set -x
           curl -u pto8bv6hoj8e:${CODING_PASSWORD} \

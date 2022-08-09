@@ -5,9 +5,7 @@
 ```bash
 $ cd ~/lnmp/wsl2/ubuntu-wsl2-systemd-script
 
-$ wsl -d wsl-k8s
+$ wsl -d wsl-k8s -- apt install -y sudo
 
-$ apt install sudo
-
-$ bash ubuntu-wsl2-systemd-script.sh
+$ wsl -d wsl-k8s -- bash ubuntu-wsl2-systemd-script.sh
 ```

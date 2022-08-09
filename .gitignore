@@ -16,6 +16,8 @@ docker-compose-Linux-x86_64
 /docker-compose.*.yml
 /docker-compose.*.yaml
 /docker-workspace.yml
+/compose.yml
+/compose.yaml
 
 # cache
 
@@ -81,3 +83,5 @@ lwpm.lock.json
 /*.log
 
 .travis.yml
+
+/.docker

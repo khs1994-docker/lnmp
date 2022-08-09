@@ -7,12 +7,12 @@ ignition:
     merge:
       - source: http://{{SERVER_HOST}}:8080/ignition/merge-common.ign
       - source: http://{{SERVER_HOST}}:8080/ignition/crictl.ign
-      - source: http://{{SERVER_HOST}}:8080/ignition/docker.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/docker.ign
       - source: http://{{SERVER_HOST}}:8080/ignition/etcd.ign
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-apiserver.ign
-      - source: http://{{SERVER_HOST}}:8080/ignition/cri-containerd.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/cri-containerd.ign
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-controller-manager.ign
-      - source: http://{{SERVER_HOST}}:8080/ignition/kube-nginx.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-nginx.ign
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-proxy.ign
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-scheduler.ign
       - source: http://{{SERVER_HOST}}:8080/ignition/kubelet.ign
@@ -72,7 +72,9 @@ systemd:
         ExecStartPre=-/usr/bin/mkdir --parents /opt/k8s/var/lib/etcd
         ExecStartPre=-/usr/bin/env chmod 700 /opt/k8s/var/lib/etcd
 
+        ExecStartPre=-/bin/podman container kill etcd
         ExecStartPre=-/bin/podman container rm etcd
+        # ExecStartPre=-/bin/podman pull quay.io/coreos/etcd:v${ETCD_VERSION}
         ExecStart=/bin/podman run --name etcd --network host --privileged \
           -e ETCD_DATA_DIR \
           -v /opt/k8s/var/lib/etcd:/var/lib/etcd \
@@ -80,7 +82,7 @@ systemd:
           quay.io/coreos/etcd:v${ETCD_VERSION} \
           etcd \
           --enable-v2=true \
-          --name="coreos{{n}}" \
+          --name="coreos1" \
           --cert-file=${K8S_ROOT}/etc/kubernetes/pki/etcd.pem \
           --key-file=${K8S_ROOT}/etc/kubernetes/pki/etcd-key.pem \
           --trusted-ca-file=${K8S_ROOT}/etc/kubernetes/pki/etcd-ca.pem \
@@ -89,10 +91,10 @@ systemd:
           --peer-trusted-ca-file=${K8S_ROOT}/etc/kubernetes/pki/etcd-ca.pem \
           --peer-client-cert-auth \
           --client-cert-auth \
-          --listen-peer-urls=https://{{IP_{{n}}}}:2380 \
-          --initial-advertise-peer-urls=https://{{IP_{{n}}}}:2380 \
-          --listen-client-urls=https://{{IP_{{n}}}}:2379,http://127.0.0.1:2379 \
-          --advertise-client-urls=https://{{IP_{{n}}}}:2379 \
+          --listen-peer-urls=https://192.168.57.200:2380 \
+          --initial-advertise-peer-urls=https://192.168.57.200:2380 \
+          --listen-client-urls=https://192.168.57.200:2379,http://127.0.0.1:2379 \
+          --advertise-client-urls=https://192.168.57.200:2379 \
           --initial-cluster-token="mytoken" \
           --initial-cluster=${ETCD_NODES} \
           --initial-cluster-state=new \
@@ -104,7 +106,6 @@ systemd:
           --election-timeout=2000
 
         ExecStop=/bin/podman stop etcd
-        ExecStopPost=/bin/podman container rm etcd
 
         # ExecStartPost
         # ExecReload：重启当前服务时执行的命令
@@ -127,11 +128,11 @@ systemd:
 
         [Service]
         # Flag --experimental-encryption-provider-config has been deprecated, use --encryption-provider-config.
-        # --insecure-port has been deprecated, This flag will be removed in a future version.
 
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStartPre=mkdir -p /opt/k8s/var/log/kubernetes
+        ExecStartPre=/usr/bin/env mkdir -p /opt/k8s/var/log/kubernetes/kube-apiserver
+        ExecStartPre=/usr/bin/env touch    /opt/k8s/var/log/kubernetes/kube-apiserver/audit.log
 
         ExecStart=/bin/podman run \
         --name kube-apiserver \
@@ -140,7 +141,7 @@ systemd:
         --network host \
         k8s.gcr.io/kube-apiserver:{{KUBERNETES_VERSION}} \
         kube-apiserver \
-        --advertise-address={{IP_{{n}}}} \
+        --advertise-address=192.168.57.200 \
         --default-not-ready-toleration-seconds=360 \
         --default-unreachable-toleration-seconds=360 \
         --max-mutating-requests-inflight=2000 \
@@ -152,11 +153,10 @@ systemd:
         --etcd-certfile=${K8S_ROOT}/etc/kubernetes/pki/apiserver-etcd-client.pem \
         --etcd-keyfile=${K8S_ROOT}/etc/kubernetes/pki/apiserver-etcd-client-key.pem \
         --etcd-servers=${ETCD_ENDPOINTS} \
-        --bind-address={{IP_{{n}}}} \
+        --bind-address=192.168.57.200 \
         --secure-port=6443 \
         --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/apiserver.pem \
         --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/apiserver-key.pem \
-        --insecure-port=0 \
         --audit-log-maxage=15 \
         --audit-log-maxbackup=3 \
         --audit-log-maxsize=100 \
@@ -180,7 +180,6 @@ systemd:
         --runtime-config=api/all=true \
         --enable-admission-plugins=NodeRestriction \
         --allow-privileged=true \
-        --apiserver-count=1 \
         --event-ttl=168h \
         --kubelet-certificate-authority=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --kubelet-client-certificate=${K8S_ROOT}/etc/kubernetes/pki/apiserver-kubelet-client.pem \
@@ -213,7 +212,6 @@ systemd:
 
         [Service]
 
-        # Flag --port has been deprecated, see --secure-port instead.
         # Flag --horizontal-pod-autoscaler-use-rest-clients has been deprecated,
         # Heapster is no longer supported as a source for Horizontal Pod Autoscaler metrics.
 
@@ -233,7 +231,7 @@ systemd:
         --leader-elect \
         --use-service-account-credentials \
         --concurrent-service-syncs=2 \
-        --bind-address={{IP_{{n}}}} \
+        --bind-address=192.168.57.200 \
         --secure-port=10257 \
         --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/kube-controller-manager.pem \
         --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/kube-controller-manager-key.pem \
@@ -286,9 +284,8 @@ systemd:
         k8s.gcr.io/kube-scheduler:{{KUBERNETES_VERSION}} \
         kube-scheduler \
         --config=${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml \
-        --bind-address={{IP_{{n}}}} \
+        --bind-address=192.168.57.200 \
         --secure-port=10259 \
-        --port=0 \
         --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/kube-scheduler.pem \
         --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/kube-scheduler-key.pem \
         --authentication-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig \
@@ -307,20 +304,36 @@ systemd:
 
         [Install]
         WantedBy=multi-user.target
-    - name: docker-tls-tcp.socket
+    - name: cri-containerd.service
       enabled: true
       contents: |
         [Unit]
-        Description=Docker Secured Socket for the API
+        Description=containerd container runtime for kubernetes
+        Documentation=https://containerd.io
+        After=network-online.target network.target local-fs.target
+        Wants=network-online.target
 
-        [Socket]
-        # ListenStream={{IP_{{n}}}}:2376
-        ListenStream=2376
-        BindIPv6Only=both
-        Service=docker.service
+        [Service]
+        ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/opt/cni/bin
+        ExecStartPre=/usr/bin/env cp -a /usr/libexec/cni/. /opt/k8s/opt/cni/bin
+        ExecStartPre=-/usr/bin/env modprobe overlay
+        ExecStart=/usr/bin/containerd \
+                  --config /opt/k8s/etc/cri-containerd/1.5/config.toml
+        Type=notify
+        KillMode=process
+        Delegate=yes
+        LimitNOFILE=1048576
+        # Having non-zero Limit*s causes performance problems due to accounting overhead
+        # in the kernel. We recommend using cgroups to do container-local accounting.
+        LimitNPROC=infinity
+        LimitCORE=infinity
+        TasksMax=infinity
+
+        Restart=on-failure
+        RestartSec=5
 
         [Install]
-        WantedBy=sockets.target
+        WantedBy=multi-user.target
     - name: kubelet.service
       enabled: true
       contents: |
@@ -334,7 +347,7 @@ systemd:
 
         [Service]
         WorkingDirectory=/home/core
-        Environment="NODE_NAME=coreos{{n}}"
+        Environment="NODE_NAME=coreos1"
         # Fix me
         Environment="KUBE_APISERVER=${KUBE_APISERVER}"
 
@@ -357,19 +370,9 @@ systemd:
         --root-dir=/opt/k8s/var/lib/kubelet \
         --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
         --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
-        --hostname-override=coreos{{n}} \
-        --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
+        --hostname-override=coreos1 \
         --logtostderr=true \
         --v=2
-
-        # cri is docker
-        # --network-plugin=cni \
-        # --cni-cache-dir=/opt/k8s/var/lib/cni/cache \
-        # --cni-bin-dir=/opt/k8s/opt/cni/bin \
-        # --cni-conf-dir=/opt/k8s/etc/cni/net.d \
-        # --pod-infra-container-image=gcr.mirror/google-containers/pause:3.2 \
-        # --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 \
-        # --image-pull-progress-deadline=15m \
 
         ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
         ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
@@ -385,7 +388,7 @@ storage:
       mode: 0644
       overwrite: true
       contents:
-        inline: coreos{{n}}
+        inline: coreos1
     - path: "/etc/hosts"
       mode: 0644
       overwrite: true
@@ -393,40 +396,13 @@ storage:
         inline: |
           127.0.0.1 localhost
           ::1       localhost
-          {{IP_1}} gcr.io k8s.gcr.io docker.khs1994.com docker.domain.com
-          {{IP_1}} coreos1
-          {{IP_2}} coreos2
-          {{IP_3}} coreos3
-          {{IP_{{n}}}} coreos{{n}}
-    - path: ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf
-      mode: 0644
-      contents:
-        inline: |
-          worker_processes 1;
-
-          events {
-              worker_connections  1024;
-          }
-
-          stream {
-              upstream backend {
-                  hash $remote_addr consistent;
-                  server {{IP_1}}:6443        max_fails=3 fail_timeout=30s;
-                  server {{IP_2}}:6443        max_fails=3 fail_timeout=30s;
-                  server {{IP_3}}:6443        max_fails=3 fail_timeout=30s;
-              }
-
-              server {
-                  listen 127.0.0.1:18443;
-                  proxy_connect_timeout 1s;
-                  proxy_pass backend;
-              }
-          }
+          192.168.57.200 gcr.io k8s.gcr.io docker.khs1994.com docker.domain.com
+          192.168.57.200 coreos1
     - path: ${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml
       mode: 0644
       contents:
         inline: |
-          apiVersion: kubescheduler.config.k8s.io/v1beta1
+          apiVersion: kubescheduler.config.k8s.io/v1beta3
           kind: KubeSchedulerConfiguration
           clientConnection:
             burst: 200
@@ -434,17 +410,15 @@ storage:
             qps: 100
           enableContentionProfiling: false
           enableProfiling: true
-          healthzBindAddress: {{IP_{{n}}}}:10251
           leaderElection:
             leaderElect: true
-          metricsBindAddress: {{IP_{{n}}}}:10251
     - path: ${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml
       mode: 0644
       contents:
         inline: |
           kind: KubeletConfiguration
           apiVersion: kubelet.config.k8s.io/v1beta1
-          address: "{{IP_{{n}}}}"
+          address: "192.168.57.200"
           staticPodPath: ""
           syncFrequency: 1m
           fileCheckFrequency: 20s
@@ -470,7 +444,7 @@ storage:
           enableDebuggingHandlers: true
           enableContentionProfiling: true
           healthzPort: 10248
-          healthzBindAddress: "{{IP_{{n}}}}"
+          healthzBindAddress: "192.168.57.200"
           clusterDomain: "cluster.local."
           clusterDNS:
             - "10.254.0.2"
@@ -491,7 +465,7 @@ storage:
           maxPods: 220
           podCIDR: "10.244.0.0/16"
           podPidsLimit: -1
-          resolvConf: /etc/resolv.conf
+          resolvConf: /run/systemd/resolve/resolv.conf
           maxOpenFiles: 1000000
           kubeAPIQPS: 1000
           kubeAPIBurst: 2000
@@ -513,10 +487,9 @@ storage:
           systemReservedCgroup: ""
           kubeReservedCgroup: ""
           enforceNodeAllocatable: ["pods"]
-          # volumePluginDir: ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+          volumePluginDir: ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
           featureGates:
             # AllAlpha: true
-            # BoundServiceAccountTokenVolume: false
     - path: ${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml
       mode: 0644
       contents:
@@ -527,12 +500,12 @@ storage:
             burst: 200
             kubeconfig: "${K8S_ROOT}/etc/kubernetes/kube-proxy.kubeconfig"
             qps: 100
-          bindAddress: {{IP_{{n}}}}
-          healthzBindAddress: {{IP_{{n}}}}:10256
-          metricsBindAddress: {{IP_{{n}}}}:10249
+          bindAddress: 192.168.57.200
+          healthzBindAddress: 192.168.57.200:10256
+          metricsBindAddress: 192.168.57.200:10249
           enableProfiling: true
           clusterCIDR: 10.244.0.0/16
-          hostnameOverride: coreos{{n}}
+          hostnameOverride: coreos1
           mode: "ipvs"
           portRange: ""
           iptables:
@@ -557,5 +530,17 @@ storage:
           [ipv4]
           method=manual
           dns=114.114.114.114
-          addresses={{IP_{{n}}}}/24
+          addresses=192.168.57.200/24
           gateway=${NETWORK_GATEWAY}
+    - path: /opt/k8s/etc/cri-containerd/1.5/config.toml
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/cri-containerd/1.5/config.toml
+    - path: /opt/k8s/etc/cri-containerd/1.5/certs.d/docker.io/hosts.toml
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/cri-containerd/certs.d/docker.io/hosts.toml
+    - path: ${K8S_ROOT}/etc/cni/net.d/99-loopback.conf
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/cni/99-loopback.conf

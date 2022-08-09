@@ -9,7 +9,7 @@ on:
       PHP_VERSION:
         description: php version
         required: true
-        default: "7.3.32"
+        default: "7.3.33"
 
 name: PHP_7.3
 
@@ -268,7 +268,7 @@ jobs:
         echo "::group::Build full custom"
 
         docker buildx build \
-        --build-arg PHP_EXTENSION_EXTRA="wddx xsl" \
+        --build-arg PHP_EXTENSION_EXTRA="xsl" \
         --build-arg PECL_EXTENSION_EXTRA="imagick msgpack" \
         --build-arg APK_EXTRA="libxslt imagemagick-libs libgomp musl" \
         --build-arg APK_DEV_EXTRA="libxslt-dev imagemagick-dev imagemagick" \
@@ -284,7 +284,7 @@ jobs:
         PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v7
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.32
+        PHP_TAG_VERSION: 7.3.33
         TYPE: ${{ matrix.TYPE }}
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php ghcr.io/khs1994/php
       name: 'Build Image'

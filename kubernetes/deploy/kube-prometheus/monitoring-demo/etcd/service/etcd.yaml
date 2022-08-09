@@ -4,11 +4,11 @@ metadata:
   name: etcd
   namespace: kube-system
   labels:
-    k8s-app: etcd
+    app.kubernetes.io/name: etcd
 spec:
   ports:
-  - port: 12379
-    name: etcd
+  - port: 2379
+    name: https-metrics
   clusterIP: None
 ---
 kind: Endpoints
@@ -17,10 +17,10 @@ metadata:
   name: etcd
   namespace: kube-system
   labels:
-    k8s-app: etcd
+    app.kubernetes.io/name: etcd
 subsets:
   - addresses:
     - ip: 192.168.199.100
     ports:
-      - name: etcd
-        port: 12379
+      - name: https-metrics
+        port: 2379

@@ -98,7 +98,6 @@ $ journalctl -u kube-scheduler
 
 $ sudo netstat -lnpt|grep kube-sche
 
-tcp        0      0 192.168.199.100:10251   0.0.0.0:*               LISTEN      25873/kube-schedule
 tcp        0      0 192.168.199.100:10259   0.0.0.0:*               LISTEN      25873/kube-schedule
 
 $ curl -s http://127.0.0.1:10251/metrics |head
@@ -106,7 +105,7 @@ $ curl -s http://127.0.0.1:10251/metrics |head
 $ kubectl get endpoints kube-scheduler --namespace=kube-system  -o yaml
 ```
 
-- **10251** http 端口
+- **10251** http 端口 (v1.23不再使用 http 端口)
 - **10259** https 端口
 
 两个接口都对外提供 `/metrics` 和 `/healthz` 的访问

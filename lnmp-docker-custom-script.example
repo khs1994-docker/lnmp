@@ -2,7 +2,6 @@
 
 # this is custom script use by lnmp-docker
 
-# 执行 up 命令前会调用此函数
 __lnmp_custom_init(){
   true
 }
@@ -19,15 +18,19 @@ __lnmp_custom_cleanup() {
   true
 }
 
-__lnmp_custom_up() {
+__lnmp_custom_pre_up() {
   true
 }
 
-__lnmp_custom_down() {
+__lnmp_custom_post_up() {
   true
 }
 
-__lnmp_custom_pull() {
+__lnmp_custom_post_down() {
+  true
+}
+
+__lnmp_custom_post_pull() {
   true
 }
 

@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.4.25
+ARG PHP_VERSION=7.4.29
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine
 
@@ -298,7 +298,7 @@ RUN set -x \
 #    && apk add --no-cache PKG \
 #    && apk add --no-cache --virtual .ext-build-deps PKG-dev \
 #    && echo "" > /tmp/xdebug.configure.options \
-    && pickle install xdebug -n --defaults --strip \
+    && pickle install xdebug@3.1.5 -n --defaults --strip \
 #    && apk del --no-network .ext-build-deps \
     && rm -rf /tmp/*
 

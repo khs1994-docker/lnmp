@@ -1,5 +1,5 @@
 # https://github.com/kubernetes/kubernetes/blob/master/pkg/scheduler/apis/config/types.go
-apiVersion: kubescheduler.config.k8s.io/v1beta1
+apiVersion: kubescheduler.config.k8s.io/v1beta3
 kind: KubeSchedulerConfiguration
 clientConnection:
   burst: 200
@@ -7,7 +7,5 @@ clientConnection:
   qps: 100
 enableContentionProfiling: false
 enableProfiling: true
-healthzBindAddress: ##NODE_IP##:10251
 leaderElection:
   leaderElect: true
-metricsBindAddress: ##NODE_IP##:10251

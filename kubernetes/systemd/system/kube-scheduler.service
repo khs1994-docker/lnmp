@@ -29,7 +29,6 @@ ExecStart=/opt/k8s/bin/kube-scheduler \
 --config=${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml \
 --bind-address=${K8S_S_HOST} \
 --secure-port=10259 \
---port=0 \
 --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/kube-scheduler.pem \
 --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/kube-scheduler-key.pem \
 --authentication-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig \
@@ -42,6 +41,7 @@ ExecStart=/opt/k8s/bin/kube-scheduler \
 --authorization-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig \
 --logtostderr=true \
 # --logging-format=json \
+# --write-config-to /kube-scheduler.config.yaml \
 --v=2
 
 Restart=on-failure

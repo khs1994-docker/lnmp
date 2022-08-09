@@ -1,11 +1,2 @@
 resources:
-- apiservice.yaml
-- deployment.yaml
-- rbac.yaml
-- service.yaml
-images:
-  - name: k8s.gcr.io/metrics-server/metrics-server:v0.5.0
-    newName: ccr.ccs.tencentyun.com/gcr-mirror/metrics-server
-    newTag: v0.5.0
-commonLabels:
-  k8s-app: metrics-server
+- base

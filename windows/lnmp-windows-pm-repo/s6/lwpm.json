@@ -10,7 +10,7 @@
     "install": "sudo tar -zxf $filename -C /",
     "platform-reqs": "if(!$_IsLinux){echo $false}"
   },
-  "url": "https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-amd64.tar.gz",
-  "url-mirror": "https://download.fastgit.org/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-amd64.tar.gz",
-  "version": "2.2.0.3"
+  "url": "https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-x86_64.tar.xz",
+  "url-mirror": "https://download.fastgit.org/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-x86_64.tar.xz",
+  "version": "3.1.0.1"
 }

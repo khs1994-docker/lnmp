@@ -6,7 +6,7 @@ Function Test-Manifest([string]$token, [string]$image, [string]$digest, [string]
       -Headers @{"Accept" = "$contentType" } `
       "https://$registry/v2/$image/manifests/$digest" `
       -Method Head `
-      -UserAgent "Docker-Client/20.10.1 (Windows)"
+      -UserAgent "Docker-Client/20.10.16 (Windows)"
   }
   catch {
     write-host "==> check manifest exists error [ $($_.Exception.Response.StatusCode) ]" `

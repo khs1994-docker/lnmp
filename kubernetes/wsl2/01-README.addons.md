@@ -1,4 +1,4 @@
-## 必需组件部署
+## K8S 必需组件部署
 
 ### 1. 部署 CNI -- calico
 
@@ -8,7 +8,7 @@
 # $ kubectl apply -k addons/cni/calico-custom
 
 $ kubectl apply -f addons/cni/calico-eBPF/kubernetes.yaml
-$ kubectl apply -k addons/cni/calico-eBPF
+$ kubectl apply -k addons/cni/calico-eBPF-nft
 ```
 
 > 若不能正确匹配网卡，请修改 [addons/cni/calico/basic.patch.json](../addons/cni/calico/basic.patch.json) 文件中 `IP_AUTODETECTION_METHOD` 变量的值

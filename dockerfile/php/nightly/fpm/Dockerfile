@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-FROM --platform=$TARGETPLATFORM alpine:3.14 as php
+FROM --platform=$TARGETPLATFORM alpine:3.16 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -39,6 +39,7 @@ ENV PHPIZE_DEPS \
 RUN set -ex \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && apk add --no-cache \
+                 ca-certificates \
                  curl \
                  tar \
                  xz \
@@ -182,7 +183,6 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
           argon2-dev \
           coreutils \
           curl-dev \
-          libedit-dev \
           libsodium-dev \
           libxml2-dev \
           linux-headers \
@@ -219,6 +219,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
           gnu-libiconv-dev \
           ${APK_DEV_EXTRA:-} \
   \
+  && rm -vf /usr/include/iconv.h \
   && export CFLAGS="$PHP_CFLAGS" \
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
@@ -250,9 +251,9 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
     --with-sodium=shared \
     \
     --with-curl \
-    --with-libedit \
     --with-openssl=shared \
       --with-system-ciphers \
+    --with-readline \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     --with-password-argon2 \
@@ -305,7 +306,6 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            # opcache 已默认安装，需要自行载入
                            opcache \
                            zip \
-                           # iconv \
                            ffi \
                            ${PHP_EXTENSION_EXTRA:-} \
   && echo "extension=exif" > $PHP_INI_DIR/conf.d/docker-php-ext-z-exif.ini \
@@ -388,7 +388,9 @@ ENV PECL_BUILD_DEPS \
       # yaml-dev \
       pcre2-dev \
       zlib-dev \
-      zstd-dev
+      zstd-dev \
+# https://github.com/xdebug/xdebug/pull/835
+      linux-headers
 
 ENV PECL_RUN_DEPS \
       libmemcached-libs \
@@ -407,7 +409,7 @@ ENV PECL_EXTENSION \
       # xdebug-beta \
       # yaml \
       # https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
-      https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
+      https://github.com/kjdev/php-ext-zstd/archive/0.11.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \

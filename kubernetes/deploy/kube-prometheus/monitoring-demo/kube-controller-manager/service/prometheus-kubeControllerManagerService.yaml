@@ -4,7 +4,7 @@ metadata:
   namespace: kube-system
   name: kube-controller-manager
   labels:
-    k8s-app: kube-controller-manager
+    app.kubernetes.io/name: kube-controller-manager
 spec:
   ports:
   - name: https-metrics
@@ -18,7 +18,7 @@ metadata:
   name: kube-controller-manager
   namespace: kube-system
   labels:
-    k8s-app: kube-controller-manager
+    app.kubernetes.io/name: kube-controller-manager
 subsets:
   - addresses:
     - ip: 192.168.199.100

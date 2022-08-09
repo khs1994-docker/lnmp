@@ -49,7 +49,6 @@
 │   │   └── etc
 │   │       └── mysql
 │   │           ├── conf.d
-│   │           │   └── docker.cnf
 │   │           ├── debian-start
 │   │           ├── debian.cnf
 │   │           ├── mariadb.cnf
@@ -68,6 +67,8 @@
 │   ├── mongod.conf
 │   └── mongod.production.conf
 ├── mysql
+│   ├── conf.d
+│   │   └── docker.cnf
 │   ├── default
 │   │   └── etc
 │   │       └── mysql
@@ -96,7 +97,6 @@
 │   │   ├── t.khs1994.com.crt
 │   │   └── t.khs1994.com.key
 │   ├── demo-ssl.config
-│   ├── demo-toolkit-docs.conf
 │   ├── demo-www.conf
 │   ├── demo-www.config
 │   ├── demo.config
@@ -169,6 +169,7 @@
 │   │                   └── zz-docker.conf
 │   ├── docker-php.example.ini
 │   ├── php-PHP_SAPI.ini
+│   ├── php-cli.example.ini
 │   ├── php.development.ini
 │   ├── php.production.ini
 │   ├── zz-docker.example.conf
@@ -224,6 +225,7 @@
 │   │                   ├── www.conf.default
 │   │                   └── zz-docker.conf
 │   ├── docker-php.example.ini
+│   ├── php-cli.example.ini
 │   ├── php.development.ini
 │   ├── php.production.ini
 │   ├── zz-docker.example.conf
@@ -244,6 +246,19 @@
 │   └── nginx.htpasswd.demo
 ├── s6
 │   ├── README.md
+│   ├── s6-rc.d
+│   │   ├── laravel-horizon
+│   │   │   ├── log
+│   │   │   │   └── run
+│   │   │   └── run
+│   │   ├── php-fpm
+│   │   │   ├── finish
+│   │   │   ├── run
+│   │   │   └── type
+│   │   └── user
+│   │       └── contents.d
+│   │           ├── laravel-horizon
+│   │           └── php-fpm
 │   └── services.d
 │       ├── crond
 │       │   └── run
@@ -264,5 +279,5 @@
 │   └── supervisord.ini.example
 └── yarn
 
-63 directories, 200 files
+70 directories, 208 files
 ```

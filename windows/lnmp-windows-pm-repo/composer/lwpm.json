@@ -1,8 +1,8 @@
 {
   "name": "composer",
   "description": "Dependency Manager for PHP",
-  "version": "2.1.14",
-  "pre-version": "2.1.14",
+  "version": "2.2.7",
+  "pre-version": "2.2.7",
   "homepage": "https://getcomposer.org/",
   "bug": "https://github.com/composer/composer/issues",
   "github": "composer/composer",

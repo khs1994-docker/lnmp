@@ -71,9 +71,6 @@ systemReservedCgroup: ""
 kubeReservedCgroup: ""
 enforceNodeAllocatable: ["pods"]
 # volumePluginDir: ##K8S_ROOT##/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
-featureGates:
+# featureGates:
   # AllAlpha: true
-  # BoundServiceAccountTokenVolume: false
-  IPv6DualStack: true
-  EphemeralContainers: true
-  GenericEphemeralVolume: true
+  # EphemeralContainers: true

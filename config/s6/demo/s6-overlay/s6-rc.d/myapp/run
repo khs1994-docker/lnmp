@@ -1,0 +1,11 @@
+# Dropping privileges
+#!/usr/bin/execlineb -P
+s6-setuidgid daemon
+myservice
+
+# Dropping privileges
+#!/bin/sh
+exec s6-setuidgid daemon myservice
+
+#!/command/execlineb -P
+nginx -g "daemon off;"

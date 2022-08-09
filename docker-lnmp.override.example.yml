@@ -11,7 +11,7 @@ x-common:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 #
-# 这里的文件具有最高优先级，可以通过以下命令查看最终的 compose 文件
+# 此文件具有最高优先级，可以通过以下命令查看最终的 compose 文件
 #
 # $ ./lnmp-docker config > docker-compose.yaml
 #
@@ -28,14 +28,12 @@ services:
   # php8:
   #   &php8
   #   # ! change php8 default image
-  #   image: username/php:${LNMP_PHP8_VERSION:-8.0.12}-fpm-alpine
+  #   image: username/php:${LNMP_PHP8_VERSION:-8.1.3}-fpm-alpine
   #   # ! cn mirror image
-  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP8_VERSION:-8.0.12}-fpm-alpine
+  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP8_VERSION:-8.1.3}-fpm-alpine
   #   # ! s6
-  #   # image: khs1994/php:${LNMP_PHP8_VERSION:-8.0.12}-s6-alpine
+  #   # image: khs1994/php:${LNMP_PHP8_VERSION:-8.1.3}-s6-alpine
   #   # command: []
-  #   # volumes:
-  #   #   - ./config/s6/services.d:/etc/services.d
   #   # ! open more port
   #   ports:
   #     - "9000"
@@ -60,7 +58,7 @@ services:
 # More Demo
 
   # phpmyadmin:
-  #   image: phpmyadmin:5.1.1-fpm-alpine
+  #   image: phpmyadmin:5.2.0-fpm-alpine
   #   volumes:
   #     - phpmyadmin:/var/www/html
   #   healthcheck:
@@ -77,7 +75,7 @@ services:
 
   swoole:
     << : *common
-    image: khs1994/php:${LNMP_PHP_VERSION:-8.0.12}-swoole-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-8.1.3}-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php

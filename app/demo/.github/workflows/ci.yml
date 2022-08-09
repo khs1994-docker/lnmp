@@ -16,7 +16,7 @@ jobs:
   test:
     strategy:
       matrix:
-        php_version: ["7.3.32","7.4.25","8.0.12"]
+        php_version: ["7.4.29","8.0.17","8.1.3"]
     runs-on: ubuntu-latest
     # needs: job
     steps:
@@ -90,6 +90,6 @@ jobs:
         options: -v mysql-data:/var/lib/mysql --restart always --workdir=/
 
       redis:
-        image: redis:6.2.5-alpine
+        image: redis:7.0.0-alpine
         ports:
           - 6379:6379

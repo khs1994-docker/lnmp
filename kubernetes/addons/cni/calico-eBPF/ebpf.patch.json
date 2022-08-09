@@ -1,10 +1,18 @@
 [
   {
     "op": "add",
-    "path": "/spec/template/spec/containers/0/env/22",
+    "path": "/spec/template/spec/containers/0/env/23",
     "value": {
       "name": "FELIX_BPFENABLED",
       "value": "true"
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/env/24",
+    "value": {
+      "name": "FELIX_BPFEXTERNALSERVICEMODE",
+      "value": "DSR"
     }
   }
 ]

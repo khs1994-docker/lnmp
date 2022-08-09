@@ -59,7 +59,7 @@ fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=2.1.14
+export COMPOSER_VERSION=2.2.7
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
@@ -308,7 +308,8 @@ $( $(_sudo) apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 $( $(_sudo) apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
 $( _test_pkg libenchant1c2a ) \
 $( _test_pkg libenchant-2-2 ) \
-libssl1.1 \
+$( $(_sudo) apt install -y libssl1.1 > /dev/null 2>&1 && echo libssl1.1 ) \
+$( $(_sudo) apt install -y libssl3 > /dev/null 2>&1 && echo libssl3 ) \
 $( $(_sudo) apt install -y libicu55 > /dev/null 2>&1 && echo libicu55) \
 $( $(_sudo) apt install -y libicu57 > /dev/null 2>&1 && echo libicu57) \
 $( $(_sudo) apt install -y libicu60 > /dev/null 2>&1 && echo libicu60) \
@@ -1032,8 +1033,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=8.0.12
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=8.0.12
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=8.1.3
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=8.1.3
 
 _get_phpnum $PHP_VERSION
 

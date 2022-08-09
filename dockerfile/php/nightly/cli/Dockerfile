@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-FROM --platform=$TARGETPLATFORM alpine:3.14
+FROM --platform=$TARGETPLATFORM alpine:3.16
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -41,6 +41,7 @@ ENV PHPIZE_DEPS \
 RUN set -ex \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && apk add --no-cache \
+                 ca-certificates \
                  curl \
                  tar \
                  xz \
@@ -196,12 +197,13 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           argon2-dev \
           coreutils \
           curl-dev \
-          libedit-dev \
+          gnu-libiconv-dev \
           libsodium-dev \
           libxml2-dev \
           linux-headers \
           oniguruma-dev \
           openssl-dev \
+          readline-dev \
           sqlite-dev \
           cyrus-sasl-dev \
           postgresql-dev \
@@ -230,9 +232,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           libavif-dev \
           \
           bison \
-          gnu-libiconv-dev \
           ${APK_DEV_EXTRA:-} \
   \
+  && rm -vf /usr/include/iconv.h \
   && export CFLAGS="$PHP_CFLAGS" \
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
@@ -264,9 +266,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     --with-sodium=shared \
     \
     --with-curl=shared \
-    --with-libedit \
     --with-openssl=shared \
       --with-system-ciphers \
+    --with-readline \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     --with-password-argon2 \
@@ -334,7 +336,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            mbstring \
                            curl \
                            zip \
-                           # iconv \
                            ${PHP_EXTENSION_EXTRA:-} \
   && echo "extension=exif" > $PHP_INI_DIR/conf.d/docker-php-ext-z-exif.ini \
   && echo "extension=gd" > $PHP_INI_DIR/conf.d/docker-php-ext-z-gd.ini \
@@ -375,7 +376,9 @@ ENV PECL_BUILD_DEPS \
       # yaml-dev \
       pcre2-dev \
       zlib-dev \
-      zstd-dev
+      zstd-dev \
+# https://github.com/xdebug/xdebug/pull/835
+      linux-headers
 
 ENV PECL_RUN_DEPS \
       libmemcached-libs \
@@ -394,7 +397,7 @@ ENV PECL_EXTENSION \
       # xdebug-beta \
       # yaml \
       # https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
-      https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
+      https://github.com/kjdev/php-ext-zstd/archive/0.11.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \

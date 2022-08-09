@@ -15,7 +15,7 @@ $ lnmp-composer create-project symfony/website-skeleton my_project_name 5.0.x-de
 
 $ php bin/console about
 
-$ lnmp-docker php7-cli
+$ lnmp-docker php8-cli
 
 $ php bin/console cache:clear --env development
 ```

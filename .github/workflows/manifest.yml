@@ -19,11 +19,11 @@ jobs:
       matrix:
         os:
         - ubuntu-latest
-        - macos-latest
+        - macos-12
     runs-on: ubuntu-latest
     services:
       redis:
-        image: redis:6.2.5-alpine
+        image: redis:7.0.0-alpine
     defaults:
       run:
         shell: bash --noprofile --norc -exo pipefail {0}

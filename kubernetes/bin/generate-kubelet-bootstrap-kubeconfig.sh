@@ -18,6 +18,8 @@ if [ -n "${WSL2_IP}" ];then
   -e "s/##NODE_IP##/${WSL2_IP}/g" \
   -e "s!##K8S_ROOT##!${K8S_ROOT:-/opt/k8s}!g" \
   | tee ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kubelet.config.yaml > /dev/null
+
+  echo "${WSL2_IP}" > ${K8S_ROOT:-/opt/k8s}/.WSL2_IP.env
 fi
 
 until curl --cacert ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/pki/ca.pem ${KUBE_APISERVER}; do

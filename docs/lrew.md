@@ -15,7 +15,7 @@ macOS 有 `brew` 包管理工具，khs1994-docker/lnmp 包管理工具称为 `lr
 ```bash
 LREW_INCLUDE="minio example"
 
-LNMP_SERVICES="nginx mysql php7 redis example"
+LNMP_SERVICES="nginx mysql php8 redis example"
 ```
 
 ### 启动

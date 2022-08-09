@@ -1,2 +1,2 @@
 #!/bin/sh
-exec logutil-service /var/log/laravel-horizon
+exec /command/logutil-service /var/log/laravel-horizon

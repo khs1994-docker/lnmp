@@ -4,6 +4,10 @@
 
 * Kubernetes `1.22.0`
 
+## v1.24.0
+
+* 不支持 `Docker` Docker runtime support using dockshim in the kubelet is now completely removed in 1.24.
+
 ## v1.23.0
 
 * `kubescheduler.config.k8s.io/v1beta1` 替换为 `kubescheduler.config.k8s.io/v1beta3`

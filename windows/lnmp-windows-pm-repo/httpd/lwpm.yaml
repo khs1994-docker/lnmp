@@ -1,7 +1,7 @@
 name: httpd
 description: ""
-version: 2.4.49
-pre-version: 2.4.49
+version: 2.4.53
+pre-version: 2.4.53
 homepage: https://httpd.apache.org/
 bug: https://httpd.apache.org/bug_report.html
 github: apache/httpd

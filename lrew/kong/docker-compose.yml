@@ -38,7 +38,7 @@ services:
   kong:
     &kong
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/kong:2.5.1-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/kong:2.8.1-alpine
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: postgresql-kong

@@ -14,7 +14,7 @@ $KUBE_APISERVER="https://wsl2.k8s.khs1994.com:6443"
 # 解析到 WSL2 的域名，每个变量最好不要超过 5 个值
 
 $WSL2_DOMAIN="wsl.t.khs1994.com","test2.t.khs1994.com"
-$WSL2_DOMAIN_1=""
+$WSL2_DOMAIN_1="prometheus-alertmanager.t.khs1994.com","grafana.t.khs1994.com","prometheus.t.khs1994.com"
 $WSL2_DOMAIN_2=""
 # $WSL2_DOMAIN_20=""
 

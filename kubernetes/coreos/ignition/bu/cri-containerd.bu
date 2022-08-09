@@ -17,12 +17,12 @@ systemd:
 
         ExecStartPre=/usr/bin/env bash -c "if ! [ `/usr/local/bin/cri-containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/cri-containerd; fi"
         ExecStartPre=/usr/bin/env bash -c "if ! [ -f /usr/local/bin/cri-containerd ];then \
-          rm -rf /tmp/bin ;\
-          tar -zxvf /opt/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz \
+          rm -rf /tmp/usr/local/bin /tmp/bin;\
+          tar -zxvf /opt/.khs1994-docker-lnmp/caches/cri-containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz \
           -C /tmp ;\
-          cp /tmp/bin/containerd /tmp/bin/cri-containerd ; \
-          cp /tmp/bin/containerd-shim /tmp/bin/cri-containerd-shim ; \
-          cp /tmp/bin/* /usr/local/bin/ ;\
+          cp /tmp/usr/local/bin/containerd      /tmp/usr/local/bin/cri-containerd ; \
+          cp /tmp/usr/local/bin/containerd-shim /tmp/usr/local/bin/cri-containerd-shim ; \
+          cp /tmp/usr/local/bin/* /usr/local/bin/ ;\
           fi"
         ExecStart=/usr/bin/env echo success
         [Install]
@@ -42,7 +42,7 @@ systemd:
         ExecStartPre=/usr/bin/env cp -a /usr/libexec/cni/. /opt/k8s/opt/cni/bin
         ExecStartPre=-/usr/bin/env modprobe overlay
         ExecStart=/usr/local/bin/cri-containerd \
-                  --config /opt/k8s/etc/cri-containerd/1.5/config.toml
+                  --config /opt/k8s/etc/cri-containerd/1.6/config.toml
         Type=notify
         KillMode=process
         Delegate=yes
@@ -60,16 +60,20 @@ systemd:
         WantedBy=multi-user.target
 storage:
   files:
-    - path: /opt/k8s/etc/cri-containerd/1.5/config.toml
+    - path: /opt/k8s/etc/cri-containerd/1.6/config.toml
       mode: 0644
       contents:
-        source: http://{{SERVER_HOST}}:8080/etc/cri-containerd/1.5/config.toml
+        source: http://{{SERVER_HOST}}:8080/etc/cri-containerd/1.6/config.toml
+    - path: /opt/k8s/etc/cri-containerd/1.6/certs.d/docker.io/hosts.toml
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/cri-containerd/certs.d/docker.io/hosts.toml
     - path: ${K8S_ROOT}/etc/cni/net.d/99-loopback.conf
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/etc/cni/99-loopback.conf
-    - path: /opt/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz
+    - path: /opt/.khs1994-docker-lnmp/caches/cri-containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz
       mode: 0644
       contents:
         compression: null
-        source: http://{{SERVER_HOST}}:8080/releases/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz
+        source: http://{{SERVER_HOST}}:8080/releases/cri-containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz

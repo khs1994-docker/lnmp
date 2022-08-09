@@ -1,0 +1,92 @@
+--- 1.6/config.default.toml	2022-06-04 07:50:31.672247100 +0800
++++ 1.7/config.default.toml	2022-06-12 14:13:38.794187500 +0800
+@@ -43,22 +43,25 @@
+     startup_delay = "100ms"
+ 
+   [plugins."io.containerd.grpc.v1.cri"]
++    cdi_spec_dirs = ["/etc/cdi", "/var/run/cdi"]
+     device_ownership_from_security_context = false
+     disable_apparmor = false
+     disable_cgroup = false
+     disable_hugetlb_controller = true
+     disable_proc_mount = false
+     disable_tcp_service = true
++    enable_cdi = false
+     enable_selinux = false
+     enable_tls_streaming = false
+     enable_unprivileged_icmp = false
+     enable_unprivileged_ports = false
+     ignore_image_defined_volumes = false
++    image_pull_progress_timeout = "1m0s"
+     max_concurrent_downloads = 3
+     max_container_log_line_size = 16384
+     netns_mounts_under_state_dir = false
+     restrict_oom_score_adj = false
+-    sandbox_image = "k8s.gcr.io/pause:3.6"
++    sandbox_image = "k8s.gcr.io/pause:3.7"
+     selinux_category_range = 1024
+     stats_collect_period = 10
+     stream_idle_timeout = "4h0m0s"
+@@ -79,6 +82,7 @@
+       default_runtime_name = "runc"
+       disable_snapshot_annotations = true
+       discard_unpacked_layers = false
++      ignore_blockio_not_enabled_errors = false
+       ignore_rdt_not_enabled_errors = false
+       no_pivot = false
+       snapshotter = "overlayfs"
+@@ -90,10 +94,12 @@
+         container_annotations = []
+         pod_annotations = []
+         privileged_without_host_devices = false
++        privileged_without_host_devices_all_devices_allowed = false
+         runtime_engine = ""
+         runtime_path = ""
+         runtime_root = ""
+         runtime_type = ""
++        snapshotter = ""
+ 
+         [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime.options]
+ 
+@@ -106,10 +112,12 @@
+           container_annotations = []
+           pod_annotations = []
+           privileged_without_host_devices = false
++          privileged_without_host_devices_all_devices_allowed = false
+           runtime_engine = ""
+           runtime_path = ""
+           runtime_root = ""
+           runtime_type = "io.containerd.runc.v2"
++          snapshotter = ""
+ 
+           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+             BinaryName = ""
+@@ -131,10 +139,12 @@
+         container_annotations = []
+         pod_annotations = []
+         privileged_without_host_devices = false
++        privileged_without_host_devices_all_devices_allowed = false
+         runtime_engine = ""
+         runtime_path = ""
+         runtime_root = ""
+         runtime_type = ""
++        snapshotter = ""
+ 
+         [plugins."io.containerd.grpc.v1.cri".containerd.untrusted_workload_runtime.options]
+ 
+@@ -187,6 +197,7 @@
+     default = ["walking"]
+ 
+   [plugins."io.containerd.service.v1.tasks-service"]
++    blockio_config_file = ""
+     rdt_config_file = ""
+ 
+   [plugins."io.containerd.snapshotter.v1.aufs"]
+@@ -239,6 +250,7 @@
+ 
+ [timeouts]
+   "io.containerd.timeout.bolt.open" = "0s"
++  "io.containerd.timeout.metrics.shimstats" = "2s"
+   "io.containerd.timeout.shim.cleanup" = "5s"
+   "io.containerd.timeout.shim.load" = "5s"
+   "io.containerd.timeout.shim.shutdown" = "3s"

@@ -1,12 +1,13 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=7.4.25
+ARG PHP_VERSION=7.4.29
 ARG USERNAME=khs1994
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ENV NGINX_UNIT_VERSION=1.24.0
+ENV NGINX_UNIT_VERSION=1.27.0
+# ENV NGINX_UNIT_VERSION=master
 
 RUN set -x \
   && mkdir -p /usr/src/unit \

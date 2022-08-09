@@ -384,7 +384,7 @@ data:
     <source>
       @id journald-cri-containerd@1.4
       @type systemd
-      matches [{ "_SYSTEMD_UNIT": "cri-containerd@1.5.service" }]
+      matches [{ "_SYSTEMD_UNIT": "cri-containerd@1.6.service" }]
       <storage>
         @type local
         persistent true

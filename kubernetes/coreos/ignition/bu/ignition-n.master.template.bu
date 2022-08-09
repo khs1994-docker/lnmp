@@ -106,7 +106,6 @@ systemd:
           --election-timeout=2000
 
         ExecStop=/bin/podman stop etcd
-        ExecStopPost=/bin/podman container rm etcd
 
         # ExecStartPost
         # ExecReload：重启当前服务时执行的命令
@@ -129,11 +128,11 @@ systemd:
 
         [Service]
         # Flag --experimental-encryption-provider-config has been deprecated, use --encryption-provider-config.
-        # --insecure-port has been deprecated, This flag will be removed in a future version.
 
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStartPre=mkdir -p /opt/k8s/var/log/kubernetes
+        ExecStartPre=/usr/bin/env mkdir -p /opt/k8s/var/log/kubernetes/kube-apiserver
+        ExecStartPre=/usr/bin/env touch    /opt/k8s/var/log/kubernetes/kube-apiserver/audit.log
 
         ExecStart=/bin/podman run \
         --name kube-apiserver \
@@ -158,7 +157,6 @@ systemd:
         --secure-port=6443 \
         --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/apiserver.pem \
         --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/apiserver-key.pem \
-        --insecure-port=0 \
         --audit-log-maxage=15 \
         --audit-log-maxbackup=3 \
         --audit-log-maxsize=100 \
@@ -215,7 +213,6 @@ systemd:
 
         [Service]
 
-        # Flag --port has been deprecated, see --secure-port instead.
         # Flag --horizontal-pod-autoscaler-use-rest-clients has been deprecated,
         # Heapster is no longer supported as a source for Horizontal Pod Autoscaler metrics.
 
@@ -290,7 +287,6 @@ systemd:
         --config=${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml \
         --bind-address={{IP_{{n}}}} \
         --secure-port=10259 \
-        --port=0 \
         --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/kube-scheduler.pem \
         --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/kube-scheduler-key.pem \
         --authentication-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig \
@@ -360,7 +356,6 @@ systemd:
         --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
         --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
         --hostname-override=coreos{{n}} \
-        --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
         --v=2
 
@@ -430,7 +425,7 @@ storage:
       mode: 0644
       contents:
         inline: |
-          apiVersion: kubescheduler.config.k8s.io/v1beta1
+          apiVersion: kubescheduler.config.k8s.io/v1beta3
           kind: KubeSchedulerConfiguration
           clientConnection:
             burst: 200
@@ -438,10 +433,8 @@ storage:
             qps: 100
           enableContentionProfiling: false
           enableProfiling: true
-          healthzBindAddress: {{IP_{{n}}}}:10251
           leaderElection:
             leaderElect: true
-          metricsBindAddress: {{IP_{{n}}}}:10251
     - path: ${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml
       mode: 0644
       contents:
@@ -495,7 +488,7 @@ storage:
           maxPods: 220
           podCIDR: "10.244.0.0/16"
           podPidsLimit: -1
-          resolvConf: /etc/resolv.conf
+          resolvConf: /run/systemd/resolve/resolv.conf
           maxOpenFiles: 1000000
           kubeAPIQPS: 1000
           kubeAPIBurst: 2000
@@ -517,10 +510,9 @@ storage:
           systemReservedCgroup: ""
           kubeReservedCgroup: ""
           enforceNodeAllocatable: ["pods"]
-          # volumePluginDir: ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+          volumePluginDir: ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
           featureGates:
             # AllAlpha: true
-            # BoundServiceAccountTokenVolume: false
     - path: ${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml
       mode: 0644
       contents:

@@ -17,5 +17,5 @@
     "dist": "_mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename\n"
   },
   "url": "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/kubernetes-server-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz",
-  "version": "1.23.0"
+  "version": "1.24.0"
 }

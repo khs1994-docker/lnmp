@@ -83,7 +83,6 @@ for i in `seq ${NODE_NUM}`;do
   cp ignition-$i.bu.source ignition-$i.bu
 
   sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" ignition-$i.bu
-  sed -i "s#{{DISCOVERY_URL}}#${DISCOVERY_URL}#g" ignition-$i.bu
   sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ignition-$i.bu
   sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" ignition-$i.bu
 done

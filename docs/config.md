@@ -18,50 +18,6 @@
 
 **3.** 修改 `.env` 文件 `SOFT_NAME_CONF` 值为文件名或目录名
 
-## MySQL
-
-**1.** 示例配置文件：`./config/mysql/docker.cnf`
-
-**2.** 在示例配置文件夹内 `./config/mysql/` 复制 `docker.cnf` 为 `docker.my.cnf`
-
-**3.** 在 `.env` 文件内修改 `LNMP_MYSQL_CONF` 变量值为 `docker.my.cnf`
-
-### 修改默认数据文件夹
-
-假设自定义文件夹为 `/var/lib/mysql-my` (必须为绝对路径)
-
-在 `docker.my.cnf` 中增加如下配置
-
-```bash
-[mysqld]
-
-datadir         = /var/lib/mysql-my
-```
-
-在 `.env` 文件中修改 `LNMP_MYSQL_DATA=/var/lib/mysql-my`,之后启动即可。
-
-> MariaDB 配置差不多，这里不再赘述。
-
-### MySQL 自定义初始的 ROOT 密码
-
-#### 通过密钥文件设置密码（自行了解设置）
-
-**1.** 在 `./secrets/` 新建 `*.txt` 文件，并写入密码。例如 `db.my.txt`
-
-**2.** 在 `.env` 文件中设置 `LNMP_DB_ROOT_PASSWORD_PATH` 值为文件名，例如 `LNMP_DB_ROOT_PASSWORD_PATH=db.my.txt`
-
-#### 通过修改 .env 文件修改密码（默认）
-
-```diff
-- LNMP_MYSQL_ROOT_PASSWORD=mytest
-+ LNMP_MYSQL_ROOT_PASSWORD=newpassword
-
-- LNMP_MYSQL_DATABASE=test
-+ LNMP_MYSQL_DATABASE=mydb
-```
-
-> 如果 MySQL 之前启动过，要么销毁（数据卷）之后重新启动，要么手动进入命令行修改密码。
-
 ## NGINX HTTPD
 
 这两个软件的配置文件较多，详细说明一下：
@@ -78,13 +34,19 @@ datadir         = /var/lib/mysql-my
 
 **6.** 修改 `.env` 文件 `LNMP_NGINX_CONF=nginx.my.conf` `LNMP_NGINX_CONF_D=nginx.my`，HTTPD 同理
 
-## 简单的自定义 `php.ini` 配置
+## PHP
+
+### 简单的自定义 `php.ini` 配置
 
 编辑 `./config/php/docker-php.ini` 文件。
 
 > 当你需要更改大量的 `php.ini` 配置时，请编辑 `./config/php/php.ini`
 
 > php.ini 支持系统变量 `key=${VAR}`，故可以通过设置系统变量来自定义配置
+
+## MySQL
+
+* 在 `./config/mysql/conf.d/my.cnf` 文件中增加配置项即可
 
 ## 其他软件
 

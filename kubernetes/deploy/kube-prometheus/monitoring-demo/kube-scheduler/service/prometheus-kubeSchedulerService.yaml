@@ -4,11 +4,11 @@ metadata:
   namespace: kube-system
   name: kube-scheduler
   labels:
-    k8s-app: kube-scheduler #与servicemonitor中的selector匹配
+    app.kubernetes.io/name: kube-scheduler #与servicemonitor中的selector匹配
 spec:
   ports:
-  - name: http-metrics
-    port: 10251
+  - name: https-metrics
+    port: 10259
     protocol: TCP
   clusterIP: None
 ---
@@ -18,10 +18,10 @@ metadata:
   name: kube-scheduler
   namespace: kube-system
   labels:
-    k8s-app: kube-scheduler
+    app.kubernetes.io/name: kube-scheduler
 subsets:
   - addresses:
     - ip: 192.168.199.100
     ports:
-      - name: http-metrics
-        port: 10251
+      - name: https-metrics
+        port: 10259

@@ -48,7 +48,7 @@ data:
         Systemd_Filter  _SYSTEMD_UNIT=kubelet@crio.service
         Systemd_Filter  _SYSTEMD_UNIT=kubelet@cri-containerd.service
         Systemd_Filter  _SYSTEMD_UNIT=cri-o.service
-        Systemd_Filter  _SYSTEMD_UNIT=cri-containerd@1.5.service
+        Systemd_Filter  _SYSTEMD_UNIT=cri-containerd@1.6.service
         Strip_Underscores On
         # Read_From_Tail  On
 

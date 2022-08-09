@@ -28,7 +28,7 @@ version: "3.9"
 
 x-common:
   &common
-  image: redis:6.2.5-alpine
+  image: redis:7.0.0-alpine
   restart: always
   env_file:
     - ./cli/timezone.env

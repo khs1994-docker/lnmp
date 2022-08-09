@@ -1,6 +1,7 @@
 # README
 
 * https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config/
+* https://github.com/coreos/butane/tree/main/docs
 
 ## password hash
 

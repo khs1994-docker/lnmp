@@ -76,7 +76,7 @@ $ lnmp-wsl-install php | mysql ...
 主版本所有执行文件放到 `/usr/local/bin`，其他版本请使用绝对路径，例如 `/usr/local/php56/bin/php`。
 
 ```bash
-$ lnmp-wsl-install enable php73 php72 | php71 | php70 | php56
+$ lnmp-wsl-install enable php81 | php80 | php74 | php73 | php72 | php71 | php70 | php56
 ```
 
 **PHP 安装路径**
