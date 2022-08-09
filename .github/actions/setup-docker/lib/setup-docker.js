@@ -125,8 +125,8 @@ async function run() {
 
     core.startGroup('install docker')
     // await exec.exec('brew', ['update'])
-    // await exec.exec('wget', ['https://raw.githubusercontent.com/Homebrew/homebrew-cask/300b1dcc6d9f61cc93e9351e76066f0846beefe9/Casks/docker.rb']);
-    await exec.exec('wget', ['https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/docker.rb']);
+    await exec.exec('wget', ['https://raw.githubusercontent.com/Homebrew/homebrew-cask/fe866ec0765de141599745f03e215452db7f511b/Casks/docker.rb']);
+    // await exec.exec('wget', ['https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/docker.rb']);
     await exec.exec('brew', [
       'install',
       '--cask',
