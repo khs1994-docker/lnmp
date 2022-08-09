@@ -33,7 +33,7 @@ RUN --mount=type=bind,from=php:7.2.34-alpine,source=/usr/local/bin,target=/opt/b
     && export PATH=$PATH:/opt/bin \
     && echo " \
            --enable-openssl \
-           --enable-http2" > /tmp/swoole.configure.options \
+           " > /tmp/swoole.configure.options \
     && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
          -n --defaults --strip --cleanup \
     && apk del --no-network .pecl_build_deps \

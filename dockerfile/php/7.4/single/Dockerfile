@@ -319,7 +319,6 @@ RUN set -x \
 --with-php-config=php-config \
 --enable-openssl \
 --enable-sockets \
---enable-http2 \
 --enable-mysqlnd \
 " > /tmp/swoole.configure.options \
     && pickle install swoole -n --defaults --strip \

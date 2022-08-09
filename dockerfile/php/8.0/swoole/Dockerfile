@@ -22,7 +22,7 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-ENV SWOOLE_VERSION=v4.8.10
+ENV SWOOLE_VERSION=v5.0.0
 # ENV SWOOLE_VERSION=master
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
@@ -37,7 +37,7 @@ RUN --mount=type=bind,from=php:8.0.17-alpine,source=/usr/local/bin,target=/opt/b
     && export PATH=$PATH:/opt/bin \
     && echo " \
            --enable-openssl \
-           --enable-http2" > /tmp/swoole.configure.options \
+           " > /tmp/swoole.configure.options \
     && pickle install https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz \
          -n --defaults --strip --cleanup \
     && apk del --no-network .pecl_build_deps \
