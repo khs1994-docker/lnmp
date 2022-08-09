@@ -9,7 +9,7 @@
   "path": [
     "C:\\php"
   ],
-  "pre-version": "8.1.2",
+  "pre-version": "8.1.3",
   "releases": "https://www.php.net/downloads.php",
   "scripts": {
     "get-version": "if(!($VERSION)){\n$VERSION=$stable_version\n}\nif($isPre){\n$VC_VERSION=\"nts-Win32-vs16\"\n$VERSION=$pre_version\n$url=\"https://windows.php.net/downloads/qa/php-${VERSION}-${VC_VERSION}-x64.zip\"\n$unzipDesc=\"php-pre\"\n$global:PHP_PREFIX=\"C:\\php-pre\"\n}else{\n$VC_VERSION=\"nts-Win32-vs16\"\n$url=\"https://windows.php.net/downloads/releases/archives/php-${VERSION}-${VC_VERSION}-x64.zip\"\n$unzipDesc=\"php\"\n$global:PHP_PREFIX=\"C:\\php\"\n}",
@@ -25,5 +25,5 @@
     "uninstall": "_cleanup \"C:\\php\"",
     "version": "(php -v).split(\" \")[1]"
   },
-  "version": "8.1.2"
+  "version": "8.1.3"
 }

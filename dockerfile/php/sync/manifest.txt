@@ -1,9 +1,9 @@
-8.1.2-cli-alpine
-8.1.2-fpm-alpine
-8.1.2-unit-alpine
-8.1.2-composer-alpine
-8.1.2-swoole-alpine
-8.1.2-s6-alpine
+8.1.3-cli-alpine
+8.1.3-fpm-alpine
+8.1.3-unit-alpine
+8.1.3-composer-alpine
+8.1.3-swoole-alpine
+8.1.3-s6-alpine
 8.0.17-cli-alpine
 8.0.17-fpm-alpine
 8.0.17-unit-alpine

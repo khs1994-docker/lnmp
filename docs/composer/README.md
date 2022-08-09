@@ -38,5 +38,5 @@ $ composer config -g --unset repos.packagist
 
 ```powershell
 $MIRROR="mirrors.aliyun.com/composer/"
-docker run -it --rm khs1994/php:8.1.2-composer-alpine sh -cx "composer config -g repos.packagist composer https://$MIRROR ; composer require laravel/laravel"
+docker run -it --rm khs1994/php:8.1.3-composer-alpine sh -cx "composer config -g repos.packagist composer https://$MIRROR ; composer require laravel/laravel"
 ```

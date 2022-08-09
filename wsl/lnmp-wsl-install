@@ -30,7 +30,7 @@ $ lnmp-wsl-install php 8.1.0 deb
 
 $ lnmp-wsl-install php 8.1.0 rpm
 
-$ lnmp-wsl-install php 8.1.0 [8.1.2] [8.0.17] [7.4.29] [7.3.33] [7.2.34] [7.1.33] [7.0.33] [5.6.40]
+$ lnmp-wsl-install php 8.1.0 [8.1.3] [8.0.17] [7.4.29] [7.3.33] [7.2.34] [7.1.33] [7.0.33] [5.6.40]
 
 $ REGISTRY_MIRROR=mirror.baidubce.com  lnmp-wsl-install php nightly
 
@@ -59,7 +59,7 @@ NODE_VERSION=18.2.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=8.1.2
+PHP_VERSION=8.1.3
 
 MYSQL_DEB_VERSION=0.8.13-1
 
@@ -111,9 +111,9 @@ _php(){
   # command -v docker > /dev/null || exit 1
 
   # include redis memcached
-  # default install latest php version (8.1.2)
+  # default install latest php version (8.1.3)
 
-  PHP_VERSION=${1:-8.1.2}
+  PHP_VERSION=${1:-8.1.3}
 
   case ${PHP_VERSION} in
     5.6.* )
