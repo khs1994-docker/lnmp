@@ -35,7 +35,7 @@ services:
   mysql:
     << : *common
     << : *common-labels
-    image: "${LNMP_LIBRARY_NS:-library}/mysql:${LNMP_MYSQL_VERSION:-8.0.26}"
+    image: "${LNMP_LIBRARY_NS:-library}/mysql:${LNMP_MYSQL_VERSION:-8.0.27}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
       # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
