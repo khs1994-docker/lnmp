@@ -54,7 +54,7 @@ ENV PECL_EXTENSION \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       # xdebug \
       yaml \
-      swoole \
+      swoole@4.6.0 \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
