@@ -19,6 +19,7 @@
       // "ms-python.vscode-pylance",
       "xdebug.php-debug",
       "mikestead.dotenv",
-      "be5invis.toml"
+      "be5invis.toml",
+      "MS-vsliveshare.vsliveshare",
   ]
 }
