@@ -25,6 +25,12 @@ if (!$?) {
 if ($MountPhysicalDiskDeviceID2WSL2 -and $MountPhysicalDiskPartitions2WSL2) {
   # "\\.\PHYSICALDRIVE1" ==> "PHYSICALDRIVE1"
   $MountPhysicalDiskDeviceID2WSL2Trim = $MountPhysicalDiskDeviceID2WSL2.replace('\', '').replace('.', '')
+  $query = "SELECT * from Win32_DiskDrive WHERE DeviceID = '\\\\.\\${MountPhysicalDiskDeviceID2WSL2Trim}'"
+  if ((GET-CimInstance -query $query).DeviceID -ne $MountPhysicalDiskDeviceID2WSL2) {
+    Write-Warning "==> Disk [ $MountPhysicalDiskDeviceID2WSL2 ] not found, please check disk exists"
+
+    exit 1
+  }
   # /wsl/PHYSICALDRIVE1p<n>
   $MountPhysicalDiskDeviceWSL2Path = "/wsl/${MountPhysicalDiskDeviceID2WSL2Trim}p${MountPhysicalDiskPartitions2WSL2}"
   wsl -d wsl-k8s -- sh -c "mountpoint -q $MountPhysicalDiskDeviceWSL2Path"
