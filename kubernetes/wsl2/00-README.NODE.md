@@ -44,6 +44,8 @@ export PATH=/wsl/wsl-k8s-data/k8s/bin:$PATH
 ## 复制文件
 
 ```powershell
+$ ./wsl2/bin/kube-check
+
 $env:WSLENV="K8S_ROOT/u"
 $env:K8S_ROOT="/wsl/wsl-k8s-data/k8s"
 
@@ -59,10 +61,6 @@ $items="kubectl.kubeconfig","etcd-client.pem","etcd-client-key.pem","ca.pem","ca
 
 $ foreach($item in $items){cp \\wsl$\wsl-k8s\wsl\wsl-k8s-data\k8s\etc\kubernetes\pki\$item wsl2/certs}
 ```
-
-## 切换 IPTABLES 模式
-
-请查看 [README.switch.iptables.md](README.switch.iptables.md)
 
 ## join
 

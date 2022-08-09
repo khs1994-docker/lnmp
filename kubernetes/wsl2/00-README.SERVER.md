@@ -58,7 +58,7 @@ $ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sou
 $ wsl -d wsl-k8s -- apt update
 
 # procps => ps 命令
-$ wsl -d wsl-k8s -- apt install -y procps bash-completion iproute2 jq curl vim fdisk
+$ wsl -d wsl-k8s -- apt install -y procps bash-completion iproute2 jq curl vim fdisk net-tools
 ```
 
 ### 复制配置文件
@@ -73,7 +73,7 @@ $ wsl --shutdown
 
 > 由于 WSL 存储机制，硬盘空间不能回收，我们将数据放到 `wsl-k8s-data`，若不再需要 `wsl-k8s` 直接删除 `wsl-k8s-data` 即可。例如 WSL2 放入一个 10G 文件，即使删除之后，这 10G 空间仍然占用，无法回收。
 
-> 也可以使用 wsl --mount 挂载一个物理硬盘用来存放数据
+> 也可以使用 wsl --mount 挂载一个物理硬盘(**电脑第二硬盘位**/**USB接移动硬盘**)用来存放数据
 
 ## 一、新建 `wsl-k8s-data` WSL2 发行版(不挂载物理硬盘)
 
@@ -104,7 +104,7 @@ Filesystem                Size      Used Available Use% Mounted on
 $ wsl -d wsl-k8s -u root -- sh -xc 'mkdir -p /wsl/wsl-k8s-data && mount /dev/sdX /wsl/wsl-k8s-data'
 ```
 
-## 二、挂载物理硬盘
+## 二、挂载物理硬盘(电脑第二硬盘位/USB接移动硬盘)
 
 ### 挂载物理硬盘到 `wsl-k8s` 的 `/wsl/wsl-k8s-data` (Windows 20226+)
 
@@ -118,54 +118,17 @@ KINGSTON SA400S37240G   \\.\PHYSICALDRIVE1  KINGSTON SA400S37240G   2           
 WDC WDS250G1B0A-00H9H0  \\.\PHYSICALDRIVE0  WDC WDS250G1B0A-00H9H0  2           250056737280
 ```
 
-### 新建 `ext4` 分区
+如果你的硬盘没有 `ext4` 分区，请查看 [00-README.MKFS.md](00-README.MKFS.md)。
 
-**如果你的硬盘存在 `ext4` 分区，可以跳过这一小节。**
-
-如果硬盘不存在 `ext4` 分区，先在 Windows 磁盘管理中分出一个未分配卷（可以从一个分区中压缩出一个，然后在未分配卷中点击右键选择[新建简单卷]，选择 [不要格式化这个卷]）。然后挂载整块硬盘
-
-```bash
-# 请将 PHYSICALDRIVE1 替换为具体的值
-$ wsl --mount \\.\PHYSICALDRIVE1 --bare
-```
-
-挂载之后在 `wsl-k8s` WSL2 发行版中进行格式化。
-
-```bash
-$ wsl -d wsl-k8s
-
-# 查看有哪些硬盘
-
-$ lsblk
-NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
-sda      8:0    0 366.8M  1 disk
-sdb      8:16   0 232.9G  0 disk
-|-sdb1   8:17   0 202.9G  0 part
-`-sdb2   8:18   0    30G  0 part
-sdc      8:32   0     1T  0 disk /
-
-# sdc 为发行版自身的硬盘
-# 再根据硬盘的容量等确定 sdb2 为我们新建的卷，可以格式化为 ext4
-# $ mkfs.ext4 /dev/sdXN
-# 请将 /dev/sdb2 替换为实际的值
-$ mkfs.ext4 /dev/sdb2
-```
-
-```powershell
-$ wsl --unmount
-```
-
-### 挂载
-
-**执行命令挂载**
+如果你的硬盘拥有了 `ext4` 分区，则可以先 **执行命令挂载**
 
 ```powershell
 $ ./wsl2/bin/wsl2d.ps1 wsl-k8s
 
-# 请将 PHYSICALDRIVEN --partition N 替换为实际的值
+# 请将 PHYSICALDRIVE<N> --partition <P> 替换为实际的值
 $ wsl --mount \\.\PHYSICALDRIVE1 --partition 2
 
-# 会将 /dev/sdXN 挂载到 挂载点(/etc/wsl.conf [automount] root=挂载点)/wsl/PHYSICALDRIVE1pN
+# 会将 /dev/sd<X><P> 挂载到 挂载点(/etc/wsl.conf [automount] root=挂载点)/wsl/PHYSICALDRIVE<N>p<P>
 
 $ wsl -d wsl-k8s -- mount -t ext4
 
@@ -176,12 +139,24 @@ $ wsl -d wsl-k8s -- mount -t ext4
 $ wsl -d wsl-k8s -- sh -xc 'mkdir -p /wsl/wsl-k8s-data/ && mount /dev/sdb2 /wsl/wsl-k8s-data/'
 ```
 
-**在 .env.ps1 文件中配置，以后通过 `./wsl2/bin/kube-check` 挂载**
+**手动执行命令挂载之后，在 .env.ps1 文件中配置，尝试通过 `./wsl2/bin/kube-check` 挂载**
 
 ```powershell
 $MountPhysicalDiskDeviceID2WSL2="\\.\PHYSICALDRIVE1"
 $MountPhysicalDiskPartitions2WSL2="2"
 $MountPhysicalDiskType2WSL2="ext4"
+```
+
+**停止 WSL2**
+
+```powershell
+$ wsl --shutdown
+```
+
+**尝试通过 `./wsl2/bin/kube-check` 挂载**
+
+```powershell
+$ ./wsl2/bin/kube-check
 ```
 
 ## 获取 kubernetes
@@ -222,8 +197,6 @@ $ wsl -d wsl-k8s -- sh -xc 'cd ${CFSSL_ROOT:?err} && runc run cfssl'
 ## `WSL2` 文件准备
 
 ```powershell
-$ ./wsl2/bin/kube-check
-
 $env:WSLENV="K8S_ROOT/u"
 $env:K8S_ROOT="/wsl/wsl-k8s-data/k8s"
 $ wsl -d wsl-k8s -- bash -xc 'mkdir -p ${K8S_ROOT:?err}/{etc/kubernetes/pki,bin}'
