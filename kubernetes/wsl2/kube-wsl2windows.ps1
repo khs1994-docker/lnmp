@@ -128,4 +128,4 @@ if ($args.Length -eq 0) {
   return
 }
 
-Start-wsl2windows $args
+Start-wsl2windows $args[0] $args[1]

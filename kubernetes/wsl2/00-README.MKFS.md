@@ -22,7 +22,7 @@ sdb      8:16   0 232.9G  0 disk
 `-sdb2   8:18   0    30G  0 part
 sdc      8:32   0     1T  0 disk /
 
-# sdc 为发行版自身的硬盘
+# sdc 挂载到了 `/` (根目录) 为发行版自身的硬盘
 # 再根据硬盘的容量等确定 sdb2 为我们新建的卷，可以格式化为 ext4
 # $ mkfs.ext4 /dev/sd<X><P>
 # 请将 /dev/sdb2 替换为实际的值

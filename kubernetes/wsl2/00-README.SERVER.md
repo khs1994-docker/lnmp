@@ -97,7 +97,7 @@ $ ./wsl2/bin/wsl2d.ps1 wsl-k8s
 $ wsl -d wsl-k8s-data -- df -h
 
 Filesystem                Size      Used Available Use% Mounted on
-/dev/sdc                251.0G     12.4G    225.8G   5% /
+/dev/sdc               1006.9G      6.0M    955.6G   0% /
 
 # 在 wsl-k8s 中将 /dev/sdc(不固定，必须通过上面的命令获取该值) 挂载到 /wsl/wsl-k8s-data
 

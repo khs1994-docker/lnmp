@@ -78,7 +78,7 @@ if (!$?) {
     & $PSScriptRoot/wsl2d.ps1
     # 在 wsl-k8s 挂载 wsl-k8s-data
     Write-Host "==> Try mount WSL2 dist [ wsl-k8s-data ] to [ wsl-k8s ] /wsl/wsl-k8s-data" -ForegroundColor Green
-    $dev_sdx = (wsl -d wsl-k8s-data -- mount).split(' ')[0]
+    $dev_sdx = (wsl -d wsl-k8s-data -- mount -t ext4).split(' ')[0]
     Write-Host "==> WSL2 dist [wsl-k8s-data] Disk is $dev_sdx" -ForegroundColor Green
   }
 

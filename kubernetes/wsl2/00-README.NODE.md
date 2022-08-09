@@ -32,7 +32,7 @@ swap=0
 ## 设置 PATH
 
 ```powershell
-$ wsl -d wsl-k8s -- vim ~/.bashrc
+$ wsl -d wsl-k8s -- bash -cx 'vim ~/.bashrc'
 
 export PATH=/wsl/wsl-k8s-data/k8s/bin:$PATH
 ```
