@@ -1,0 +1,52 @@
+name: php-redis
+description: ""
+version: "5.3.7"
+pre-version: "5.3.7"
+homepage: ""
+bug: ""
+github: phpredis/phpredis
+releases: ""
+url: ""
+url-mirror: ""
+pre-url: ""
+pre-url-mirror: ""
+command: ""
+download-filename: ""
+architecture: amd64
+os: windows
+scripts:
+  preinstall:
+  - ''
+  install:
+  - |
+    $PHP_PREFIX='C:/php'
+
+    if (Test-Path "${PHP_PREFIX}/php.exe"){
+      $env:PHP_BIN="${PHP_PREFIX}/php.exe"
+    }else{
+      exit 1
+    }
+
+    if (Test-Path $HOME/github/pickle/bin/pickle){
+      & ${env:PHP_BIN} $HOME/github/pickle/bin/pickle install redis --php ${env:PHP_BIN}
+    }else{
+      if(!(Test-Path C:\bin\pickle)){
+      _downloader `
+        https://${GITHUB_DOWNLOAD_URL}/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar `
+        pickle `
+        pickle
+
+      copy-item -r -force pickle C:\bin
+      }else{
+      & ${env:PHP_BIN} C:\bin\pickle install redis --php ${env:PHP_BIN}
+      }
+    }
+  postinstall: ""
+  preuninstall: ""
+  uninstall: ''
+  postuninstall: ""
+  pruneuninstall: ""
+  pretest: ""
+  test: ""
+  posttest: ""
+  version: ""

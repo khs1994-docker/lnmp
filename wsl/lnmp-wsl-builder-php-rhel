@@ -611,7 +611,7 @@ _install_pecl_ext_by_pickle(){
   export PATH=${PHP_PREFIX}/bin:$PATH
   $(_sudo) chmod 777 $(${PHP_PREFIX}/bin/php-config --extension-dir)
 
-  if [ ${PHP_NUM} -ge "81" ];then set +e; fi
+  if [ ${PHP_NUM} -ge "82" ];then set +e; fi
 
   PICKLE_OPTIONS="-n --php=${PHP_PREFIX}/bin/php -vvv"
 
@@ -637,7 +637,7 @@ _install_pecl_ext_by_pickle(){
   echo "--enable-redis-igbinary" > /tmp/redis.configure.options
   echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options
 
-  if [ ${PHP_NUM} -ge "81" ];then
+  if [ ${PHP_NUM} -ge "82" ];then
     _install_pecl_ext_by_pickle \
       https://github.com/igbinary/igbinary/archive/master.tar.gz@igbinary \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz@redis \
@@ -648,9 +648,36 @@ _install_pecl_ext_by_pickle(){
       memcached
   else
     $(_sudo) pickle install igbinary --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install redis --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install xdebug --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install swoole --defaults ${PICKLE_OPTIONS}
+    # $(_sudo) pickle install redis --defaults ${PICKLE_OPTIONS}
+    $(_sudo) pickle install https://github.com/phpredis/phpredis/archive/develop.tar.gz@redis --defaults ${PICKLE_OPTIONS}
+    $(_sudo) pickle install $( \
+                               if [ $PHP_NUM -ge "80" ]; then \
+                                 echo 'xdebug'; \
+                               fi ; \
+                               if [ $PHP_NUM -ge "72" -a $PHP_NUM -le "74" ]; then \
+                                 echo 'xdebug@3.1.5'; \
+                               fi ; \
+                               if [ $PHP_NUM -eq "71" ]; then \
+                                 echo 'xdebug@2.9.8'; \
+                               fi ; \
+                               if [ $PHP_NUM -eq "70" ]; then \
+                                 echo 'xdebug@2.9.0'; \
+                               fi ; \
+                               if [ $PHP_NUM -eq "56" ]; then \
+                                 echo 'xdebug@2.5.5'; \
+                               fi ; \
+                            ) --defaults ${PICKLE_OPTIONS}
+    $(_sudo) pickle install $( \
+                               if [ $PHP_NUM -ge "80" ]; then \
+                                 echo 'swoole'; \
+                               fi ; \
+                               if [ $PHP_NUM -ge "72" -a $PHP_NUM -le "74" ]; then \
+                                 echo 'swoole@4.8.11'; \
+                               fi ; \
+                               if [ $PHP_NUM -eq "71" ]; then \
+                                 echo 'swoole@4.6.0'; \
+                               fi ; \
+                              ) --defaults ${PICKLE_OPTIONS}
     $(_sudo) pickle install memcached --defaults ${PICKLE_OPTIONS}
     $(_sudo) pickle install mongodb --defaults ${PICKLE_OPTIONS}
   fi

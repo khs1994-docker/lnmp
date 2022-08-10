@@ -1,0 +1,35 @@
+{
+  "architecture": "amd64",
+  "bug": "",
+  "command": "",
+  "description": "",
+  "download-filename": "",
+  "github": "mongodb/mongo-php-library",
+  "homepage": "",
+  "name": "php-mongodb",
+  "os": "windows",
+  "pre-url": "",
+  "pre-url-mirror": "",
+  "pre-version": "1.13.0",
+  "releases": "",
+  "scripts": {
+    "install": [
+      "$PHP_PREFIX='C:/php'\n\nif (Test-Path \"${PHP_PREFIX}/php.exe\"){\n  $env:PHP_BIN=\"${PHP_PREFIX}/php.exe\"\n}else{\n  exit 1\n}\n\nif (Test-Path $HOME/github/pickle/bin/pickle){\n  & ${env:PHP_BIN} $HOME/github/pickle/bin/pickle install mongodb@${VERSION} --php ${env:PHP_BIN}\n}else{\n  if(!(Test-Path C:\\bin\\pickle)){\n  _downloader `\n    https://${GITHUB_DOWNLOAD_URL}/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar `\n    pickle `\n    pickle\n\n  copy-item -r -force pickle C:\\bin\n  }else{\n  & ${env:PHP_BIN} C:\\bin\\pickle install mongodb@${VERSION} --php ${env:PHP_BIN}\n  }\n}\n"
+    ],
+    "postinstall": "",
+    "posttest": "",
+    "postuninstall": "",
+    "preinstall": [
+      ""
+    ],
+    "pretest": "",
+    "preuninstall": "",
+    "pruneuninstall": "",
+    "test": "",
+    "uninstall": "",
+    "version": ""
+  },
+  "url": "",
+  "url-mirror": "",
+  "version": "1.13.0"
+}

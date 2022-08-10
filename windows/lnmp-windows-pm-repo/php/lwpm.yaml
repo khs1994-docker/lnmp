@@ -47,33 +47,6 @@ scripts:
     $PHP_INI="${PHP_PREFIX}/php.ini"
     $PHP_BIN="${PHP_PREFIX}/php.exe"
 
-    # https://windows.php.net/downloads/pecl/releases/xdebug/
-    $extensions='xdebug@3.1.3',`
-         'redis',`
-         'mongodb',`
-         'igbinary'
-
-    $GITHUB_DOWNLOAD_URL="github.com"
-    $GITHUB_DOWNLOAD_URL="download.fastgit.org"
-
-    _downloader `
-      https://${GITHUB_DOWNLOAD_URL}/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar `
-      pickle `
-      pickle
-
-    copy-item -r -force pickle C:\bin
-
-    _downloader `
-      https://${GITHUB_DOWNLOAD_URL}/deemru/php-cgi-spawner/releases/download/1.1.23/php-cgi-spawner.exe `
-      php-cgi-spawner.exe `
-      php-cgi-spawner
-
-    Get-Process php-cgi-spawner -ErrorAction "SilentlyContinue" | out-null
-
-    if(!($?)){
-    cp php-cgi-spawner.exe C:\php
-    }
-
     # https://curl.se/docs/caextract.html
     # https://github.com/khs1994-docker/lnmp/issues/339
     _downloader `
@@ -94,16 +67,6 @@ scripts:
 
     EnableExt mbstring
     EnableExt openssl
-
-    Foreach ($extension in $extensions){
-    "==> install $extension ..."
-
-    if (Test-Path $HOME/github/pickle/bin/pickle){
-      & ${PHP_BIN} $HOME/github/pickle/bin/pickle install $extension --php ${PHP_BIN}
-    }else{
-      & ${PHP_BIN} C:\bin\pickle install $extension --php ${PHP_BIN}
-    }
-    }
 
     #
     # Windows php curl ssl

@@ -1,0 +1,51 @@
+name: php-cgi-spawner
+description: ""
+version: "1.1.23"
+pre-version: "1.1.23"
+homepage: ""
+bug: ""
+github: deemru/php-cgi-spawner
+releases: ""
+url: "https://github.com/deemru/php-cgi-spawner/releases/download/${VERSION}/php-cgi-spawner.exe"
+url-mirror: "https://download.fastgit.org/deemru/php-cgi-spawner/releases/download/${VERSION}/php-cgi-spawner.exe"
+pre-url: ""
+pre-url-mirror: ""
+command: ""
+download-filename: ""
+architecture: amd64
+os: windows
+scripts:
+  preinstall: ""
+  install:
+  - |
+    $PHP_PREFIX='C:/php'
+
+    if (!(Test-Path $PHP_PREFIX)){
+      printError "not found php on $PHP_PREFIX"
+
+      exit 1
+    }
+
+    Get-Process php-cgi-spawner -ErrorAction "SilentlyContinue" | out-null
+
+    if(!($?)){
+      cp $filename C:\php
+    }else{
+      printErro "php-cgi-spawner is running, please stop php first"
+
+      exit 1
+    }
+  postinstall: ""
+  preuninstall: ""
+  uninstall: '_cleanup C:\php\php-cgi-spawner.exe'
+  postuninstall: ""
+  pruneuninstall: ""
+  pretest: ""
+  test: ""
+  posttest: ""
+  version: ""
+  platform-reqs:
+    - |
+      if(!$IsWindows){echo $False}
+path:
+- C:\bin\php
