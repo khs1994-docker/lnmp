@@ -727,10 +727,9 @@ _install_pecl_ext_by_pickle(){
       mongodb \
       memcached
   else
-    $(_sudo) pickle install igbinary --defaults ${PICKLE_OPTIONS}
-    # $(_sudo) pickle install redis --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install https://github.com/phpredis/phpredis/archive/develop.tar.gz@redis --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install $( \
+    _install_pecl_ext_by_pickle igbinary \
+                                https://github.com/phpredis/phpredis/archive/develop.tar.gz@redis \
+                            $( \
                                if [ $PHP_NUM -ge "80" ]; then \
                                  echo 'xdebug'; \
                                fi ; \
@@ -746,8 +745,9 @@ _install_pecl_ext_by_pickle(){
                                if [ $PHP_NUM -eq "56" ]; then \
                                  echo 'xdebug@2.5.5'; \
                                fi ; \
-                            ) --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install $( \
+                            ) \
+                            \
+                            $( \
                                if [ $PHP_NUM -ge "80" ]; then \
                                  echo 'swoole'; \
                                fi ; \
@@ -757,9 +757,10 @@ _install_pecl_ext_by_pickle(){
                                if [ $PHP_NUM -eq "71" ]; then \
                                  echo 'swoole@4.6.0'; \
                                fi ; \
-                              ) --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install memcached --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install mongodb --defaults ${PICKLE_OPTIONS}
+                            ) \
+                            \
+                            memcached \
+                            mongodb
   fi
 
   $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
