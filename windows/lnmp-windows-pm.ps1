@@ -521,6 +521,9 @@ function __init($soft, $custom_script = $false) {
   copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\lwpm.json `
     $SOFT_ROOT\lwpm.json
 
+  copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\lwpm.yaml `
+    $SOFT_ROOT\lwpm.yaml
+
   copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\README.md `
     $SOFT_ROOT\README.md
 
