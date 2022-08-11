@@ -20,9 +20,9 @@ LNMP Windows Package Manager
 COMMANDS:
 
 add         Add package [ --all-platform | ]
-install     Install soft [ --pre | ]
-uninstall   Uninstall soft [ --prune | ]
-remove      Uninstall soft
+install     Install soft [ --pre | --force | ]
+uninstall   Uninstall soft [ --pre | --prune | ]
+remove      Uninstall soft [ --pre | --prune | ]
 list        List available softs
 outdated    Shows a list of installed packages that have updates available
 info        Shows information about packages
@@ -336,7 +336,21 @@ Function __install($softs) {
 }
 
 Function __uninstall($softs) {
+  $preVersion = 0
+  $isPrune = 0
+
+  if ($softs -contains '--pre') {
+    $preVersion = 1
+  }
+
+  if ($softs -contains '--prune') {
+    $isPrune = 1
+  }
+
   Foreach ($soft in $softs) {
+    if (($soft -eq '--pre') -or ($soft -eq '--prune') -or ($soft -eq '-f') -or ($soft -eq '--force')) {
+      continue
+    }
     Write-Host "==> Uninstalling $soft ..." -ForegroundColor Red
 
     try {
@@ -346,7 +360,7 @@ Function __uninstall($softs) {
       continue
     }
 
-    _uninstall
+    _uninstall -isPre $preVersion -prune $isPrune
     _remove_module -Name $soft
   }
 }

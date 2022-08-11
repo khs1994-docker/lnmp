@@ -287,7 +287,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
   }
 }
 
-Function _uninstall($prune = 0) {
+Function _uninstall($prune = 0, $isPre = 0) {
   if (!($lwpm.scripts.uninstall)) {
     Write-Host "==> Not Support" -ForegroundColor Red
 
