@@ -20,21 +20,26 @@ scripts:
   - |
     $PHP_PREFIX='C:/php'
 
-    if (!(Test-Path $PHP_PREFIX)){
-      printError "not found php on $PHP_PREFIX"
+    if($isPre -eq 1){
+      $PHP_PREFIX="${PHP_PREFIX}-pre"
+    }
+
+    if (!(Test-Path "${PHP_PREFIX}/php.exe")){
+      printError "Can't found php on [ $PHP_PREFIX ]"
 
       exit 1
     }
 
     Get-Process php-cgi-spawner -ErrorAction "SilentlyContinue" | out-null
 
-    if(!($?)){
-      cp $filename C:\php
-    }else{
-      printErro "php-cgi-spawner is running, please stop php first"
+    if($?){
+      printError "php-cgi-spawner is running, please stop php first"
 
       exit 1
     }
+
+    printInfo "Install php-cgi-spawner on $PHP_PREFIX ..."
+    cp $filename $PHP_PREFIX
   postinstall: ""
   preuninstall: ""
   uninstall: '_cleanup C:\php\php-cgi-spawner.exe'
@@ -48,4 +53,5 @@ scripts:
     - |
       if(!$IsWindows){echo $False}
 path:
-- C:\bin\php
+- C:\php
+- C:\php-pre

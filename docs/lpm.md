@@ -130,6 +130,8 @@ $ ./lpm.ps1 restart-service minio
 
 ## lwpm.json 支持的变量
 
+* `${lwpm}` **`lwpm.json` 转化成的对象，例如读取包名可以使用 `${lwpm}.name`**
+
 * `${VERSION}`
 
 * `$filename` 下载的文件

@@ -9,7 +9,8 @@
   "name": "php-cgi-spawner",
   "os": "windows",
   "path": [
-    "C:\\bin\\php"
+    "C:\\php",
+    "C:\\php-pre"
   ],
   "pre-url": "",
   "pre-url-mirror": "",
@@ -17,7 +18,7 @@
   "releases": "",
   "scripts": {
     "install": [
-      "$PHP_PREFIX='C:/php'\n\nif (!(Test-Path $PHP_PREFIX)){\n  printError \"not found php on $PHP_PREFIX\"\n\n  exit 1\n}\n\nGet-Process php-cgi-spawner -ErrorAction \"SilentlyContinue\" | out-null\n\nif(!($?)){\n  cp $filename C:\\php\n}else{\n  printErro \"php-cgi-spawner is running, please stop php first\"\n\n  exit 1\n}\n"
+      "$PHP_PREFIX='C:/php'\n\nif($isPre -eq 1){\n  $PHP_PREFIX=\"${PHP_PREFIX}-pre\"\n}\n\nif (!(Test-Path \"${PHP_PREFIX}/php.exe\")){\n  printError \"Can't found php on [ $PHP_PREFIX ]\"\n\n  exit 1\n}\n\nGet-Process php-cgi-spawner -ErrorAction \"SilentlyContinue\" | out-null\n\nif($?){\n  printError \"php-cgi-spawner is running, please stop php first\"\n\n  exit 1\n}\n\nprintInfo \"Install php-cgi-spawner on $PHP_PREFIX ...\"\ncp $filename $PHP_PREFIX\n"
     ],
     "platform-reqs": [
       "if(!$IsWindows){echo $False}\n"

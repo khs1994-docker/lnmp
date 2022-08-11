@@ -21,26 +21,41 @@ scripts:
   - |
     $PHP_PREFIX='C:/php'
 
-    if (Test-Path "${PHP_PREFIX}/php.exe"){
-      $env:PHP_BIN="${PHP_PREFIX}/php.exe"
-    }else{
+    if($isPre -eq 1){
+      $PHP_PREFIX="${PHP_PREFIX}-pre"
+    }
+
+    $env:PHP_BIN="${PHP_PREFIX}/php.exe"
+
+    if (!(Test-Path "$env:PHP_BIN")){
+      printError "can't fount php.exe on [$PHP_PREFIX]"
+
       exit 1
     }
 
+    $GITHUB_DOWNLOAD_URL='github.com'
+    $GITHUB_DOWNLOAD_URL='download.fastgit.org'
+    $PHP_EXT=${lwpm}.name.replace('php-','')
+
     if (Test-Path $HOME/github/pickle/bin/pickle){
-      & ${env:PHP_BIN} $HOME/github/pickle/bin/pickle install redis --php ${env:PHP_BIN}
+      $PICKLE_PATH="$HOME/github/pickle/bin/pickle"
     }else{
       if(!(Test-Path C:\bin\pickle)){
-      _downloader `
-        https://${GITHUB_DOWNLOAD_URL}/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar `
-        pickle `
-        pickle
+        printInfo "pickle not install, installing..."
+        _downloader `
+          https://${GITHUB_DOWNLOAD_URL}/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar `
+          pickle `
+          pickle
 
-      copy-item -r -force pickle C:\bin
-      }else{
-      & ${env:PHP_BIN} C:\bin\pickle install redis --php ${env:PHP_BIN}
+        copy-item -r -force pickle C:\bin
       }
+
+      $PICKLE_PATH='C:\bin\pickle'
     }
+
+    printInfo "use $PICKLE_PATH"
+
+    & ${env:PHP_BIN} $PICKLE_PATH install ${PHP_EXT} --php ${env:PHP_BIN}
   postinstall: ""
   preuninstall: ""
   uninstall: ''
