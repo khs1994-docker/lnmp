@@ -84,16 +84,16 @@
     "dest": "library-mirror/mariadb:latest"
   },
   {
-    "source": "library/mariadb:10.6.4",
-    "dest": "library-mirror/mariadb:10.6.4"
+    "source": "library/mariadb:10.8.3",
+    "dest": "library-mirror/mariadb:10.8.3"
   },
   {
-    "source": "library/mariadb:10.5.9",
-    "dest": "library-mirror/mariadb:10.5.9"
+    "source": "library/mariadb:10.7.4",
+    "dest": "library-mirror/mariadb:10.7.4"
   },
   {
-    "source": "library/mariadb:10.4.18",
-    "dest": "library-mirror/mariadb:10.4.17"
+    "source": "library/mariadb:10.6.8",
+    "dest": "library-mirror/mariadb:10.6.8"
   },
   {
     "source": "library/registry:latest",

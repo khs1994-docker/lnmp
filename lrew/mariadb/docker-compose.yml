@@ -20,7 +20,7 @@ services:
   mariadb:
     << : *common
     << : *common-label
-    image: "${LNMP_LIBRARY_NS:-library}/mariadb:${LNMP_MARIADB_VERSION:-10.6.4}"
+    image: "${LNMP_LIBRARY_NS:-library}/mariadb:${LNMP_MARIADB_VERSION:-10.8.3}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
