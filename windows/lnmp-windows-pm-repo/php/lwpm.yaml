@@ -13,7 +13,8 @@ command: php
 download-filename: php-${VERSION}-${VC_VERSION}-x64.zip
 scripts:
   platform-reqs: ["if(!$IsWindows){echo $False}"]
-  uninstall: _cleanup "C:\php"
+  uninstall: |
+    if($isPre -eq 1){_cleanup "C:\php-pre"}else{_cleanup "C:\php"}
   version: (php -v).split(" ")[1]
   postinstall: |
     # https://www.php.net/manual/en/openssl.installation.php
@@ -103,9 +104,15 @@ scripts:
     }
 
     mkdir -f $home\lnmp\windows\logs\php | out-null
+    mkdir -f $home\lnmp\windows\logs\php-pre | out-null
     new-item $home\lnmp\windows\logs\php\php_errors.log -ErrorAction "SilentlyContinue"
-    remove-item C:\logs\php\php_errors.log
+    new-item $home\lnmp\windows\logs\php-pre\php_errors.log -ErrorAction "SilentlyContinue"
+    _mkdir C:\logs\php
+    _mkdir C:\logs\php-pre
+    remove-item C:\logs\php\php_errors.log -ErrorAction "SilentlyContinue"
+    remove-item C:\logs\php-pre\php_errors.log -ErrorAction "SilentlyContinue"
     _ln      $home\lnmp\windows\logs\php\php_errors.log C:\logs\php\php_errors.log
+    _ln      $home\lnmp\windows\logs\php-pre\php_errors.log C:\logs\php-pre\php_errors.log
 
   get-version: |-
     if(!($VERSION)){
