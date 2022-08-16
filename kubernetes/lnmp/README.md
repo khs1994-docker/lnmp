@@ -53,8 +53,6 @@ $ kubectl apply -k redis/overlays/development -n lnmp
 
 **mysql**
 
-不支持除 `amd64` 以外的架构，其他架构请使用 `mariadb`
-
 ```bash
 $ kubectl apply -k mysql/overlays/development -n lnmp
 

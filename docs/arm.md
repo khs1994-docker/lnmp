@@ -6,21 +6,9 @@
 $ ./lnmp-docker up
 ```
 
-## MySQL 暂不支持 arm
+> 建议使用 arm 64位系统 https://www.raspberrypi.com/software/operating-systems/
 
-> arm32 位(armv7l) 同样无法使用 `mariadb`
-
-* 在 `.env` 文件中将 `mysql` 替换为 `mariadb`
-* 在 `.env` 文件中 `LREW_INCLUDE` 新增 `mariadb`
-
-```diff
-# .env
-- LNMP_SERVICES="nginx mysql php7 redis"
-+ LNMP_SERVICES="nginx mariadb php7 redis"
-
-- LREW_INCLUDE="pcit"
-+ LREW_INCLUDE="pcit mariadb"
-```
+## MySQL 暂不支持 arm 32位
 
 ## 安装 docker-compose
 
@@ -43,10 +31,6 @@ $ ./lnmp-docker compose -f
 ## ARM 镜像构建
 
 请查看 [buildx](buildx.md) 或 [manifest](manifest.md)
-
-## ARM64
-
-官方测试版 https://www.raspberrypi.org/forums/viewtopic.php?f=117&t=275370
 
 ## 参考
 
