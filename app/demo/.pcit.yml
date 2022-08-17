@@ -127,7 +127,7 @@ services:
 
 jobs:
   COMPOSER_VERSION:
-    - 2.2.7
+    - 2.3.10
   PHP_VERSION:
     - 8.1.4
     - 8.0.18
