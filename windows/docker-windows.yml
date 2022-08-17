@@ -14,7 +14,7 @@ services:
     isolation: hyperv
 
   mysql:
-    image: khs1994/mysql:8.0.17-windowsservercore-1903
+    image: khs1994/mysql:8.0.18-windowsservercore-1903
     isolation: process # hyperv
     ports:
       - "3306:3306"
