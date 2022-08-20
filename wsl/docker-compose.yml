@@ -7,14 +7,17 @@ services:
     image: khs1994/wsl:latest
 
 # https://endoflife.software/operating-systems/linux/debian
+# https://github.com/docker-library/docs/tree/master/debian
   wsl-php-builder-74:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_74:-7.4.30}
-        - OS_TYPE=debian:buster-slim
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.30}-debian-buster_amd64
+        - OS_TYPE=debian:bullseye-slim
+        # - DEB_URL=mirrors.ustc.edu.cn
+        # - DEB_SECURITY_URL=mirrors.ustc.edu.cn/debian-security
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.30}-debian-bullseye_amd64
 
   wsl-php-builder-80:
     build:
@@ -22,8 +25,10 @@ services:
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_80:-8.0.18}
-        - OS_TYPE=debian:buster-slim
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.18}-debian-buster_amd64
+        - OS_TYPE=debian:bullseye-slim
+        # - DEB_URL=mirrors.ustc.edu.cn
+        # - DEB_SECURITY_URL=mirrors.ustc.edu.cn/debian-security
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.18}-debian-bullseye_amd64
 
   wsl-php-builder-81:
     build:
@@ -31,8 +36,10 @@ services:
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_81:-8.1.4}
-        - OS_TYPE=debian:buster-slim
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.4}-debian-buster_amd64
+        - OS_TYPE=debian:bullseye-slim
+        # - DEB_URL=mirrors.ustc.edu.cn
+        # - DEB_SECURITY_URL=mirrors.ustc.edu.cn/debian-security
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.4}-debian-bullseye_amd64
 
   wsl-php-builder-nightly:
     build:
@@ -40,20 +47,25 @@ services:
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
         - PHP_VERSION=nightly
-        - OS_TYPE=debian:buster-slim
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php82_0.0.0-debian-buster_amd64
+        - OS_TYPE=debian:bullseye-slim
+        # - DEB_URL=mirrors.ustc.edu.cn
+        # - DEB_SECURITY_URL=mirrors.ustc.edu.cn/debian-security
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php82_0.0.0-debian-bullseye_amd64
 
 # latest stable php and debian
-  wsl-php-builder-debian11-81:
+  wsl-php-builder-debian12-81:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_81:-8.1.4}
-        - OS_TYPE=debian:bullseye-slim
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.4}-debian-bullseye_amd64
+        - OS_TYPE=debian:bookworm-slim
+        - DEB_URL=mirrors.ustc.edu.cn
+        - DEB_SECURITY_URL=mirrors.ustc.edu.cn/debian-security
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.4}-debian-bookworm_amd64
 
 # https://endoflife.software/operating-systems/linux/ubuntu
+# https://github.com/docker-library/docs/tree/master/ubuntu
   wsl-php-builder-ubuntu1804-74:
     build:
       context: .
@@ -61,6 +73,8 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION_74:-7.4.30}
         - OS_TYPE=ubuntu:18.04
+        # - UBUNTU_URL=mirrors.ustc.edu.cn
+        # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.30}-ubuntu-bionic_amd64
 
   wsl-php-builder-ubuntu1804-80:
@@ -70,6 +84,8 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION_80:-8.0.18}
         - OS_TYPE=ubuntu:18.04
+        # - UBUNTU_URL=mirrors.ustc.edu.cn
+        # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.18}-ubuntu-bionic_amd64
 
   wsl-php-builder-ubuntu1804-81:
@@ -79,6 +95,8 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION_81:-8.1.4}
         - OS_TYPE=ubuntu:18.04
+        # - UBUNTU_URL=mirrors.ustc.edu.cn
+        # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.4}-ubuntu-bionic_amd64
 
   wsl-php-builder-ubuntu2004-74:
@@ -88,6 +106,8 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION_74:-7.4.30}
         - OS_TYPE=ubuntu:20.04
+        # - UBUNTU_URL=mirrors.ustc.edu.cn
+        # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.30}-ubuntu-focal_amd64
 
   wsl-php-builder-ubuntu2004-80:
@@ -97,6 +117,8 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION_80:-8.0.18}
         - OS_TYPE=ubuntu:20.04
+        # - UBUNTU_URL=mirrors.ustc.edu.cn
+        # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.18}-ubuntu-focal_amd64
 
   wsl-php-builder-ubuntu2004-81:
@@ -106,7 +128,42 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION_81:-8.1.4}
         - OS_TYPE=ubuntu:20.04
+        # - UBUNTU_URL=mirrors.ustc.edu.cn
+        # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.4}-ubuntu-focal_amd64
+
+  wsl-php-builder-ubuntu2204-74:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_74:-7.4.30}
+        - OS_TYPE=ubuntu:22.04
+        # - UBUNTU_URL=mirrors.ustc.edu.cn
+        # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.30}-ubuntu-jammy_amd64
+
+  wsl-php-builder-ubuntu2204-80:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.18}
+        - OS_TYPE=ubuntu:22.04
+        # - UBUNTU_URL=mirrors.ustc.edu.cn
+        # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.18}-ubuntu-jammy_amd64
+
+  wsl-php-builder-ubuntu2204-81:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_81:-8.1.4}
+        - OS_TYPE=ubuntu:22.04
+        # - UBUNTU_URL=mirrors.ustc.edu.cn
+        # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.4}-ubuntu-jammy_amd64
 
   wsl-php-builder-ubuntu2204-nightly:
     build:
@@ -115,17 +172,21 @@ services:
       args:
         - PHP_VERSION=nightly
         - OS_TYPE=ubuntu:22.04
+        # - UBUNTU_URL=mirrors.ustc.edu.cn
+        # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php82_0.0.0-ubuntu-jammy_amd64
 
 # latest stable php and ubuntu
-  wsl-php-builder-ubuntu2204-81:
+  wsl-php-builder-ubuntu2210-81:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_81:-8.1.4}
-        - OS_TYPE=ubuntu:22.04
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.4}-ubuntu-jammy_amd64
+        - OS_TYPE=ubuntu:22.10
+        # - UBUNTU_URL=mirrors.ustc.edu.cn
+        # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.4}-ubuntu-kinetic_amd64
 
 # rhel
 
@@ -163,6 +224,24 @@ services:
         - PHP_VERSION=${PHP_VERSION_81:-8.1.4}
         - OS_TYPE=quay.io/centos/centos:stream8
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_${PHP_VERSION_81:-8.1.4}-centos-8_amd64
+
+  wsl-php-builder-rhel9-74:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_74:-7.4.30}
+        - OS_TYPE=quay.io/centos/centos:stream9
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.30}-centos-9_amd64
+
+  wsl-php-builder-rhel9-80:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.18}
+        - OS_TYPE=quay.io/centos/centos:stream9
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.18}-centos-9_amd64
 
   wsl-php-builder-rhel9-81:
     build:
