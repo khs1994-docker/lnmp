@@ -50,6 +50,7 @@ RUN set -ex \
                  openssl \
                  bash \
                  tzdata \
+                 less \
 # ensure www-data user exists
 # RUN set -x \
       && adduser -u 82 -D -S -G www-data www-data
