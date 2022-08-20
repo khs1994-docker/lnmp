@@ -238,20 +238,33 @@ _libzip(){
 
     test ${PHP_NUM} -ge '72' && _libzip
 
+    _libcurl(){
+      # CentOS Stream 9+ => libcurl-minimal
+      if [ ${VERSION_ID} -ge 9 -a "${REDHAT_SUPPORT_PRODUCT_VERSION}" = 'CentOS Stream' ];then
+        echo 'libcurl-minimal'
+        return
+      fi
+
+      if [ "${ID}" = 'rocky' ];then
+        if [ ${ROCKY_SUPPORT_PRODUCT_VERSION} -eq 8 ];then
+          # rocky linux 8 => libcurl-minimal
+          echo 'libcurl-minimal'
+          return
+        else
+          echo 'libcurl'
+          return
+        fi
+      fi
+
+      echo 'libcurl'
+    }
+
     export PHP_DEP="libedit \
 zlib \
 libxml2 \
 openssl \
 libxslt \
-$( if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' -a "${REDHAT_SUPPORT_PRODUCT_VERSION}" != 'CentOS Stream' ];then \
-     echo libcurl-minimal; \
-   else \
-     if [ ${VERSION_ID} -ge 9 -a "${REDHAT_SUPPORT_PRODUCT_VERSION}" = 'CentOS Stream' ];then \
-       echo libcurl-minimal;
-     else \
-       echo libcurl; \
-     fi \
-   fi ) \
+$( _libcurl ) \
 $(if [ ${VERSION_ID} -ge 8 ];then echo libpq; else echo postgresql-libs ;fi ) \
 $( if [ ${VERSION_ID} -ge 9 -a ${ID} != 'fedora' ];then \
      echo "sqlite-libs"; \
@@ -278,6 +291,7 @@ libicu \
 libXpm \
 libwebp \
 enchant \
+$(if [ ${VERSION_ID} -ge 8 ];then echo 'enchant2';fi) \
 openldap \
 libffi \
 krb5-libs \
@@ -344,6 +358,7 @@ _install_php_build_dep(){
                    \
                    libwebp-devel \
                    enchant-devel \
+                   $(if [ ${VERSION_ID} -ge 8 ];then echo 'enchant2-devel';fi) \
                    openldap-devel \
                    libffi-devel \
                    krb5-devel \
@@ -371,8 +386,15 @@ if [ ${VERSION_ID} -ge 9 -a ${ID} != 'fedora' ];then
   $(_sudo) dnf --enablerepo=crb install -y \
                                  libmemcached-awesome-devel \
                                  aspell-devel
-  $(_sudo) dnf install -y https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
-  $(_sudo) dnf install -y uw-imap-devel
+  # $(_sudo) dnf install -y https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
+  # $(_sudo) dnf install -y uw-imap-devel
+  $(_sudo) dnf install -y https://download-ib01.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/u/uw-imap-devel-2007f-24.el8.x86_64.rpm --skip-broken
+fi
+
+if [ ${VERSION_ID} -ge 9 -a ${ID} != 'fedora' ];then
+  $(_sudo) dnf --enablerepo=crb install -y ${DEP_SOFTS}
+
+  return
 fi
 
 $(_sudo) yum install -y ${DEP_SOFTS}
