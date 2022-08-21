@@ -212,8 +212,8 @@
     "dest": "library-mirror/phpmyadmin:5.2.0-fpm-alpine"
   },
   {
-    "source": "minio/minio:RELEASE.2021-07-08T01-15-01Z",
-    "dest": "minio:RELEASE.2021-07-08T01-15-01Z"
+    "source": "minio/minio:RELEASE.2022-08-13T21-54-44Z",
+    "dest": "minio:RELEASE.2022-08-13T21-54-44Z"
   },
   {
     "source": "dockerpracticesig/docker_practice:vuepress",
@@ -279,8 +279,8 @@
     "dest": "library-mirror/debian:bullseye-slim"
   },
   {
-    "source": "library/debian:bookworm-slim",
-    "dest": "library-mirror/debian:bookworm-slim"
+    "source": "library/debian:bookworm",
+    "dest": "library-mirror/debian:bookworm"
   },
   {
     "source": "library/debian:bookworm-slim",

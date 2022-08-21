@@ -594,7 +594,7 @@ services:
   minio:
     << : *common
     << : *default-labels
-    image: minio/minio:RELEASE.2021-07-08T01-15-01Z
+    image: minio/minio:RELEASE.2022-08-13T21-54-44Z
     command:
       - server
       - /data
