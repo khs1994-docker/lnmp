@@ -4,6 +4,10 @@
 
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
+source $ScriptRoot/../.env.example
+
+PHP_LATEST_STABLE_VERSION=${LNMP_PHP81_VERSION}
+
 _print_help_info(){
     exec echo "
 
@@ -12,7 +16,7 @@ Install WSL soft by shell script
 
 Usage:
 
-$ lnmp-wsl-install php 8.1.0 [ tar | deb | rpm ]
+$ lnmp-wsl-install php ${PHP_LATEST_STABLE_VERSION} [ tar | deb | rpm ]
 
 $ lnmp-wsl-install enable [ php81 | php80 | php74 | php73 | php72 | php71 | php70 | php56 ]
 
@@ -24,13 +28,13 @@ $ lnmp-wsl-install php-extension-list
 
 Example:
 
-$ lnmp-wsl-install php 8.1.0 tar
+$ lnmp-wsl-install php ${PHP_LATEST_STABLE_VERSION} tar
 
-$ lnmp-wsl-install php 8.1.0 deb
+$ lnmp-wsl-install php ${PHP_LATEST_STABLE_VERSION} deb
 
-$ lnmp-wsl-install php 8.1.0 rpm
+$ lnmp-wsl-install php ${PHP_LATEST_STABLE_VERSION} rpm
 
-$ lnmp-wsl-install php 8.1.0 [8.1.4] [8.0.18] [7.4.30] [7.3.33] [7.2.34] [7.1.33] [7.0.33] [5.6.40]
+$ lnmp-wsl-install php ${PHP_LATEST_STABLE_VERSION} [${LNMP_PHP80_VERSION}] [${LNMP_PHP74_VERSION}] [${LNMP_PHP73_VERSION}] [${LNMP_PHP72_VERSION}] [${LNMP_PHP71_VERSION}] [${LNMP_PHP70_VERSION}] [${LNMP_PHP56_VERSION}]
 
 $ REGISTRY_MIRROR=mirror.baidubce.com  lnmp-wsl-install php nightly
 
@@ -59,7 +63,7 @@ NODE_VERSION=18.2.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=8.1.4
+PHP_VERSION=${PHP_LATEST_STABLE_VERSION}
 
 MYSQL_DEB_VERSION=0.8.13-1
 
@@ -107,9 +111,9 @@ _nginx(){
 
 _php(){
   # include redis memcached
-  # default install latest php version (8.1.4)
+  # default install latest php version (8.1.5)
 
-  PHP_VERSION=${1:-8.1.4}
+  PHP_VERSION=${1:-${PHP_LATEST_STABLE_VERSION}}
 
   case ${PHP_VERSION} in
     5.6.* )
