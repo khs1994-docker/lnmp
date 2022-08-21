@@ -271,12 +271,56 @@
     "dest": "library-mirror/caddy:alpine"
   },
   {
+    "source": "library/debian:bullseye",
+    "dest": "library-mirror/debian:bullseye"
+  },
+  {
+    "source": "library/debian:bullseye-slim",
+    "dest": "library-mirror/debian:bullseye-slim"
+  },
+  {
+    "source": "library/debian:bookworm-slim",
+    "dest": "library-mirror/debian:bookworm-slim"
+  },
+  {
+    "source": "library/debian:bookworm-slim",
+    "dest": "library-mirror/debian:bookworm-slim"
+  },
+  {
     "source": "library/debian:sid",
     "dest": "library-mirror/debian:sid"
   },
   {
+    "source": "library/debian:sid-slim",
+    "dest": "library-mirror/debian:sid-slim"
+  },
+  {
+    "source": "library/ubuntu:18.04",
+    "dest": "library-mirror/ubuntu:18.04"
+  },
+  {
     "source": "library/ubuntu:20.04",
     "dest": "library-mirror/ubuntu:20.04"
+  },
+  {
+    "source": "library/ubuntu:22.04",
+    "dest": "library-mirror/ubuntu:22.04"
+  },
+  {
+    "source": "library/ubuntu:22.10",
+    "dest": "library-mirror/ubuntu:22.10"
+  },
+  {
+    "source": "library/rockylinux:8",
+    "dest": "library-mirror/rockylinux:8"
+  },
+  {
+    "source": "library/rockylinux:9",
+    "dest": "library-mirror/rockylinux:9"
+  },
+  {
+    "source": "library/centos:7",
+    "dest": "library-mirror/centos:7"
   },
   {
     "source": "lrew/lrew:latest",
