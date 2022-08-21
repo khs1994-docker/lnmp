@@ -1,5 +1,5 @@
 name: s6
-version: 3.1.0.1
+version: 3.1.1.2
 url: https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-x86_64.tar.xz
 url-mirror: https://download.fastgit.org/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-x86_64.tar.xz
 scripts:
