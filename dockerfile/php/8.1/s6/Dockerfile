@@ -6,7 +6,7 @@ ARG BASE=fpm
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
-RUN --mount=type=bind,from=khs1994/s6:3.1.0.1,source=/,target=/tmp/s6 \
+RUN --mount=type=bind,from=khs1994/s6:3.1.1.2,source=/,target=/tmp/s6 \
     --network=none \
     set -x \
     && tar -xvf /tmp/s6/s6-overlay-noarch.tar.xz -C / \
