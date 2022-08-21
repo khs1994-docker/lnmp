@@ -121,32 +121,14 @@ Function _start($soft) {
 
     "php" {
       printInfo "Start php-cgi..." Green
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9000 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9100 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9200 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9300 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9400 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9500 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9600 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9700 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9800 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9900 1
+      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9000 4+16
       Write-Host "
        "
     }
 
     "php-pre" {
       printInfo "Start php-cgi..." Green
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9000 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9100 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9200 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9300 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9400 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9500 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9600 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9700 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9800 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9900 1
+      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9000 4+16
       Write-Host "
       "
     }
