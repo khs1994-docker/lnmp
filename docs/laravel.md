@@ -110,8 +110,9 @@ $ ./lnmp-docker up
 # 适用于首次使用，/app 暂无子目录，需要到 /app 中新建项目目录
 $ lnmp-docker code
 
-# 之后可以直接打开 /app 子目录（e.g. laravel）
+# /app 有子目录之后可以直接打开 /app 子目录（e.g. laravel）
 # $ lnmp-docker code laravel
+# 上述命令将打开 /app/laravel
 ```
 
 在 vsCode 中点击菜单栏 `查看` -> `终端`
