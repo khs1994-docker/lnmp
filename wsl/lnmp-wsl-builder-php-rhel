@@ -302,7 +302,7 @@ if [ ${VERSION_ID} -ge 9 -a ${ID} != 'fedora' ];then
                                 libmemcached-awesome \
                                 aspell
   $(_sudo) dnf install -y https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
-  $(_sudo) dnf install -y libc-client
+  $(_sudo) dnf install -y https://github.com/khs1994-docker/uw-imap-el9/releases/download/el9/libc-client-2007f-24.el9.x86_64.rpm
 fi
 
 $(_sudo) yum install -y ${PHP_DEP} rpm-build > /dev/null
@@ -386,7 +386,7 @@ if [ ${VERSION_ID} -ge 9 -a ${ID} != 'fedora' ];then
                                  aspell-devel
   # $(_sudo) dnf install -y https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
   # $(_sudo) dnf install -y uw-imap-devel
-  $(_sudo) dnf install -y https://download-ib01.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/u/uw-imap-devel-2007f-24.el8.x86_64.rpm --skip-broken
+  $(_sudo) dnf install -y https://github.com/khs1994-docker/uw-imap-el9/releases/download/el9/uw-imap-devel-2007f-24.el9.x86_64.rpm
 fi
 
 if [ ${VERSION_ID} -ge 9 -a ${ID} != 'fedora' ];then
@@ -418,6 +418,26 @@ _test(){
 }
 
 ################################################################################
+
+openssl_3_patch(){
+      if ! [ -f /lib64/libssl.so.3 -o -f /usr/lib/x86_64-linux-gnu/libssl.so.3 ];then
+        return
+      fi
+
+      $(_sudo) dnf install -y patch
+
+      if [ "${PHP_NUM}" -eq "74" ];then
+        curl -O https://git.remirepo.net/cgit/rpms/php/php74.git/plain/php-7.4.26-openssl3.patch
+        patch -p1 < php-7.4.26-openssl3.patch
+        ./buildconf --force
+      fi
+
+      if [ "${PHP_NUM}" -eq "80" ];then
+        curl -O https://git.remirepo.net/cgit/rpms/php/php80.git/plain/php-8.0.21-openssl3.patch
+        patch -p1 < php-8.0.21-openssl3.patch
+        ./buildconf --force
+      fi
+}
 
 _builder(){
 
@@ -528,6 +548,8 @@ _builder(){
     export CFLAGS="$PHP_CFLAGS"
     export CPPFLAGS="$PHP_CPPFLAGS"
     export LDFLAGS="$PHP_LDFLAGS"
+
+    openssl_3_patch
 
     if ! [ -f configure ];then ./buildconf --force; fi
 

@@ -63,10 +63,10 @@ jobs:
             DIST_FILE: khs1994-wsl-php81-8.1.4-1.el8.rocky.x86_64.rpm
           - JOB_NAME: wsl-php-builder-rocky9-81
             DIST_FILE: khs1994-wsl-php81-8.1.4-1.el9.rocky.x86_64.rpm
-          - JOB_NAME: wsl-php-builder-fc35-74
-            DIST_FILE: khs1994-wsl-php74-7.4.30-1.fc35.x86_64.rpm
-          - JOB_NAME: wsl-php-builder-fc35-80
-            DIST_FILE: khs1994-wsl-php80-8.0.18-1.fc35.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc36-74
+            DIST_FILE: khs1994-wsl-php74-7.4.30-1.fc36.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc36-80
+            DIST_FILE: khs1994-wsl-php80-8.0.18-1.fc36.x86_64.rpm
           - JOB_NAME: wsl-php-builder-fc36-81
             DIST_FILE: khs1994-wsl-php81-8.1.4-1.fc36.x86_64.rpm
           - JOB_NAME: wsl-php-builder-fc36-nightly

@@ -552,6 +552,24 @@ set +e
     export CPPFLAGS="$PHP_CPPFLAGS"
     export LDFLAGS="$PHP_LDFLAGS"
 
+    openssl_3_patch(){
+      if ! [ -f /lib64/libssl.so.3 -o -f /usr/lib/x86_64-linux-gnu/libssl.so.3 ];then
+        return
+      fi
+
+      if [ "${PHP_NUM}" -eq "74" ];then
+        curl -O https://git.remirepo.net/cgit/rpms/php/php74.git/plain/php-7.4.26-openssl3.patch
+        patch -p1 < php-7.4.26-openssl3.patch
+        ./buildconf --force
+      fi
+
+      if [ "${PHP_NUM}" -eq "80" ];then
+        curl -O https://git.remirepo.net/cgit/rpms/php/php80.git/plain/php-8.0.21-openssl3.patch
+        patch -p1 < php-8.0.21-openssl3.patch
+        ./buildconf --force
+      fi
+    }
+
     buster_patch(){
       if ! [ "${VERSION_CODENAME}" = 'buster' ];then
         return
@@ -589,6 +607,7 @@ set +e
 
     buster_patch
     sid_php74_with_enchant2_patch
+    openssl_3_patch
 
     if ! [ -f configure ];then ./buildconf --force; fi
 
