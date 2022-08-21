@@ -106,10 +106,6 @@ _nginx(){
 }
 
 _php(){
-  # command -v docker > /dev/null || echo -e "Docker cli not install, please exec $ lnmp-wsl-docker-cli "
-
-  # command -v docker > /dev/null || exit 1
-
   # include redis memcached
   # default install latest php version (8.1.4)
 
