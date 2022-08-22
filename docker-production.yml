@@ -5,8 +5,8 @@ version: "3.9"
 # @link https://docs.docker.com/engine/swarm/
 #
 #
-# $ docker-compose -f docker-production.yml build
-# $ docker-compose -f docker-production.yml push
+# $ docker compose -f docker-production.yml build
+# $ docker compose -f docker-production.yml push
 #
 # $ docker stack deploy -c docker-production.yml lnmp
 # $ docker stack ps lnmp

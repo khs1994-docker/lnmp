@@ -10,7 +10,7 @@ version: "3.9"
 # @link https://docs.docker.com/compose/compose-file/
 #
 #
-# $ docker-compose build
+# $ docker compose build
 #
 
 services:

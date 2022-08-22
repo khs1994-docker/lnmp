@@ -121,7 +121,7 @@ $ sudo modprobe {nfs,nfsd,rpcsec_gss_krb5}
 ```bash
 $ cd kubernetes/nfs-server
 
-$ docker-compose up [-d] nfs
+$ docker compose up [-d] nfs
 
 # 或者可以直接执行
 $ lnmp-docker nfs [down]

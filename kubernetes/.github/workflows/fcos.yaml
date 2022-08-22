@@ -61,7 +61,7 @@ jobs:
 
           cd ..
 
-          docker-compose logs
+          docker compose logs
       - uses: ./.github/actions/setup-libvirt
       - name: libvirt
         run: |

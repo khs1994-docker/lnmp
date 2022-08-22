@@ -50,9 +50,9 @@ _init(){
   _cp .env.example .env
   _cp config/gitea/app.kubernetes.example.ini config/gitea/app.kubernetes.ini
 
-  command -v docker-compose > /dev/null 2>&1
+  docker compose version > /dev/null 2>&1
 
-  if [ $? -ne 0 ];then exec echo "Error: docker-compose not install" ; fi
+  if [ $? -ne 0 ];then exec echo "Error: docker compose v2 not install" ; fi
 }
 
 _reset_(){
@@ -134,11 +134,11 @@ _up(){
     CI_INCLUDE_TARGET+="$soft "
   done
 
-  docker-compose ${COMPOSE_FILE:?err} config > docker-compose.yml
+  docker compose ${COMPOSE_FILE:?err} config > docker-compose.yml
 
   if [ -n "${CI_COMPOSE_CONFIG_ONLY}" ];then return;fi
 
-  docker-compose ${COMPOSE_FILE:?err} up ${CI_COMPOSE_OPT:-} \
+  docker compose ${COMPOSE_FILE:?err} up ${CI_COMPOSE_OPT:-} \
     ${CI_INCLUDE_TARGET} drone-server drone-docker-runner
 }
 
@@ -209,16 +209,16 @@ _up-tls(){
 
   test "$ENABLE_NGINX" = 'FALSE' && _sed_external_nginx || _sed_nginx
 
-  docker-compose ${COMPOSE_FILE:?err} config > docker-compose.yml
+  docker compose ${COMPOSE_FILE:?err} config > docker-compose.yml
 
   if [ -n "${CI_COMPOSE_CONFIG_ONLY}" ];then return;fi
 
-  docker-compose ${COMPOSE_FILE:?err} up ${CI_COMPOSE_OPT:-} \
+  docker compose ${COMPOSE_FILE:?err} up ${CI_COMPOSE_OPT:-} \
     ${CI_INCLUDE-gogs registry} drone-server drone-docker-runner
 }
 
 _down(){
-  docker-compose down --remove-orphans
+  docker compose down --remove-orphans
 }
 
 _logs(){

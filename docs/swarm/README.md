@@ -27,19 +27,19 @@
 执行以下命令构建镜像并运行。
 
 ```bash
-$ docker-compose -f docker-production.yml build [SERVICE_NAME]
+$ docker compose -f docker-production.yml build [SERVICE_NAME]
 
-$ docker-compose -f docker-production.yml push SERVICE_NAME
+$ docker compose -f docker-production.yml push SERVICE_NAME
 ```
 
 # 准备
 
-`docker-compose` 与 `Swarm` 启动的容器相互冲突，请清除之后再使用另一种方式。
+`docker compose` 与 `Swarm` 启动的容器相互冲突，请清除之后再使用另一种方式。
 
-首先停止使用 `docker-compose` 启动的容器并移除网络
+首先停止使用 `docker compose` 启动的容器并移除网络
 
 ```bash
-$ docker-compose down
+$ docker compose down
 
 $ docker network prune
 ```

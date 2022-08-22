@@ -17,11 +17,11 @@
 
 $ cd app/demo
 
-$ docker-compose build
+$ docker compose build
 
 $ cd ../../config/nginx
 
-$ docker-compose build
+$ docker compose build
 
 $ cd ~/lnmp/scripts/linuxkit
 

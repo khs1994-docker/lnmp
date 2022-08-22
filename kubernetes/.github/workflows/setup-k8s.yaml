@@ -167,7 +167,7 @@ jobs:
          ls -la kubernetes-release/release/ || true
          echo $PATH
 
-         docker-compose --version
+         docker compose version
          docker --version
 
          ip addr
@@ -194,8 +194,8 @@ jobs:
          echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
          sudo cat /etc/hosts || true
 
-         docker-compose up cfssl-local
-         docker-compose down
+         docker compose up cfssl-local
+         docker compose down
          # source .env
          ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
 

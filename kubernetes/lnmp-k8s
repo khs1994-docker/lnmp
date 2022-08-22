@@ -1113,7 +1113,7 @@ _k8s_install_conf_cp(){
   $(_sudo) cp systemd/certs/*.pem systemd/certs/sa.pub systemd/certs/sa.key ${K8S_ROOT}/etc/kubernetes/pki
 
   if ! [ -f systemd/certs/admin-key.pem ];then \
-    echo "Please Generate certs first $ docker-compose up cfssl-local"; exit; fi
+    echo "Please Generate certs first $ docker compose up cfssl-local"; exit; fi
 
   $(_sudo) cp systemd/certs/*.kubeconfig ${K8S_ROOT}/etc/kubernetes/
   $(_sudo) cp \
@@ -1580,11 +1580,11 @@ case $_command in
       # $(_sudo) modprobe nfsd || true
       cd nfs-server
       if [ "$1" = 'down' ];then
-        exec docker-compose stop nfs
+        exec docker compose stop nfs
       elif [ "$1" = 'logs' ]; then
-        exec docker-compose logs nfs
+        exec docker compose logs nfs
       fi
-      exec docker-compose up -d nfs
+      exec docker compose up -d nfs
       ;;
     * )
       command -v $_command > /dev/null && $_command $@ || echo "command not found"

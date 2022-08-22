@@ -40,7 +40,7 @@
 
 * Docker CE v18.09 Stable +
 
-* docker-compose v1.23.1 +
+* docker compose v2
 
 * 知道如何注册 GitHub App (GitHub only)
 
