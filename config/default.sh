@@ -8,7 +8,7 @@ cat ../lrew/mariadb/.env.compose >> .env
 
 echo COMPOSE_PROJECT_NAME=config >> .env
 
-docker-compose up -d
+docker compose up -d
 
 rm -rf php/default \
        etc/default \
@@ -35,7 +35,7 @@ docker cp config_mariadb_1_666:/etc/mysql mariadb/default/etc/
 
 docker cp config_mysql_1_666:/etc/mysql mysql/default/etc/
 
-docker-compose down
+docker compose down
 
 rm -rf php/default/usr/local/etc/pear.conf
 
