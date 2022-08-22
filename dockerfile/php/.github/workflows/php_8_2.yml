@@ -190,6 +190,8 @@ jobs:
 
         ######
 
+        exit 0
+
         if [ "$TYPE" = "COMPOSER" ];then
             echo "::group::Build php-cs-fixer"
             docker buildx build \
@@ -252,7 +254,7 @@ jobs:
             echo "::endgroup::"
         fi
 
-        if [ "$TYPE" != "FPM-dont-build" ];then exit 0; fi
+        if [ "$TYPE" != "FPM" ];then exit 0; fi
 
         echo "::group::Build custom 7.0"
         docker buildx build --push \
