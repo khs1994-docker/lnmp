@@ -30,15 +30,8 @@ jobs:
     - run: |
         env
         docker --version
-        docker-compose --version
+        docker compose version
       name: 'manifest'
-    # - run: |
-    #     sudo rm /usr/local/bin/docker-compose
-    #     curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-    #     sudo install -m755 docker-compose /usr/local/bin
-    #   name: 'Setup Docker Compose'
-    #   env:
-    #     DOCKER_COMPOSE_VERSION: 1.29.0
     - run: |
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
@@ -60,7 +53,7 @@ jobs:
         docker_version: "20.10"
     - run: |
         docker --version
-        docker-compose --version
+        docker compose version
         docker buildx version
         docker
       name: 'install-after-manifest'
