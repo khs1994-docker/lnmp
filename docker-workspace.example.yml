@@ -2,8 +2,6 @@
 # @link https://www.ruanyifeng.com/blog/2016/07/yaml.html
 #
 
-version: "3.9"
-
 x-common:
   &common
   # fix me

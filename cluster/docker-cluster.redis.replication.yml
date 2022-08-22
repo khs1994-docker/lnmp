@@ -1,4 +1,4 @@
-version: "3.9"
+
 
 #
 # Redis 1master-1node (M-S) Replication

@@ -32,7 +32,7 @@
 
 ```yaml
 # docker-lnmp.override.yml
-version: "3.9"
+
 
 services:
   php8:
@@ -44,7 +44,7 @@ services:
 
 ```yaml
 # docker-lnmp.override.yml
-version: "3.9"
+
 
 services:
   php8:
@@ -66,7 +66,7 @@ $ ./lnmp-docker up
 
 ```yaml
 # docker-lnmp.override.yml
-version: "3.9"
+
 
 services:
   php8:
@@ -78,7 +78,7 @@ services:
 
 ```yaml
 # docker-lnmp.override.yml
-version: "3.9"
+
 
 services:
   mysql:
@@ -90,7 +90,7 @@ services:
 
 ```yaml
 # docker-lnmp.override.yml
-version: "3.9"
+
 
 services:
   my_add_service:
