@@ -11,10 +11,6 @@
       "lwpm.yaml",
       "lwpm.yml"
     ],
-    "scripts/mutagen/mutagen.schema.json": [
-      "mutagen.yml",
-      "mutagen.example.yml"
-    ],
     "kubernetes/coreos/ignition/butane-fcos.schema.json": [
       "*.bu",
     ],
