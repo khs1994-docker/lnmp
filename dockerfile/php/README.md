@@ -14,26 +14,26 @@
 
 ## 后缀
 
-* 8.1.5-cli-alpine
-* 8.1.5-fpm-alpine
-* 8.1.5-unit-alpine         (based cli)
-* 8.1.5-composer-alpine     (based fpm)
-* 8.1.5-swoole-alpine       (based cli)
-* 8.1.5-s6-alpine           (based fpm)
+* 8.1.6-cli-alpine
+* 8.1.6-fpm-alpine
+* 8.1.6-unit-alpine         (based cli)
+* 8.1.6-composer-alpine     (based fpm)
+* 8.1.6-swoole-alpine       (based cli)
+* 8.1.6-s6-alpine           (based fpm)
 
 ## Supported tags and respective `Dockerfile` links
 
-* [`8.1.5-fpm-alpine` (8.1/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.5/8.1/fpm/Dockerfile)
+* [`8.1.6-fpm-alpine` (8.1/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.6/8.1/fpm/Dockerfile)
 
-* [`8.0.19-fpm-alpine` (8.0/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.5/8.0/fpm/Dockerfile)
+* [`8.0.20-fpm-alpine` (8.0/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.6/8.0/fpm/Dockerfile)
 
-* [`7.4.30-fpm-alpine` (7.4/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.5/7.4/fpm/Dockerfile)
+* [`7.4.30-fpm-alpine` (7.4/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.6/7.4/fpm/Dockerfile)
 
 * [`nightly-fpm-alpine` (nightly/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/master/nightly/fpm/Dockerfile)
 
-* [`7.3.33-fpm-alpine` (7.3/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.5/7.3/fpm/Dockerfile)
+* [`7.3.33-fpm-alpine` (7.3/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.6/7.3/fpm/Dockerfile)
 
-* [`7.2.34-fpm-alpine` (7.2/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.5/7.2/fpm/Dockerfile)
+* [`7.2.34-fpm-alpine` (7.2/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.6/7.2/fpm/Dockerfile)
 
 ## Overview
 
@@ -166,7 +166,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 
 * https://sources.debian.org/src/php7.4/7.4.30-1+deb11u1/debian/control/
 
-* https://sources.debian.org/src/php8.1/8.1.5-1/debian/control/
+* https://sources.debian.org/src/php8.1/8.1.6-1/debian/control/
 
 * https://ram.tianon.xyz/post/2017/12/26/dockerize-compiled-software.html
 

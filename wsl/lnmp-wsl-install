@@ -111,7 +111,6 @@ _nginx(){
 
 _php(){
   # include redis memcached
-  # default install latest php version (8.1.5)
 
   PHP_VERSION=${1:-${PHP_LATEST_STABLE_VERSION}}
 
