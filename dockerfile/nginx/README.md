@@ -67,7 +67,7 @@ $ docker run -dit \
 # Compare
 
 ```bash
-$ docker-compose up alpine | buster | official
+$ docker compose up alpine | buster | official
 
 $ h2load -n 100 -c 10 https://quic.t.khs1994.com
 ```

@@ -11,7 +11,7 @@ $ vi .env
 
 $ cp example.Dockerfile Dockerfile
 
-$ docker-compose build
+$ docker compose build
 ```
 
 ## labels
