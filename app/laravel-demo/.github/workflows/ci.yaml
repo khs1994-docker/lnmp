@@ -38,10 +38,8 @@ jobs:
           lrew_include: "laravel"
       - name: Init LNMP
         run: |
-          docker-compose --version
-          lnmp-docker compose --official
+          docker compose version
           lnmp-docker services
-          docker-compose --version
       - name: Install Laravel
         env:
           ACTIONS_COMPOSER_BIN_PATH: /home/runner/.composer/vendor/bin

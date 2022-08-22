@@ -10,16 +10,6 @@ $ ./lnmp-docker up
 
 ## MySQL 暂不支持 arm 32位
 
-## 安装 docker-compose
-
-**依赖软件**
-
-```bash
-$ sudo apt install libffi-dev
-
-$ ./lnmp-docker compose -f
-```
-
 ## [Docker ARM 镜像](https://github.com/docker-library/official-images#architectures-other-than-amd64)
 
 |镜像|系统|架构|

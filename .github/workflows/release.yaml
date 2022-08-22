@@ -123,12 +123,11 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
     - run: |
-        ./lnmp-docker compose --official -f
         cd wsl
-        docker-compose build ${JOB_NAME}
+        docker compose build ${JOB_NAME}
         if [ "${GITHUB_EVENT_NAME}" = workflow_dispatch ];then exit 0; fi
-        docker-compose push ${JOB_NAME}
-        docker-compose run ${JOB_NAME} command || true
+        docker compose push ${JOB_NAME}
+        docker compose run ${JOB_NAME} command || true
         . .env
         docker cp $( docker container ls -a --format {{.ID}} ):/${DIST_FILE} .
         export GITHUB_TAG=$(echo $GITHUB_REF | cut -d '/' -f 3)
