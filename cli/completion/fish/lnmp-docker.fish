@@ -98,5 +98,3 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a lrew-outdated     -d   
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a lrew-backup       -d      'Upload composer.json to GitHub Gist'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a lrew-update       -d      'Update lrew package'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a test              -d      'Test LNMP'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a compose           -d      'Install docker-compose'
-complete -c lnmp-docker -n '__fish_seen_subcommand_from compose' -l official -f -d 'Force Install docker-compose'
