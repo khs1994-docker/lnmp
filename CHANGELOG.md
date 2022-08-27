@@ -15,3 +15,4 @@
 ### Updates:
 
 * [PHP `8.1.6` `8.0.20` `7.4.30`](https://www.php.net/ChangeLog-8.php#8.1.6)
+* [Kubernetes `1.25.0`](https://github.com/kubernetes/kubernetes/releases/tag/v1.25.0)

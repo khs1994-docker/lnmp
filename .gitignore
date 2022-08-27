@@ -86,4 +86,4 @@ lwpm.lock.json
 
 /.docker
 
-/.patch
+.patch
