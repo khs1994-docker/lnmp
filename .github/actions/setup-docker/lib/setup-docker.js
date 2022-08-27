@@ -150,14 +150,14 @@ async function run() {
 
     core.startGroup('start docker step1');
     // https://github.com/docker/for-mac/issues/2359#issuecomment-943131345
-    await exec.exec('sudo',[
+    await exec.exec('sudo', [
       '/Applications/Docker.app/Contents/MacOS/Docker',
       '--unattended',
       '--install-privileged-components'
     ]);
     core.endGroup();
     core.startGroup('start docker step2');
-    await exec.exec('open',[
+    await exec.exec('open', [
       '-a',
       '/Applications/Docker.app',
       '--args',
@@ -343,6 +343,13 @@ system_profiler SPHardwareDataType || true
       DOCKER_VERSION_STRING ? `docker-ce=${DOCKER_VERSION_STRING}` : 'docker-ce',
       DOCKER_VERSION_STRING ? `docker-ce-cli=${DOCKER_VERSION_STRING}` : 'docker-ce-cli'
     ]);
+
+    await exec.exec('sudo', [
+      'apt-get',
+      '-y',
+      'install',
+      'docker-compose-plugin',
+    ]).catch(() => { });
     core.endGroup();
   }
 
