@@ -29,6 +29,7 @@ Management Commands:
   builder     Manage builds
   buildx*     Docker Buildx (Docker Inc., v0.8.2-docker)
   checkpoint  Manage checkpoints
+  compose*    Docker Compose (Docker Inc., v2.6.0)
   config      Manage Docker configs
   container   Manage containers
   context     Manage contexts

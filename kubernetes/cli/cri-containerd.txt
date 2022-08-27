@@ -13,7 +13,7 @@ USAGE:
    cri-containerd [global options] command [command options] [arguments...]
 
 VERSION:
-   v1.6.4
+   v1.6.8
 
 DESCRIPTION:
 
