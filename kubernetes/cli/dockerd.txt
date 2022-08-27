@@ -45,7 +45,7 @@ Options:
       --default-cgroupns-mode string            Default mode for
                                                 containers cgroup
                                                 namespace ("host" |
-                                                "private") (default "host")
+                                                "private") (default "private")
       --default-gateway ip                      Container default gateway
                                                 IPv4 address
       --default-gateway-v6 ip                   Container default gateway
