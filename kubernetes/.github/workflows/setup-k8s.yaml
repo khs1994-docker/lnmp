@@ -39,16 +39,16 @@ jobs:
       # next next version
       #  - os: ubuntu
       #    dist: 20.04
-      #    CI_KUBERNETES_VERSION: 1.26.0-alpha.1
+      #    CI_KUBERNETES_VERSION: 1.27.0-alpha.1
       #    LNMP_K8S_GET: --url
       #    GENERATE_CLI_HELP: "true"
 
       # next version
-       - os: ubuntu
-         dist: 20.04
-         CI_KUBERNETES_VERSION: 1.25.0-rc.1
-         LNMP_K8S_GET: --url
-         GENERATE_CLI_HELP: "true"
+      #  - os: ubuntu
+      #    dist: 20.04
+      #    CI_KUBERNETES_VERSION: 1.26.0-alpha.1
+      #    LNMP_K8S_GET: --url
+      #    GENERATE_CLI_HELP: "true"
 
        # current stable version
        - os: ubuntu
@@ -63,13 +63,13 @@ jobs:
          CI_KUBERNETES_VERSION: 1.25.0
          LNMP_K8S_GET: --url
          #
-         GENERATE_CLI_HELP: "true"
+         # GENERATE_CLI_HELP: "true"
          #
          UPLOAD_TO_CODING: "true"
        # ipv6
        # - os: ubuntu
        #  dist: 20.04
-       #  CI_KUBERNETES_VERSION: 1.24.0
+       #  CI_KUBERNETES_VERSION: 1.25.0
        #  LNMP_K8S_GET: --url
        #  IPV6: "true"
        - os: ubuntu
@@ -236,14 +236,14 @@ jobs:
          test -n "$CMD_FAILED" && false || true
 
          sudo systemctl cat kube-scheduler
-         if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 23 ];then \
-          echo "replace kube-scheduler config" \
-          && echo "remove it when k8s version ge 1.23" \
-          && sudo sed -i -e "s!^healthzBindAddress.*!#healthzBindAddress!g" \
-                      -e "s!^metricsBindAddress.*!#metricsBindAddress!g" \
-                      -e "s!v1beta1!v1beta3!g" \
-                      ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kube-scheduler.config.yaml ; \
-         fi
+         #  if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 23 ];then \
+         #   echo "replace kube-scheduler config" \
+         #   && echo "remove it when k8s version ge 1.23" \
+         #   && sudo sed -i -e "s!^healthzBindAddress.*!#healthzBindAddress!g" \
+         #               -e "s!^metricsBindAddress.*!#metricsBindAddress!g" \
+         #               -e "s!v1beta1!v1beta3!g" \
+         #               ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kube-scheduler.config.yaml ; \
+         #  fi
          sudo systemctl start kube-scheduler || CMD_FAILED=1
          test -n "$CMD_FAILED" && sudo journalctl -u kube-scheduler || true
          test -n "$CMD_FAILED" && false || true
@@ -569,7 +569,7 @@ jobs:
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          BASE_BRANCH=v1.25.0-rc.1
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.26.0-alpha.1' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.27.0-alpha.1' ];then
            exit 0
          fi
 
