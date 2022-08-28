@@ -669,14 +669,22 @@ else {
   cp $PSScriptRoot/.env.example.ps1 $PSScriptRoot/.env.ps1
 }
 
+function Get-Env($ENV_NAME, $ENV_FILE, $ENV_DEFAULT) {
+  $ENV_CONTENT = (cat $PSScriptRoot/${ENV_FILE} | select-string ^$ENV_NAME=)
+  if ($ENV_CONTENT) {
+    if ($ENV_CONTENT.Line.GetType().FullName -eq 'System.String') {
+      return $ENV_CONTENT.Line.split('=')[-1]
+    }
+    else {
+      return $ENV_CONTENT.Line[-1].split('=')[-1]
+    }
+  }
+
+  return $ENV_DEFAULT
+}
+
 # APP_ROOT
-$APP_ROOT_CONTENT = (cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^APP_ROOT=)
-if ($APP_ROOT_CONTENT) {
-  $APP_ROOT = $APP_ROOT_CONTENT.Line.split('=')[-1]
-}
-else {
-  $APP_ROOT = './app'
-}
+$APP_ROOT = Get-Env 'APP_ROOT' $LNMP_ENV_FILE './app'
 
 $env:USE_WSL2_DOCKER_COMPOSE = '0'
 $env:USE_WSL2_BUT_DOCKER_NOT_RUNNING = '0'
@@ -734,13 +742,8 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and !($WSL2_DIST)) {
 }
 
 # APP_ENV
-$APP_ENV_CONTENT = (cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^APP_ENV=)
-if ($APP_ENV_CONTENT) {
-  $APP_ENV = $APP_ENV_CONTENT.Line.split('=')[-1]
-}
-else {
-  $APP_ENV = 'development'
-}
+
+$APP_ENV = Get-Env -ENV_NAME 'APP_ENV' -ENV_FILE $LNMP_ENV_FILE -ENV_DEFAULT 'development'
 
 # cd LNMP_ROOT
 if (!(Test-Path cli/khs1994-robot.enc )) {
@@ -1513,6 +1516,62 @@ Example: ./lnmp-docker composer /app/demo install
     }
     printInfo Open WSL2 $WSL2_DIST [ $APP_ROOT ]
     code --remote wsl+$WSL2_DIST $APP_ROOT
+  }
+
+  outdated {
+    "[
+    {
+      `"SOFT_NAME`":`"nginx`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_NGINX_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_NGINX_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"MySQL`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_MYSQL_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_MYSQL_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"PHP`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_PHP_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_PHP_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"PHP82`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_PHP82_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_PHP82_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"PHP80`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_PHP80_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_PHP80_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"PHP74`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_PHP74_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_PHP74_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"Redis`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_REDIS_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_REDIS_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"Node.js`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_NODE_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_NODE_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"PHPMyAdmin`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_PHPMYADMIN_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_PHPMYADMIN_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"Memcached`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_MEMCACHED_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_MEMCACHED_VERSION '.env.example' '')`"
+    },
+   ]" | ConvertFrom-Json
+
   }
 
   default {
