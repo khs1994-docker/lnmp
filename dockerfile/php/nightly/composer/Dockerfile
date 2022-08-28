@@ -1,7 +1,8 @@
 # syntax=docker/dockerfile:labs
 
 ARG USERNAME=khs1994
-ARG BASE=fpm
+# ARG BASE=fpm
+ARG BASE=cli
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:nightly-${BASE}-alpine
 

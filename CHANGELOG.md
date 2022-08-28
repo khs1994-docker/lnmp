@@ -10,6 +10,8 @@
 
 ### Changes:
 
+* Composer Docker image based cli
+
 ### Updates:
 
 * [PHP `8.1.7` `8.0.21` `7.4.30`](https://www.php.net/ChangeLog-8.php#8.1.7)
