@@ -99,7 +99,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-kerberos \
         --with-imap=shared \
             --with-imap-ssl \
-        # --with-xmlrpc=shared \ 8.0 removed
+        # --with-xmlrpc=shared 8.0 removed
         --with-pic \
         --with-enchant=shared \
         --enable-fileinfo=shared \
@@ -186,7 +186,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
           libexif-dev \
           # libxslt-dev \
           gmp-dev \
-          # xmlrpc-c-dev \ 8.0 removed
+          # xmlrpc-c-dev 8.0 removed
           bzip2-dev \
           enchant2-dev \
           imap-dev \
@@ -288,7 +288,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
                            sysvsem \
                            sysvshm \
                            # tidy \
-                           # xmlrpc \ 8.0 removed
+                           # xmlrpc 8.0 removed
                            # xsl \
                            # opcache 已默认安装，需要自行载入
                            opcache \
