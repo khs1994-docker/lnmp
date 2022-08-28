@@ -1,18 +1,15 @@
 # Changelog
 
-## v20.10.19
+## v20.10.20
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/v20.10.18...v20.10.19
+* https://github.com/khs1994-docker/lnmp/compare/v20.10.19...20.10
 
 ### Bug fixes:
 
 ### Changes:
 
-* Use [Compose V2](https://docs.docker.com/compose/install/compose-plugin/)
-
 ### Updates:
 
-* [PHP `8.1.6` `8.0.20` `7.4.30`](https://www.php.net/ChangeLog-8.php#8.1.6)
-* [Kubernetes `1.25.0`](https://github.com/kubernetes/kubernetes/releases/tag/v1.25.0)
+* [PHP `8.1.7` `8.0.21` `7.4.30`](https://www.php.net/ChangeLog-8.php#8.1.7)

@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=8.1.6
+ARG PHP_VERSION=8.1.7
 
-FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.15 as php
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.16 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

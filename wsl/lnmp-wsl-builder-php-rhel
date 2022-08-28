@@ -1021,10 +1021,10 @@ command -v wget > /dev/null || $(_sudo) yum install -y wget
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
-    PHP_VERSION=8.1.6 ; fi
+    PHP_VERSION=8.1.7 ; fi
 
 if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
-    PHP_VERSION=8.1.6 ; fi
+    PHP_VERSION=8.1.7 ; fi
 
 _get_phpnum $PHP_VERSION
 
