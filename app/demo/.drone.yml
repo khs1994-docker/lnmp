@@ -33,7 +33,7 @@ clone:
 steps:
   # install dep
   - name: install
-    # image: composer:2.4.0
+    # image: composer:2.4.1
     image: khs1994/php:8.1.7-composer-alpine
     commands:
       - pwd
@@ -226,7 +226,7 @@ volumes:
 
 # matrix:
 #   COMPOSER_VERSION:
-#     - 2.4.0
+#     - 2.4.1
 #   PHP_VERSION:
 #     - 8.1.7
 #     - 8.0.21

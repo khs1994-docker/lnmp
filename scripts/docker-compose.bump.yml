@@ -17,7 +17,7 @@ services:
     image: php:8.1.7-fpm-alpine
 
   composer:
-    image: composer:2.4.0
+    image: composer:2.4.1
 
   nginx:
     image: nginx:1.21.3-alpine
