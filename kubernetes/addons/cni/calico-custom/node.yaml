@@ -1,4 +1,4 @@
-# https://docs.projectcalico.org/reference/resources/node
+# https://projectcalico.docs.tigera.io/reference/resources/node
 apiVersion: projectcalico.org/v3
 kind: Node
 metadata:

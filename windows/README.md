@@ -327,5 +327,3 @@ $ memcached -d
 * https://www.cnblogs.com/52fhy/p/6059685.html
 
 * https://www.cnblogs.com/chuxuezhe/archive/2012/08/29/2661656.html
-
-* https://www.iteye.com/blog/nbczw8750-2353989

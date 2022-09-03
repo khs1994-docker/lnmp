@@ -41,7 +41,7 @@
 
 ## RUN
 
-Please use `docker-compose`, example see [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp/blob/master/docker-compose.yml).
+Please use `docker-compose`, example see [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp/blob/master/docker-lnmp.yml).
 
 ## Who use it?
 

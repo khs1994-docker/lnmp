@@ -10,4 +10,4 @@
 
 **CRI-O**
 
-* https://github.com/cri-o/cri-o/blob/master/internal/config/capabilities/capabilities.go#L15
+* https://github.com/cri-o/cri-o/blob/main/internal/config/capabilities/capabilities.go#L15

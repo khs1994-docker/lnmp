@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: calico-custom.conf
 data:
-  # https://docs.projectcalico.org/reference/node/configuration#configuring-the-default-ip-pools
+  # https://projectcalico.docs.tigera.io/reference/node/configuration#configuring-the-default-ip-pools
   # podCIDR: 192.168.0.0/16
   podCIDR: 10.244.0.0/16
   IPV6podCIDR: fc00::/48

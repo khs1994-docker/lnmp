@@ -19,9 +19,9 @@
 ## CRI-O
 
 * https://www.jianshu.com/p/5c7ffe9328e9
-* https://github.com/cri-o/cri-o/blob/master/install.md
-* https://github.com/cri-o/cri-o/blob/master/tutorials/kubernetes.md
-* https://github.com/cri-o/cri-o/blob/master/tutorials/install-distro.md
+* https://github.com/cri-o/cri-o/blob/main/install.md
+* https://github.com/cri-o/cri-o/blob/main/tutorials/kubernetes.md
+* https://github.com/cri-o/cri-o/blob/main/tutorials/install-distro.md
 
 crio 会加载 `/etc/containers/` 下的配置。
 

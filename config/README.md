@@ -14,7 +14,7 @@
 
 ### 生产环境
 
-一个 **主域名** 一个 **配置文件** 一个 **TLS 密钥** 一个 **TLS 证书**（Let's Encrypt 支持签发免费的 [通配符](https://github.com/khs1994-docker/lnmp/blob/master/docs/issue-ssl.md) 证书）。
+一个 **主域名** 一个 **配置文件** 一个 **TLS 密钥** 一个 **TLS 证书**（Let's Encrypt 支持签发免费的 [通配符](https://github.com/khs1994-docker/lnmp/blob/master/docs/nginx/issue-ssl.md) 证书）。
 
 通过 [`Secrets`](https://docs.docker.com/engine/swarm/secrets/) [`Configs`](https://docs.docker.com/engine/swarm/configs/) 统一挂载到集群中。
 

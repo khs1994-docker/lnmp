@@ -1,4 +1,4 @@
-# [Storage-Classes](https://kubernetes.io/zh/docs/concepts/storage/storage-classes/)
+# [Storage-Classes](https://kubernetes.io/zh-cn/docs/concepts/storage/storage-classes/)
 
 `StorageClass` 标记存储资源的特性和性能, 在 1.6 版本, `StorageClass` 与动态资源供应的机制得到了完善, 实现了存储卷的按需创建
 

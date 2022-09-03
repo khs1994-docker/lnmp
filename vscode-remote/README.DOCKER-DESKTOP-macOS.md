@@ -33,7 +33,7 @@ $ docker volume create lnmp_npm-cache-data
 
 10. [macOS 终端] `$ docker compose -f docker-workspace.yml run --rm npm install` (或者执行 `$ lnmp-docker code-run npm install`)
 
-11. 参照 https://github.com/khs1994-docker/laravel-demo/tree/master/.test 将示例放入项目
+11. 参照 https://github.com/khs1994-docker/laravel-demo/tree/master/patch 将示例放入项目
 
 12. [macOS 终端] 编译项目 `$ docker compose -f docker-workspace.yml run --rm npm run dev` (或者执行 `$ lnmp-docker code-run npm run dev`)
 

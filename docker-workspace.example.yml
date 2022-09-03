@@ -15,7 +15,7 @@ services:
     networks:
       - backend
     volumes:
-      # https://code.visualstudio.com/docs/remote/containers-advanced#_avoiding-extension-reinstalls-on-container-rebuild
+      # https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
       - vscode-server:/root/.vscode-server
       - vscode-server-insiders:/root/.vscode-server-insiders
 

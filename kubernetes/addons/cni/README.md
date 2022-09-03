@@ -1,4 +1,4 @@
-* https://docs.projectcalico.org/manifests/calico.yaml
+* https://projectcalico.docs.tigera.io/manifests/calico.yaml
 * https://projectcalico.docs.tigera.io/manifests/csi-driver.yaml
 
 ## 环境变量
@@ -15,15 +15,15 @@
 
 **dual-stack**
 
-* https://docs.projectcalico.org/networking/ipv6
+* https://projectcalico.docs.tigera.io/networking/ipv6
 
 **环境变量**
 
-* https://docs.projectcalico.org/reference/felix/configuration
+* https://projectcalico.docs.tigera.io/reference/felix/configuration
 
 ## eBPF
 
-* https://docs.projectcalico.org/maintenance/enabling-bpf
+* https://projectcalico.docs.tigera.io/maintenance/enabling-bpf
 * https://www.projectcalico.org/introducing-the-calico-ebpf-dataplane/
 
 **使用 eBPF 不再需要 kube-proxy 服务，请事先停止 kube-proxy**

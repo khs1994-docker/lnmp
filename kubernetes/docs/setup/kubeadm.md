@@ -3,7 +3,7 @@
 * https://github.com/kubernetes/kubeadm
 
 * https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
-* https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/
+* https://kubernetes.io/zh-cn/docs/reference/setup-tools/kubeadm/kubeadm-init/
 * https://docs.khs1994.com/feiskyer-kubernetes-handbook/deploy/kubeadm.html
 * https://blog.csdn.net/tiger435/article/details/85002337
 
@@ -201,11 +201,11 @@ $ kubeadm join 192.168.199.100:6443 --token cz81zt.orsy9gm9v649e5lf \
 
 ## 部署 CNI -- calico
 
-* https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/
+* https://projectcalico.docs.tigera.io/getting-started/kubernetes/self-managed-onprem/
 
 修改 `addons/cni/calico/configMap.yaml` 中的 `192.168.0.0/16` 为 `10.244.0.0/16`(同 `flannel` 一致)
 
-有 [三种方式](https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/) 存储 calico 数据,这里采用第一种 `Installing with the Kubernetes API datastore—50 nodes or less`
+有 [三种方式](https://projectcalico.docs.tigera.io/getting-started/kubernetes/self-managed-onprem/) 存储 calico 数据,这里采用第一种 `Installing with the Kubernetes API datastore—50 nodes or less`
 
 #### 修改内核参数
 

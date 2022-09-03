@@ -43,7 +43,7 @@ spec:
   template:
     metadata:
       labels:
-        # https://kubernetes.io/zh/docs/concepts/overview/working-with-objects/common-labels/
+        # https://kubernetes.io/zh-cn/docs/concepts/overview/working-with-objects/common-labels/
         # app.kubernetes.io/name: mysql
         # app.kubernetes.io/instance: lnmp-xxx
         # app.kubernetes.io/version: 8.0.30

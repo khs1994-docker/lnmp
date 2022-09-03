@@ -1,6 +1,6 @@
 # Git GPG
 
-* https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification
+* https://docs.github.com/en/authentication/managing-commit-signature-verification
 
 **Windows**
 
@@ -31,7 +31,7 @@ uid                 [ultimate] khs1994 <khs1994@khs1994.com>
 $ gpg --armor --export <GPG-key-id>
 
 # copy output to github
-# https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification/adding-a-new-gpg-key-to-your-github-account
+# https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-new-gpg-key-to-your-github-account
 ```
 
 ## 配置 GIT

@@ -34,7 +34,7 @@
 
 * [kind](https://github.com/kubernetes-sigs/kind)
 
-* [microk8s](https://github.com/ubuntu/microk8s)
+* [microk8s](https://github.com/canonical/microk8s)
 
 ## 微信订阅号
 

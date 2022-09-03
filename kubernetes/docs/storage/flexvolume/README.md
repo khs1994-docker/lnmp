@@ -7,7 +7,7 @@
 
 `Pod` 通过 `flexvolume` `in-tree` 插件与 `Flexvolume` 驱动程序交互。 更多详情请参考 [这里](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-storage/flexvolume.md)。
 
-## [Out-of-Tree 卷插件](https://kubernetes.io/zh/docs/concepts/storage/volumes/#out-of-tree-%E5%8D%B7%E6%8F%92%E4%BB%B6)
+## [Out-of-Tree 卷插件](https://kubernetes.io/zh-cn/docs/concepts/storage/volumes/#out-of-tree-%E5%8D%B7%E6%8F%92%E4%BB%B6)
 
 `Out-of-Tree` 卷插件包括容器存储接口（CSI）和 `FlexVolume`。 它们使存储供应商能够创建自定义存储插件，而无需将它们添加到 Kubernetes 代码仓库。
 

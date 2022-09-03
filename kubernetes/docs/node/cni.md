@@ -29,7 +29,7 @@ If there are multiple CNI configuration files in the directory, the kubelet uses
 
 CNI 配置文件必须设置 `cniVersion`
 
-* `cniVersion` https://github.com/containernetworking/cni/blob/master/SPEC.md
+* `cniVersion` https://github.com/containernetworking/cni/blob/main/SPEC.md
 * https://github.com/kubernetes/kubernetes/pull/80482
 
 ## 参考

@@ -63,7 +63,7 @@ metadata:
 
 ## 4 层代理(tcp udp)
 
-* https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/exposing-tcp-udp-services.md
+* https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md
 
 `tcp-udp`
 
