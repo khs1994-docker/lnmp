@@ -13,7 +13,10 @@
         ">",
         "docker-compose.yml"
       ],
-      "group": "build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "problemMatcher": [],
       "label": "lnmp-docker config",
       "detail": "show lnmp-docker compose config"
