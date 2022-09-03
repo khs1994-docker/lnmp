@@ -56,6 +56,7 @@ export TZ=Asia/Shanghai
 # export CC=clang CXX=clang
 # export CC=gcc CXX=g++
 
+export PHP_LATEST_VERSION=8.1.7
 ################################################################################
 
 #
@@ -103,8 +104,14 @@ case "$1" in
     export PHP_NUM=81
     ;;
 
-  nightly )
+  8.2.* )
     export PHP_NUM=82
+    export BUILD_FROM_GIT=1
+    export PHP_SRC_BRANCH=PHP-8.2
+    ;;
+
+  nightly )
+    export PHP_NUM=83
     export BUILD_FROM_GIT=1
     ;;
 
@@ -1021,10 +1028,10 @@ command -v wget > /dev/null || $(_sudo) yum install -y wget
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
-    PHP_VERSION=8.1.7 ; fi
+    PHP_VERSION=${PHP_LATEST_VERSION} ; fi
 
 if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
-    PHP_VERSION=8.1.7 ; fi
+    PHP_VERSION=${PHP_LATEST_VERSION} ; fi
 
 _get_phpnum $PHP_VERSION
 

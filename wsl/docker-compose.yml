@@ -1,5 +1,3 @@
-
-
 services:
 
   wsl:
@@ -50,7 +48,7 @@ services:
         - OS_TYPE=debian:bullseye-slim
         # - DEB_URL=mirrors.ustc.edu.cn
         # - DEB_SECURITY_URL=mirrors.ustc.edu.cn/debian-security
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php82_0.0.0-debian-bullseye_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php83_0.0.0-debian-bullseye_amd64
 
 # latest stable php and debian
   wsl-php-builder-debian12-81:
@@ -174,7 +172,7 @@ services:
         - OS_TYPE=ubuntu:22.04
         # - UBUNTU_URL=mirrors.ustc.edu.cn
         # - UBUNTU_SECURITY_URL=mirrors.ustc.edu.cn
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php82_0.0.0-ubuntu-jammy_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php83_0.0.0-ubuntu-jammy_amd64
 
 # latest stable php and ubuntu
   wsl-php-builder-ubuntu2210-81:
@@ -309,7 +307,7 @@ services:
       args:
         - PHP_VERSION=nightly
         - OS_TYPE=fedora:36
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php82_0.0.0-fedora-36_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php83_0.0.0-fedora-36_amd64
 
 # latest php and fedora
   wsl-php-builder-fc37-nightly:
@@ -319,4 +317,4 @@ services:
       args:
         - PHP_VERSION=nightly
         - OS_TYPE=fedora:37
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php82_0.0.0-fedora-37_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php83_0.0.0-fedora-37_amd64

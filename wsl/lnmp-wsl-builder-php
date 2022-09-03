@@ -65,6 +65,8 @@ export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
 # export CC=clang CXX=clang
 export CC=gcc CXX=g++
+
+export PHP_LATEST_VERSION=8.1.7
 ################################################################################
 
 for command in "$@"
@@ -130,8 +132,14 @@ case "$1" in
      export PHP_NUM=81
      ;;
 
+  8.2.* )
+     export PHP_NUM=82
+     export BUILD_FROM_GIT=1
+     export PHP_SRC_BRANCH=PHP-8.2
+     ;;
+
   nightly )
-    export PHP_NUM=82
+    export PHP_NUM=83
     export BUILD_FROM_GIT=1
     ;;
 
@@ -1071,8 +1079,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=8.1.7
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=8.1.7
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=${PHP_LATEST_VERSION}
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=${PHP_LATEST_VERSION}
 
 _get_phpnum $PHP_VERSION
 
