@@ -2,7 +2,7 @@
   "bug": "https://github.com/Microsoft/vscode/issues",
   "command": "code",
   "description": "Visual Studio Code is a code editor redefined and optimized for building and debugging modern web and cloud applications",
-  "download-filename": "VSCode$(if($IsWindows){echo .exe}else{echo .zip})\n",
+  "download-filename": "VSCode-${VERSION}$(if($IsWindows){echo .exe}else{echo .zip})\n",
   "github": "microsoft/vscode",
   "homepage": "https://code.visualstudio.com/",
   "name": "vsCode",
