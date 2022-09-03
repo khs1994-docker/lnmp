@@ -178,7 +178,7 @@ while ! /Applications/Docker.app/Contents/Resources/bin/docker system info &>/de
 command -v docker || echo 'test docker command loop: not found'
 sleep 1
 # wait 180s(3min)
-if [ $i -gt 180 ];then sudo /Applications/Docker.app/Contents/MacOS/com.docker.diagnose check;uname -a;system_profiler SPHardwareDataType;echo "::error::-- Wait docker start $i s too long, exit"; exit 1; fi
+if [ $i -gt 180 ];then exit 1;sudo /Applications/Docker.app/Contents/MacOS/com.docker.diagnose check;uname -a;system_profiler SPHardwareDataType;echo "::error::-- Wait docker start $i s too long, exit"; exit 1; fi
 done
 echo "::notice::-- Docker is ready.Wait time is $i s"
 uname -a || true
