@@ -12,4 +12,4 @@ NODE_IP NODE_NAME
 
 * https://www.jianshu.com/p/258539db000a
 
-* https://kubernetes.io/zh-cn/docs/reference/kubectl/overview/
+* https://kubernetes.io/zh-cn/docs/reference/kubectl/

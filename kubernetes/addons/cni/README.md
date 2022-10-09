@@ -24,7 +24,7 @@
 ## eBPF
 
 * https://projectcalico.docs.tigera.io/maintenance/enabling-bpf
-* https://www.projectcalico.org/introducing-the-calico-ebpf-dataplane/
+* https://www.tigera.io/blog/introducing-the-calico-ebpf-dataplane
 
 **使用 eBPF 不再需要 kube-proxy 服务，请事先停止 kube-proxy**
 

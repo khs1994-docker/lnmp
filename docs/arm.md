@@ -14,8 +14,8 @@ $ ./lnmp-docker up
 
 |镜像|系统|架构|
 |:--|:--|:--|
-|[arm32v7 Docker image](https://hub.docker.com/u/arm32v7/)|[官方系统 Raspbian (基于 Debian)](https://www.raspberrypi.org/software/operating-systems/)|arm32|
-|[arm64v8 Docker image](https://hub.docker.com/u/arm64v8/)|[pi 64](https://github.com/khs1994/pi64)|arm64|
+|[arm64v8 Docker image](https://hub.docker.com/u/arm64v8/)|[官方系统 Raspberry Pi OS (64-bit) (基于 Debian)](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit)|arm64|
+|[arm32v7 Docker image](https://hub.docker.com/u/arm32v7/)|[官方系统 Raspberry Pi OS (Legacy) (基于 Debian)](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-legacy)|arm32|
 |[armhf Docker image](https://hub.docker.com/u/armhf/)    |已经废弃，转移到了上述两个项目中|-|
 
 ## ARM 镜像构建

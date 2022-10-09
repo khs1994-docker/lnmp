@@ -1,4 +1,4 @@
-* https://php.net/configuration.file
+* https://www.php.net/configuration.file
 * http://www.jinbuguo.com/php/php.ini.html
 
 ## [sapi](https://github.com/php/php-src/tree/master/sapi)

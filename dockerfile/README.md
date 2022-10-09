@@ -16,6 +16,6 @@ $ docker compose build
 
 ## labels
 
-* https://github.com/opencontainers/image-spec/blob/master/annotations.md
+* https://github.com/opencontainers/image-spec/blob/main/annotations.md
 
 `org.label-schema.PREFIX` 已经废弃

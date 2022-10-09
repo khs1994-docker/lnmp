@@ -62,7 +62,7 @@ _ide_helper.php
 
 以上两种情况项目文件位于 Windows 均为跨主机, 故存在文件性能问题。
 
-这些情况下 `vendor` 目录可以使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_use-a-targeted-named-volume) 的说明和笔者提出的方案原理大致相同。
+这些情况下 `vendor` 目录可以使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-a-targeted-named-volume) 的说明和笔者提出的方案原理大致相同。
 
 由于文件性能问题，不推荐将项目文件放置于 Windows。
 

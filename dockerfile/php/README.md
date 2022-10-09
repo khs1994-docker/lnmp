@@ -160,7 +160,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 
 * [Official PHP Dockerfiles](https://github.com/docker-library/php)
 
-* https://git.alpinelinux.org/cgit/aports/tree/community/php8/APKBUILD
+* https://git.alpinelinux.org/aports/tree/community/php8/APKBUILD
 
 * https://sources.debian.org/src/php7.3/7.3.29-1~deb10u1/debian/control/
 

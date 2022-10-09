@@ -1,3 +1,3 @@
-# [LWPM](https://docs.lnmp.khs1994.com/windows/lwpm.html)
+# [LWPM](https://docs.lnmp.khs1994.com/lpm.html)
 
 **LNMP Windows Package Manager**

@@ -24,4 +24,4 @@ $ docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2
 
 ## mcr.microsoft.com
 
-* https://github.com/microsoft/containerregistry/blob/master/docs/mcr-endpoints-guidance.md
+* https://github.com/microsoft/containerregistry/blob/main/docs/mcr-endpoints-guidance.md
