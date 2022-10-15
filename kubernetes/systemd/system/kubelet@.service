@@ -110,7 +110,6 @@ ExecStart=/opt/k8s/bin/kubelet \
 --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
 --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
 --hostname-override=${NODE_NAME} \
---logtostderr=true \
 --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
 --v=2 \
 --container-runtime=remote \

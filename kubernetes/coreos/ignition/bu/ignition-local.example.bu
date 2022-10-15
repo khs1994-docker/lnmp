@@ -189,7 +189,6 @@ systemd:
         --proxy-client-key-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-client-key.pem \
         --service-cluster-ip-range=10.254.0.0/16 \
         --service-node-port-range="1-65535" \
-        --logtostderr=true \
         --v=2
 
         Restart=on-failure
@@ -256,7 +255,6 @@ systemd:
         --root-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --service-account-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/sa.key \
         --kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
-        --logtostderr=true \
         --v=2
 
         Restart=on-failure
@@ -296,7 +294,6 @@ systemd:
         --requestheader-group-headers=X-Remote-Group \
         --requestheader-username-headers=X-Remote-User \
         --authorization-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig \
-        --logtostderr=true \
         --v=2
 
         Restart=on-failure
@@ -371,7 +368,6 @@ systemd:
         --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
         --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
         --hostname-override=coreos1 \
-        --logtostderr=true \
         --v=2
 
         ExecStopPost=-/usr/bin/env umount /var/lib/kubelet

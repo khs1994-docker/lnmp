@@ -50,7 +50,6 @@ ExecStart=/opt/k8s/bin/kube-controller-manager \
 --root-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
 --service-account-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/sa.key \
 --kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
---logtostderr=true \
 --cluster-cidr=10.244.0.0/16,fc00::/48 \
 --allocate-node-cidrs=true \
 --feature-gates="IPv6DualStack=true" \
