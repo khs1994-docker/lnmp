@@ -46,7 +46,7 @@ jobs:
       # next version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.26.0-alpha.3
+         CI_KUBERNETES_VERSION: 1.26.0-rc.0
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
 
@@ -538,9 +538,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.26.0-alpha.2-config
+         BASE_BRANCH=v1.26.0-alpha.3-config
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.26.0-alpha.3' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.26.0-rc.0' ];then
            exit 0
          fi
 
