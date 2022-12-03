@@ -22,8 +22,8 @@ RUN set -x \
                                   pcre2-dev \
                                   patch \
   \
-  && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/713.diff -O \
-  && patch -p1 < 713.diff \
+  # && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/713.diff -O \
+  # && patch -p1 < 713.diff \
   \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
