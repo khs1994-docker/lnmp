@@ -14,5 +14,5 @@
 
 ### Updates:
 
-* [PHP `8.1.8` `8.0.22` `7.4.31`](https://www.php.net/ChangeLog-8.php#8.1.8)
+* [PHP `8.1.8` `8.0.22` `7.4.32`](https://www.php.net/ChangeLog-8.php#8.1.8)
 * [Composer `2.5.1`](https://github.com/composer/composer/releases/tag/2.5.1)

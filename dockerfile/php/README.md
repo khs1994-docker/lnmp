@@ -27,7 +27,7 @@
 
 * [`8.0.22-fpm-alpine` (8.0/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.8/8.0/fpm/Dockerfile)
 
-* [`7.4.31-fpm-alpine` (7.4/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.8/7.4/fpm/Dockerfile)
+* [`7.4.32-fpm-alpine` (7.4/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.1.8/7.4/fpm/Dockerfile)
 
 * [`nightly-fpm-alpine` (nightly/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/master/nightly/fpm/Dockerfile)
 
@@ -164,7 +164,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 
 * https://sources.debian.org/src/php7.3/7.3.29-1~deb10u1/debian/control/
 
-* https://sources.debian.org/src/php7.4/7.4.31-1+deb11u1/debian/control/
+* https://sources.debian.org/src/php7.4/7.4.32-1+deb11u1/debian/control/
 
 * https://sources.debian.org/src/php8.1/8.1.8-1/debian/control/
 

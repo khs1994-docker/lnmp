@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:labs
 
-ARG PHP_VERSION=7.4.31
+ARG PHP_VERSION=7.4.32
 ARG USERNAME=khs1994
 ARG BASE=composer
 
@@ -27,8 +27,8 @@ ENV EXT_RUN_DEP \
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN --mount=type=bind,from=php:7.4.31-cli-alpine,source=/usr/src,target=/usr/local/src,rw \
-    --mount=type=bind,from=php:7.4.31-cli-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.4.32-cli-alpine,source=/usr/src,target=/usr/local/src,rw \
+    --mount=type=bind,from=php:7.4.32-cli-alpine,source=/usr/local/bin,target=/opt/bin,rw \
     set -x \
     && export PATH=$PATH:/opt/bin \
     && mkdir -p /usr/src \
