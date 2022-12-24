@@ -38,7 +38,6 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --default-unreachable-toleration-seconds=360 \
 --max-mutating-requests-inflight=2000 \
 --max-requests-inflight=4000 \
---default-watch-cache-size=200 \
 --delete-collection-workers=2 \
 --encryption-provider-config=${K8S_ROOT}/etc/kubernetes/encryption-config.yaml \
 --etcd-cafile=${K8S_ROOT}/etc/kubernetes/pki/etcd-ca.pem \
