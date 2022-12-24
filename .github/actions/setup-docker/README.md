@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
+      timeout-minutes: 12
     - run: |
         set -x
 

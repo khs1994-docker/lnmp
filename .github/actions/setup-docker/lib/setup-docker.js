@@ -287,7 +287,7 @@ system_profiler SPHardwareDataType || true
 
     core.debug('add apt-key');
     await shell(`
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor | sudo cat >/usr/share/keyrings/docker-archive-keyring.gpg
     `);
 
     message = 'add apt source';
@@ -332,6 +332,14 @@ system_profiler SPHardwareDataType || true
 
       core.warning(`Docker ${DOCKER_VERSION} not available on ubuntu ${OS}, will install latest docker version`);
     }
+
+    core.startGroup('remove default moby');
+    await exec.exec('sudo', [
+      'sh',
+      '-c',
+      "apt remove -y moby-buildx moby-cli moby-compose moby-containerd moby-engine moby-runc"
+    ]).catch(() => { });
+    core.endGroup();
 
     message = 'install docker'
     core.debug(message);
