@@ -202,7 +202,7 @@ $ ./lnmp-docker down
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:3.0.0`            | **3.0.0**           |`alpine:3.16`    |
 |[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.21.3-alpine`           | **1.21.3**          |`alpine:3.13`    |
-|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.1.8-unit-alpine`| **1.27.0**          |`alpine:3.16`    |
+|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.1.8-unit-alpine`| **1.28.0**          |`alpine:3.16`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.53-alpine`           | **2.4.53**          |`alpine:3.16`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.30`                  | **8.0.30**          |`oraclelinux:8-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.8.3`                | **10.8.3**          |`ubuntu:jammy`  |
