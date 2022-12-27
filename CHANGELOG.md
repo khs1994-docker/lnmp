@@ -4,13 +4,11 @@
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/v20.10.20...20.10
+* https://github.com/khs1994-docker/lnmp/compare/v20.10.20...v20.10.21
 
 ### Bug fixes:
 
 ### Changes:
-
-* Composer Docker image based cli
 
 ### Updates:
 
