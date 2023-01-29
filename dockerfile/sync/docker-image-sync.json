@@ -60,8 +60,8 @@
     "dest": "library-mirror/python:alpine"
   },
   {
-    "source": "library/python:3.9.5-alpine",
-    "dest": "library-mirror/python:3.9.5-alpine"
+    "source": "library/python:3.11.1-alpine",
+    "dest": "library-mirror/python:3.11.1-alpine"
   },
   {
     "source": "library/mysql:latest",
