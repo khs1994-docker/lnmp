@@ -3,6 +3,7 @@
 !etcd
 !httpd
 !minio
+!minio-old
 !mariadb
 !pcit
 !kong

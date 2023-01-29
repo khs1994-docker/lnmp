@@ -212,8 +212,8 @@
     "dest": "library-mirror/phpmyadmin:5.2.0-fpm-alpine"
   },
   {
-    "source": "minio/minio:RELEASE.2022-08-13T21-54-44Z",
-    "dest": "minio:RELEASE.2022-08-13T21-54-44Z"
+    "source": "minio/minio:RELEASE.2022-10-24T18-35-07Z",
+    "dest": "minio:RELEASE.2022-10-24T18-35-07Z"
   },
   {
     "source": "dockerpracticesig/docker_practice:vuepress",

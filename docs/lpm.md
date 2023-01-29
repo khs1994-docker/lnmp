@@ -67,7 +67,7 @@ $ ./lpm.ps1 install example
 请以 **管理员权限** 打开 `powershell` 执行下面的命令(这里以 minio 为例)
 
 ```powershell
-$ .\windows\lnmp-windows-pm.ps1 install-service minio "C:/bin/minio","server","$HOME/minio" C:/logs/minio.log
+$ .\windows\lnmp-windows-pm.ps1 install-service minio "C:/bin/minio","server","$HOME/minio"，"--console-address",":9090","--address",":9080" C:/logs/minio.log
 ```
 
 **移除服务**
