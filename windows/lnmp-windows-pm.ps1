@@ -1083,6 +1083,15 @@ switch ($command) {
   }
 
   "install-service" {
+
+    if($PSVersionTable.PSVersion.Major -ne 5){
+      Write-Host "==> Please exec this command on powershell.exe" -ForegroundColor Red
+      cd $HOME/lnmp
+      powershell.exe
+
+      exit
+    }
+
     Import-Module $PSScriptRoot/sdk/service/service.psm1 -Force
 
     _mkdir C:/bin | out-null

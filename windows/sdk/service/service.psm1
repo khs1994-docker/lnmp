@@ -172,9 +172,12 @@ function RemoveService()
         Stop-Service $src
         sc.exe delete $src;
 
-        $wsrv = gwmi win32_service | ? Name -eq $ServiceName
+        # $wsrv = gwmi win32_service | ? Name -eq $ServiceName
+        $wsrc = (Get-CimInstance -ClassName Win32_Service -Filter "name='$src'" | select PathName).PathName
 
         # Remove the temp svc binary
+
+        Remove-Item $wsrc -Confirm
     }
 }
 
