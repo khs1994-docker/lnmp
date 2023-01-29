@@ -6,8 +6,8 @@ homepage: "https://code.visualstudio.com/"
 bug: "https://github.com/Microsoft/vscode/issues"
 github: "microsoft/vscode"
 releases: "https://github.com/Microsoft/vscode/releases"
-url: "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64}else{echo $env:lwpm_os})/stable"
-pre-url: "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64}else{echo $env:lwpm_os})/insider"
+url: "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64-user}else{echo $env:lwpm_os})/stable"
+pre-url: "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64-user}else{echo $env:lwpm_os})/insider"
 command: code
 download-filename: |
   VSCode-${VERSION}$(if($IsWindows){echo .exe}else{echo .zip})

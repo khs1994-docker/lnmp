@@ -6,7 +6,7 @@
   "github": "microsoft/vscode",
   "homepage": "https://code.visualstudio.com/",
   "name": "vsCode",
-  "pre-url": "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64}else{echo $env:lwpm_os})/insider",
+  "pre-url": "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64-user}else{echo $env:lwpm_os})/insider",
   "pre-version": "",
   "releases": "https://github.com/Microsoft/vscode/releases",
   "scripts": {
@@ -18,6 +18,6 @@
     "test": "if($_isWindows){\n  & \"$home\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code.cmd\" --version\n}else{\n  & \"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code\" --version | Out-Host\n}\n",
     "version": "$(code --version).split(' ')[0]"
   },
-  "url": "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64}else{echo $env:lwpm_os})/stable",
+  "url": "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64-user}else{echo $env:lwpm_os})/stable",
   "version": ""
 }
