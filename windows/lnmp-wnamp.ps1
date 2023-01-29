@@ -2,8 +2,6 @@
 
 ################################################################################
 
-$LNMP_WSL_CMD = wsl -d ${DistributionName} -- wslpath "'$PSScriptRoot\..\wsl\lnmp-wsl'";
-
 Function print_help_info() {
   Write-Host "
 Usage:
@@ -37,14 +35,17 @@ Function _stop($soft) {
     "nginx" {
       printInfo "Stop nginx..." Red
       start-process "nginx" -ArgumentList "-s", "stop", "-p", "${NGINX_PATH}" -Verb RunAs
+      Stop-Process -Name nginx
       Write-Host "
       "
     }
 
     "php" {
       printInfo "Stop php-cgi..." Red
-      taskkill /F /IM php-cgi-spawner.exe
-      taskkill /F /IM php-cgi.exe
+      # taskkill /F /IM php-cgi-spawner.exe
+      # taskkill /F /IM php-cgi.exe
+      Stop-Process -Name php-cgi-spawner
+      Stop-Process -Name php-cgi
       Write-Host "
        "
     }
@@ -64,12 +65,14 @@ Function _stop($soft) {
     }
 
     Default {
+      $LNMP_WSL_CMD = wsl -d ${DistributionName} -- wslpath "'$PSScriptRoot\..\wsl\lnmp-wsl'";
       wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop $soft
     }
   }
 }
 
 Function _stop_wsl($soft) {
+  $LNMP_WSL_CMD = wsl -d ${DistributionName} -- wslpath "'$PSScriptRoot\..\wsl\lnmp-wsl'";
   switch ($soft) {
     "wsl-php" {
       wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop php
@@ -142,12 +145,14 @@ Function _start($soft) {
     }
 
     Default {
+      $LNMP_WSL_CMD = wsl -d ${DistributionName} -- wslpath "'$PSScriptRoot\..\wsl\lnmp-wsl'";
       wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start $soft
     }
   }
 }
 
 Function _start_wsl($soft) {
+  $LNMP_WSL_CMD = wsl -d ${DistributionName} -- wslpath "'$PSScriptRoot\..\wsl\lnmp-wsl'";
   switch ($soft) {
     "wsl-php" {
       wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start php
