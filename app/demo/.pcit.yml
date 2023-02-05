@@ -16,7 +16,7 @@ steps:
   # install dep
   install:
     # image: composer:${COMPOSER_VERSION}
-    image: khs1994/php:8.1.8-composer-alpine
+    image: khs1994/php:8.1.9-composer-alpine
     shell: bash
     run:
       - pwd
@@ -80,7 +80,7 @@ steps:
       event: tag
 
   after_success:
-    image: khs1994/php:8.1.8-composer-alpine
+    image: khs1994/php:8.1.9-composer-alpine
     shell: bash
     if:
       status: success
@@ -129,8 +129,8 @@ jobs:
   COMPOSER_VERSION:
     - 2.5.1
   PHP_VERSION:
-    - 8.1.8
-    - 8.0.22
+    - 8.1.9
+    - 8.0.23
     - 7.4.32
     # - 7.3.33
     # - 7.2.34

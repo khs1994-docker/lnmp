@@ -16,7 +16,7 @@ jobs:
   test:
     strategy:
       matrix:
-        php_version: ["7.4.32","8.0.22","8.1.8"]
+        php_version: ["7.4.32","8.0.23","8.1.9"]
     runs-on: ubuntu-latest
     # needs: job
     steps:

@@ -26,5 +26,5 @@
     "uninstall": "if($isPre -eq 1){_cleanup \"C:\\php-pre\"}else{_cleanup \"C:\\php\"}\n",
     "version": "(php -v).split(\" \")[1]"
   },
-  "version": "8.1.8"
+  "version": "8.1.9"
 }
