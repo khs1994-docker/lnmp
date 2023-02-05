@@ -15,7 +15,7 @@
     "get-version-function": "Function Get-Version($url){\ntry{\nInvoke-WebRequest `\n  -MaximumRedirection 0 `\n  -Method Head `\n  -uri $url\n}catch{\n  $location = $_.Exception.Response.Headers.Location\n  $url=$location.AbsoluteUri\n  $version=$location.Segments[3].split('-')[2].trim('.exe')\n}\nreturn $version,$url\n}\n",
     "install": "if($IsWindows){\nStart-Process -FilePath $filename -wait\n\nreturn\n}\n\nunzip $filename -d /Applications/\n",
     "platform-reqs": "if($IsLinux){\nprintInfo Please download from \"[ https://code.visualstudio.com/#alt-downloads ]\"\necho $False\n}\n",
-    "test": "if($_isWindows){\n  & \"$home\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code.cmd\" --version\n}else{\n  & \"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code\" --version | Out-Host\n}\n",
+    "test": "if($_isWindows){\n  & \"C:\\Program Files\\Microsoft VS Code\\bin\\code.cmd\" --version\n  & \"C:\\Program Files\\Microsoft VS Code Insiders\\bin\\code-insiders.cmd\" --version\n}else{\n  & \"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code\" --version | Out-Host\n}\n",
     "version": "$(code --version).split(' ')[0]"
   },
   "url": "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64}else{echo $env:lwpm_os})/stable",

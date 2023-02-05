@@ -15,8 +15,8 @@
       "_unzip $filename C:\\bin"
     ],
     "test": [
-      "minio --version",
-      "mc --version"
+      "(minio --version)[0].split(' ')[2]",
+      "(mc --version)[0].split(' ')[2]"
     ],
     "uninstall": "_cleanup C:\\bin\\minio.exe C:\\bin\\mc.exe",
     "version": "(minio --version)[0].split(' ')[2]"

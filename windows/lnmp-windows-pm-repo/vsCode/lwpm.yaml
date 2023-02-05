@@ -14,7 +14,8 @@ download-filename: |
 scripts:
   test: |
     if($_isWindows){
-      & "$home\AppData\Local\Programs\Microsoft VS Code\bin\code.cmd" --version
+      & "C:\Program Files\Microsoft VS Code\bin\code.cmd" --version
+      & "C:\Program Files\Microsoft VS Code Insiders\bin\code-insiders.cmd" --version
     }else{
       & "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" --version | Out-Host
     }
