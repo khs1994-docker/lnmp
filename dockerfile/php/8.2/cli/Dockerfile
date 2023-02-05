@@ -1,16 +1,16 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=8.2.0beta3
+ARG PHP_VERSION=8.2.0
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
 
-FROM --platform=$TARGETPLATFORM alpine:3.16
+FROM --platform=$TARGETPLATFORM alpine:3.17
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=8.2.0beta3
+ARG PHP_VERSION=8.2.0
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 

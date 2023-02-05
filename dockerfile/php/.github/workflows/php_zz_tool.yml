@@ -60,6 +60,33 @@ jobs:
       name: 'install-after-manifest'
     - run: |
         echo
+        cp .env.example .env
+
+        if [ -n "${PHP_CUSTOM_VERSION}" ];then
+          export PHP_TAG_VERSION=$PHP_CUSTOM_VERSION
+        fi
+
+        echo $GITHUB_REF | grep -q 'refs/tags/' && IS_TAG_EVENT=1 || true
+
+        if ! [ -n "${IS_TAG_EVENT}" -o "${GITHUB_EVENT_NAME}" = 'workflow_dispatch' ];then \
+          export PLATFORM=linux/amd64; \
+          if [ "$PHP_VERSION" = 8_X_X -o "$PHP_VERSION" = nightly ];then \
+            export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
+            IS_PUSH=--push; \
+            mirror="${add_mirror}"; \
+          else \
+            IS_PUSH=--push; \
+            DOCKER_HUB_USERNAME=$DOCKER_HUB_USERNAME_TEST; \
+          fi; \
+        else \
+          IS_PUSH=--push \
+          && mirror="${add_mirror}"; \
+        fi
+
+        VCS_REF=`git rev-parse --short HEAD`
+        CACHE_IMAGE=ghcr.io/${DOCKER_HUB_USERNAME}/php
+        # CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
+
             echo "::group::Build php-cs-fixer"
             docker buildx build \
               -t $DOCKER_HUB_USERNAME/php:php-cs-fixer \
