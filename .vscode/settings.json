@@ -65,10 +65,27 @@
     "*.conflist": "json",
     "**/systemd/**/**.conf": "systemd-conf"
   },
-  "terminal.integrated.shell.windows": "pwsh.exe",
   "typescript.tsc.autoDetect": "off",
   "grunt.autoDetect": "off",
   "jake.autoDetect": "off",
   "gulp.autoDetect": "off",
-  "npm.autoDetect": "off"
+  "npm.autoDetect": "off",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "Command Prompt": {
+      "path": [
+        "${env:windir}\\Sysnative\\cmd.exe",
+        "${env:windir}\\System32\\cmd.exe"
+      ],
+      "args": [],
+      "icon": "terminal-cmd"
+    },
+    "Git Bash": {
+      "source": "Git Bash"
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "PowerShell"
 }
