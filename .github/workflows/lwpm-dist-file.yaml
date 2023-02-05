@@ -51,7 +51,7 @@ jobs:
         if: matrix.os == 'windows' &&
             contains( github.event.head_commit.message, '[k8s]')
         env:
-          VERSION: 1.25.0
+          VERSION: 1.26.0
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 dist crictl@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push crictl@${env:VERSION}
