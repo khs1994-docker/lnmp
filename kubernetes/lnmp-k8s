@@ -355,7 +355,7 @@ fi
 
 _etcd_install(){
   local url_official="https://github.com/etcd-io/etcd/releases/download"
-  local url="https://mirrors.huaweicloud.com/etcd"
+  local url="https://repo.huaweicloud.com/etcd"
   local TAR_FILE="etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
 
   if [ -f ${K8S_ROOT}/bin/etcd -a ! "$1" = "--dry-run" ];then
@@ -396,7 +396,7 @@ _helm_install(){
   fi
 
   local url_official="https://get.helm.sh"
-  local url="https://mirrors.huaweicloud.com/helm/v${HELM_VERSION}"
+  local url="https://repo.huaweicloud.com/helm/v${HELM_VERSION}"
   local TAR_FILE="helm-v${HELM_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
     _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official

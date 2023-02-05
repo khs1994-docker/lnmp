@@ -6,7 +6,7 @@ homepage: "https://nginx.org"
 bug: "http://nginx.org/en/support.html"
 github: "nginx/nginx"
 releases: "https://nginx.org/en/download.html"
-url-mirror: "https://mirrors.huaweicloud.com/nginx/nginx-${VERSION}.zip"
+url-mirror: "https://repo.huaweicloud.com/nginx/nginx-${VERSION}.zip"
 url: "https://nginx.org/download/nginx-${VERSION}.zip"
 path:
   - C:\nginx

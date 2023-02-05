@@ -8,7 +8,7 @@
   "github": "etcd-io/etcd",
   "releases": "https://github.com/etcd-io/etcd/releases",
   "url": "https://github.com/etcd-io/etcd/releases/download/v${VERSION}/etcd-v${VERSION}-windows-amd64.zip",
-  "url-mirror": "https://mirrors.huaweicloud.com/etcd/v${VERSION}/etcd-v${VERSION}-windows-amd64.zip",
+  "url-mirror": "https://repo.huaweicloud.com/etcd/v${VERSION}/etcd-v${VERSION}-windows-amd64.zip",
   "command": "etcd",
   "scripts": {
     "install": [
@@ -22,7 +22,7 @@
     "test": "printInfo $(etcd --version)[0] install success",
     "version": "(etcd --version).split(' ')[2]",
     "hash": [
-      "invoke-webrequest https://mirrors.huaweicloud.com/etcd/v${VERSION}/SHA256SUMS -outFile Temp:/etcd-sha256",
+      "invoke-webrequest https://repo.huaweicloud.com/etcd/v${VERSION}/SHA256SUMS -outFile Temp:/etcd-sha256",
       "$hash=(get-content Temp:/etcd-sha256 | select-string $filename).Line.split(' ')[0]",
       "if($hash -and ((Get-SHA256 $filename) -ne $hash)){printError \"$filename sha256 check failed \"}"
     ]

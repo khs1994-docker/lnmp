@@ -8,7 +8,7 @@
   "github": "helm/helm",
   "releases": "https://github.com/helm/helm/releases",
   "url": "https://get.helm.sh/helm-v${VERSION}-windows-amd64.zip",
-  "url-mirror": "https://mirrors.huaweicloud.com/helm/v${VERSION}/helm-v${VERSION}-windows-amd64.zip",
+  "url-mirror": "https://repo.huaweicloud.com/helm/v${VERSION}/helm-v${VERSION}-windows-amd64.zip",
   "command": "helm",
   "scripts": {
     "version": "(ConvertFrom-Json -InputObject (helm version).trim('version.BuildInfo')).Version.trim('v')",

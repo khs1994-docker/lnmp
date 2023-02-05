@@ -22,6 +22,6 @@
     "version": "nginx -v > $env:TEMP/.nginx.version 2>&1\n$(Get-Content $env:TEMP/.nginx.version).split(' ')[2].split('/')[1]\n"
   },
   "url": "https://nginx.org/download/nginx-${VERSION}.zip",
-  "url-mirror": "https://mirrors.huaweicloud.com/nginx/nginx-${VERSION}.zip",
+  "url-mirror": "https://repo.huaweicloud.com/nginx/nginx-${VERSION}.zip",
   "version": "1.20.0"
 }
