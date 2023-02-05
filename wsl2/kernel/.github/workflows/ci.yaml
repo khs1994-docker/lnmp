@@ -112,7 +112,7 @@ jobs:
 
         kernelversion=$(make -s kernelversion)-microsoft-standard-WSL2
         kernelversion=`ls linux/lib/modules`
-        echo ::set-output name=kernelversion::`echo $kernelversion`
+        echo kernelversion=`echo $kernelversion` >> $GITHUB_OUTPUT
     - name: Dist
       env:
         kernelversion: ${{ steps.build.outputs.kernelversion }}
@@ -206,7 +206,7 @@ jobs:
         DEB_NAME=linux-headers-${kernelversion}_${DEB_VERSION}-1_amd64.deb
         sudo dpkg-deb -b linux-headers-${kernelversion} $DEB_NAME
 
-        echo ::set-output name=DEB_NAME::${DEB_NAME}
+        echo DEB_NAME=${DEB_NAME} >> $GITHUB_OUTPUT
     - uses: actions/upload-artifact@main
       name: Upload deb
       with:
