@@ -68,7 +68,7 @@ services:
     image: docker:20.10.17
 
   gogs:
-    image: gogs/gogs:0.12
+    image: gogs/gogs:0.13
 
   acme.sh:
     image: neilpang/acme.sh:3.0.0
