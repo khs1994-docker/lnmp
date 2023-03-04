@@ -65,16 +65,12 @@ $ ./ci
 CI_INCLUDE="gogs"
 ```
 
-编辑 `docker-compose.override.yml`，将以下内容取消注释。
+并按如下内容修改 `.env` 文件
 
-```yaml
-networks:
-  backend:
-    external: true
-    name: lnmp_backend
-  frontend:
-    external: true
-    name: lnmp_frontend
+```bash
+# CI_GIT_TYPE=gogs
+
+CI_GIT_TYPE=github
 ```
 
 > 启动之前必须先启动 khs1994-docker/lnmp

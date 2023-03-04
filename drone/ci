@@ -2,7 +2,7 @@
 
 print_help_info(){
   exec echo "
-CI-CLI 2.4.0
+CI-CLI 2.16.0
 
 Donate WebSite https://zan.khs1994.com
 
@@ -11,9 +11,6 @@ Usage: ./ci COMMAND options
 Debug: DEBUG=1 ./ci COMMAND options
 
 Options:
-
-  --open-port            开放 MySQL Redis 端口
-
   -d                     后台运行
 
   --use-external-nginx   使用外部 NGINX = 后边值为配置文件路径 (TLS Only)
@@ -21,10 +18,10 @@ Options:
   --config               生成 docker-compose.yml 文件
 
 Commands:
-  up           [-d]   [--open-port]
+  up           [-d]
   down
 
-  up-tls       [-d]   [--open-port]  [--use-external-nginx=/etc/nginx/conf.d]
+  up-tls       [-d] [--use-external-nginx=/etc/nginx/conf.d]
 
   swarm-deploy [TODO]
   swarm-remove [TODO]
@@ -49,10 +46,11 @@ _cp(){
 _init(){
   _cp .env.example .env
   _cp config/gitea/app.kubernetes.example.ini config/gitea/app.kubernetes.ini
-
+  set +e
   docker compose version > /dev/null 2>&1
 
   if [ $? -ne 0 ];then exec echo "Error: docker compose v2 not install" ; fi
+  set -e
 }
 
 _reset_(){
@@ -73,7 +71,7 @@ _sed_common(){
 
   if ! [ -f docker-ci.override.yml ];then
     sed -e "s#{{ DB_TYPE }}#${CI_DB_TYPE:-mysql}#g" \
-      docker-ci.override.demo.yml \
+      git-compose/${CI_GIT_TYPE:-gogs}-compose.yaml \
       > docker-ci.override.yml
   fi
 
@@ -276,7 +274,6 @@ CI_COMPOSE_OPT=
 
 for arg in "$@"
 do
-  test $arg = '--open-port' && COMPOSE_FILE+=' -f docker-ci.port.yml' || true
   test $arg = '-d' && CI_COMPOSE_OPT='-d' || true
   test $arg = '--config' && CI_COMPOSE_CONFIG_ONLY=1 || true
   [[ $arg =~ --use-external-nginx=* ]] && \
