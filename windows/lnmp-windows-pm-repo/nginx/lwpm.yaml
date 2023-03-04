@@ -1,6 +1,6 @@
 name: "nginx"
 description: "small, powerful, scalable web/proxy server"
-version: "1.20.0"
+version: "1.22.1"
 pre-version: "1.23.3"
 homepage: "https://nginx.org"
 bug: "http://nginx.org/en/support.html"

@@ -23,5 +23,5 @@
   },
   "url": "https://nginx.org/download/nginx-${VERSION}.zip",
   "url-mirror": "https://repo.huaweicloud.com/nginx/nginx-${VERSION}.zip",
-  "version": "1.20.0"
+  "version": "1.22.1"
 }
