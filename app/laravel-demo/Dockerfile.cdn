@@ -16,7 +16,7 @@
 # $ docker buildx build --target=laravel --load -t khs1994/laravel:7 -f Dockerfile.cdn --build-arg NODE_REGISTRY=https://registry.npmmirror.com --build-arg CI=false .
 
 ARG PHP_VERSION=8.1.9
-ARG NGINX_VERSION=1.21.3-alpine
+ARG NGINX_VERSION=1.23.3-alpine
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建，并上传到 CDN
