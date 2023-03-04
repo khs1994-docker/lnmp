@@ -7,9 +7,6 @@ set -e
 tty=
 tty -s > /dev/null 2>&1 && tty=--tty || true
 
-readonly KUBERNETES_VERSION="1.21.3"
-readonly KUBERNETES_COREDNS_VERSION="1.8.0"
-readonly KUBERNETES_PAUSE_VERSION="3.4.1"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -180,7 +177,6 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  gcr.io               Up local k8s.gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | down | ]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -232,112 +228,6 @@ _tongji(){
 }
 
 test -f cluster/help.sh && source cluster/help.sh || true
-
-# docker for mac local k8s.gcr.io server
-_gcr_io_down(){
-  docker container rm -f $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > /dev/null 2>&1 || true
-}
-
-_test_gcr_image(){
-  result=$(docker image ls -q k8s.gcr.io/$1)
-
-  if [ -n "$result" ];then
-    return 0
-  fi
-
-  return 1
-}
-
-_get_gcr_image(){
-  if [ "$1" = "coredns/coredns:v${KUBERNETES_COREDNS_VERSION}" ];then
-    local IMAGE_AND_VERSION="coredns:v${KUBERNETES_COREDNS_VERSION}"
-    docker pull $2/$IMAGE_AND_VERSION
-    docker tag $2/$IMAGE_AND_VERSION k8s.gcr.io/coredns/$IMAGE_AND_VERSION
-    docker rmi $2/$IMAGE_AND_VERSION
-  else
-    docker pull $2/$1
-    docker tag  $2/$1 k8s.gcr.io/$1
-    # docker push k8s.gcr.io/$image
-    docker rmi $2/$1
-  fi
-}
-
-_gcr_io(){
-  if [ "$1" = down ];then
-    _gcr_io_down
-    print_info "Stop k8s.gcr.io local server success"
-    exit
-  fi
-
-  if [ "$1" = logs ];then
-    exec docker container logs $(docker container ls -f label=com.khs1994.lnmp.gcr.io -q) -f
-  fi
-
-  _gcr_io_down
-
-  print_info "This local server support Docker Desktop with Kubernetes v${KUBERNETES_VERSION}"
-
-  mkdir -p $HOME/.khs1994-docker-lnmp/registry
-
-  docker run -i ${tty} -d \
-      -p 443:443 \
-      -p 80:80 \
-      --mount type=bind,src=$PWD/config/registry/config.gcr.io.yml,target=/etc/docker/registry/config.yml \
-      --mount type=bind,src=$PWD/config/registry,target=/etc/docker/registry/ssl \
-      --mount type=bind,src=$HOME/.khs1994-docker-lnmp/registry,target=/var/lib/registry \
-      --label com.khs1994.lnmp.gcr.io \
-      registry || quit=1
-
-      # -v $PWD/config/registry/nginx.htpasswd:/etc/docker/registry/auth/nginx.htpasswd \
-
-      if [ "$quit" = 1 ];then
-        print_error "Please stop soft who bind 443 port first"
-        exit 1
-      fi
-
-    if [ "$1" = '--no-pull' ];then
-      print_info "Up k8s.gcr.io Server Success"
-      return
-    fi
-
-    images="kube-controller-manager:v${KUBERNETES_VERSION} \
-    kube-apiserver:v${KUBERNETES_VERSION} \
-    kube-scheduler:v${KUBERNETES_VERSION} \
-    kube-proxy:v${KUBERNETES_VERSION} \
-    etcd:3.4.13-0 \
-    coredns/coredns:v${KUBERNETES_COREDNS_VERSION} \
-    pause:${KUBERNETES_PAUSE_VERSION}"
-
-    sleep 5
-
-    set +e
-
-    for image in $images
-    do
-       print_info "Handle ${image} ..."
-       _test_gcr_image $image
-       if [ $? = 0 ];then
-         print_info "k8s.gcr.io/${image} exists"
-
-         continue
-       fi
-
-       _get_gcr_image $image k8s.gcr.io/google_containers
-
-       # 一些镜像 aliyun 可能不存在，从第二个镜像下载
-
-       _test_gcr_image $image
-       if [ $? = 0 ];then
-         continue
-       fi
-
-       print_error "Download from mirror error, try other mirror"
-
-       _get_gcr_image $image ccr.ccs.tencentyun.com/gcr-mirror
-    done
-
-    _gcr_io_down
-}
 
 # composer satis
 _satis(){
@@ -1113,19 +1003,6 @@ main() {
 
   bug )
   _lnmp_bug
-  ;;
-
-  gcr.io )
-   print_info "Check k8s.gcr.io host "
-   cat /etc/hosts | grep -q 'k8s.gcr.io' || \
-       (print_info "Append hosts, please input password " ; echo '127.0.0.1 k8s.gcr.io' | $(_sudo) tee -a /etc/hosts )
-
-   if ! [ "$OS" = 'Darwin' ];then
-     $(_sudo) mkdir -p /etc/docker/certs.d/k8s.gcr.io
-     $(_sudo) bash -c "cat config/registry/ca.crt > /etc/docker/certs.d/k8s.gcr.io/ca.crt"
-   fi
-
-   _gcr_io "$@"
   ;;
 
   swarm-config )

@@ -133,10 +133,6 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # $ErrorActionPreference="SilentlyContinue"
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
-# $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.21.3"
-$KUBERNETES_COREDNS_VERSION = "1.8.0"
-$KUBERNETES_PAUSE_VERSION = "3.4.1"
 $EXEC_CMD_DIR = $PWD
 
 Function Test-Command($command) {
