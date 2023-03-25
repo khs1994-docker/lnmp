@@ -4,6 +4,10 @@
 
 * Kubernetes `1.22.0`
 
+## v1.27.0
+
+* kubelet[6992]: E0325 01:13:41.783571    6992 run.go:74] "command failed" err="failed to parse kubelet flag: unknown flag: --container-runtime"
+
 ## v1.24.0
 
 * 不支持 `Docker` Docker runtime support using dockshim in the kubelet is now completely removed in 1.24.
