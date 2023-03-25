@@ -56,7 +56,7 @@ export TZ=Asia/Shanghai
 # export CC=clang CXX=clang
 # export CC=gcc CXX=g++
 
-export PHP_LATEST_VERSION=8.1.10
+export PHP_LATEST_VERSION=8.2.2
 ################################################################################
 
 #

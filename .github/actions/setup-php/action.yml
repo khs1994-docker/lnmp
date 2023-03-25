@@ -6,7 +6,7 @@ author: 'khs1994'
 inputs:
   php_version:
     description: PHP version
-    default: "8.1.10"
+    default: "8.2.2"
     required: false
   php_type:
     description: php image type, fpm | composer | swoole | php-cs-fixer | doctum

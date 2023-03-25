@@ -2,13 +2,13 @@ FROM debian:buster-slim
 
 ################################################################################
 
-ARG PHP_VERSION=8.1.10
+ARG PHP_VERSION=8.2.2
 
-ARG PHP_NUM=74
+ARG PHP_NUM=82
 
-ARG PHP_PREFIX=/usr/local/php73
+ARG PHP_PREFIX=/usr/local/php82
 
-ARG PHP_INI_DIR=/usr/local/etc/php73
+ARG PHP_INI_DIR=/usr/local/etc/php82
 
 ARG COMPOSER_VERSION=2.5.5
 

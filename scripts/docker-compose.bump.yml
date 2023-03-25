@@ -14,7 +14,7 @@ services:
     image: memcached:1.6.15-alpine
 
   php:
-    image: php:8.1.10-fpm-alpine
+    image: php:8.2.2-fpm-alpine
 
   composer:
     image: composer:2.5.5
