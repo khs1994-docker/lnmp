@@ -65,10 +65,6 @@ jobs:
         login-server: pcit-docker.pkg.coding.net
         username: khs1994-1601432822176
         password: ${{secrets.CODING_DOCKER_PASSWORD}}
-    - name: Update docker compose
-      run: |
-        docker-compose --version
-        ./lnmp-docker compose --official || true
     - name: Stop MySQL
       run: sudo systemctl stop mysql
       if: |
@@ -86,9 +82,9 @@ jobs:
     - name: Up
       run: |
         ./lnmp-docker config > docker-compose.yml
-        docker-compose config -q
+        docker compose config -q
 
-        docker-compose up -d $(./lnmp-docker services)
+        docker compose up -d $(./lnmp-docker services)
         sleep 20
         docker ps -a
         curl -fsSL 127.0.0.1

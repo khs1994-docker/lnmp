@@ -1,8 +1,8 @@
-version: "3.9"
+
 
 services:
   k8s_apiserver:
-    image: k8s.gcr.io/kube-apiserver:v1.24.0
+    image: k8s.gcr.io/kube-apiserver:v1.26.0
 
   etcd:
     image: quay.io/coreos/etcd:v3.5.4
@@ -18,7 +18,7 @@ services:
     # https://github.com/kubernetes/kubernetes/tree/master/build/pause
 
   calico:
-    image: calico/cni:v3.23.3
+    image: calico/cni:v3.24.0
 
   ingress_nginx:
     image: registry.k8s.io/ingress-nginx/controller:v1.3.0

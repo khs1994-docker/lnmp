@@ -1,4 +1,6 @@
-ARG PHP_VERSION=7.4.29
+# syntax=docker/dockerfile:labs
+
+ARG PHP_VERSION=7.4.32
 ARG USERNAME=khs1994
 ARG BASE=composer
 
@@ -25,7 +27,12 @@ ENV EXT_RUN_DEP \
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN set -x \
+RUN --mount=type=bind,from=php:7.4.32-cli-alpine,source=/usr/src,target=/usr/local/src,rw \
+    --mount=type=bind,from=php:7.4.32-cli-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+    set -x \
+    && export PATH=$PATH:/opt/bin \
+    && mkdir -p /usr/src \
+    && cp /usr/local/src/* /usr/src/ \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     # 安装构建依赖，构建之后可以删除
     && apk add --no-cache --virtual .pecl_build_deps $EXT_BUILD_DEP $PHPIZE_DEPS \
@@ -43,7 +50,8 @@ RUN set -x \
     && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
     # 验证
     && php -m \
-    && ls -la $(php-config --extension-dir)
+    && ls -la $(php-config --extension-dir) \
+    && rm -rf /usr/src/*
     # ！请自行编辑以下内容
     # 默认不启用的扩展可以将配置文件改为不以 .ini 结尾的文件名
     # && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \

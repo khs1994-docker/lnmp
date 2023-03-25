@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 20.10.16
+.VERSION 20.10.23
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -133,10 +133,6 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # $ErrorActionPreference="SilentlyContinue"
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
-# $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.21.3"
-$KUBERNETES_COREDNS_VERSION = "1.8.0"
-$KUBERNETES_PAUSE_VERSION = "3.4.1"
 $EXEC_CMD_DIR = $PWD
 
 Function Test-Command($command) {
@@ -336,7 +332,6 @@ Commands:
   pull                 Pull LNMP Docker Images
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
-  compose              Install docker-compose [PATH]
   composer             Exec composer command on Docker Container
   bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
@@ -635,11 +630,11 @@ function convert_args_to_string_if_use_wsl2() {
   foreach ($item in $args) {
     if ($item.getType().Name -eq 'Object[]' ) {
       foreach ($i in $item) {
-        $string += " $i "
+        $string += " $i"
       }
       continue
     }
-    $string += " $item "
+    $string += " $item"
   }
 
   return $string
@@ -670,19 +665,45 @@ else {
   cp $PSScriptRoot/.env.example.ps1 $PSScriptRoot/.env.ps1
 }
 
+function Get-Env($ENV_NAME, $ENV_FILE, $ENV_DEFAULT) {
+  $ENV_CONTENT = (cat $PSScriptRoot/${ENV_FILE} | select-string ^$ENV_NAME=)
+  if ($ENV_CONTENT) {
+    if ($ENV_CONTENT.Line.GetType().FullName -eq 'System.String') {
+      return $ENV_CONTENT.Line.split('=')[-1]
+    }
+    else {
+      return $ENV_CONTENT.Line[-1].split('=')[-1]
+    }
+  }
+
+  return $ENV_DEFAULT
+}
+
 # APP_ROOT
-$APP_ROOT_CONTENT = (cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^APP_ROOT=)
-if ($APP_ROOT_CONTENT) {
-  $APP_ROOT = $APP_ROOT_CONTENT.Line.split('=')[-1]
-}
-else {
-  $APP_ROOT = './app'
-}
+$APP_ROOT = Get-Env 'APP_ROOT' $LNMP_ENV_FILE './app'
 
 $env:USE_WSL2_DOCKER_COMPOSE = '0'
 $env:USE_WSL2_BUT_DOCKER_NOT_RUNNING = '0'
 
 # 判断项目是否存储在 WSL2
+
+function docker-compose() {
+  foreach ($item in $args) {
+    if (!($item)) { continue }
+    if ($item.getType().Name -eq 'Object[]' ) {
+      foreach ($i in $item) {
+        $string += " $i"
+      }
+      continue
+    }
+    $string += " $item"
+  }
+
+  printInfo "Load compose file: $env:COMPOSE_FILE"
+  printInfo "Exec:              $ docker compose $string"
+
+  Invoke-Expression "docker compose $string"
+}
 
 if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
   $env:USE_WSL2_DOCKER_COMPOSE = '1'
@@ -693,18 +714,16 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
 
   function docker-compose() {
     #@debug
-    printInfo "Exec docker-compose command in WSL2 [ ${WSL2_DIST} ]"
+    printInfo "Exec docker compose command in WSL2 [ ${WSL2_DIST} ]"
 
-    $COMPOSE_BIN = "/mnt/wsl/docker-desktop/cli-tools/usr/bin/docker-compose"
-
-    echo $args
+    $COMPOSE_BIN = "/mnt/wsl/docker-desktop/cli-tools/usr/bin/docker"
 
     $cmd = convert_args_to_string_if_use_wsl2 $args
 
     wsl -d $WSL2_DIST -- sh -c "command -v $COMPOSE_BIN > /dev/null || exit 1"
 
     if ($?) {
-      wsl -d $WSL2_DIST -- sh -xc "$COMPOSE_BIN $cmd"
+      wsl -d $WSL2_DIST -- sh -xc "$COMPOSE_BIN compose $cmd"
     }
     else {
       printWarning "Docker Desktop not running"
@@ -719,13 +738,8 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and !($WSL2_DIST)) {
 }
 
 # APP_ENV
-$APP_ENV_CONTENT = (cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^APP_ENV=)
-if ($APP_ENV_CONTENT) {
-  $APP_ENV = $APP_ENV_CONTENT.Line.split('=')[-1]
-}
-else {
-  $APP_ENV = 'development'
-}
+
+$APP_ENV = Get-Env -ENV_NAME 'APP_ENV' -ENV_FILE $LNMP_ENV_FILE -ENV_DEFAULT 'development'
 
 # cd LNMP_ROOT
 if (!(Test-Path cli/khs1994-robot.enc )) {
@@ -808,9 +822,14 @@ New-InitFile
 New-LogFile
 Test-DockerVersion
 
-if (Test-Command docker-compose) {
-  printInfo $(docker-compose --version)
+docker compose version | out-null
+
+if (!($?)) {
+  printError "Docker Compose V2 not found, please install, see https://docs.docker.com/compose/install/compose-plugin/"
+  exit 1
 }
+
+printInfo $(docker compose version)
 
 if ($args.Count -eq 0) {
   help_information
@@ -847,13 +866,13 @@ switch -regex ($command) {
   }
 
   backup {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} exec mysql /backup/backup.sh $other
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} exec mysql /backup/backup.sh $other
     #@custom
     __lnmp_custom_backup $other
   }
 
   restore {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} exec mysql /backup/restore.sh $other
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} exec mysql /backup/restore.sh $other
     #@custom
     __lnmp_custom_restore $other
   }
@@ -873,7 +892,7 @@ switch -regex ($command) {
 
     Write-Host "Build this service image: $services" -ForegroundColor Green
     sleep 3
-    & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $service --parallel }
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $service
   }
 
   push {
@@ -891,7 +910,7 @@ switch -regex ($command) {
 
     Write-Host "Push this service image: $services" -ForegroundColor Green
     sleep 3
-    & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $service }
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $service
   }
 
   cleanup {
@@ -957,7 +976,7 @@ switch -regex ($command) {
     $options = Get-ComposeOptions "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
-    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services
 
     #@custom
     __lnmp_custom_post_pull
@@ -969,7 +988,7 @@ switch -regex ($command) {
     $options = Get-ComposeOptions "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
-    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} down --remove-orphans
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} down --remove-orphans
 
     #@custom
     __lnmp_custom_post_down
@@ -998,15 +1017,15 @@ switch -regex ($command) {
   }
 
   swarm-config {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml config
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml config
   }
 
   swarm-build {
-    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml build $other --parallel
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml build $other
   }
 
   swarm-push {
-    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml push $other
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml push $other
   }
 
   restart {
@@ -1015,7 +1034,7 @@ switch -regex ($command) {
     $options = Get-ComposeOptions "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
-    & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options restart $other }
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options restart $other
     #@custom
     __lnmp_custom_restart $other
   }
@@ -1049,19 +1068,19 @@ switch -regex ($command) {
       "cluster/docker-cluster.mysql.yml", `
       "cluster/docker-cluster.redis.yml"
 
-    & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up $other }
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up $other
   }
 
   clusterkit-mysql-up {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml up $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml up $other
   }
 
   clusterkit-mysql-down {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml down $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml down $other
   }
 
   clusterkit-mysql-config {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml config $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml config $other
   }
 
   clusterkit-mysql-exec {
@@ -1077,15 +1096,15 @@ switch -regex ($command) {
   }
 
   clusterkit-memcached-up {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml up $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml up $other
   }
 
   clusterkit-memcached-down {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml down $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml down $other
   }
 
   clusterkit-memcached-config {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml config $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml config $other
   }
 
   clusterkit-memcached-exec {
@@ -1101,15 +1120,15 @@ switch -regex ($command) {
   }
 
   clusterkit-redis-up {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml up $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml up $other
   }
 
   clusterkit-redis-down {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml down $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml down $other
   }
 
   clusterkit-redis-config {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml config $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml config $other
   }
 
   clusterkit-redis-exec {
@@ -1125,15 +1144,15 @@ switch -regex ($command) {
   }
 
   clusterkit-redis-replication-up {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml up $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml up $other
   }
 
   clusterkit-redis-replication-down {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml down $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml down $other
   }
 
   clusterkit-redis-replication-config {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml config $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml config $other
   }
 
   clusterkit-redis-replication-exec {
@@ -1149,15 +1168,15 @@ switch -regex ($command) {
   }
 
   clusterkit-redis-sentinel-up {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml up $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml up $other
   }
 
   clusterkit-redis-sentinel-down {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml down $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml down $other
   }
 
   clusterkit-redis-sentinel-config {
-    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml config $other
+    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml config $other
   }
 
   clusterkit-redis-sentinel-exec {
@@ -1192,7 +1211,7 @@ switch -regex ($command) {
     }
 
     $docker_version = $(docker --version)
-    $compose_version = $(docker-compose --version)
+    $compose_version = $(docker compose version)
     $git_commit = $(git log -1 --pretty=%H)
     Write-Output "<details>
 %0A
@@ -1386,7 +1405,7 @@ Example: ./lnmp-docker composer /app/demo install
   "^code-exec$" {
     cd $EXEC_CMD_DIR
 
-    docker-compose -f docker-workspace.yml exec $other
+    docker compose -f docker-workspace.yml exec $other
   }
 
   "mount" {
@@ -1495,11 +1514,67 @@ Example: ./lnmp-docker composer /app/demo install
     code --remote wsl+$WSL2_DIST $APP_ROOT
   }
 
+  outdated {
+    "[
+    {
+      `"SOFT_NAME`":`"nginx`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_NGINX_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_NGINX_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"MySQL`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_MYSQL_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_MYSQL_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"PHP`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_PHP_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_PHP_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"PHP82`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_PHP82_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_PHP82_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"PHP80`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_PHP80_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_PHP80_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"PHP74`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_PHP74_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_PHP74_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"Redis`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_REDIS_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_REDIS_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"Node.js`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_NODE_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_NODE_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"PHPMyAdmin`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_PHPMYADMIN_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_PHPMYADMIN_VERSION '.env.example' '')`"
+    },
+    {
+      `"SOFT_NAME`":`"Memcached`",
+      `"CURRENT_VERSION`":`"$(Get-Env LNMP_MEMCACHED_VERSION $LNMP_ENV_FILE '')`",
+      `"LATEST_VERSION`":`"$(Get-Env LNMP_MEMCACHED_VERSION '.env.example' '')`"
+    },
+   ]" | ConvertFrom-Json
+
+  }
+
   default {
     #@custom
     __lnmp_custom_command $args
     printInfo `
-      "maybe you input command is notdefined, I will try exec $ docker-compose CMD"
+      "maybe you input command is notdefined, I will try exec $ docker compose CMD"
     $options = Get-ComposeOptions "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 

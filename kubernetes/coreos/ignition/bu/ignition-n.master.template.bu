@@ -146,7 +146,6 @@ systemd:
         --default-unreachable-toleration-seconds=360 \
         --max-mutating-requests-inflight=2000 \
         --max-requests-inflight=4000 \
-        --default-watch-cache-size=200 \
         --delete-collection-workers=2 \
         --encryption-provider-config=${K8S_ROOT}/etc/kubernetes/encryption-config.yaml \
         --etcd-cafile=${K8S_ROOT}/etc/kubernetes/pki/etcd-ca.pem \
@@ -190,7 +189,6 @@ systemd:
         --proxy-client-key-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-client-key.pem \
         --service-cluster-ip-range=10.254.0.0/16 \
         --service-node-port-range="1-65535" \
-        --logtostderr=true \
         --v=2
 
         Restart=on-failure
@@ -252,12 +250,10 @@ systemd:
         --concurrent-gc-syncs=30 \
         --node-cidr-mask-size=24 \
         --service-cluster-ip-range=10.254.0.0/16 \
-        --pod-eviction-timeout=6m \
         --terminated-pod-gc-threshold=10000 \
         --root-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --service-account-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/sa.key \
         --kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
-        --logtostderr=true \
         --v=2
 
         Restart=on-failure
@@ -297,7 +293,6 @@ systemd:
         --requestheader-group-headers=X-Remote-Group \
         --requestheader-username-headers=X-Remote-User \
         --authorization-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig \
-        --logtostderr=true \
         --v=2
 
         Restart=on-failure
@@ -356,7 +351,6 @@ systemd:
         --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
         --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
         --hostname-override=coreos{{n}} \
-        --logtostderr=true \
         --v=2
 
         # cri is docker

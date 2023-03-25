@@ -188,6 +188,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
           linux-headers \
           oniguruma-dev \
           openssl-dev \
+          readline-dev \
           sqlite-dev \
           cyrus-sasl-dev \
           postgresql-dev \

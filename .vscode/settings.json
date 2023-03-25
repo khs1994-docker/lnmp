@@ -1,7 +1,7 @@
 {
   // https://www.schemastore.org/json/
   "yaml.schemas": {
-    "https://github.com/pcit-ce/pcit/raw/master/config/config.schema.json": [
+    "https://raw.fastgit.org/pcit-ce/pcit/master/config/config.schema.json": [
       ".pcit.yml",
       ".pcit.yaml",
       ".pcit/*.yml",
@@ -11,17 +11,14 @@
       "lwpm.yaml",
       "lwpm.yml"
     ],
-    "scripts/mutagen/mutagen.schema.json": [
-      "mutagen.yml",
-      "mutagen.example.yml"
-    ],
     "kubernetes/coreos/ignition/butane-fcos.schema.json": [
       "*.bu",
     ],
-    "https://raw.githubusercontent.com/coreos/ignition/main/config/v3_4_experimental/schema/ignition.json":[
+    // raw.githubusercontent.com
+    "https://raw.fastgit.org/coreos/ignition/main/config/v3_4_experimental/schema/ignition.json":[
       "*.ign"
     ],
-    "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json":[
+    "https://raw.fastgit.org/compose-spec/compose-spec/master/schema/compose-spec.json":[
        "docker-lnmp.yml",
        "docker-lnmp.*.yml",
        "docker-production.yml",
@@ -56,7 +53,6 @@
   },
   "editor.fontFamily": "JetBrains Mono, Consolas, 'Courier New', monospace",
   "editor.fontSize": 20,
-  "sync.gist": "76f5fad88768a18910fadf6f8bc35c6c",
   "editor.renderControlCharacters": true,
   "editor.renderWhitespace": "all",
   "files.eol": "\n",
@@ -67,12 +63,29 @@
     "*.ign": "json",
     "*.bu": "yaml",
     "*.conflist": "json",
-    "**/systemd/**/**.conf": "systemd-unit-file"
+    "**/systemd/**/**.conf": "systemd-conf"
   },
-  "terminal.integrated.shell.windows": "pwsh.exe",
   "typescript.tsc.autoDetect": "off",
   "grunt.autoDetect": "off",
   "jake.autoDetect": "off",
   "gulp.autoDetect": "off",
-  "npm.autoDetect": "off"
+  "npm.autoDetect": "off",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "Command Prompt": {
+      "path": [
+        "${env:windir}\\Sysnative\\cmd.exe",
+        "${env:windir}\\System32\\cmd.exe"
+      ],
+      "args": [],
+      "icon": "terminal-cmd"
+    },
+    "Git Bash": {
+      "source": "Git Bash"
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "PowerShell"
 }

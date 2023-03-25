@@ -1,13 +1,14 @@
 name: mysql
 description: MySQL Server, the world's most popular open source database, and MySQL Cluster, a real-time, open source transactional database"
-version: "8.0.28"
-pre-version: "8.0.28"
+version: "8.0.30"
+pre-version: "8.0.30"
 homepage: "http://www.mysql.com/"
 bug: ""
 github: "mysql/mysql-server"
 releases: "https://github.com/mysql/mysql-server/releases"
-url: "https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip"
-url-mirror: "https://mirrors.huaweicloud.com/mysql/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip"
+url: "https://cdn.mysql.com/archives/mysql-8.0/mysql-${VERSION}-winx64.zip"
+# url-mirror: "https://repo.huaweicloud.com/mysql/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip"
+url-mirror: "https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip"
 scripts:
   postinstall: |
     if(!(Test-Path C:\mysql\data)){

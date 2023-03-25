@@ -9,3 +9,4 @@
 !php-fpm
 !user
 !.gitignore
+!user2

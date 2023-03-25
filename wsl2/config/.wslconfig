@@ -40,3 +40,5 @@ vmIdleTimeout=10000
 
 # networkingMode=bridged
 # vmSwitch=替换成你创建的虚拟交换机名称
+
+# safeMode=true

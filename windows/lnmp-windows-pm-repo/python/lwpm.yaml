@@ -1,15 +1,15 @@
 name: "python"
 description: "Python is a programming language that lets you work quickly and integrate systems more effectively"
-version: "3.9.5"
-pre-version: "3.9.5"
+version: "3.11.1"
+pre-version: "3.11.1"
 homepage: "https://www.python.org/"
 bug: ""
 github: "python/cpython"
 releases: "https://www.python.org/downloads/"
 url: "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe"
-url-mirror: "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe"
+url-mirror: "https://repo.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe"
 pre-url: "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe"
-pre-url-mirror: "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe"
+pre-url-mirror: "https://repo.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe"
 path:
   - ${env:ProgramData}\Python
   - ${env:ProgramData}\Python\Scripts

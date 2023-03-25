@@ -1,6 +1,6 @@
 # 证书文件和配置文件
 
-* https://kubernetes.io/zh/docs/setup/best-practices/certificates/
+* https://kubernetes.io/zh-cn/docs/setup/best-practices/certificates/
 
 ```bash
 .

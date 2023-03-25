@@ -27,8 +27,9 @@ Options:
 Management Commands:
   app*        Docker App (Docker Inc., v0.9.1-beta3)
   builder     Manage builds
-  buildx*     Build with BuildKit (Docker Inc., v0.6.3-docker)
+  buildx*     Docker Buildx (Docker Inc., v0.10.0-docker)
   checkpoint  Manage checkpoints
+  compose*    Docker Compose (Docker Inc., v2.16.0)
   config      Manage Docker configs
   container   Manage containers
   context     Manage contexts
@@ -37,7 +38,7 @@ Management Commands:
   network     Manage networks
   node        Manage Swarm nodes
   plugin      Manage plugins
-  scan*       Docker Scan (Docker Inc., v0.9.0)
+  scan*       Docker Scan (Docker Inc., v0.23.0)
   secret      Manage Docker secrets
   service     Manage services
   stack       Manage Docker stacks
@@ -90,4 +91,4 @@ Commands:
 
 Run 'docker COMMAND --help' for more information on a command.
 
-[1mTo get more help with docker, check out our guides at https://docs.docker.com/go/guides/[0m
+To get more help with docker, check out our guides at https://docs.docker.com/go/guides/

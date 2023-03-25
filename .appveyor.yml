@@ -24,9 +24,8 @@ build_script:
       get-command wsl
   - pwsh: docker version
   - pwsh: docker info
-  - pwsh: docker-compose --version
+  - pwsh: docker compose version
   - ps: get-command docker
-  - ps: get-command docker-compose
   - ps: date
   - ps: |
       & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -Shutdown
@@ -56,7 +55,6 @@ build_script:
   - ps: |
       ls $Env:ProgramFiles\Docker\Docker\resources\bin
   - ps: get-command docker
-  - ps: get-command docker-compose
   # - ps: |
   #     Stop-Service docker
   - ps: Write-host "`nSwitch to linux engine"  -foregroundcolor green
@@ -68,29 +66,24 @@ build_script:
   # - ps: |
   #     [environment]::SetEnvironmentvariable("Path", "C:\;$env:PATH","Process")
   - ps: echo $env:PATH
-  - ps: get-command docker-compose
-  - ps: docker-compose --version
   - ps: |
       & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SharedDrives
   # - ps: ./lnmp-docker wait-docker
-  - pwsh: Invoke-WebRequest -Uri https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Windows-x86_64.exe -OutFile "C:\Program Files\Docker\Docker\Resources\bin\docker-compose.exe"
-  - pwsh: docker-compose --version
-
   - pwsh: ./lnmp-docker
   - pwsh: icacls C:\Users\appveyor\lnmp /grant 'DockerExchange:f' /T | out-null
   - pwsh: icacls C:\Users\appveyor\lnmp\log /grant 'DockerExchange:f' /T
   - pwsh: |
       ./lnmp-docker services
       ./lnmp-docker config | out-file docker-compose.yml
-      docker-compose config -q
+      docker compose config -q
       ./lnmp-docker config > docker-compose.yml
-      docker-compose config -q
+      docker compose config -q
   - ps: echo $env:DOCKER_HOST
   - ps: |
       [environment]::SetEnvironmentvariable("DOCKER_HOST","npipe:////./pipe/docker_engine","Process")
       ls $HOME/.docker
   - pwsh: |
-      docker-compose up -d $(./lnmp-docker services)
+      docker compose up -d $(./lnmp-docker services)
       sleep 20
       docker ps -a
       curl 127.0.0.1
@@ -101,25 +94,9 @@ build_script:
       docker ps -a
       cat log/php/php-fpm-error.log
       cat log/nginx/error.log
-      docker-compose logs
+      docker compose logs
       (Invoke-WebRequest 127.0.0.1).content
       ./lnmp-docker down
-  # - pwsh: |
-  #     write-host "Set gcr.io k8s.gcr.io hosts"
-  #     "" | Out-File -Append C:\Windows\System32\drivers\etc\hosts
-  #     "127.0.0.1 k8s.gcr.io gcr.io" | Out-File -Append C:\Windows\System32\drivers\etc\hosts
-  #     cat C:\Windows\System32\drivers\etc\hosts
-  # - pwsh: |
-  #     write-host "Test gcr.io k8s.gcr.io mirror"
-  #     ping gcr.io -n 1
-  #     (ping gcr.io -n 1).split(" ")[11]
-  #     '$LNMP_CACHE="C:/"' | Out-File -Append .env.ps1
-  #     ./lnmp-docker gcr.io
-  #     ./lnmp-docker gcr.io --no-pull
-  #     sleep 5
-  #     docker pull gcr.io/google-containers/kube-controller-manager:v1.15.0
-  #     docker image ls
-  #     ./lnmp-docker gcr.io down
   # - ps: Write-host "`nSwitch to Windows engine"  -foregroundcolor green
   # - ps: Switch-DockerWindows
   # - ps: |
@@ -135,14 +112,14 @@ build_script:
   #     cd ..
   #     remove-item windows/config/nginx/www.conf
   #     move-item windows/config/nginx/www.container.config windows/config/nginx/www.conf
-  # - ps: docker-compose -f docker-windows.yml up -d nginx php
+  # - ps: docker compose -f docker-windows.yml up -d nginx php
   # - ps: |
   #     sleep 60
   #     docker ps -a
   #     (Invoke-WebRequest 127.0.0.1:8080).content
   #     (Invoke-WebRequest https://demo.t.khs1994.com/index.html).content
   #     (Invoke-WebRequest https://demo.t.khs1994.com/index.php).content
-  #     docker-compose -f docker-windows.yml down
+  #     docker compose -f docker-windows.yml down
 test_script:
   - ps: wsl --help
   - ps: wslconfig /setdefault ubuntu-18.04

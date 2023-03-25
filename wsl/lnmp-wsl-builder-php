@@ -21,8 +21,8 @@ $ lnmp-wsl-builder-php [ apt | apt-dev ]
 
 $ lnmp-wsl-builder-php 7.3.0 [ tar | deb ] [--skipbuild] [--ci]
 
-# echo \"--with-xxx --enable-xxx\" > /tmp/EXT_REAL_NAME.configure.options
-$ lnmp-wsl-builder-php 7.3.0 enable-ext [EXT_NAME@EXT_REAL_NAME]
+# echo \"--with-xxx --enable-xxx\" > /tmp/EXT_NAME.configure.options
+$ lnmp-wsl-builder-php 7.3.0 enable-ext EXT_NAME
 
 $ lnmp-wsl-builder-php 7.3.0 [ arm64 | arm32 ] tar [TODO]
 
@@ -59,12 +59,14 @@ fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=2.2.7
+export COMPOSER_VERSION=2.5.1
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
 # export CC=clang CXX=clang
 export CC=gcc CXX=g++
+
+export PHP_LATEST_VERSION=8.1.9
 ################################################################################
 
 for command in "$@"
@@ -128,12 +130,16 @@ case "$1" in
 
   8.1.* )
      export PHP_NUM=81
+     ;;
+
+  8.2.* )
+     export PHP_NUM=82
      export BUILD_FROM_GIT=1
-     export PHP_SRC_BRANCH=PHP-8.1
+     export PHP_SRC_BRANCH=PHP-8.2
      ;;
 
   nightly )
-    export PHP_NUM=82
+    export PHP_NUM=83
     export BUILD_FROM_GIT=1
     ;;
 
@@ -554,6 +560,24 @@ set +e
     export CPPFLAGS="$PHP_CPPFLAGS"
     export LDFLAGS="$PHP_LDFLAGS"
 
+    openssl_3_patch(){
+      if ! [ -f /lib64/libssl.so.3 -o -f /usr/lib/x86_64-linux-gnu/libssl.so.3 ];then
+        return
+      fi
+
+      if [ "${PHP_NUM}" -eq "74" ];then
+        curl -O https://git.remirepo.net/cgit/rpms/php/php74.git/plain/php-7.4.26-openssl3.patch
+        patch -p1 < php-7.4.26-openssl3.patch
+        ./buildconf --force
+      fi
+
+      if [ "${PHP_NUM}" -eq "80" ];then
+        curl -O https://git.remirepo.net/cgit/rpms/php/php80.git/plain/php-8.0.21-openssl3.patch
+        patch -p1 < php-8.0.21-openssl3.patch
+        ./buildconf --force
+      fi
+    }
+
     buster_patch(){
       if ! [ "${VERSION_CODENAME}" = 'buster' ];then
         return
@@ -591,6 +615,7 @@ set +e
 
     buster_patch
     sid_php74_with_enchant2_patch
+    openssl_3_patch
 
     if ! [ -f configure ];then ./buildconf --force; fi
 
@@ -691,21 +716,14 @@ _install_pecl_ext_by_pickle(){
   export PATH=${PHP_PREFIX}/bin:$PATH
   $(_sudo) chmod 777 $(${PHP_PREFIX}/bin/php-config --extension-dir)
 
-  if [ ${PHP_NUM} -ge "81" ];then set +e; fi
+  if [ ${PHP_NUM} -ge "82" ];then set +e; fi
 
   PICKLE_OPTIONS="-n --php=${PHP_PREFIX}/bin/php -vvv"
 
   if [ $# -ne 0 ];then
     for extension in $@
     do
-      local extension_real_name=$(echo $extension | cut -d "@" -f 2)
-      local extension=$(echo $extension | cut -d "@" -f 1)
-
       $(_sudo) pickle install $extension ${PICKLE_OPTIONS} --defaults
-
-      ${PHP_PREFIX}/bin/php -m > /dev/null 2>&1 \
-        || $(_sudo) mv ${PHP_INI_DIR}/conf.d/php-ext-${extension_real_name}.ini \
-                       ${PHP_INI_DIR}/conf.d/php-ext-${extension_real_name}.ini.notwork
     done
 
     $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
@@ -717,22 +735,50 @@ _install_pecl_ext_by_pickle(){
   echo "--enable-redis-igbinary" > /tmp/redis.configure.options
   echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options
 
-  if [ ${PHP_NUM} -ge "81" ];then
+  if [ ${PHP_NUM} -ge "82" ];then
     _install_pecl_ext_by_pickle \
-      https://github.com/igbinary/igbinary/archive/master.tar.gz@igbinary \
-      https://github.com/phpredis/phpredis/archive/develop.tar.gz@redis \
-      https://github.com/xdebug/xdebug/archive/master.tar.gz@xdebug \
-      https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz@tideways_xhprof \
-      https://github.com/swoole/swoole-src/archive/master.tar.gz@swoole \
+      https://github.com/igbinary/igbinary/archive/master.tar.gz \
+      https://github.com/phpredis/phpredis/archive/develop.tar.gz \
+      https://github.com/xdebug/xdebug/archive/master.tar.gz \
+      https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
+      https://github.com/swoole/swoole-src/archive/master.tar.gz \
       mongodb \
       memcached
   else
-    $(_sudo) pickle install igbinary --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install redis --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install xdebug --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install swoole --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install memcached --defaults ${PICKLE_OPTIONS}
-    $(_sudo) pickle install mongodb --defaults ${PICKLE_OPTIONS}
+    _install_pecl_ext_by_pickle igbinary \
+                                https://github.com/phpredis/phpredis/archive/develop.tar.gz \
+                            $( \
+                               if [ $PHP_NUM -ge "80" ]; then \
+                                 echo 'xdebug'; \
+                               fi ; \
+                               if [ $PHP_NUM -ge "72" -a $PHP_NUM -le "74" ]; then \
+                                 echo 'xdebug@3.1.5'; \
+                               fi ; \
+                               if [ $PHP_NUM -eq "71" ]; then \
+                                 echo 'xdebug@2.9.8'; \
+                               fi ; \
+                               if [ $PHP_NUM -eq "70" ]; then \
+                                 echo 'xdebug@2.9.0'; \
+                               fi ; \
+                               if [ $PHP_NUM -eq "56" ]; then \
+                                 echo 'xdebug@2.5.5'; \
+                               fi ; \
+                            ) \
+                            \
+                            $( \
+                               if [ $PHP_NUM -ge "80" ]; then \
+                                 echo 'swoole'; \
+                               fi ; \
+                               if [ $PHP_NUM -ge "72" -a $PHP_NUM -le "74" ]; then \
+                                 echo 'swoole@4.8.11'; \
+                               fi ; \
+                               if [ $PHP_NUM -eq "71" ]; then \
+                                 echo 'swoole@4.6.0'; \
+                               fi ; \
+                            ) \
+                            \
+                            memcached \
+                            mongodb
   fi
 
   $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
@@ -1033,8 +1079,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=8.1.3
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=8.1.3
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=${PHP_LATEST_VERSION}
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=${PHP_LATEST_VERSION}
 
 _get_phpnum $PHP_VERSION
 

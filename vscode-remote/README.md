@@ -61,19 +61,19 @@ $ ./lnmp-docker up
 **安装依赖**
 
 ```bash
-$ docker-compose -f docker-workspace.yml run --rm composer install
+$ docker compose -f docker-workspace.yml run --rm composer install
 ```
 
 **安装新的依赖**
 
 ```bash
-$ docker-compose -f docker-workspace.yml run --rm composer require XXX
+$ docker compose -f docker-workspace.yml run --rm composer require XXX
 ```
 
 **升级依赖**
 
 ```bash
-$ docker-compose -f docker-workspace.yml run --rm composer update
+$ docker compose -f docker-workspace.yml run --rm composer update
 ```
 
 **或者执行**

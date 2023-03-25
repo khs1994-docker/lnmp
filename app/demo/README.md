@@ -215,7 +215,7 @@ $ lnmp-phpunit [参数]
 自行修改 `.env` `docker-compose.yml` 文件，保留所需的 PHP 版本，其他的注释
 
 ```bash
-$ docker-compose build php nginx
+$ docker compose build php nginx
 ```
 
 ### 13. 将项目提交到 Git

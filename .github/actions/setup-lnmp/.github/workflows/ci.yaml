@@ -29,7 +29,8 @@ jobs:
       - name: Init LNMP
         run: |
           QUITE=true lnmp-docker
-          docker-compose --version
+          docker-compose --version || true
+          docker compose version || true
       - name: Up
         run: |
           set -x

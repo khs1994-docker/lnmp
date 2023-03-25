@@ -1,14 +1,14 @@
 {
   "name": "helm",
   "description": "The Kubernetes Package Manager",
-  "version": "3.9.2",
-  "pre-version": "3.9.2",
+  "version": "3.9.4",
+  "pre-version": "3.9.4",
   "homepage": "https://helm.sh/",
   "bug": "https://github.com/helm/helm/issues",
   "github": "helm/helm",
   "releases": "https://github.com/helm/helm/releases",
   "url": "https://get.helm.sh/helm-v${VERSION}-windows-amd64.zip",
-  "url-mirror": "https://mirrors.huaweicloud.com/helm/v${VERSION}/helm-v${VERSION}-windows-amd64.zip",
+  "url-mirror": "https://repo.huaweicloud.com/helm/v${VERSION}/helm-v${VERSION}-windows-amd64.zip",
   "command": "helm",
   "scripts": {
     "version": "(ConvertFrom-Json -InputObject (helm version).trim('version.BuildInfo')).Version.trim('v')",

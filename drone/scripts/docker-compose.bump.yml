@@ -1,5 +1,5 @@
-version: "3.9"
+
 
 services:
   drone:
-    image: drone/drone:2.4.0
+    image: drone/drone:2.16.0

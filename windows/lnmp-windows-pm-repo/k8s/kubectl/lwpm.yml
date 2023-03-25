@@ -1,19 +1,25 @@
 name: kubectl
-version: 1.24.0
+version: 1.26.0
 # url: "https://mirror.azure.cn/kubernetes/kubectl/v${VERSION}/bin/linux/amd64/kubectl"
-url: "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/kubernetes-client-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz"
+# url: "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/kubernetes-client-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz"
 scripts:
   dist: |
     _mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}
 
     curl -L `
-      $url `
+      https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/kubernetes-client-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz `
       -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename
+  install: |
+    _mkdir C:/bin
+
+    curl -L `
+      https://mirror.azure.cn/kubernetes/kubectl/v${VERSION}/bin/windows/amd64/kubectl.exe `
+      -o C:/bin/kubectl.exe
 platform:
   - architecture: amd64
     os: windows
-    hash:
-      sha512: 18adffab5d1be146906fd8531f4eae7153576aac235150ce2da05aee5ae161f6bd527e8dec34ae6131396cd4b3771e0d54ce770c065244ad3175a1afa63c89e1
+    # hash:
+    #   sha512: 18adffab5d1be146906fd8531f4eae7153576aac235150ce2da05aee5ae161f6bd527e8dec34ae6131396cd4b3771e0d54ce770c065244ad3175a1afa63c89e1
   - architecture: amd64
     os: linux
   - architecture: arm64

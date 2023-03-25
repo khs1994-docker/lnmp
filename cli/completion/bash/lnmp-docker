@@ -69,7 +69,6 @@ complete -W "acme.sh \
         pkg-backup \
         pkg-update \
         test \
-        compose \
         composer \
         pcit-up \
         pcit-cp \

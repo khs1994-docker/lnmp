@@ -8,8 +8,6 @@
 !httpd
 !deb
 !rpm
-!lnmp-wsl-docker-cli
-!lnmp-wsl-init
 !lnmp-wsl
 !lnmp-wsl-install
 !lnmp-wsl-builder-php
@@ -27,3 +25,4 @@
 !config
 !lnmp-wsl-pm
 !patch
+!00-CN-MIRROR.md

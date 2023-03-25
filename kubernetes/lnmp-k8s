@@ -355,7 +355,7 @@ fi
 
 _etcd_install(){
   local url_official="https://github.com/etcd-io/etcd/releases/download"
-  local url="https://mirrors.huaweicloud.com/etcd"
+  local url="https://repo.huaweicloud.com/etcd"
   local TAR_FILE="etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
 
   if [ -f ${K8S_ROOT}/bin/etcd -a ! "$1" = "--dry-run" ];then
@@ -396,7 +396,7 @@ _helm_install(){
   fi
 
   local url_official="https://get.helm.sh"
-  local url="https://mirrors.huaweicloud.com/helm/v${HELM_VERSION}"
+  local url="https://repo.huaweicloud.com/helm/v${HELM_VERSION}"
   local TAR_FILE="helm-v${HELM_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
     _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
@@ -1113,7 +1113,7 @@ _k8s_install_conf_cp(){
   $(_sudo) cp systemd/certs/*.pem systemd/certs/sa.pub systemd/certs/sa.key ${K8S_ROOT}/etc/kubernetes/pki
 
   if ! [ -f systemd/certs/admin-key.pem ];then \
-    echo "Please Generate certs first $ docker-compose up cfssl-local"; exit; fi
+    echo "Please Generate certs first $ docker compose up cfssl-local"; exit; fi
 
   $(_sudo) cp systemd/certs/*.kubeconfig ${K8S_ROOT}/etc/kubernetes/
   $(_sudo) cp \
@@ -1580,11 +1580,11 @@ case $_command in
       # $(_sudo) modprobe nfsd || true
       cd nfs-server
       if [ "$1" = 'down' ];then
-        exec docker-compose stop nfs
+        exec docker compose stop nfs
       elif [ "$1" = 'logs' ]; then
-        exec docker-compose logs nfs
+        exec docker compose logs nfs
       fi
-      exec docker-compose up -d nfs
+      exec docker compose up -d nfs
       ;;
     * )
       command -v $_command > /dev/null && $_command $@ || echo "command not found"

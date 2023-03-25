@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=8.1.3
+ARG PHP_VERSION=8.1.9
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
 
@@ -10,7 +10,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=8.1.3
+ARG PHP_VERSION=8.1.9
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -50,6 +50,7 @@ RUN set -ex \
                  openssl \
                  bash \
                  tzdata \
+                 less \
 # ensure www-data user exists
 # RUN set -x \
       && adduser -u 82 -D -S -G www-data www-data

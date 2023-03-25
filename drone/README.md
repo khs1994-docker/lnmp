@@ -40,7 +40,7 @@
 
 * Docker CE v18.09 Stable +
 
-* docker-compose v1.23.1 +
+* docker compose v2
 
 * 知道如何注册 GitHub App (GitHub only)
 
@@ -76,7 +76,7 @@ $ ./ci
 
 修改 `.env` 中的 `CI_HOST` 变量值为 `你自己的 IP`(例如 `云服务器公网 IP`、`路由器分配给电脑的 IP`)
 
-### MySQL 密码(可选)
+### 内置 MySQL 密码(可选)
 
 修改 `secrets/mysql.env` 中的 `MYSQL_ROOT_PASSWORD` 变量值为 MySQL 密码。
 
@@ -133,18 +133,12 @@ CI_EXTERNAL_REDIS_HOST=
 
 ### 选择 Git 服务商
 
-编辑 `docker-compose.override.yml` 文件最下方
+默认使用 `Gogs` ，如需使用 `GitHub` 按如下内容修改 `.env` 文件
 
-默认使用 `Gogs` ，如需使用 `GitHub` 按如下内容修改
+```bash
+# CI_GIT_TYPE=gogs
 
-```yaml
-
-...
-
-services:
-  drone-server:
-    # << : *gogs
-    << : *github
+CI_GIT_TYPE=github
 ```
 
 ## 启动

@@ -150,14 +150,14 @@ async function run() {
 
     core.startGroup('start docker step1');
     // https://github.com/docker/for-mac/issues/2359#issuecomment-943131345
-    await exec.exec('sudo',[
+    await exec.exec('sudo', [
       '/Applications/Docker.app/Contents/MacOS/Docker',
       '--unattended',
       '--install-privileged-components'
     ]);
     core.endGroup();
     core.startGroup('start docker step2');
-    await exec.exec('open',[
+    await exec.exec('open', [
       '-a',
       '/Applications/Docker.app',
       '--args',
@@ -178,7 +178,7 @@ while ! /Applications/Docker.app/Contents/Resources/bin/docker system info &>/de
 command -v docker || echo 'test docker command loop: not found'
 sleep 1
 # wait 180s(3min)
-if [ $i -gt 180 ];then sudo /Applications/Docker.app/Contents/MacOS/com.docker.diagnose check;uname -a;system_profiler SPHardwareDataType;echo "::error::-- Wait docker start $i s too long, exit"; exit 1; fi
+if [ $i -gt 180 ];then exit 1;sudo /Applications/Docker.app/Contents/MacOS/com.docker.diagnose check;uname -a;system_profiler SPHardwareDataType;echo "::error::-- Wait docker start $i s too long, exit"; exit 1; fi
 done
 echo "::notice::-- Docker is ready.Wait time is $i s"
 uname -a || true
@@ -287,7 +287,7 @@ system_profiler SPHardwareDataType || true
 
     core.debug('add apt-key');
     await shell(`
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor | sudo cat >/usr/share/keyrings/docker-archive-keyring.gpg
     `);
 
     message = 'add apt source';
@@ -333,6 +333,14 @@ system_profiler SPHardwareDataType || true
       core.warning(`Docker ${DOCKER_VERSION} not available on ubuntu ${OS}, will install latest docker version`);
     }
 
+    core.startGroup('remove default moby');
+    await exec.exec('sudo', [
+      'sh',
+      '-c',
+      "apt remove -y moby-buildx moby-cli moby-compose moby-containerd moby-engine moby-runc"
+    ]).catch(() => { });
+    core.endGroup();
+
     message = 'install docker'
     core.debug(message);
     core.startGroup(message);
@@ -343,6 +351,13 @@ system_profiler SPHardwareDataType || true
       DOCKER_VERSION_STRING ? `docker-ce=${DOCKER_VERSION_STRING}` : 'docker-ce',
       DOCKER_VERSION_STRING ? `docker-ce-cli=${DOCKER_VERSION_STRING}` : 'docker-ce-cli'
     ]);
+
+    await exec.exec('sudo', [
+      'apt-get',
+      '-y',
+      'install',
+      'docker-compose-plugin',
+    ]).catch(() => { });
     core.endGroup();
   }
 

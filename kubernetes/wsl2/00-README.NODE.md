@@ -50,8 +50,8 @@ $env:WSLENV="K8S_ROOT/u"
 $env:K8S_ROOT="/wsl/wsl-k8s-data/k8s"
 
 $ wsl -d wsl-k8s -- sh -xc 'mkdir -p ${K8S_ROOT:?err}/bin'
-# 请将 1.24.0 替换为实际的版本号
-$ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v1.24.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin'
+# 请将 1.26.0 替换为实际的版本号
+$ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v1.26.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin'
 
 $ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","etcd-client.pem","etcd-client-key.pem","ca.pem","ca-key.pem"
 

@@ -1,4 +1,4 @@
-apiVersion: kubescheduler.config.k8s.io/v1beta1
+apiVersion: kubescheduler.config.k8s.io/v1beta3
 clientConnection:
   acceptContentTypes: ""
   burst: 200
@@ -7,7 +7,6 @@ clientConnection:
   qps: 100
 enableContentionProfiling: false
 enableProfiling: true
-healthzBindAddress: ""
 kind: KubeSchedulerConfiguration
 leaderElection:
   leaderElect: true
@@ -17,7 +16,6 @@ leaderElection:
   resourceName: kube-scheduler
   resourceNamespace: kube-system
   retryPeriod: 2s
-metricsBindAddress: ""
 parallelism: 16
 percentageOfNodesToScore: 0
 podInitialBackoffSeconds: 1
@@ -25,22 +23,22 @@ podMaxBackoffSeconds: 10
 profiles:
 - pluginConfig:
   - args:
-      apiVersion: kubescheduler.config.k8s.io/v1beta1
+      apiVersion: kubescheduler.config.k8s.io/v1beta3
       kind: DefaultPreemptionArgs
       minCandidateNodesAbsolute: 100
       minCandidateNodesPercentage: 10
     name: DefaultPreemption
   - args:
-      apiVersion: kubescheduler.config.k8s.io/v1beta1
+      apiVersion: kubescheduler.config.k8s.io/v1beta3
       hardPodAffinityWeight: 1
       kind: InterPodAffinityArgs
     name: InterPodAffinity
   - args:
-      apiVersion: kubescheduler.config.k8s.io/v1beta1
+      apiVersion: kubescheduler.config.k8s.io/v1beta3
       kind: NodeAffinityArgs
     name: NodeAffinity
   - args:
-      apiVersion: kubescheduler.config.k8s.io/v1beta1
+      apiVersion: kubescheduler.config.k8s.io/v1beta3
       kind: NodeResourcesBalancedAllocationArgs
       resources:
       - name: cpu
@@ -49,7 +47,7 @@ profiles:
         weight: 1
     name: NodeResourcesBalancedAllocation
   - args:
-      apiVersion: kubescheduler.config.k8s.io/v1beta1
+      apiVersion: kubescheduler.config.k8s.io/v1beta3
       kind: NodeResourcesFitArgs
       scoringStrategy:
         resources:
@@ -60,7 +58,7 @@ profiles:
         type: LeastAllocated
     name: NodeResourcesFit
   - args:
-      apiVersion: kubescheduler.config.k8s.io/v1beta1
+      apiVersion: kubescheduler.config.k8s.io/v1beta3
       kind: NodeResourcesLeastAllocatedArgs
       resources:
       - name: cpu
@@ -69,12 +67,12 @@ profiles:
         weight: 1
     name: NodeResourcesLeastAllocated
   - args:
-      apiVersion: kubescheduler.config.k8s.io/v1beta1
+      apiVersion: kubescheduler.config.k8s.io/v1beta3
       defaultingType: System
       kind: PodTopologySpreadArgs
     name: PodTopologySpread
   - args:
-      apiVersion: kubescheduler.config.k8s.io/v1beta1
+      apiVersion: kubescheduler.config.k8s.io/v1beta3
       bindTimeoutSeconds: 600
       kind: VolumeBindingArgs
     name: VolumeBinding

@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=8.0.17
+ARG PHP_VERSION=8.0.23
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
 
@@ -10,7 +10,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=8.0.17
+ARG PHP_VERSION=8.0.23
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -50,6 +50,7 @@ RUN set -ex \
                  openssl \
                  bash \
                  tzdata \
+                 less \
 # ensure www-data user exists
 # RUN set -x \
       && adduser -u 82 -D -S -G www-data www-data
@@ -98,7 +99,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-kerberos \
         --with-imap=shared \
             --with-imap-ssl \
-        # --with-xmlrpc=shared \ 8.0 removed
+        # --with-xmlrpc=shared 8.0 removed
         --with-pic \
         --with-enchant=shared \
         --enable-fileinfo=shared \
@@ -141,7 +142,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
 ENV PHP_VERSION=${PHP_VERSION}
-# ENV PHP_URL="https://www.php.net/get/php-7.4.29.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.4.29.tar.xz.asc/from/this/mirror"
+# ENV PHP_URL="https://www.php.net/get/php-7.4.32.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.4.32.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -185,7 +186,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
           libexif-dev \
           # libxslt-dev \
           gmp-dev \
-          # xmlrpc-c-dev \ 8.0 removed
+          # xmlrpc-c-dev 8.0 removed
           bzip2-dev \
           enchant2-dev \
           imap-dev \
@@ -287,7 +288,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
                            sysvsem \
                            sysvshm \
                            # tidy \
-                           # xmlrpc \ 8.0 removed
+                           # xmlrpc 8.0 removed
                            # xsl \
                            # opcache 已默认安装，需要自行载入
                            opcache \

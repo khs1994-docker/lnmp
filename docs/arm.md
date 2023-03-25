@@ -6,47 +6,21 @@
 $ ./lnmp-docker up
 ```
 
-## MySQL 暂不支持 arm
+> 建议使用 arm 64位系统 https://www.raspberrypi.com/software/operating-systems/
 
-> arm32 位(armv7l) 同样无法使用 `mariadb`
-
-* 在 `.env` 文件中将 `mysql` 替换为 `mariadb`
-* 在 `.env` 文件中 `LREW_INCLUDE` 新增 `mariadb`
-
-```diff
-# .env
-- LNMP_SERVICES="nginx mysql php7 redis"
-+ LNMP_SERVICES="nginx mariadb php7 redis"
-
-- LREW_INCLUDE="pcit"
-+ LREW_INCLUDE="pcit mariadb"
-```
-
-## 安装 docker-compose
-
-**依赖软件**
-
-```bash
-$ sudo apt install libffi-dev
-
-$ ./lnmp-docker compose -f
-```
+## MySQL 暂不支持 arm 32位
 
 ## [Docker ARM 镜像](https://github.com/docker-library/official-images#architectures-other-than-amd64)
 
 |镜像|系统|架构|
 |:--|:--|:--|
-|[arm32v7 Docker image](https://hub.docker.com/u/arm32v7/)|[官方系统 Raspbian (基于 Debian)](https://www.raspberrypi.org/software/operating-systems/)|arm32|
-|[arm64v8 Docker image](https://hub.docker.com/u/arm64v8/)|[pi 64](https://github.com/khs1994/pi64)|arm64|
+|[arm64v8 Docker image](https://hub.docker.com/u/arm64v8/)|[官方系统 Raspberry Pi OS (64-bit) (基于 Debian)](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit)|arm64|
+|[arm32v7 Docker image](https://hub.docker.com/u/arm32v7/)|[官方系统 Raspberry Pi OS (Legacy) (基于 Debian)](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-legacy)|arm32|
 |[armhf Docker image](https://hub.docker.com/u/armhf/)    |已经废弃，转移到了上述两个项目中|-|
 
 ## ARM 镜像构建
 
 请查看 [buildx](buildx.md) 或 [manifest](manifest.md)
-
-## ARM64
-
-官方测试版 https://www.raspberrypi.org/forums/viewtopic.php?f=117&t=275370
 
 ## 参考
 

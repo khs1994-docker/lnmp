@@ -1,7 +1,7 @@
 # OCI Runtime
 
 * https://kubernetes.io/docs/concepts/containers/runtime-class/
-* https://github.com/opencontainers/runtime-spec/blob/master/implementations.md
+* https://github.com/opencontainers/runtime-spec/blob/main/implementations.md
 
 * [runc](https://github.com/opencontainers/runc)
 * [crun](https://github.com/containers/crun)

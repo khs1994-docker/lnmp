@@ -30,15 +30,8 @@ jobs:
     - run: |
         env
         docker --version
-        docker-compose --version
+        docker compose version
       name: 'manifest'
-    # - run: |
-    #     sudo rm /usr/local/bin/docker-compose
-    #     curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-    #     sudo install -m755 docker-compose /usr/local/bin
-    #   name: 'Setup Docker Compose'
-    #   env:
-    #     DOCKER_COMPOSE_VERSION: 1.29.0
     - run: |
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
@@ -60,7 +53,7 @@ jobs:
         docker_version: "20.10"
     - run: |
         docker --version
-        docker-compose --version
+        docker compose version
         docker buildx version
         docker
       name: 'install-after-manifest'
@@ -101,8 +94,8 @@ jobs:
         echo $options
 
         if [ "$TYPE" = "UNIT" ];then
-          echo "::set-output name=type::unit"
-          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine"
+          echo "type=unit" >> $GITHUB_OUTPUT
+          echo "image=$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine" >> $GITHUB_OUTPUT
           echo ::group::Build $TYPE
           docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -113,8 +106,8 @@ jobs:
         fi
 
         if [ "$TYPE" = "SUPERVISORD" ];then
-          echo "::set-output name=type::supervisord"
-          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine"
+          echo "type=supervisord" >> $GITHUB_OUTPUT
+          echo "image=$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine" >> $GITHUB_OUTPUT
           echo ::group::Build $TYPE
           docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -125,8 +118,8 @@ jobs:
         fi
 
         if [ "$TYPE" = "COMPOSER" ];then
-          echo "::set-output name=type::composer"
-          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine"
+          echo "type=composer" >> $GITHUB_OUTPUT
+          echo "image=$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine" >> $GITHUB_OUTPUT
           echo ::group::Build $TYPE
           docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -137,8 +130,8 @@ jobs:
         fi
 
         if [ "$TYPE" = "SINGLE" ];then
-          echo "::set-output name=type::single"
-          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine"
+          echo "type=single" >> $GITHUB_OUTPUT
+          echo "image=$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine" >> $GITHUB_OUTPUT
           echo ::group::Build $TYPE
           docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -148,8 +141,8 @@ jobs:
         fi
 
         if [ "$TYPE" = "SWOOLE" ];then
-          echo "::set-output name=type::swoole"
-          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine"
+          echo "type=swoole" >> $GITHUB_OUTPUT
+          echo "image=$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine" >> $GITHUB_OUTPUT
           echo ::group::Build $TYPE
           docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -160,8 +153,8 @@ jobs:
         fi
 
         if [ "$TYPE" = "FPM" ];then
-          echo "::set-output name=type::fpm"
-          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine"
+          echo "type=fpm" >> $GITHUB_OUTPUT
+          echo "image=$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine" >> $GITHUB_OUTPUT
           echo ::group::Build $TYPE
           docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -173,8 +166,8 @@ jobs:
         fi
 
         if [ "$TYPE" = "CLI" ];then
-          echo "::set-output name=type::cli"
-          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine"
+          echo "type=cli" >> $GITHUB_OUTPUT
+          echo "image=$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine" >> $GITHUB_OUTPUT
           echo ::group::Build $TYPE
           docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -185,8 +178,8 @@ jobs:
         fi
 
         if [ "$TYPE" = "S6" ];then
-          echo "::set-output name=type::s6"
-          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-s6-alpine"
+          echo "type=s6" >> $GITHUB_OUTPUT
+          echo "image=$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-s6-alpine" >> $GITHUB_OUTPUT
           echo ::group::Build $TYPE
           docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \

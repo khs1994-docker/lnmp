@@ -39,28 +39,28 @@ jobs:
       # next next version
       #  - os: ubuntu
       #    dist: 20.04
-      #    CI_KUBERNETES_VERSION: 1.26.0-alpha.1
+      #    CI_KUBERNETES_VERSION: 1.28.0-alpha.1
       #    LNMP_K8S_GET: --url
       #    GENERATE_CLI_HELP: "true"
 
       # next version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.25.0-beta.0
+         CI_KUBERNETES_VERSION: 1.27.0-rc.0
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
 
        # current stable version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.24.0
+         CI_KUBERNETES_VERSION: 1.26.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --crio
          K8S_IMAGE_NS: khs1994
          K8S_IMAGE_REGISTRY: useccr.ccs.tencentyun.com
          UPLOAD_TO_CODING: "true"
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.24.0
+         CI_KUBERNETES_VERSION: 1.26.0
          LNMP_K8S_GET: --url
          #
          # GENERATE_CLI_HELP: "true"
@@ -69,12 +69,12 @@ jobs:
        # ipv6
        # - os: ubuntu
        #  dist: 20.04
-       #  CI_KUBERNETES_VERSION: 1.24.0
+       #  CI_KUBERNETES_VERSION: 1.26.0
        #  LNMP_K8S_GET: --url
        #  IPV6: "true"
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.24.0
+         CI_KUBERNETES_VERSION: 1.26.0
          LNMP_K8S_GET: --url
          CNI_CALICO_EBPF: 'true'
       # v1.24.0+ not support docker
@@ -84,34 +84,34 @@ jobs:
       #    LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.24.0
+         CI_KUBERNETES_VERSION: 1.26.0
          LNMP_K8S_GET: --url
          K8S_ROOT: /opt/k8s-custom
        # old version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.23.6
+         CI_KUBERNETES_VERSION: 1.25.6
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.22.9
+         CI_KUBERNETES_VERSION: 1.24.10
          LNMP_K8S_GET: --url
      fail-fast: false
    steps:
-     - uses: actions/checkout@v2
+     - uses: actions/checkout@v3
        with:
          fetch-depth: 2
      - uses: docker-practice/actions-setup-docker@master
        with:
          docker_channel: test
          docker_version: "20.10"
-     - uses: actions/cache@v2
+     - uses: actions/cache@v3
        name: k8s-files-caches
        with:
          path: |
            kubernetes-release/release/v${{matrix.CI_KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin
          key: ${{matrix.CI_KUBERNETES_VERSION}}
-     - uses: actions/cache@v2
+     - uses: actions/cache@v3
        name: khs1994-docker-lnmp-caches
        with:
          path: ~/.khs1994-docker-lnmp/caches
@@ -138,9 +138,9 @@ jobs:
 
          df -h
        name: os-metadata
-     - uses: actions/setup-go@v2
+     - uses: actions/setup-go@v3
        with:
-         go-version: '^1.18'
+         go-version: '^1.19'
      - name: Setup dns
        run: |
          pwd
@@ -167,7 +167,7 @@ jobs:
          ls -la kubernetes-release/release/ || true
          echo $PATH
 
-         docker-compose --version
+         docker compose version
          docker --version
 
          ip addr
@@ -194,8 +194,8 @@ jobs:
          echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
          sudo cat /etc/hosts || true
 
-         docker-compose up cfssl-local
-         docker-compose down
+         docker compose up cfssl-local
+         docker compose down
          # source .env
          ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
 
@@ -236,14 +236,14 @@ jobs:
          test -n "$CMD_FAILED" && false || true
 
          sudo systemctl cat kube-scheduler
-         if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 23 ];then \
-          echo "replace kube-scheduler config" \
-          && echo "remove it when k8s version ge 1.23" \
-          && sudo sed -i -e "s!^healthzBindAddress.*!#healthzBindAddress!g" \
-                      -e "s!^metricsBindAddress.*!#metricsBindAddress!g" \
-                      -e "s!v1beta1!v1beta3!g" \
-                      ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kube-scheduler.config.yaml ; \
-         fi
+         #  if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 23 ];then \
+         #   echo "replace kube-scheduler config" \
+         #   && echo "remove it when k8s version ge 1.23" \
+         #   && sudo sed -i -e "s!^healthzBindAddress.*!#healthzBindAddress!g" \
+         #               -e "s!^metricsBindAddress.*!#metricsBindAddress!g" \
+         #               -e "s!v1beta1!v1beta3!g" \
+         #               ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kube-scheduler.config.yaml ; \
+         #  fi
          sudo systemctl start kube-scheduler || CMD_FAILED=1
          test -n "$CMD_FAILED" && sudo journalctl -u kube-scheduler || true
          test -n "$CMD_FAILED" && false || true
@@ -510,9 +510,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         # BASE_BRANCH=master
-         BASE_BRANCH=v1.23.0-config
-         if ! [ $CI_KUBERNETES_VERSION = '1.24.0' -a "$GENERATE_CLI_HELP" = "true" ];then
+         BASE_BRANCH=master
+         # BASE_BRANCH=v1.25.0-config
+         if ! [ $CI_KUBERNETES_VERSION = '1.26.0' -a "$GENERATE_CLI_HELP" = "true" ];then
            exit 0
          fi
 
@@ -538,10 +538,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         # BASE_BRANCH=v1.24.0-config
-         BASE_BRANCH=v1.25.0-alpha.1-config
+         BASE_BRANCH=v1.27.0-alpha.3-config
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.25.0-beta.0' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.27.0-rc.0' ];then
            exit 0
          fi
 
@@ -560,16 +559,16 @@ jobs:
 
          git add .
          git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
-         && git push origin $(git branch --show-current):v$CI_KUBERNETES_VERSION-config -f \
+         && git push origin $(git branch --show-current):v${CI_KUBERNETES_VERSION}-config -f \
          || true
 
      - name: Update k8s next next cli help info
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.25.0-beta.0
+         BASE_BRANCH=v1.27.0-alpha.1
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.26.0-alpha.1' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.28.0-alpha.1' ];then
            exit 0
          fi
 
@@ -588,7 +587,7 @@ jobs:
 
          git add .
          git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
-         && git push origin $(git branch --show-current):v$CI_KUBERNETES_VERSION-config -f \
+         && git push origin $(git branch --show-current):v${CI_KUBERNETES_VERSION}-config -f \
          || true
 
 

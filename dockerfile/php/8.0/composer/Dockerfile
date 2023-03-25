@@ -1,7 +1,8 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=8.0.17
+ARG PHP_VERSION=8.0.23
 ARG USERNAME=khs1994
-ARG BASE=fpm
+# ARG BASE=fpm
+ARG BASE=cli
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
@@ -18,12 +19,12 @@ ENV COMPOSER_DEP_APKS \
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_HOME=/tmp/composer \
     COMPOSER_NO_INTERACTION=1 \
-    COMPOSER_VERSION=2.2.7 \
+    COMPOSER_VERSION=2.5.1 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:2.2.7,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:2.5.1,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .composer_deps $COMPOSER_DEP_APKS \
     && { echo "memory_limit=-1"; \
@@ -39,7 +40,7 @@ RUN --mount=type=bind,from=composer:2.2.7,source=/usr/bin/composer,target=/opt/b
  #        exit(1); \
  #    }" \
  # && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
-    && curl -fsSL https://raw.githubusercontent.com/composer/docker/622ed016babc9c89ab72f7fe6b037f6a312f0f0a/2.2/docker-entrypoint.sh \
+    && curl -fsSL https://raw.githubusercontent.com/composer/docker/493d91e44e4d5245e80ff9462f2653c7d7de9a8c/2.4/docker-entrypoint.sh \
          -o /docker-entrypoint.composer \
     && chmod +x /docker-entrypoint.composer \
     && cp -a /opt/bin/composer /usr/bin/composer \

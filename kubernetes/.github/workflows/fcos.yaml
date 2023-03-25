@@ -17,12 +17,12 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 1
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         name: khs1994-docker-lnmp-caches
         with:
           path: ~/.khs1994-docker-lnmp/caches
           key: khs1994-docker-lnmp-caches-20201101-0
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         name: fcos qcow2 cache
         with:
           path: /home/runner/work/lnmp-k8s/lnmp-k8s/coreos/current
@@ -61,7 +61,7 @@ jobs:
 
           cd ..
 
-          docker-compose logs
+          docker compose logs
       - uses: ./.github/actions/setup-libvirt
       - name: libvirt
         run: |

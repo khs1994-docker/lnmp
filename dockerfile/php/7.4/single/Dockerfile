@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.4.29
+ARG PHP_VERSION=7.4.32
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine
 
@@ -322,7 +322,7 @@ RUN set -x \
 --enable-http2 \
 --enable-mysqlnd \
 " > /tmp/swoole.configure.options \
-    && pickle install swoole -n --defaults --strip \
+    && pickle install swoole@4.8.11 -n --defaults --strip \
     && apk del --no-network .ext-build-deps \
     && rm -rf /tmp/*
 

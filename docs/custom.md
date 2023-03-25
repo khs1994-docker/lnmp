@@ -32,23 +32,23 @@
 
 ```yaml
 # docker-lnmp.override.yml
-version: "3.9"
+
 
 services:
   php8:
     # 想修改哪个配置在这里重写即可，例如想使用自己的 PHP 镜像或国内镜像，那么增加 `image` 指令即可
-    image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-8.1.3}-fpm-alpine
+    image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-8.1.9}-fpm-alpine
 ```
 
 你也可以加上 `build` 字段，先构建镜像再启动
 
 ```yaml
 # docker-lnmp.override.yml
-version: "3.9"
+
 
 services:
   php8:
-    image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-8.1.3}-fpm-alpine
+    image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-8.1.9}-fpm-alpine
     # 增加 build 字段
     build:
       context: ./dockerfile/php/
@@ -66,7 +66,7 @@ $ ./lnmp-docker up
 
 ```yaml
 # docker-lnmp.override.yml
-version: "3.9"
+
 
 services:
   php8:
@@ -78,7 +78,7 @@ services:
 
 ```yaml
 # docker-lnmp.override.yml
-version: "3.9"
+
 
 services:
   mysql:
@@ -90,7 +90,7 @@ services:
 
 ```yaml
 # docker-lnmp.override.yml
-version: "3.9"
+
 
 services:
   my_add_service:

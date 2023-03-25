@@ -164,7 +164,7 @@ jobs:
       set -x
       env
       docker --version
-      docker-compose --version
+      docker compose version
     displayName: 'manifest'
   - script: |
       set -x
@@ -173,10 +173,7 @@ jobs:
       sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) ${DOCKER_CHANNEL}"
       sudo apt-get update
       sudo apt-get -y install docker-ce
-      docker-compose --version || true
-      # sudo rm /usr/local/bin/docker-compose
-      # curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-      # sudo install -m755 docker-compose /usr/local/bin
+      docker compose version
       sudo mkdir -p /etc/systemd/system/docker.service.d
       echo -e '[Service]\nExecStart=\nExecStart=/usr/bin/dockerd' | sudo tee /etc/systemd/system/docker.service.d/docker.conf
       echo '{"hosts":["unix:///var/run/docker.sock","tcp://0.0.0.0:2375"],"experimental":true}' | sudo tee /etc/docker/daemon.json
@@ -193,7 +190,7 @@ jobs:
   - script: |
       set -x
       docker --version
-      docker-compose --version
+      docker compose version
       docker buildx version
       docker
     displayName: 'install-after-manifest'

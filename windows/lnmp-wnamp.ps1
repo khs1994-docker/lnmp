@@ -2,8 +2,6 @@
 
 ################################################################################
 
-$LNMP_WSL_CMD = wsl -d ${DistributionName} -- wslpath "'$PSScriptRoot\..\wsl\lnmp-wsl'";
-
 Function print_help_info() {
   Write-Host "
 Usage:
@@ -37,14 +35,17 @@ Function _stop($soft) {
     "nginx" {
       printInfo "Stop nginx..." Red
       start-process "nginx" -ArgumentList "-s", "stop", "-p", "${NGINX_PATH}" -Verb RunAs
+      Stop-Process -Name nginx
       Write-Host "
       "
     }
 
     "php" {
       printInfo "Stop php-cgi..." Red
-      taskkill /F /IM php-cgi-spawner.exe
-      taskkill /F /IM php-cgi.exe
+      # taskkill /F /IM php-cgi-spawner.exe
+      # taskkill /F /IM php-cgi.exe
+      Stop-Process -Name php-cgi-spawner
+      Stop-Process -Name php-cgi
       Write-Host "
        "
     }
@@ -64,12 +65,14 @@ Function _stop($soft) {
     }
 
     Default {
+      $LNMP_WSL_CMD = wsl -d ${DistributionName} -- wslpath "'$PSScriptRoot\..\wsl\lnmp-wsl'";
       wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop $soft
     }
   }
 }
 
 Function _stop_wsl($soft) {
+  $LNMP_WSL_CMD = wsl -d ${DistributionName} -- wslpath "'$PSScriptRoot\..\wsl\lnmp-wsl'";
   switch ($soft) {
     "wsl-php" {
       wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop php
@@ -121,32 +124,14 @@ Function _start($soft) {
 
     "php" {
       printInfo "Start php-cgi..." Green
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9000 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9100 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9200 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9300 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9400 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9500 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9600 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9700 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9800 1
-      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9900 1
+      php-cgi-spawner.exe "c:/php/php-cgi.exe -c c:/php/php.ini" 9000 4+16
       Write-Host "
        "
     }
 
     "php-pre" {
       printInfo "Start php-cgi..." Green
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9000 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9100 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9200 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9300 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9400 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9500 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9600 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9700 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9800 1
-      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9900 1
+      php-cgi-spawner.exe "c:/php-pre/php-cgi.exe -c c:/php-pre/php.ini" 9000 4+16
       Write-Host "
       "
     }
@@ -160,12 +145,14 @@ Function _start($soft) {
     }
 
     Default {
+      $LNMP_WSL_CMD = wsl -d ${DistributionName} -- wslpath "'$PSScriptRoot\..\wsl\lnmp-wsl'";
       wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start $soft
     }
   }
 }
 
 Function _start_wsl($soft) {
+  $LNMP_WSL_CMD = wsl -d ${DistributionName} -- wslpath "'$PSScriptRoot\..\wsl\lnmp-wsl'";
   switch ($soft) {
     "wsl-php" {
       wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start php

@@ -8,7 +8,7 @@
 
 ## 与 docker compose 命令保持一致
 
-例如 `lnmp-docker up | down` 对应着 `docker-compose up | down`
+例如 `lnmp-docker up | down` 对应着 `docker compose up | down`
 
 ## 自定义 CLI
 
@@ -68,22 +68,22 @@ export PATH=$LNMP_PATH:$LNMP_PATH/bin:$PATH
 
 请查看 [项目初始化过程](init.md)。
 
-### docker-compose 原始命令
+### docker compose 原始命令
 
-使用 `docker-compose` 来启动、停止、销毁容器的参数分别是 `up -d` `stop` `down`，通过 `-f` 来加载 `docker-compose.yml` (可以任意命名)，本项目的 CLI 就是对以上一些命令的封装。
+使用 `docker compose` 来启动、停止、销毁容器的参数分别是 `up -d` `stop` `down`，通过 `-f` 来加载 `docker-compose.yml` (可以任意命名)，本项目的 CLI 就是对以上一些命令的封装。
 
 |场景|CLI|原始命令|
 |:--|:--|:-|
-|开发环境  | `$ ./lnmp-docker up`           |`docker-compose -f docker-lnmp.yml -f docker-lnmp.override.yml up -d`                                                            |
+|开发环境  | `$ ./lnmp-docker up`           |`docker compose -f docker-lnmp.yml -f docker-lnmp.override.yml up -d`                                                            |
 |生产环境                 | `$ ./lnmp-docker swarm-deploy` |`docker stack -c docker-production.yml lnmp`                                   |
 
->`docker-lnmp.override.yaml` 是为了重写 `docker-lnmp.yaml`，执行 `docker-compose up -d` 会默认加载该文件。
+>`docker-lnmp.override.yaml` 是为了重写 `docker-lnmp.yaml`，执行 `docker compose up -d` 会默认加载该文件。
 
 你可以使用 `config` 命令查看最终的 `docker compose` 配置文件。
 
-### 使用 docker-compose 命令
+### 使用 docker compose 命令
 
-> 我就是不想使用你提供的 `lnmp-docker` `CLI`，我就要使用 `docker-compose` 命令，怎们办？
+> 我就是不想使用你提供的 `lnmp-docker` `CLI`，我就要使用 `docker compose` 命令，怎们办？
 
 本项目支持生成标准的 `docker-compose.yml` 文件，执行以下命令即可。
 
@@ -93,12 +93,12 @@ export PATH=$LNMP_PATH:$LNMP_PATH/bin:$PATH
 $ ./lnmp-docker config > docker-compose.yml
 ```
 
-之后就可以使用 `docker-compose` 命令
+之后就可以使用 `docker compose` 命令
 
 ```bash
-$ docker-compose up -d $(./lnmp-docker services)
+$ docker compose up -d $(./lnmp-docker services)
 
-$ docker-compose down
+$ docker compose down
 ```
 
 ### 根据环境的不同使用不同的 `.env.${LNMP_ENV}` 文件

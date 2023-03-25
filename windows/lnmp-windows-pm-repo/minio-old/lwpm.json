@@ -1,0 +1,27 @@
+{
+  "name": "minio",
+  "description": "MinIO is a high performance object storage server compatible with Amazon S3 APIs",
+  "version": "RELEASE.2022-10-24T18-35-07Z",
+  "pre-version": "RELEASE.2022-10-24T18-35-07Z",
+  "homepage": "https://min.io/",
+  "bug": "https://github.com/minio/minio/issues",
+  "github": "minio/minio",
+  "releases": "https://github.com/minio/minio/releases",
+  "url": "https://github.com/khs1994-docker/minio-mirror/releases/download/nightly/minio-RELEASE.2022-10-24T18-35-07Z-windows-amd64.zip",
+  "url-mirror": "https://pcit-generic.pkg.coding.net/khs1994-docker/kubernetes/minio-RELEASE.2022-10-24T18-35-07Z-windows-amd64.zip",
+  "command": "minio",
+  "scripts": {
+    "install": [
+      "_unzip $filename C:\\bin"
+    ],
+    "test": [
+      "(minio --version)[0].split(' ')[2]",
+      "(mc --version)[0].split(' ')[2]"
+    ],
+    "uninstall": "_cleanup C:\\bin\\minio.exe C:\\bin\\mc.exe",
+    "version": "(minio --version)[0].split(' ')[2]"
+  },
+  "path": [
+    "C:\\bin"
+  ]
+}

@@ -3,7 +3,7 @@ version: "3.9"
 #
 # NGINX fzjh
 #
-# $ docker-compose -f docker-cluster.nginx.yml -f docker-compose.yml  -f docker-compose.override.yml up nginx_main nginx-1 nginx-2 nginx-3 php7
+# $ docker compose -f docker-cluster.nginx.yml -f docker-compose.yml  -f docker-compose.override.yml up nginx_main nginx-1 nginx-2 nginx-3 php7
 #
 
 x-common:

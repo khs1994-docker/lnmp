@@ -1,4 +1,4 @@
-version: "3.9"
+
 
 x-common:
   &common
@@ -10,7 +10,7 @@ services:
 
   drone-server:
     << : *common
-    image: drone/drone:${CI_DRONE_VERSION:-2.4.0}
+    image: drone/drone:${CI_DRONE_VERSION:-2.16.0}
     volumes:
       - drone-data-v1:/data:rw
     networks:
@@ -48,7 +48,7 @@ services:
 
   gogs:
     << : *common
-    image: gogs/gogs:0.12
+    image: gogs/gogs:0.13
     ports:
       - "${CI_HOST:?CI_HOST}:${CI_GOGS_SSH_PORT}:22"
       - "${CI_HOST:?CI_HOST}:${CI_GOGS_PORT}:3000"
@@ -74,7 +74,7 @@ services:
 
   mysql:
     << : *common
-    image: mysql:${CI_MYSQL_VERSION:-8.0.28}
+    image: mysql:${CI_MYSQL_VERSION:-8.0.30}
     env_file: secrets/mysql.env
     volumes:
       - mysql-data:/var/lib/mysql:rw
@@ -89,8 +89,8 @@ services:
 
   nginx:
     << : *common
-    # image: khs1994/nginx:${CI_NGINX_VERSION:-1.21.3}-alpine
-    image: nginx:${CI_NGINX_VERSION:-1.21.3}-alpine
+    # image: khs1994/nginx:${CI_NGINX_VERSION:-1.23.3}-alpine
+    image: nginx:${CI_NGINX_VERSION:-1.23.3}-alpine
     networks:
       - frontend
     ports:

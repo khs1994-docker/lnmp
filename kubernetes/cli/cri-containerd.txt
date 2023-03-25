@@ -10,10 +10,10 @@ high performance container runtime
 
 
 USAGE:
-   containerd [global options] command [command options] [arguments...]
+   cri-containerd [global options] command [command options] [arguments...]
 
 VERSION:
-   v1.5.6
+   v1.6.8
 
 DESCRIPTION:
 

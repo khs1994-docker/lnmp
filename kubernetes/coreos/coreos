@@ -112,19 +112,19 @@ case "$1" in
   server )
   if ! [ -f cert/apiserver.pem ];then
     cd ..
-    docker-compose up cfssl
+    docker compose up cfssl
     cd -
   fi
 
   cd ..
   shift
-  docker-compose up $@ fcos-server
+  docker compose up $@ fcos-server
 
   ;;
 
   cert )
     cd ..
-    docker-compose up cfssl
+    docker compose up cfssl
 
   ;;
 

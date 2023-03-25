@@ -62,5 +62,3 @@ server{
   }
 }
 ```
-
-你也可以在 https://khs1994.gitee.io/server-side-tls/ssl-config-generator/ 便捷的生成 SSL 配置。

@@ -1,6 +1,6 @@
 # [Storage](https://kubernetes.io/docs/concepts/storage/)
 
-* https://kubernetes.io/zh/docs/concepts/storage/
+* https://kubernetes.io/zh-cn/docs/concepts/storage/
 * https://github.com/kubernetes/kubernetes/tree/master/pkg/volume
 
 你可以将数据存入以下地方

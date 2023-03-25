@@ -10,10 +10,13 @@ echo "==> Initial Configuration, please see https://unit.nginx.org/installation/
 
 set -e
 
+WAITLOOPS=5
+SLEEPSEC=1
+
 curl_put()
 {
-    RET=`/usr/bin/curl -s -w '%{http_code}' -X PUT --data-binary @$1 --unix-socket /usr/local/nginx-unit/control.unit.sock http://localhost/$2`
-    RET_BODY=${RET::-3}
+    RET=$(/usr/bin/curl -s -w '%{http_code}' -X PUT --data-binary @$1 --unix-socket /usr/local/nginx-unit/control.unit.sock http://localhost/$2)
+    RET_BODY=$(echo $RET | /bin/sed '$ s/...$//')
     RET_STATUS=$(echo $RET | /usr/bin/tail -c 4)
     if [ "$RET_STATUS" -ne "200" ]; then
         echo "$0: Error: HTTP response status code is '$RET_STATUS'"
@@ -26,13 +29,13 @@ curl_put()
     return 0
 }
 
-if [ "$1" = "unitd" ]; then
+if [ "$1" = "unitd" ] || [ "$1" = "unitd-debug" ]; then
     if /usr/bin/find "/usr/local/nginx-unit/state/" -mindepth 1 -print -quit 2>/dev/null | /bin/grep -q .; then
         echo "$0: /usr/local/nginx-unit/state/ is not empty, skipping initial configuration..."
     else
         if /usr/bin/find "/docker-entrypoint.d/" -mindepth 1 -print -quit 2>/dev/null | /bin/grep -q .; then
             echo "$0: /docker-entrypoint.d/ is not empty, launching Unit daemon to perform initial configuration..."
-            /usr/sbin/unitd --user root --group root --log /var/log/nginx-unit/nginx-unit.log --control unix:/usr/local/nginx-unit/control.unit.sock
+            /usr/sbin/$1 --control unix:/usr/local/nginx-unit/control.unit.sock
 
             while [ ! -S /usr/local/nginx-unit/control.unit.sock ]; do echo "$0: Waiting for control socket to be created..."; /bin/sleep 0.1; done
             # even when the control socket exists, it does not mean unit has finished initialisation
@@ -63,9 +66,20 @@ if [ "$1" = "unitd" ]; then
             done
 
             echo "$0: Stopping Unit daemon after initial configuration..."
-            kill -TERM `/bin/cat /usr/local/nginx-unit/unit.pid`
+            kill -TERM $(/bin/cat /usr/local/nginx-unit/unit.pid)
 
-            while [ -S /usr/local/nginx-unit/control.unit.sock ]; do echo "$0: Waiting for control socket to be removed..."; /bin/sleep 0.1; done
+            for i in $(/usr/bin/seq $WAITLOOPS); do
+                if [ -S /usr/local/nginx-unit/control.unit.sock ]; then
+                    echo "$0 Waiting for control socket to be removed..."
+                    /bin/sleep $SLEEPSEC
+                else
+                    break
+                fi
+            done
+            if [ -S /usr/local/nginx-unit/control.unit.sock ]; then
+                kill -KILL $(/bin/cat /usr/local/nginx-unit/unit.pid)
+                rm -f /usr/local/nginx-unit/control.unit.sock
+            fi
 
             echo
             echo "$0: Unit initial configuration complete; ready for start up..."

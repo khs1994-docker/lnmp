@@ -92,5 +92,5 @@ MountFlags=shared
 * https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner
 * https://www.jianshu.com/p/8236cb452bcf
 * https://www.jianshu.com/p/bfa204cef8c0
-* https://stor.51cto.com/art/201812/588905.htm
+* https://www.51cto.com/article/588905.html
 * https://blog.csdn.net/watermelonbig/article/details/84108424

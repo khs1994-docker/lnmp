@@ -6,15 +6,16 @@ homepage: "https://code.visualstudio.com/"
 bug: "https://github.com/Microsoft/vscode/issues"
 github: "microsoft/vscode"
 releases: "https://github.com/Microsoft/vscode/releases"
-url: "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64-user}else{echo $env:lwpm_os})/stable"
-pre-url: "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64-user}else{echo $env:lwpm_os})/insider"
+url: "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64}else{echo $env:lwpm_os})/stable"
+pre-url: "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64}else{echo $env:lwpm_os})/insider"
 command: code
 download-filename: |
-  VSCode$(if($IsWindows){echo .exe}else{echo .zip})
+  VSCode-${VERSION}$(if($IsWindows){echo .exe}else{echo .zip})
 scripts:
   test: |
     if($_isWindows){
-      & "$home\AppData\Local\Programs\Microsoft VS Code\bin\code.cmd" --version
+      & "C:\Program Files\Microsoft VS Code\bin\code.cmd" --version
+      & "C:\Program Files\Microsoft VS Code Insiders\bin\code-insiders.cmd" --version
     }else{
       & "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" --version | Out-Host
     }
