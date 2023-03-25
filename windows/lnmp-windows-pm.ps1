@@ -1125,6 +1125,24 @@ switch ($command) {
     # @{NODE_NAME = "$nodeName";}
   }
 
+  "start" {
+    if (${opt}.GetType().Name -eq 'String') {
+      $ServiceName = $opt
+      try {
+        $pkg_root = pkg_root $ServiceName
+
+        if ($pkg_root) {
+          $service = (ConvertFrom-Json (Get-Content $pkg_root/lwpm.json -raw)).scripts.service
+          if ($service) {
+            $command, $other = $service;
+            Start-Process $command $other
+          }
+        }
+      }
+      catch { }
+    }
+  }
+
   "remove-service" {
     Import-Module $PSScriptRoot/sdk/service/service.psm1 -Force
     foreach ($item in $opt) {
