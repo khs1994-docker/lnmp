@@ -130,10 +130,6 @@ Official WebSite https://lnmp.khs1994.com
 
 Usage: ./docker-lnmp COMMAND
 
-PCIT EE:
-  pcit-up              Up(Run) PCIT EE https://github.com/pcit-ce/pcit
-  pcit-cp              Copy PCIT files to app/.pcit
-
 Commands:
   up                   Up LNMP (Support x86_64 arm64v8)
   down                 Stop and remove LNMP Docker containers, networks
@@ -841,22 +837,22 @@ restore(){
 pcit_nginx_init(){
   # 判断 nginx 配置文件是否存在
 
-  if ! [ -f pcit/conf/pcit.conf ];then
-    $(_sudo) cp pcit/conf/pcit.config pcit/conf/pcit.conf
+  if ! [ -f lrew/pcit/conf/pcit.conf ];then
+    $(_sudo) cp lrew/pcit/conf/pcit.config lrew/pcit/conf/pcit.conf
   fi
 
-  cat pcit/conf/pcit.conf | grep -q demo.ci.khs1994.com && print_error "PCIT conf error, please see pcit/README.md"
+  cat lrew/pcit/conf/pcit.conf | grep -q demo.ci.khs1994.com && print_error "PCIT conf error, please see lrew/pcit/README.md"
 
   # SSL 证书
 
-  if ! [ -f pcit/ssl/ci.crt ];then
-    print_error "PCIT Website SSL key not found, please see pcit/README.md"
+  if ! [ -f lrew/pcit/ssl/ci.crt ];then
+    print_error "PCIT Website SSL key not found, please see lrew/pcit/README.md"
     exit 1
   fi
 
-  $(_sudo) cp pcit/ssl/ci.crt config/${LNMP_NGINX_CONF_D:-nginx}/ssl/ci.crt
+  $(_sudo) cp lrew/pcit/ssl/ci.crt config/${LNMP_NGINX_CONF_D:-nginx}/ssl/ci.crt
 
-  $(_sudo) cp pcit/conf/pcit.conf config/${LNMP_NGINX_CONF_D:-nginx}/pcit.conf
+  $(_sudo) cp lrew/pcit/conf/pcit.conf config/${LNMP_NGINX_CONF_D:-nginx}/pcit.conf
 }
 
 pcit_init(){
@@ -867,7 +863,7 @@ pcit_init(){
   docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
 
   if ! [ -f pcit/.env.${APP_ENV:-development} ];then
-    cp pcit/.env.example pcit/.env.${APP_ENV:-development}
+    cp lrew/pcit/.env.example lrew/pcit/.env.${APP_ENV:-development}
   fi
 
   # if ! [ -f ${APP_ROOT}/pcit/public/.env.development ];then
@@ -876,8 +872,8 @@ pcit_init(){
 
   # GitHub App private key
 
-  if ! [ -f pcit/key/private.key ];then
-    print_error "PCIT GitHub App private key not found, please see pcit/README.md"
+  if ! [ -f lrew/pcit/key/private.key ];then
+    print_error "PCIT GitHub App private key not found, please see lrew/pcit/README.md"
     exit 1
   fi
 }

@@ -320,9 +320,6 @@ Usage: ./docker-lnmp COMMAND
 Donate:
   zan                  Donate
 
-PCIT EE:
-  pcit-up              Up(Run) PCIT EE https://github.com/pcit-ce/pcit
-
 Commands:
   up                   Up LNMP (Support x86_64 arm64v8)
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
@@ -1296,38 +1293,38 @@ XXX
     #   cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.production
     # }
 
-    if (!(Test-Path pcit/.env.development)) {
-      cp pcit/.env.example pcit/.env.development
+    if (!(Test-Path lrew/pcit/.env.development)) {
+      cp lrew/pcit/.env.example lrew/pcit/.env.development
     }
 
     # 判断 nginx 配置文件是否存在
 
-    if (!(Test-Path pcit/conf/pcit.conf)) {
-      cp pcit/conf/pcit.config pcit/conf/pcit.conf
+    if (!(Test-Path lrew/pcit/conf/pcit.conf)) {
+      cp lrew/pcit/conf/pcit.config lrew/pcit/conf/pcit.conf
     }
 
-    $a = Select-String 'demo.ci.khs1994.com' pcit/conf/pcit.conf
+    $a = Select-String 'demo.ci.khs1994.com' lrew/pcit/conf/pcit.conf
 
     if ($a.Length -ne 0) {
-      printError "PCIT nginx conf error, please see pcit/README.md"
+      printError "PCIT nginx conf error, please see lrew/pcit/README.md"
     }
 
-    if (!(Test-Path pcit/ssl/ci.crt)) {
-      printError "PCIT Website SSL key not found, please see pcit/README.md"
+    if (!(Test-Path lrew/pcit/ssl/ci.crt)) {
+      printError "PCIT Website SSL key not found, please see lrew/pcit/README.md"
     }
 
-    if (!(Test-Path pcit/key/private.key)) {
-      printError "PCIT GitHub App private key not found, please see pcit/README.md"
+    if (!(Test-Path lrew/pcit/key/private.key)) {
+      printError "PCIT GitHub App private key not found, please see lrew/pcit/README.md"
     }
 
-    if (!(Test-Path pcit/key/public.key)) {
-      docker run -it --rm -v $PWD/pcit/key:/app pcit/pcit `
+    if (!(Test-Path lrew/pcit/key/public.key)) {
+      docker run -it --rm -v $PWD/lrew/pcit/key:/app pcit/pcit `
         openssl rsa -in private.key -pubout -out public.key
     }
 
-    cp pcit/ssl/ci.crt config/nginx/ssl/ci.crt
+    cp lrew/pcit/ssl/ci.crt config/nginx/ssl/ci.crt
 
-    cp pcit/conf/pcit.conf config/nginx/pcit.conf
+    cp lrew/pcit/conf/pcit.conf config/nginx/pcit.conf
 
     # 启动
     $options = Get-ComposeOptions "docker-lnmp.yml", `
