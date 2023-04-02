@@ -16,7 +16,7 @@ x-common-labels:
 x-common:
   &common
   restart: ${LNMP_RESTART:-always}
-  env_file: ./cli/timezone.env
+  env_file: ./scripts/cli/timezone.env
   networks:
     - backend
   read_only: ${LNMP_ROOT_FILESYSTEM_READ_ONLY:-false}

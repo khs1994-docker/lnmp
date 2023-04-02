@@ -3,7 +3,7 @@
 x-common:
   &common
   restart: always
-  env_file: ./cli/timezone.env
+  env_file: ./scripts/cli/timezone.env
   networks:
     - backend
     - frontend

@@ -48,14 +48,14 @@ export EXEC_CMD_DIR=`pwd`
 
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-if [ -f cli/khs1994-robot.enc ];then
+if [ -f scripts/cli/khs1994-robot.enc ];then
     print_info "Use LNMP CLI in LNMP Root $PWD"
 else
     print_info "Use LNMP CLI in $PWD"
     cd ${ScriptRoot}
 fi
 
-if ! [ -f cli/khs1994-robot.enc ];then
+if ! [ -f scripts/cli/khs1994-robot.enc ];then
     exit 1
 fi
 
@@ -987,13 +987,13 @@ main() {
     ;;
 
   test )
-    _docker_is_run; cli/test $@
+    _docker_is_run; scripts/cli/test $@
     ;;
 
   completion )
     ROOT_PATH=$HOME/.config/fish/completions
     if ! [ -d $ROOT_PATH ];then mkdir -p $ROOT_PATH ; fi
-    ln -sf $PWD/cli/completion/fish/* $ROOT_PATH
+    ln -sf $PWD/scripts/cli/completion/fish/* $ROOT_PATH
     ls -la $ROOT_PATH
     ;;
 
@@ -1580,7 +1580,7 @@ COMPOSE_LINK=https://download.fastgit.org/docker/compose/releases/download
 if [ -n "${LNMP_SERVICES}" ];then LNMP_SERVICES_SYSTEM_ENV=$LNMP_SERVICES;fi
 if [ -n "${LREW_INCLUDE}" ];then LREW_INCLUDE_SYSTEM_ENV=$LREW_INCLUDE;fi
 
-env_status && . ./.env && . cli/.env
+env_status && . ./.env && . scripts/cli/.env
 
 if [ -n "${LNMP_SERVICES_SYSTEM_ENV}" ];then export LNMP_SERVICES=$LNMP_SERVICES_SYSTEM_ENV;fi
 if [ -n "${LREW_INCLUDE_SYSTEM_ENV}" ];then export LREW_INCLUDE=$LREW_INCLUDE_SYSTEM_ENV;fi

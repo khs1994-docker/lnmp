@@ -1,13 +1,13 @@
 # systemd
 
-systemd 文件位于 `cli/systemd/*`
+systemd 文件位于 `scripts/cli/systemd/*`
 
 适用于 `Linux x86_64` 开发环境。
 
 >务必熟悉 `systemd` 之后再执行此项操作。
 
 ```bash
-$ sudo cp $LNMP_PATH/cli/systemd/lnmp-docker.service /etc/systemd/system/
+$ sudo cp $LNMP_PATH/scripts/cli/systemd/lnmp-docker.service /etc/systemd/system/
 
 $ sudo vi /etc/systemd/system/lnmp-docker.service
 
@@ -27,7 +27,7 @@ $ sudo journalctl -u lnmp-docker
 ## 每周清理日志
 
 ```bash
-$ sudo cp -a $LNMP_PATH/cli/systemd/*-cleanup /etc/systemd/system/
+$ sudo cp -a $LNMP_PATH/scripts/cli/systemd/*-cleanup /etc/systemd/system/
 
 $ sudo vi /etc/systemd/system/lnmp-docker-cleanup.service
 

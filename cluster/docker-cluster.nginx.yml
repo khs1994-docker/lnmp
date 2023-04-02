@@ -11,7 +11,7 @@ x-common:
   # image: "khs1994/nginx:${LNMP_NGINX_VERSION:-1.17.8}-alpine"
   image: "nginx:${LNMP_NGINX_VERSION:-1.17.8}-alpine"
   restart: always
-  env_file: ./cli/timezone.env
+  env_file: ./scripts/cli/timezone.env
   networks:
     - frontend
   working_dir: /app

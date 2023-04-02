@@ -33,7 +33,7 @@ x-common:
   environment:
     - REDIS_HOST=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
   env_file:
-    - ./cli/timezone.env
+    - ./scripts/cli/timezone.env
   networks:
     cluster_redis_s:
       # ipv4_address: 172.15.0.705

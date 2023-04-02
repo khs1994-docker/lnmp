@@ -7,15 +7,15 @@ Build khs1994-docker/lnmp deb or rpm
 
 Usage:
 
-$ cli/build.sh deb \${TAG}
+$ scripts/cli/build.sh deb \${TAG}
 
-$ cli/build.sh rpm \${TAG}
+$ scripts/cli/build.sh rpm \${TAG}
 
 Example:
 
-$ cli/build.sh deb v18.05
+$ scripts/cli/build.sh deb v18.05
 
-$ cli/build.sh rpm v18.06-rc1
+$ scripts/cli/build.sh rpm v18.06-rc1
 
 "
 fi
@@ -25,7 +25,7 @@ set -ex
 if [ -f khs1994-robot.enc ];then exit 1; fi
 
 _deb(){
-  cd cli/deb
+  cd scripts/cli/deb
 
   sed -i "s#KHS1994_DOCKER_LNMP_VERSION#${VERSION}#g" DEBIAN/control
 
@@ -49,11 +49,11 @@ _deb(){
 
 _rpm(){
 
-  sed -i "s#KHS1994_DOCKER_LNMP_VERSION#${VERSION}#g" cli/rpm/SPECS/khs1994-docker-lnmp.spec
+  sed -i "s#KHS1994_DOCKER_LNMP_VERSION#${VERSION}#g" scripts/cli/rpm/SPECS/khs1994-docker-lnmp.spec
 
-  rpmbuild -bb cli/rpm/SPECS/khs1994-docker-lnmp.spec || sed -i "s#${VERSION}#KHS1994_DOCKER_LNMP_VERSION#g" cli/rpm/SPECS/khs1994-docker-lnmp.spec
+  rpmbuild -bb scripts/cli/rpm/SPECS/khs1994-docker-lnmp.spec || sed -i "s#${VERSION}#KHS1994_DOCKER_LNMP_VERSION#g" cli/rpm/SPECS/khs1994-docker-lnmp.spec
 
-  sed -i "s#${VERSION}#KHS1994_DOCKER_LNMP_VERSION#g" cli/rpm/SPECS/khs1994-docker-lnmp.spec
+  sed -i "s#${VERSION}#KHS1994_DOCKER_LNMP_VERSION#g" scripts/cli/rpm/SPECS/khs1994-docker-lnmp.spec
 }
 
 command=$1

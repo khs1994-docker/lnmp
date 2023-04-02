@@ -7,8 +7,8 @@
 
 **主、次版本号**
 
-* cli/.env
-* cli/.env.ps1
+* scripts/cli/.env
+* scripts/cli/.env.ps1
 * 全部搜索替换
 
 ## 发布 `lnmp-docker.ps1`

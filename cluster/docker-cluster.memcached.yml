@@ -16,7 +16,7 @@ x-common:
   networks:
     - cluster_memcached
   env_file:
-    - ./cli/timezone.env
+    - ./scripts/cli/timezone.env
 
 x-deploy:
   &default-deploy

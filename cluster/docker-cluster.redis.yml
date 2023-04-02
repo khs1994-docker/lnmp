@@ -31,7 +31,7 @@ x-common:
   image: redis:7.0.0-alpine
   restart: always
   env_file:
-    - ./cli/timezone.env
+    - ./scripts/cli/timezone.env
   networks:
     cluster_redis:
       # ipv4_address: 172.16.2.55

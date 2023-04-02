@@ -33,7 +33,7 @@ x-logging:
 x-common:
   &common
   env_file:
-    - ./cli/timezone.env
+    - ./scripts/cli/timezone.env
   networks:
     - backend
   read_only: false
