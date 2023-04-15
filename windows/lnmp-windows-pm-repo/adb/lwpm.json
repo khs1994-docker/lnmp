@@ -1,8 +1,8 @@
 {
   "name": "adb",
   "description": "",
-  "version": "33.0.1",
-  "pre-version": "33.0.1",
+  "version": "34.0.1",
+  "pre-version": "34.0.1",
   "homepage": "https://developer.android.google.cn/studio/releases/platform-tools",
   "bug": "",
   "github": "",

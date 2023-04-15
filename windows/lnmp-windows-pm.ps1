@@ -1084,7 +1084,7 @@ switch ($command) {
 
   "install-service" {
 
-    if($PSVersionTable.PSVersion.Major -ne 5){
+    if ($PSVersionTable.PSVersion.Major -ne 5) {
       Write-Host "==> Please exec this command on powershell.exe" -ForegroundColor Red
       cd $HOME/lnmp
       powershell.exe
@@ -1109,7 +1109,9 @@ switch ($command) {
 
         if ($pkg_root) {
           $service = (ConvertFrom-Json (Get-Content $pkg_root/lwpm.json -raw)).scripts.service
-
+          if ((ConvertFrom-Json (Get-Content $pkg_root/lwpm.json -raw)).serviceName) {
+            $ServiceName = (ConvertFrom-Json (Get-Content $pkg_root/lwpm.json -raw)).serviceName
+          }
           if ($service) {
             $CommandLine = $service
             $LogFile = "C:\logs\${ServiceName}.log"
