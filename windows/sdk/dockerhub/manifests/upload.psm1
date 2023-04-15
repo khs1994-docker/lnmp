@@ -1,3 +1,5 @@
+Import-Module $PSScriptRoot/exists.psm1
+
 Function New-Manifest([string]$token, [string]$image, [string]$ref, [string]$manifest_json_path, [string]$contentType = "application/vnd.docker.distribution.manifest.v2+json", [string]$registry = "registry.hub.docker.com") {
   write-host "==> push [ $image $ref ] $contentType" -ForegroundColor Blue
 
@@ -26,6 +28,22 @@ Function New-Manifest([string]$token, [string]$image, [string]$ref, [string]$man
   }
   catch {
     write-host $_.Exception
+
+    curl -k -L -s `
+      -H "Content-Type: $contentType" `
+      -H "Authorization: Bearer $token" `
+      -X PUT `
+      -D $env:TEMP/curl_resp_header.txt `
+      --data-binary "@$manifest_json_path" `
+      -A "Docker-Client/20.10.16 (Windows)" `
+      "https://$registry/v2/$image/manifests/$ref"
+
+    if (Test-Manifest $token $image $ref $contentType $registry) {
+      return (Get-Content $manifest_json_path).Length, $ref
+    }
+    else {
+      return $false, $false
+    }
 
     return $false, $false
   }

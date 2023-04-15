@@ -17,6 +17,9 @@
 # 默认的 163 镜像可能较缓慢，请设置环境变量为阿里云镜像（自行获取）
 # $ $env:REGISTRY_MIRROR="xxxx.mirror.aliyuncs.com"
 
+# 或者直接使用官方地址
+# $env:LNMP_CN_ENV='false'
+
 $ . .\windows\sdk\dockerhub\rootfs.ps1
 
 $ rootfs alpine latest amd64 linux
@@ -27,6 +30,9 @@ $ rootfs alpine latest amd64 linux
 ```bash
 # 默认的 163 镜像可能较缓慢，请设置环境变量为阿里云镜像（自行获取）
 # $ export REGISTRY_MIRROR=xxxx.mirror.aliyuncs.com
+
+# 或者直接使用官方地址
+# export LNMP_CN_ENV=false
 
 $ ./windows/sdk/dockerhub/rootfs.sh alpine latest amd64 linux
 ```

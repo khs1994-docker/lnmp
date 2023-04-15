@@ -53,14 +53,20 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
 
   write-host "==> Upload blob ..." -ForegroundColor Blue
 
-  $result = Invoke-WebRequest `
-    -Authentication OAuth `
-    -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
-    -Method 'POST' `
-    -Uri "https://$registry/v2/$image/blobs/uploads/" `
-    -UserAgent "Docker-Client/20.10.16 (Windows)"
+  try {
+    $result = Invoke-WebRequest `
+      -Authentication OAuth `
+      -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
+      -Method 'POST' `
+      -Uri "https://$registry/v2/$image/blobs/uploads/" `
+      -UserAgent "Docker-Client/20.10.16 (Windows)"
 
-  $uuid = $result.Headers.'Location'
+    $uuid = $result.Headers.'Location'
+  }
+  catch {
+    $uuid = (curl -s --request POST "https://$registry/v2/$image/blobs/uploads" `
+        --header "Authorization: Bearer $token" -k -i).split()[-4]
+  }
 
   $length = (Get-ChildItem $file).Length
 
@@ -74,20 +80,42 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
   }
 
   try {
-    $uri = "$uuid&digest=$digest"
+    try {
+      $uri = "$uuid&digest=$digest"
 
-    if (!("$uuid".Contains('?'))) {
-      $uri = "${uuid}?digest=$digest"
+      if (!("$uuid".Contains('?'))) {
+        $uri = "${uuid}?digest=$digest"
+      }
+
+      $response = Invoke-WebRequest `
+        -Uri $uri `
+        -Headers $headers `
+        -Method 'Put' `
+        -Infile $file `
+        -UserAgent "Docker-Client/20.10.16 (Windows)"
+
+      $response_digest = $response.Headers.'Docker-Content-Digest'
     }
+    catch {
+      curl --request put $uri `
+        --header "Authorization: Bearer $token" `
+        --header "Content-Type: application/octet-stream" `
+        -k `
+        --data-binary "@$file" `
+        -D $env:TEMP/curl_resp_header.txt `
+        -s
 
-    $response = Invoke-WebRequest `
-      -Uri $uri `
-      -Headers $headers `
-      -Method 'Put' `
-      -Infile $file `
-      -UserAgent "Docker-Client/20.10.16 (Windows)"
+      if (Test-Blob $token $image $digest $registry) {
+        #     write-host (ConvertFrom-Json -InputObject @"
+        #     {
+        #       "file": "$($file.replace('\','\\'))",
+        #       "digest": "$digest"
+        #     }
+        # "@) -ForegroundColor Yellow
 
-    $response_digest = $response.Headers.'Docker-Content-Digest'
+        return $length, $digest
+      }
+    }
   }
   catch {
     write-host $_.Exception

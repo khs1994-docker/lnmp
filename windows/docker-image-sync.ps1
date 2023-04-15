@@ -1,10 +1,10 @@
 #!/usr/bin/env pwsh
 
-Import-Module $PSScriptRoot\sdk\dockerhub\manifests\get.psm1
-Import-Module $PSScriptRoot\sdk\dockerhub\manifests\upload.psm1
+Import-Module $PSScriptRoot\sdk\dockerhub\manifests\get.psm1 -Force
+Import-Module $PSScriptRoot\sdk\dockerhub\manifests\upload.psm1 -Force
 Import-Module $PSScriptRoot\sdk\dockerhub\manifests\exists.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\get.psm1
-Import-Module $PSScriptRoot\sdk\dockerhub\blobs\upload.psm1
+Import-Module $PSScriptRoot\sdk\dockerhub\blobs\upload.psm1 -Force
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\utils\Get-SHA.psm1
 
@@ -16,7 +16,7 @@ if ($env:SYNC_WINDOWS -eq 'true') {
 else {
   $EXCLUDE_OS = $("windows")
 }
-$EXCLUDE_ARCH = "s390x", "ppc64le", "386", "mips64le", "riscv64"
+$EXCLUDE_ARCH = "s390x", "ppc64le", "386", "mips", "mipsle" , "mips64" , "mips64le", "riscv64"
 $EXCLUDE_VARIANT = "v6", "v5"
 
 # $env:SOURCE_DOCKER_REGISTRY = "mirror.io"
@@ -27,9 +27,9 @@ $EXCLUDE_VARIANT = "v6", "v5"
 
 Import-Module -force $PSScriptRoot/sdk/dockerhub/imageParser/imageParser.psm1
 
-Function _upload_manifest($token, $image, $ref, $manifest_json_path, $registry) {
+Function _upload_manifest($token, $image, $ref, $manifest_json_path, $registry, $contentType = $([DockerImageSpec]::manifest)) {
   New-Manifest $token $image $ref $manifest_json_path `
-  $([DockerImageSpec]::manifest) $registry | out-host
+    $contentType $registry | out-host
 }
 
 Function _exclude_platform($manifests, $manifest_list_json_path) {
@@ -47,6 +47,11 @@ Function _exclude_platform($manifests, $manifest_list_json_path) {
     if (($EXCLUDE_OS.indexof($os) -ne -1) `
         -or ($EXCLUDE_ARCH.indexof($architecture) -ne -1) `
         -or ($EXCLUDE_VARIANT.indexof($variant) -ne -1 )) {
+      write-host "==> SKIP sync $platform" -ForegroundColor Red
+      continue
+    }
+
+    if ($architecture -eq 'unknown') {
       write-host "==> SKIP sync $platform" -ForegroundColor Red
       continue
     }
@@ -262,6 +267,8 @@ Function _sync($source, $dest, $config) {
     $manifest_list_json = $null
   }
 
+  $manifest_list_mediaType = $manifest_list_json.mediaType
+
   if (!($manifest_list_json)) {
     write-host "==> manifest list not found" -ForegroundColor Yellow
     $manifests_list_not_exists = $true
@@ -305,7 +312,7 @@ Function _sync($source, $dest, $config) {
       # check manifest exists
       $dest_token = _getDestToken $dest_registry $dest_image
       try {
-        $manifest_exists = Test-Manifest $dest_token $dest_image $manifest_digest -registry $dest_registry
+        $manifest_exists = Test-Manifest $dest_token $dest_image $manifest_digest $manifestf.mediaType -registry $dest_registry
       }
       catch {
         write-host "==> [error] check manifest error, skip" -ForegroundColor Red
@@ -325,13 +332,13 @@ manifest $manifest_digest already exists" `
 
           $token = _getSourceToken $source_registry $source_image
           $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
-          $([DockerImageSpec]::manifest) `
+            $manifestf.mediaType `
             -raw $false -registry $source_registry
 
           # upload manifests once
           $dest_token = _getDestToken $dest_registry $dest_image
           _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
-            $dest_registry
+            $dest_registry $manifestf.mediaType
 
           $already_push_manifest_once = $true
         }
@@ -375,11 +382,11 @@ manifest $manifest_digest already exists" `
 
         $token = _getSourceToken $source_registry $source_image
         $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
-        $([DockerImageSpec]::manifest) -raw $false -registry $source_registry
+          $manifest.mediaType -raw $false -registry $source_registry
 
         $dest_token = _getDestToken $dest_registry $dest_image
         _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
-          $dest_registry
+          $dest_registry $manifestf.mediaType
 
         return $manifest_json_path
       }
@@ -388,7 +395,7 @@ manifest $manifest_digest already exists" `
     # get manifest
     $token = _getSourceToken $source_registry $source_image
     $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
-    $([DockerImageSpec]::manifest) -raw $false -registry $source_registry
+      $manifest.mediaType -raw $false -registry $source_registry
 
     if (!$manifest_json_path) {
       write-host "==> [error] Image [ $source_image $source_ref ] `
@@ -400,6 +407,7 @@ manifest not found, skip" -ForegroundColor Red
     $manifest_json = ConvertFrom-Json (Get-Content $manifest_json_path -raw)
 
     $config_digest = $manifest_json.config.digest
+    $config_type = $manifest_json.config.mediaType
 
     # check config blob exists
     $dest_token = _getDestToken $dest_registry $dest_image
@@ -408,7 +416,7 @@ manifest not found, skip" -ForegroundColor Red
     try {
       _upload_blob $dest_token $dest_image $config_digest `
         $dest_registry $source_token $source_image $source_registry `
-      $([DockerImageSpec]::container_config)
+        $config_type
     }
     catch { write-host $_.Exception -ForegroundColor Red; return }
 
@@ -430,8 +438,8 @@ manifest not found, skip" -ForegroundColor Red
 
     # upload manifests
     $dest_token = _getDestToken $dest_registry $dest_image
-    _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
-      $dest_registry
+    _upload_manifest $dest_token $dest_image $manifest_digest $manifest_json_path `
+      $dest_registry $manifest.mediaType
   }
 
   if ($manifests_list_not_exists) {
@@ -445,7 +453,7 @@ manifest not found, skip" -ForegroundColor Red
   # upload manifests list
   $dest_token = _getDestToken $dest_registry $dest_image
   $length, $digest = New-Manifest $dest_token $dest_image $dest_ref $manifest_list_json_path `
-  $([DockerImageSpec]::manifest_list) $dest_registry
+    $manifest_list_mediaType $dest_registry
 
   if (!$digest) {
     write-host "==> [error] Manifest list push error" -ForegroundColor Red
