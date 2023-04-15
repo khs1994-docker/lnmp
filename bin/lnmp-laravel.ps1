@@ -25,7 +25,7 @@ lnmp-laravel new [My-project] [VERSION:-9]"
 $LARAVEL_PATH=$args[1]
 
 if (!$args[2]){
-  $VERSION=9
+  $VERSION=10
 }else{
   $VERSION=$args[2]
 }

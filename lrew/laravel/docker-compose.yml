@@ -23,9 +23,10 @@ services:
       - ./lrew/laravel/config/laravel.conf:/etc/nginx/conf.d/laravel.conf
 
   laravel:
-    << : *common
-    << : *common-label
-    image: "khs1994/laravel:${LNMP_LARAVEL_TAG:-9}"
+    << :
+      - *common
+      - *common-label
+    image: "khs1994/laravel:${LNMP_LARAVEL_TAG:-10}"
     volumes:
       # fpm config
       - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro

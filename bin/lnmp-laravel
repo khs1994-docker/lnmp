@@ -53,7 +53,7 @@ docker run -i ${tty} --rm \
   --mount type=bind,src=$ScriptRoot/../config/php8/php-cli.ini,target=/usr/local/etc/php/php-cli.ini \
   --env-file $ScriptRoot/../config/composer/.env \
   ${LNMP_PHP_IMAGE}:${LNMP_PHP_IMAGE_TAG} \
-  gosu ${LNMP_USER:-root:root} composer create-project --prefer-dist laravel/laravel=${3:-9.*} "$2"
+  gosu ${LNMP_USER:-root:root} composer create-project --prefer-dist laravel/laravel=${3:-10.*} "$2"
 
 else
   echo "Path $2 existing"
