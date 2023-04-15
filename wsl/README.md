@@ -1,6 +1,6 @@
 # WSL As PHP Development Environment
 
-* 建议使用 `Ubuntu-18.04` 版本，在商店搜索 `Linux` 选择 `Ubuntu` 安装即可
+* 建议使用 `Ubuntu-22.04` 版本，在商店搜索 `Linux` 选择 `Ubuntu` 安装即可
 
 * **NGINX** **PHP** 均为编译安装，配置目录为 `/usr/local/etc/*`。本项目提供了一键编译脚本，可以很方便的进行一键编译安装
 
@@ -14,7 +14,7 @@ $ wsl --set-default-version 2
 # $ wsl --set-version <Distro> 2
 
 # 设置默认发行版
-$ wsl -s Ubuntu-18.04
+$ wsl -s Ubuntu-22.04
 
 $ wsl -l -v
 ```

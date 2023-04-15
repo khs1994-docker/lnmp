@@ -16,17 +16,24 @@ $ composer install \
 # https://developer.aliyun.com/composer
 $ composer config -g repos.packagist composer https://mirrors.aliyun.com/composer/
 
-$ composer config -g repos.packagist composer https://repo.huaweicloud.com/repository/php/
-
 # https://mirrors.cloud.tencent.com/help/composer.html
 $ composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/
 ```
 
+**全球镜像**
+
+```bash
+$ composer config -g repos.packagist composer https://packagist.pages.dev
+```
+
 **过时的镜像（无法使用）**
 
-* https://packagist.mirrors.sjtug.sjtu.edu.cn
-* https://packagist.phpcomposer.com
-* https://php.cnpkg.org
+* ~~Asia, China mirrors.huaweicloud.com/repository/php~~
+* Asia, China developer.aliyun.com/composer
+* ~~Asia, China php.cnpkg.org~~
+* ~~Asia, China packagist.phpcomposer.com~~
+* ~~Asia, China packagist.mirrors.sjtug.sjtu.edu.cn~~
+* Asia, China mirrors.cloud.tencent.com/help/composer.html
 
 **取消配置**
 

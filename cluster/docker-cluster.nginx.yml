@@ -58,9 +58,11 @@ services:
       - ./log/nginx:/var/log/nginx
 
   nginx-2:
-    << : *nginx_node
-    << : *common
+    << :
+      - *nginx_node
+      - *common
 
   nginx-3:
-    << : *nginx_node
-    << : *common
+    << :
+      - *nginx_node
+      - *common

@@ -18,8 +18,9 @@ x-common-label:
 
 services:
   example:
-    << : *common
-    << : *common-label
+    << :
+      - *common
+      - *common-label
     image: "example/example:${LNMP_EXAMPLE_VERSION:-x.y.z}-alpine"
     # ports:
     #   - "${LNMP_EXAMPLE_HTTPS_PORT:-0.0.0.0:443}:443"

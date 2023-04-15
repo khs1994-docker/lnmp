@@ -17,8 +17,9 @@ x-common-label:
 
 services:
   registry:
-    << : *common
-    << : *common-label
+    << :
+      - *common
+      - *common-label
     image: ${LNMP_LIBRARY_NS:-library}/registry:${LNMP_REGISTRY_VERSION:-latest}
     networks:
       - frontend

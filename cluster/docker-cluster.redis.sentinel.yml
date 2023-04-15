@@ -66,8 +66,9 @@ x-labels:
 services:
 
   redis_sentinel_master-1:
-    << : *common
-    << : *default-labels
+    << :
+      - *common
+      - *default-labels
     ports:
       - "20000:20000"
     entrypoint: /docker-entrypoint.redis.sh
@@ -86,8 +87,9 @@ services:
     volumes:
       - cluster_redis_s_master-1-data:/data
     deploy:
-      << : *default-deploy
-      << : *default-labels
+      << :
+        - *default-deploy
+        - *default-labels
       placement:
         constraints: [node.role == manager]
       # resources:
@@ -100,8 +102,9 @@ services:
 
   redis_sentinel_node-1:
     &redis_node
-    << : *common
-    << : *default-labels
+    << :
+      - *common
+      - *default-labels
     depends_on:
       - redis_sentinel_master-1
     entrypoint: /docker-entrypoint.redis.sh
@@ -121,8 +124,9 @@ services:
     volumes:
       - cluster_redis_s_node-1-data:/data
     deploy:
-      << : *default-deploy
-      << : *default-labels
+      << :
+        - *default-deploy
+        - *default-labels
       # placement:
       #   constraints: [node.role == manager]
       # resources:
@@ -177,8 +181,9 @@ services:
 
   redis_sentinel_sentinel-1:
     &redis_sentinel_sentinel
-    << : *common
-    << : *default-labels
+    << :
+      - *common
+      - *default-labels
     depends_on:
       - redis_sentinel_master-1
     ports:
@@ -198,8 +203,9 @@ services:
     volumes:
       - cluster_redis_s_sentinel-1-data:/data
     deploy:
-      << : *default-deploy
-      << : *default-labels
+      << :
+        - *default-deploy
+        - *default-labels
       replicas: 1
       # resources:
       #   limits:

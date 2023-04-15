@@ -17,8 +17,9 @@ x-common-label:
 
 services:
   httpd:
-    << : *common
-    << : *common-label
+    << :
+      - *common
+      - *common-label
     image: "${LNMP_LIBRARY_NS:-library}/httpd:${LNMP_HTTPD_VERSION:-2.4.53}-alpine"
     ports:
       - "${LNMP_HTTPD_HTTPS_PORT:-0.0.0.0:443}:443"

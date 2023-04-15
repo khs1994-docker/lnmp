@@ -68,14 +68,16 @@ services:
       - 9003:9003
 
   composer:
-    << : *workspace
-    << : *common
+    << :
+      - *workspace
+      - *common
     image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.2.2}-composer-alpine"
     command: [] # install | update
 
   npm:
-    << : *workspace
-    << : *common
+    << :
+      - *workspace
+      - *common
     image: node:${LNMP_NODE_VERSION:-18.2.0}-alpine
     entrypoint: npm
     command: [] # install | ["run","dev"] |

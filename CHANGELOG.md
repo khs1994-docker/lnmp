@@ -10,6 +10,8 @@
 
 ### Changes:
 
+* Require Compose v2.17.0+
+
 ### Updates:
 
 * PHP switch to `8.2.2`

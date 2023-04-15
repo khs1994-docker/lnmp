@@ -61,8 +61,9 @@ x-labels:
 services:
 
   redis_up:
-    << : *common
-    << : *default-labels
+    << :
+      - *common
+      - *default-labels
     restart: "on-failure"
     volumes:
       - ./cluster/redis/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
@@ -92,8 +93,9 @@ services:
 
   redis_master-1:
     &redis-master
-    << : *common
-    << : *default-labels
+    << :
+      - *common
+      - *default-labels
     command: [
       "redis-server",
       "/redis.conf",
@@ -110,8 +112,9 @@ services:
     volumes:
       - cluster_redis_master-1-data:/data
     deploy:
-      << : *default-deploy
-      << : *default-labels
+      << :
+        - *default-deploy
+        - *default-labels
       placement:
         constraints: [node.role == manager]
       # resources:
@@ -173,8 +176,9 @@ services:
 
   redis_node-1:
     &redis-node
-    << : *common
-    << : *default-labels
+    << :
+      - *common
+      - *default-labels
     depends_on:
       - redis_master-1
     ports:
@@ -196,8 +200,9 @@ services:
     volumes:
       - cluster_redis_node-1-data:/data
     deploy:
-      << : *default-deploy
-      << : *default-labels
+      << :
+        - *default-deploy
+        - *default-labels
       replicas: 1
       # resources:
       #   limits:

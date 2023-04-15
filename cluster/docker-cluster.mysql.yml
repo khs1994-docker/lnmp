@@ -52,8 +52,9 @@ services:
 
   mysql_master-1:
     &mysql_master
-    << : *common
-    << : *default-labels
+    << :
+      - *common
+      - *default-labels
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
       MYSQL_REPLICATION_USER: replication
@@ -81,8 +82,9 @@ services:
       # --gtid-mode=on
       # --enforce-gtid-consistency
     deploy:
-      << : *default-deploy
-      << : *default-labels
+      << :
+        - *default-deploy
+        - *default-labels
       placement:
         constraints: [node.role == manager]
       # resources:
@@ -126,8 +128,9 @@ services:
 
   mysql_node-1:
     &mysql_node
-    << : *common
-    << : *default-labels
+    << :
+      - *common
+      - *default-labels
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
       MYSQL_REPLICATION_USER: replication
@@ -150,8 +153,9 @@ services:
       # - --gtid-mode=on
       # --enforce-gtid-consistency
     deploy:
-      << : *default-deploy
-      << : *default-labels
+      << :
+        - *default-deploy
+        - *default-labels
       replicas: 1
     networks:
       cluster_mysql:

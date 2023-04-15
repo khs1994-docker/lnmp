@@ -18,8 +18,9 @@ x-common-label:
 services:
 
   mariadb:
-    << : *common
-    << : *common-label
+    << :
+      - *common
+      - *common-label
     image: "${LNMP_LIBRARY_NS:-library}/mariadb:${LNMP_MARIADB_VERSION:-10.8.3}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables

@@ -32,8 +32,7 @@ x-tmpfs:
 
 services:
   mysql:
-    << : *common
-    << : *common-labels
+    << : [*common,*common-labels]
     image: "${LNMP_LIBRARY_NS:-library}/mysql:${LNMP_MYSQL_VERSION:-8.0.30}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
@@ -74,8 +73,7 @@ services:
       timeout: 5s
 
   redis:
-    << : *common
-    << : *common-labels
+    << : [*common,*common-labels]
     image: "${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-7.0.0}-alpine"
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
@@ -106,8 +104,7 @@ services:
       timeout: 5s
 
   memcached:
-    << : *common
-    << : *common-labels
+    << : [*common,*common-labels]
     image: ${LNMP_LIBRARY_NS:-library}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.15}-alpine
     ports:
       - "${LNMP_MEMCACHED_PORT:-127.0.0.1:11211}:11211"
@@ -121,8 +118,7 @@ services:
 
   php7:
     &php7
-    << : *common
-    << : *common-labels
+    << : [*common,*common-labels]
     image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.33}-fpm-alpine"
     volumes:
       - &bind_app ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
@@ -172,8 +168,7 @@ services:
 
   php8:
     &php8
-    << : *common
-    << : *common-labels
+    << : [*common,*common-labels]
     image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.2.2}-fpm-alpine"
     volumes:
       - *bind_app
@@ -223,8 +218,7 @@ services:
       # - XDEBUG_MODE
 
   composer:
-    << : *common
-    << : *common-labels
+    << : [*common,*common-labels]
     restart: "no"
     image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.2.2}-composer-alpine"
     volumes:
@@ -251,8 +245,7 @@ services:
       - "9003"
 
   phpmyadmin:
-    << : *common
-    << : *common-labels
+    << : [*common,*common-labels]
     image: ${LNMP_LIBRARY_NS:-library}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.2.0}
     environment:
       - PMA_HOST=mysql
@@ -271,8 +264,7 @@ services:
       # test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
 
   nginx:
-    << : *common
-    << : *common-labels
+    << : [*common,*common-labels]
     image: "${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.23.3}-alpine"
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/udp"

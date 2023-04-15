@@ -55,8 +55,9 @@ x-labels:
 services:
 
   redis_m_s_master:
-    << : *common
-    << : *default-labels
+    << :
+      - *common
+      - *default-labels
     ports:
        - "22000:22000"
     volumes:
@@ -75,8 +76,9 @@ services:
       "--aof-use-rdb-preamble yes"
       ]
     deploy:
-      << : *default-deploy
-      << : *default-labels
+      << :
+        - *default-deploy
+        - *default-labels
       # replicas: 2
       placement:
         constraints: [node.role == manager]
@@ -84,8 +86,9 @@ services:
   # 从 master 复制数据
   redis_m_s_node-1:
     &redis_m_s_node
-    << : *common
-    << : *default-labels
+    << :
+      - *common
+      - *default-labels
     ports:
       - "23000:23000"
     volumes:
@@ -107,8 +110,9 @@ services:
     depends_on:
       - redis_m_s_master
     deploy:
-      << : *default-deploy
-      << : *default-labels
+      << :
+        - *default-deploy
+        - *default-labels
       replicas: 1
       # placement:
       #   constraints: [node.role == manager]
