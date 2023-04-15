@@ -1,4 +1,4 @@
 import { createApp, h } from 'vue';
-import ExampleComponent from './components/ExampleComponent.vue'
+import ExampleComponent from './Components/ExampleComponent.vue'
 
 createApp(ExampleComponent).mount('#app');

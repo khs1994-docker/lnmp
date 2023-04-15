@@ -9,7 +9,3 @@
 * 不要在 config 以外的地方调用 `env()` 函数，运行 `config:cache` 以后该函数永远返回 `null`
 
 ## TODO
-
-## ui auth + mix version
-
-`resources/views/layouts/app.blade.php` `asset()` 函数替换为 `mix()`

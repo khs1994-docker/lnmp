@@ -79,12 +79,8 @@ jobs:
 
           cd laravel
 
-          patch -p1 < ../laravel-demo/.patch/cdn/config-app.patch
-          patch -p1 < ../laravel-demo/.patch/app-console-kernel.patch
-
           lnmp-composer require laravel/jetstream
           lnmp-composer require league/flysystem-aws-s3-v3 "^3.0"
-          # 此步骤会重置 webpack.mix.js
           # lnmp-php artisan jetstream:install livewire
           lnmp-php artisan jetstream:install inertia
           # lnmp-php artisan jetstream:install --teams
@@ -95,8 +91,7 @@ jobs:
           ls -la resources/views
 
           lnmp-npm i
-          lnmp-npm install laravel-mix-make-file-hash --save-dev
-          lnmp-npm run dev
+          lnmp-npm run build
 
           ls public/js
           ls public/css
@@ -121,7 +116,7 @@ jobs:
               \
               --build-arg NODE_REGISTRY=https://registry.npmjs.org \
               --target=laravel \
-              -t khs1994/laravel:9 \
+              -t khs1994/laravel:10 \
               -f Dockerfile.cdn . \
 
           docker buildx build --load \
@@ -129,7 +124,7 @@ jobs:
               \
               --build-arg NODE_REGISTRY=https://registry.npmjs.org \
               --target=laravel-rootless \
-              -t khs1994/laravel:9-rootless \
+              -t khs1994/laravel:10-rootless \
               -f Dockerfile.cdn . \
       - name: Up LNMP
         run: |
@@ -170,7 +165,7 @@ jobs:
             curl -k https://laravel-docker.t.khs1994.com/test/schedule/result
           echo ::endgroup::
 
-          docker run -i --rm --entrypoint=sh khs1994/laravel:9 -c "ls -la /app/laravel-docker"
+          docker run -i --rm --entrypoint=sh khs1994/laravel:10 -c "ls -la /app/laravel-docker"
 
       - name: Connect and Test Rootless
         run: |
@@ -208,6 +203,6 @@ jobs:
             curl -k https://laravel-docker.t.khs1994.com/test/rootless/result
           echo ::endgroup::
 
-          docker run -i --rm --entrypoint=sh khs1994/laravel:9-rootless -c "ls -la /app/laravel-docker"
+          docker run -i --rm --entrypoint=sh khs1994/laravel:10-rootless -c "ls -la /app/laravel-docker"
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
