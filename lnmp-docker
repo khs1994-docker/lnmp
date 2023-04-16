@@ -1540,11 +1540,9 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   checkout )
-    if [ -z "${DOCKER_VERSION_YY}" ];then print_error "check Docker version error"; exit 1; fi
-
-    git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} --depth=2
-    git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
-    BRANCH=${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
+    git fetch origin 23.11:23.11 --depth=2
+    git checkout 23.11
+    BRANCH=23.11
     update
     ;;
 
@@ -1593,20 +1591,6 @@ if [ -d .git ];then
   command -v git > /dev/null 2>&1 && BRANCH=`git rev-parse --abbrev-ref HEAD` || BRANCH="unknow"
   print_info "Branch is ${BRANCH}"
 fi
-
-_check_docker_version(){
-  if [ -z "${BRANCH}" ];then return;fi
-  if [ "${BRANCH}" = "unknow" ];then return;fi
-
-  DOCKER_VERSION_YY=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 1)
-  DOCKER_VERSION_MM=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 2)
-
-  if [ "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" != "${BRANCH}" ];then
-    print_warning "Current branch ${BRANCH} incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout"
-  fi
-}
-
-command -v docker > /dev/null 2>&1 && _check_docker_version
 
 # 写入版本号
 

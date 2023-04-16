@@ -284,24 +284,6 @@ Function New-LogFile() {
   }
 }
 
-Function Test-DockerVersion() {
-  if (!(Test-Command git)) {
-    printError "Git not install"
-    return
-  }
-
-  if (!(Test-Command docker)) {
-    printError "Docker not install"
-    return
-  }
-
-  ${BRANCH} = (git rev-parse --abbrev-ref HEAD)
-
-  if (!("${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" -eq "${BRANCH}" )) {
-    printWarning "Current branch ${BRANCH} incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}`.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout"
-  }
-}
-
 Function init() {
   New-LogFile
   # git submodule update --init --recursive
@@ -735,20 +717,8 @@ printInfo "Exec custom script"
 . ./lnmp-docker-custom-script.example.ps1
 . ./lnmp-docker-custom-script.ps1
 
-if (Test-Command docker) {
-  $DOCKER_VERSION = $(docker --version).split(' ')[2].split('-')[0].trim(',')
-}
-
-$DOCKER_VERSION_YY = ([System.Version]$DOCKER_VERSION).Major
-$DOCKER_VERSION_MM = ([System.Version]$DOCKER_VERSION).Minor
-
-if ($DOCKER_VERSION_MM -lt 10) {
-  $DOCKER_VERSION_MM = '0' + $DOCKER_VERSION_MM
-}
-
 New-InitFile
 New-LogFile
-Test-DockerVersion
 
 docker compose version | out-null
 
@@ -859,8 +829,8 @@ switch -regex ($command) {
   }
 
   checkout {
-    git fetch origin "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}":"${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" --depth=1
-    git checkout "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}"
+    git fetch origin 23.11:23.11 --depth=1
+    git checkout 23.11
     _update
   }
 
