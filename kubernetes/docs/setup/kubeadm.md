@@ -367,5 +367,5 @@ $ kubeadm config images list
 
 * 关键在于配置好 `kubelet`
 * k8s 组件除了 `kubelet` 其他组件都能够以 `pod` 方式运行，秘诀在于使用了 `hostnetwork`
-* 国内网络问题（拉取不到 `k8s.gcr.io` 镜像）：加上参数 `--image-repository registry.cn-hangzhou.aliyuncs.com/google_containers` 解决
+* 国内网络问题（拉取不到 `registry.k8s.io` 镜像）：加上参数 `--image-repository registry.cn-hangzhou.aliyuncs.com/google_containers` 解决
 * `kubelet` 的参数 `--cgroup-driver=systemd` 一定要与 Docker(或其他的 CRI) 的一致，其他文档有介绍，这里不再赘述

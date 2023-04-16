@@ -139,7 +139,7 @@ systemd:
         -v ${K8S_ROOT}:${K8S_ROOT} \
         -v /opt/k8s/var/log/kubernetes:${K8S_ROOT}/var/log/kubernetes \
         --network host \
-        k8s.gcr.io/kube-apiserver:{{KUBERNETES_VERSION}} \
+        registry.k8s.io/kube-apiserver:{{KUBERNETES_VERSION}} \
         kube-apiserver \
         --advertise-address={{IP_{{n}}}} \
         --default-not-ready-toleration-seconds=360 \
@@ -220,7 +220,7 @@ systemd:
         --name kube-controller-manager \
         -v ${K8S_ROOT}:${K8S_ROOT} \
         --network host \
-        k8s.gcr.io/kube-controller-manager:{{KUBERNETES_VERSION}} \
+        registry.k8s.io/kube-controller-manager:{{KUBERNETES_VERSION}} \
         kube-controller-manager \
         --profiling \
         --cluster-name=kubernetes \
@@ -278,7 +278,7 @@ systemd:
         ExecStart=/bin/podman run --name=kube-scheduler \
         --network host \
         -v ${K8S_ROOT}:${K8S_ROOT} \
-        k8s.gcr.io/kube-scheduler:{{KUBERNETES_VERSION}} \
+        registry.k8s.io/kube-scheduler:{{KUBERNETES_VERSION}} \
         kube-scheduler \
         --config=${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml \
         --bind-address={{IP_{{n}}}} \
@@ -386,7 +386,7 @@ storage:
         inline: |
           127.0.0.1 localhost
           ::1       localhost
-          {{IP_1}} gcr.io k8s.gcr.io docker.khs1994.com docker.domain.com
+          {{IP_1}} gcr.io registry.k8s.io docker.khs1994.com docker.domain.com
           {{IP_1}} coreos1
           {{IP_2}} coreos2
           {{IP_3}} coreos3

@@ -17,3 +17,4 @@
 * PHP switch to `8.2.2`
 * [PHP `8.2.2` `8.1.11` `8.0.25`](https://www.php.net/ChangeLog-8.php#8.1.11)
 * PHP `7.4` EOL
+* [Kubernetes `v1.27.0`](https://github.com/kubernetes/kubernetes/releases/tag/v1.27.0)

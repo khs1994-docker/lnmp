@@ -203,8 +203,8 @@ $ wsl -d wsl-k8s -- bash -xc 'mkdir -p ${K8S_ROOT:?err}/{etc/kubernetes/pki,bin}
 $ wsl -d wsl-k8s -- sh -xc 'cp ${K8S_ROOT:?err}/etc/kubernetes/pki/*.yaml       ${K8S_ROOT:?err}/etc/kubernetes'
 $ wsl -d wsl-k8s -- sh -xc 'cp ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kubernetes'
 
-# 请将 1.26.0 替换为实际的 k8s 版本号
-$ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v1.26.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin'
+# 请将 1.27.0 替换为实际的 k8s 版本号
+$ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v1.27.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin'
 ```
 
 ## 工作节点配置
