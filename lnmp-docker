@@ -987,7 +987,7 @@ main() {
     ;;
 
   test )
-    _docker_is_run; scripts/cli/test $@
+    _docker_is_run; $(_sudo) chmod +x scripts/cli/test ; scripts/cli/test $@
     ;;
 
   completion )

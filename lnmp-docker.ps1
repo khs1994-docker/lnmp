@@ -641,7 +641,7 @@ $APP_ROOT = Get-Env 'APP_ROOT' $LNMP_ENV_FILE './app'
 
 $env:USE_WSL2_BUT_DOCKER_NOT_RUNNING = '3'
 
-if ($APP_ROOT.Substring(0, 7) -eq '\\wsl$\') {
+if (($APP_ROOT.length -gt 7) -and ($APP_ROOT.Substring(0, 7) -eq '\\wsl$\')) {
   $env:USE_WSL2_BUT_DOCKER_NOT_RUNNING = '0'
 
   $WSL2_DIST = $APP_ROOT.Split('\')[3]
@@ -674,7 +674,7 @@ if (!(Test-Path scripts/cli/khs1994-robot.enc )) {
   # 在项目目录外
   printInfo "Use LNMP CLI in $PWD"
   cd $PSScriptRoot
-  if ($APP_ROOT.Substring(0, 7) -eq '\\wsl$\') {
+  if (($APP_ROOT.length -gt 7) -and ($APP_ROOT.Substring(0, 7) -eq '\\wsl$\')) {
     printInfo "APP_ROOT is WSL2 [ $WSL2_DIST ] PATH $WSL2_DIST_PATH"
   }
   else {
@@ -690,7 +690,7 @@ if (!(Test-Path scripts/cli/khs1994-robot.enc )) {
 }
 else {
   printInfo "Use LNMP CLI in LNMP Root $pwd"
-  if ($APP_ROOT.Substring(0, 7) -eq '\\wsl$\') {
+  if (($APP_ROOT.length -gt 7) -and ($APP_ROOT.Substring(0, 7) -eq '\\wsl$\')) {
     printInfo "APP_ROOT is WSL2 [ $WSL2_DIST ] PATH $WSL2_DIST_PATH"
   }
   else {
