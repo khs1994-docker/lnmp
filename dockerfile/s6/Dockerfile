@@ -1,6 +1,6 @@
 FROM alpine as downloader
 
-ARG S6_VERSION=3.1.1.2
+ARG S6_VERSION=3.1.4.2
 
 ARG TARGETARCH
 

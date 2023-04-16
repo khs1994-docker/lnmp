@@ -7,7 +7,7 @@
 
 FROM --platform=$TARGETPLATFORM alpine
 
-RUN --mount=type=bind,from=khs1994/s6:3.1.1.2,source=/,target=/tmp/s6 \
+RUN --mount=type=bind,from=khs1994/s6:3.1.4.2,source=/,target=/tmp/s6 \
     set -x \
 #   && apt-get update && apt-get install -y xz-utils
     && tar -xvf /tmp/s6/s6-overlay-noarch.tar.xz -C /
