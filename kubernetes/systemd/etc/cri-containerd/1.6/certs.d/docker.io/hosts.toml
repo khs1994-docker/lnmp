@@ -1,3 +1,5 @@
+# https://github.com/containerd/containerd/blob/main/docs/hosts.md
+
 # Server specifies the default server. When `host` is also specified,
 # those hosts are tried first.
 server = "https://docker.io"
@@ -15,12 +17,22 @@ server = "https://docker.io"
   # [host."https://mirror.baidubce.com".header]
   #   x-custom-2 = ["value1", "value2"]
 [host."https://hub-mirror.c.163.com"]
+  capabilities = ["pull", "resolve"]
   skip_verify = false
 [host."https://hub.baidubce.com"]
+  capabilities = ["pull", "resolve"]
   skip_verify = false
 [host."https://registry.baidubce.com"]
+  capabilities = ["pull", "resolve"]
   skip_verify = false
 [host."https://ccr.ccs.tencentyun.com"]
+  capabilities = ["pull", "resolve"]
+  skip_verify = false
+[host."https://dockerproxy.com"]
+  capabilities = ["pull", "resolve"]
+  skip_verify = false
+[host."https://mirror.gcr.io"]
+  capabilities = ["pull", "resolve"]
   skip_verify = false
 [host."https://registry-1.docker.io"]
   capabilities = ["pull", "resolve"]

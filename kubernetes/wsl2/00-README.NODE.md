@@ -37,27 +37,24 @@ $ wsl -d wsl-k8s -- bash -cx 'vim ~/.bashrc'
 export PATH=/wsl/wsl-k8s-data/k8s/bin:$PATH
 ```
 
-## 启用 systemd
-
-请查看 [00-README.systemd.init.md](00-README.systemd.init.md)
-
 ## 复制文件
 
 ```powershell
 $ ./wsl2/bin/kube-check
 
-$env:WSLENV="K8S_ROOT/u"
-$env:K8S_ROOT="/wsl/wsl-k8s-data/k8s"
+$ $env:WSLENV="K8S_ROOT/u:KUBERNETES_VERSION"
+$ $env:K8S_ROOT="/wsl/wsl-k8s-data/k8s"
+# 请将 1.27.0 替换为实际的 k8s 版本号
+$ $env:KUBERNETES_VERSION='1.27.0'
 
 $ wsl -d wsl-k8s -- sh -xc 'mkdir -p ${K8S_ROOT:?err}/bin'
-# 请将 1.27.0 替换为实际的版本号
-$ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v1.27.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin'
+$ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v${KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin'
 
 $ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","etcd-client.pem","etcd-client-key.pem","ca.pem","ca-key.pem"
 
 $ foreach($item in $items){cp \\wsl$\wsl-k8s\wsl\wsl-k8s-data\k8s\etc\kubernetes\pki\$item systemd/certs}
 
-$items="kubectl.kubeconfig","etcd-client.pem","etcd-client-key.pem","ca.pem","ca-key.pem","admin.pem","admin-key.pem"
+$ $items="kubectl.kubeconfig","etcd-client.pem","etcd-client-key.pem","ca.pem","ca-key.pem","admin.pem","admin-key.pem"
 
 $ foreach($item in $items){cp \\wsl$\wsl-k8s\wsl\wsl-k8s-data\k8s\etc\kubernetes\pki\$item wsl2/certs}
 ```

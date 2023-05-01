@@ -433,8 +433,8 @@ _gvisor_containerd_conf(){
     return
   fi
 print_info "config containerd with gvisor(runsc) ..."
-# containerd 1.6.x
-cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.6/config.toml
+# containerd 1.7.x
+cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.7/config.toml
 
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
@@ -605,10 +605,10 @@ _containerd_install(){
   fi
 
   if [ -f ${K8S_ROOT}/bin/cri-containerd -a ! "$1" = "--dry-run" ];then \
-    print_info "containerd 1.6 already install"; \
+    print_info "containerd 1.7 already install"; \
     ${K8S_ROOT}/bin/cri-containerd --version;return; fi
 
-  print_info "install containerd 1.6 ..."
+  print_info "install containerd 1.7 ..."
 
   local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
   local url="https://download.fastgit.org/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
@@ -1025,14 +1025,14 @@ _crio_config(){
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
   print_info "config containerd ..."
-  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/1.6
+  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/1.7
   $(_sudo) mkdir -p $CONTAINERD_CONF_ROOT/certs.d
   # containerd config default > ${K8S_ROOT}/etc/cri-containerd/config.toml
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/1.6/config.toml \
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/1.7/config.toml \
     | $(_sudo) tee $CONTAINERD_CONF_ROOT/config.toml
 
   if ! [ "${LNMP_CN_ENV}" = 'false' ];then
-  $(_sudo) cp -r systemd/etc/cri-containerd/1.6/certs.d $CONTAINERD_CONF_ROOT
+  $(_sudo) cp -r systemd/etc/cri-containerd/1.7/certs.d $CONTAINERD_CONF_ROOT
   fi
 
   if [ -n "$GITHUB_ACTIONS" ];then
@@ -1274,7 +1274,7 @@ _k8s_install_systemd(){
     _enable_wsl_k8s_systemd_target kube-apiserver.service
     _enable_wsl_k8s_systemd_target kube-controller-manager.service
     _enable_wsl_k8s_systemd_target kube-scheduler.service
-    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@1.6.service
+    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@1.7.service
     _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
     _enable_wsl_k8s_systemd_target etcd.service
 
@@ -1302,6 +1302,9 @@ _k8s_install_systemd(){
     $(_sudo) mkdir -p ${K8S_ROOT}/etc/systemd/system/kube-.service.d
 
     $(_sudo) cp -r kube-.service.d/. ${K8S_ROOT}/etc/systemd/system/kube-.service.d/
+
+    $(_sudo) mkdir -p /etc/systemd/system-environment-generators/
+    $(_sudo) cp -r ../system-environment-generators/. /etc/systemd/system-environment-generators/
   fi # wsl2 end
 
   $(_sudo) cp -r mount/. /etc/systemd/system/
@@ -1506,7 +1509,7 @@ $ $(_sudo) systemctl start kubelet@cri-containerd
 $ $(_sudo) systemctl start kubelet@crio
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
-$ $(_sudo) systemctl start cri-containerd@1.6 (Containerd runtime only)
+$ $(_sudo) systemctl start cri-containerd@1.7 (Containerd runtime only)
 $ $(_sudo) systemctl start cri-o (CRI-O runtime only)
 "
 }
@@ -1515,7 +1518,7 @@ _local_cleanup(){
   $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
-    docker cri-containerd@1.6 crio || true
+    docker cri-containerd@1.7 crio || true
 
   set +e
   $(_sudo) rm -rf ${K8S_ROOT}

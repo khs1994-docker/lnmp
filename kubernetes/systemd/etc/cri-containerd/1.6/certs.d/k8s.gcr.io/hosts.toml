@@ -12,3 +12,9 @@ server = "https://k8s.gcr.io"
   skip_verify = false
   # [host."https://registry.cn-hangzhou.aliyuncs.com".header]
   #   x-custom-2 = ["value1", "value2"]
+[host."https://k8s.dockerproxy.com"]
+  capabilities = ["pull", "resolve"]
+  skip_verify = false
+[host."https://registry.k8s.io"]
+  capabilities = ["pull", "resolve"]
+  skip_verify = false

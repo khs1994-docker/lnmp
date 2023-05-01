@@ -6,6 +6,8 @@
 
 ```powershell
 $ ./wsl2/bin/kube-check
+
+$ wsl -d wsl-k8s -- systemctl start wsl-k8s.target
 ```
 
 **2. 手动签署 CSR**
@@ -46,7 +48,7 @@ $ Invoke-WSLK8S systemctl status kube-apiserver
 $ Invoke-WSLK8S systemctl status kube-controller-manager
 $ Invoke-WSLK8S systemctl status kube-scheduler
 
-$ Invoke-WSLK8S systemctl status cri-containerd@1.6
+$ Invoke-WSLK8S systemctl status cri-containerd@1.7
 $ Invoke-WSLK8S systemctl status kubelet@cri-containerd
 
 # 你也可以执行其他命令供调试

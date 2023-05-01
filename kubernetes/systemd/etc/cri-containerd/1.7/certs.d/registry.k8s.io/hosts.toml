@@ -1,6 +1,6 @@
 # Server specifies the default server. When `host` is also specified,
 # those hosts are tried first.
-server = "https://k8s.gcr.io"
+server = "https://registry.k8s.io"
 # ca = "/etc/path/default"
 # [header]
 #   x-custom-1 = "custom header"
@@ -15,6 +15,6 @@ server = "https://k8s.gcr.io"
 [host."https://k8s.dockerproxy.com"]
   capabilities = ["pull", "resolve"]
   skip_verify = false
-[host."https://registry.k8s.io"]
+[host."https://k8s.gcr.io"]
   capabilities = ["pull", "resolve"]
   skip_verify = false

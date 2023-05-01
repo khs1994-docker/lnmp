@@ -1,0 +1,22 @@
+[Unit]
+Description=mount --bind /opt/k8s/%P /%P
+DefaultDependencies=no
+Conflicts=umount.target
+Before=umount.target
+
+X-Before=local-fs.target
+After=kube-mkdir@%p.service
+Requires=kube-mkdir@%p.service
+
+StopWhenUnneeded=yes
+RefuseManualStart=yes
+RefuseManualStop=yes
+[Mount]
+What=/opt/k8s/%P
+Where=/%P
+Type=none
+Options=bind
+DirectoryMode=0755
+X-TimeoutSec=5
+[Install]
+WantedBy=local-fs.target

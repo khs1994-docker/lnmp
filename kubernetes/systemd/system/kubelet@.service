@@ -13,7 +13,8 @@ After=cri-containerd.service \
 cri-containerd@1.3.service \
 cri-containerd@1.4.service \
 cri-containerd@1.5.service \
-cri-containerd@1.6.service
+cri-containerd@1.6.service \
+cri-containerd@1.7.service
 
 After=cri-o.service
 

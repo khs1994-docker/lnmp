@@ -40,9 +40,11 @@ NODE_IPS=192.168.1.192
 ```powershell
 $ . ../windows/sdk/dockerhub/rootfs
 
+$ $env:WSL_K8S_WSL2_InstallLocation="$env:LOCALAPPDATA\wsl-k8s"
+
 $ wsl --import wsl-k8s `
-    $env:LOCALAPPDATA\wsl-k8s `
-    $(rootfs library-mirror/debian sid -registry ccr.ccs.tencentyun.com) `
+    $env:WSL_K8S_WSL2_InstallLocation `
+    $(rootfs library-mirror/debian sid-slim -registry ccr.ccs.tencentyun.com) `
     --version 2
 
 $ wsl -d wsl-k8s -- uname -a
@@ -51,7 +53,8 @@ $ wsl -d wsl-k8s -- uname -a
 ### 修改 APT 源并安装必要软件
 
 ```powershell
-$ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sources.list
+$ wsl -d wsl-k8s -- sh -c 'test -f /etc/apt/sources.list && sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sources.list || true'
+$ wsl -d wsl-k8s -- sh -c 'test -f /etc/apt/sources.list.d/debian.sources && sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sources.list.d/debian.sources || true'
 # $ wsl -d wsl-k8s -- sed -i "s/archive.ubuntu.com/mirrors.tencent.com/g" /etc/apt/sources.list
 # $ wsl -d wsl-k8s -- sed -i "s/security.ubuntu.com/mirrors.tencent.com/g" /etc/apt/sources.list
 
@@ -59,7 +62,12 @@ $ wsl -d wsl-k8s -- apt update
 
 # procps => ps 命令
 $ wsl -d wsl-k8s -- apt install -y procps bash-completion iproute2 jq curl vim fdisk net-tools
+# systemd
+$ wsl -d wsl-k8s -- apt install -y systemd dbus dbus-user-session udev
 ```
+
+bsd-mailx cron-daemon-common exim4-base exim4-config exim4-daemon-light laptop-detect libevent-2.1-7 libfribidi0 libgnutls-dane0 libidn12 liblockfile-bin liblockfile1
+  libunbound8
 
 ### 复制配置文件
 
@@ -203,8 +211,10 @@ $ wsl -d wsl-k8s -- bash -xc 'mkdir -p ${K8S_ROOT:?err}/{etc/kubernetes/pki,bin}
 $ wsl -d wsl-k8s -- sh -xc 'cp ${K8S_ROOT:?err}/etc/kubernetes/pki/*.yaml       ${K8S_ROOT:?err}/etc/kubernetes'
 $ wsl -d wsl-k8s -- sh -xc 'cp ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kubernetes'
 
+$ $env:WSLENV="K8S_ROOT/u:KUBERNETES_VERSION"
 # 请将 1.27.0 替换为实际的 k8s 版本号
-$ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v1.27.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin'
+$ $env:KUBERNETES_VERSION='1.27.0'
+$ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v${KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin'
 ```
 
 ## 工作节点配置

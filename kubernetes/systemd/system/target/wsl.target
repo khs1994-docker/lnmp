@@ -1,9 +1,9 @@
 [Unit]
 Description=This target must active in WSL2
 Documentation=https://github.com/khs1994-docker/lnmp/tree/master/wsl2/ubuntu-wsl2-systemd-script
-Requires=basic.target
-Wants=basic.target
-After=basic.target
+Requires=graphical.target wsl-etc-hosts.service
+Wants=graphical.target wsl-etc-hosts.service
+After=graphical.target wsl-etc-hosts.service
 
 ConditionVirtualization=wsl
 
