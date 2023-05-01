@@ -1,8 +1,8 @@
-bases:
+resources:
   - ../linux
 commonLabels:
   env: production
-patchesJson6902:
+patches:
   - path: patch-app.json
     target:
       group: ""

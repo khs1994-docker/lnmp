@@ -1,6 +1,6 @@
-bases:
+resources:
   - ../nfs
-patchesJson6902:
+patches:
   - path: patch.json
     target:
       group: ""

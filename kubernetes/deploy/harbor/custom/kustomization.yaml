@@ -1,16 +1,15 @@
-bases:
+resources:
 - ../overlays/development
 # fix me ingress 用的证书
 - ../../../secrets/t.khs1994.com
-patchesStrategicMerge:
-- secret/harbor-core/patches.yaml
-- secret/harbor-notary-server/patches.yaml
-resources:
 - namespace.yaml
 - ingress.yaml
 - pv.yaml
+patchesStrategicMerge:
+- secret/harbor-core/patches.yaml
+- secret/harbor-notary-server/patches.yaml
 namespace: harbor
-patchesJson6902:
+patches:
   - path: patch/trivy.patch.json
     target:
       kind: Secret

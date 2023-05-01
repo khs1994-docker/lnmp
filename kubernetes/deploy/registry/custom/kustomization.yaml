@@ -1,7 +1,7 @@
-bases:
+resources:
   - ../overlays/development
   - ../../../../config/registry
-patchesJson6902:
+patches:
   - path: custom.patch.json
     target:
       group: apps

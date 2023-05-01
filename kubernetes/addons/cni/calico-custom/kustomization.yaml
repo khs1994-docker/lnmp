@@ -1,6 +1,6 @@
-bases:
-  - ../calico
+
 resources:
+- ../calico
 - configMap.yaml
 vars:
   - name: CALICO_IPV6POOL_CIDR
@@ -10,7 +10,7 @@ vars:
       kind: ConfigMap
     fieldref:
       fieldpath: data.IPV6podCIDR
-patchesJson6902:
+patches:
   - target:
       group: apps
       version: v1

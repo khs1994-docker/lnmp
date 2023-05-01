@@ -47,7 +47,7 @@ resources:
 
 # patches:
 # patchesStrategicMerge:
-# patchesJson6902:
+# patches:
 
 # configMapGenerator:
 #   - name: str

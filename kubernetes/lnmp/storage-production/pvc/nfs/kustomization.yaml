@@ -1,8 +1,8 @@
-bases:
+resources:
   - ../../../storage/pvc/nfs
 commonLabels:
   env: production
-patchesJson6902:
+patches:
   - path: patch.json
     target:
       group: ""

@@ -1,4 +1,4 @@
-bases:
+resources:
 - ../overlays/production
 patches:
 - secret.yaml

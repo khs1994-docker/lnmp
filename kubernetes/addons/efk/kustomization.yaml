@@ -1,6 +1,5 @@
-bases:
+resources:
 - ./es
 - ./fluentd
 - ./kibana
-resources:
-  - ./create-logging-namespace.yaml
+- ./create-logging-namespace.yaml

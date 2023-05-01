@@ -1,11 +1,11 @@
-bases:
+resources:
   - ../../../mysql/overlays/development
-patchesJson6902:
+patches:
   - path: patch.json
     target:
       group: apps
       kind: Deployment
       name: mysql
       version: v1
-patches:
+patchesStrategicMerge:
   - config.yaml
