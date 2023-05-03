@@ -23,7 +23,7 @@ services:
     image: nginx:1.23.3-alpine
 
   nginx-unit:
-    image: docker.io/nginx/unit:1.28.0-minimal
+    image: docker.io/nginx/unit:1.29.1-minimal
 
   rabbitmq:
     image: rabbitmq:3.9.0-management-alpine
