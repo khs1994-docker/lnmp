@@ -50,6 +50,7 @@ version = 2
     disable_hugetlb_controller = true
     disable_proc_mount = false
     disable_tcp_service = true
+    drain_exec_sync_io_timeout = "0s"
     enable_cdi = false
     enable_selinux = false
     enable_tls_streaming = false
@@ -61,7 +62,7 @@ version = 2
     max_container_log_line_size = 16384
     netns_mounts_under_state_dir = false
     restrict_oom_score_adj = false
-    sandbox_image = "k8s.gcr.io/pause:3.7"
+    sandbox_image = "registry.k8s.io/pause:3.8"
     selinux_category_range = 1024
     stats_collect_period = 10
     stream_idle_timeout = "4h0m0s"
@@ -77,6 +78,7 @@ version = 2
       conf_template = ""
       ip_pref = ""
       max_conf_num = 1
+      setup_serially = false
 
     [plugins."io.containerd.grpc.v1.cri".containerd]
       default_runtime_name = "runc"
@@ -99,6 +101,7 @@ version = 2
         runtime_path = ""
         runtime_root = ""
         runtime_type = ""
+        sandbox_mode = ""
         snapshotter = ""
 
         [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime.options]
@@ -117,6 +120,7 @@ version = 2
           runtime_path = ""
           runtime_root = ""
           runtime_type = "io.containerd.runc.v2"
+          sandbox_mode = "podsandbox"
           snapshotter = ""
 
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
@@ -144,6 +148,7 @@ version = 2
         runtime_path = ""
         runtime_root = ""
         runtime_type = ""
+        sandbox_mode = ""
         snapshotter = ""
 
         [plugins."io.containerd.grpc.v1.cri".containerd.untrusted_workload_runtime.options]
@@ -181,6 +186,15 @@ version = 2
 
   [plugins."io.containerd.monitor.v1.cgroups"]
     no_prometheus = false
+
+  [plugins."io.containerd.nri.v1.nri"]
+    disable = true
+    disable_connections = false
+    plugin_config_path = "/etc/nri/conf.d"
+    plugin_path = "/opt/nri/plugins"
+    plugin_registration_timeout = "5s"
+    plugin_request_timeout = "2s"
+    socket_path = "/var/run/nri/nri.sock"
 
   [plugins."io.containerd.runtime.v1.linux"]
     no_shim = false
@@ -229,6 +243,8 @@ version = 2
     endpoint = ""
     insecure = false
     protocol = ""
+
+  [plugins."io.containerd.transfer.v1.local"]
 
 [proxy_plugins]
 

@@ -4,7 +4,7 @@ metadata:
   name: fluent-bit-config
   namespace: logging
   labels:
-    k8s-app: fluent-bit
+    app.kubernetes.io/name: fluent-bit-es
 data:
   # Configuration files: server, input, filters and output
   # ======================================================

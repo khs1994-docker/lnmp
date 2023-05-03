@@ -25,6 +25,7 @@ systemd:
 
         ExecStart=${K8S_ROOT}/bin/kube-proxy \
         --config=${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml \
+        --logging-format=json \
         --v=2
 
         # --feature-gates=AllAlpha=true,BoundServiceAccountTokenVolume=false \

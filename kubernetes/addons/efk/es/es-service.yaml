@@ -4,7 +4,7 @@ metadata:
   name: elasticsearch-logging
   namespace: logging
   labels:
-    k8s-app: elasticsearch-logging
+    app.kubernetes.io/name: elasticsearch-logging
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
     kubernetes.io/name: "Elasticsearch"
@@ -21,6 +21,6 @@ spec:
       targetPort: 9300
   publishNotReadyAddresses: true
   selector:
-    k8s-app: elasticsearch-logging
+    app.kubernetes.io/name: elasticsearch-logging
   sessionAffinity: None
   type: ClusterIP

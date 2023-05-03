@@ -113,7 +113,7 @@ ExecStart=/opt/k8s/bin/kubelet \
 --hostname-override=${NODE_NAME} \
 --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
 --v=2 \
-# --logging-format=json \
+--logging-format=json \
 --container-runtime-endpoint=unix:///run/%i/%i.sock
 
 ; kubelet@cri-containerd

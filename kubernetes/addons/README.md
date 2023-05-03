@@ -12,7 +12,7 @@
 
 ## ingress
 
-* ingress-nginx `1.3.0`
+* ingress-nginx `1.7.0`
 
 * ingress-kong `2.5.0`
 

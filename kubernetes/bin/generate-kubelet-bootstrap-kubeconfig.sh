@@ -12,6 +12,13 @@ if [ -f ${K8S_ROOT:-/opt/k8s}/.env ];then
 fi
 
 if [ -n "${WSL2_IP}" ];then
+  if [ -f ${K8S_ROOT:-/opt/k8s}/.WSL2_IP.env ];then
+    WSL2_IP_ENV=`cat ${K8S_ROOT:-/opt/k8s}/.WSL2_IP.env`
+    if [ "${WSL2_IP}" = "${WSL2_IP_ENV}" ];then
+      exit 0
+    fi
+  fi
+
   cat ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kubelet.config.yaml.temp \
   | sed \
   -e "s/##NODE_NAME##/${NODE_NAME}/g" \

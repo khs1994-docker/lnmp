@@ -1,0 +1,15 @@
+cluster.name: kubernetes-logging
+
+node.name: ${NODE_NAME}
+node.master: ${NODE_MASTER}
+node.data: ${NODE_DATA}
+
+transport.profiles.default.port: ${TRANSPORT_PORT}
+http.port: ${HTTP_PORT}
+
+path.data: /data
+
+network.host: "10.244.9.222"
+
+discovery.seed_hosts: ["10.244.9.221", "10.244.9.222"]
+cluster.initial_master_nodes: ["10.244.9.221", "10.244.9.222"]

@@ -50,5 +50,9 @@
   {
     "source": "docker/dockerfile-upstream:master-labs",
     "dest": "docker-dockerfile-upstream:master-labs"
+  },
+  {
+    "source": "quay.io/fluentd_elasticsearch/elasticsearch:v7.16.2",
+    "dest": "elasticsearch:v7.16.2"
   }
 ]

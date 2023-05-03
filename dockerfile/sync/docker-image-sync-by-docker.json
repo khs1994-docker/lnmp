@@ -68,19 +68,28 @@
     "dest": "tektoncd-triggers-eventlistenersink:v0.9.0@sha256:3d9cd3788c03ea6f9c85980d3b70ded295766f222e5d30fc1790249e88a10880"
   },
   {
-    "source": "mcr.microsoft.com/powershell:preview-alpine-3.12",
-    "dest": "powershell:preview-alpine-3.12",
+    "source": "mcr.microsoft.com/powershell:preview-7.4-alpine-3.17",
+    "dest": "powershell:preview-7.4-alpine-3.17",
     "registry": "mcr.microsoft.com",
     "image": "powershell",
-    "ref": "preview-alpine-3.12"
+    "ref": "preview-7.4-alpine-3.17",
+    "$comment": "https://hub.docker.com/_/microsoft-powershell"
   },
   {
-    "source": "registry.k8s.io/ingress-nginx/controller:v1.3.0@sha256:d1707ca76d3b044ab8a28277a2466a02100ee9f58a86af1535a3edf9323ea1b5",
-    "dest": "nginx-ingress-controller:v1.3.0@sha256:d1707ca76d3b044ab8a28277a2466a02100ee9f58a86af1535a3edf9323ea1b5"
+    "source": "mcr.microsoft.com/powershell:preview-alpine-3.17",
+    "dest": "powershell:preview-alpine-3.17",
+    "registry": "mcr.microsoft.com",
+    "image": "powershell",
+    "ref": "preview-alpine-3.17",
+    "$comment": "https://hub.docker.com/_/microsoft-powershell"
   },
   {
-    "source": "registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660",
-    "dest": "nginx-ingress-kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660"
+    "source": "registry.k8s.io/ingress-nginx/controller:v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7",
+    "dest": "nginx-ingress-controller:v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7"
+  },
+  {
+    "source": "registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20230312-helm-chart-4.5.2-28-g66a760794@sha256:01d181618f270f2a96c04006f33b2699ad3ccb02da48d0f89b22abce084b292f",
+    "dest": "nginx-ingress-kube-webhook-certgen:v20230312-helm-chart-4.5.2-28-g66a760794@sha256:01d181618f270f2a96c04006f33b2699ad3ccb02da48d0f89b22abce084b292f"
   },
   {
     "source": "registry.k8s.io/metrics-server/metrics-server:v0.6.0",
@@ -125,32 +134,32 @@
     ]
   },
   {
-    "source": "registry.k8s.io/kube-proxy:v1.19.7",
-    "dest": "gcr-mirror/kube-proxy:v1.19.7",
+    "source": "registry.k8s.io/kube-proxy:v1.27.0",
+    "dest": "gcr-mirror/kube-proxy:v1.27.0",
     "registry": "registry.k8s.io",
     "image": "kube-proxy",
-    "ref": "v1.19.7"
+    "ref": "v1.27.0"
   },
   {
-    "source": "registry.k8s.io/kube-controller-manager:v1.19.7",
-    "dest": "gcr-mirror/kube-controller-manager:v1.19.7",
+    "source": "registry.k8s.io/kube-controller-manager:v1.27.0",
+    "dest": "gcr-mirror/kube-controller-manager:v1.27.0",
     "registry": "registry.k8s.io",
     "image": "kube-controller-manager",
-    "ref": "v1.19.7"
+    "ref": "v1.27.0"
   },
   {
-    "source": "registry.k8s.io/kube-apiserver:v1.19.7",
-    "dest": "gcr-mirror/kube-apiserver:v1.19.7",
+    "source": "registry.k8s.io/kube-apiserver:v1.27.0",
+    "dest": "gcr-mirror/kube-apiserver:v1.27.0",
     "registry": "registry.k8s.io",
     "image": "kube-apiserver",
-    "ref": "v1.19.7"
+    "ref": "v1.27.0"
   },
   {
-    "source": "registry.k8s.io/kube-scheduler:v1.19.7",
-    "dest": "gcr-mirror/kube-scheduler:v1.19.7",
+    "source": "registry.k8s.io/kube-scheduler:v1.27.0",
+    "dest": "gcr-mirror/kube-scheduler:v1.27.0",
     "registry": "registry.k8s.io",
     "image": "kube-scheduler",
-    "ref": "v1.19.7"
+    "ref": "v1.27.0"
   },
   {
     "source": "registry.k8s.io/etcd:3.4.16-0",
@@ -160,11 +169,11 @@
     "ref": "3.4.16-0"
   },
   {
-    "source": "registry.k8s.io/pause:3.7",
-    "dest": "gcr-mirror/pause:3.7",
+    "source": "registry.k8s.io/pause:3.8",
+    "dest": "gcr-mirror/pause:3.8",
     "registry": "registry.k8s.io",
     "image": "pause",
-    "ref": "3.6"
+    "ref": "3.8"
   },
   {
     "source": "registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.3.0",

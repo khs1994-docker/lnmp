@@ -38,8 +38,9 @@ kubectl config set-context wsl2 `
   --user=wsl2-admin `
   --kubeconfig=$kubeconfig
 
-Write-Warning "==> Exec:
+kubectl config get-contexts
 
-$ kubectl config get-contexts
-$ kubectl config use-context wsl2
-"
+kubectl config use-context wsl2
+
+kubectl config get-contexts
+

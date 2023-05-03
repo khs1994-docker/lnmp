@@ -272,7 +272,7 @@ Function _sync($source, $dest, $config) {
   if (!($manifest_list_json)) {
     write-host "==> manifest list not found" -ForegroundColor Yellow
     $manifests_list_not_exists = $true
-    $manifests = $(1)
+    $manifests = (ConvertFrom-Json '{"manifests": [{"mediaType": "application/vnd.docker.distribution.manifest.v2+json"}]}').manifests
   }
   elseif ($source_image_with_digest) {
     $manifests_list_not_exists = $false
@@ -312,7 +312,7 @@ Function _sync($source, $dest, $config) {
       # check manifest exists
       $dest_token = _getDestToken $dest_registry $dest_image
       try {
-        $manifest_exists = Test-Manifest $dest_token $dest_image $manifest_digest $manifestf.mediaType -registry $dest_registry
+        $manifest_exists = Test-Manifest $dest_token $dest_image $manifest_digest $manifest.mediaType -registry $dest_registry
       }
       catch {
         write-host "==> [error] check manifest error, skip" -ForegroundColor Red
@@ -332,13 +332,13 @@ manifest $manifest_digest already exists" `
 
           $token = _getSourceToken $source_registry $source_image
           $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
-            $manifestf.mediaType `
+            $manifest.mediaType `
             -raw $false -registry $source_registry
 
           # upload manifests once
           $dest_token = _getDestToken $dest_registry $dest_image
           _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
-            $dest_registry $manifestf.mediaType
+            $dest_registry $manifest.mediaType
 
           $already_push_manifest_once = $true
         }
@@ -358,7 +358,7 @@ manifest $manifest_digest already exists" `
       # get source manifest
       $token = _getSourceToken $source_registry $source_image
       $source_manifest_digest = Get-Manifest $token $source_image $manifest_digest `
-      $([DockerImageSpec]::manifest) `
+      $manifest.mediaType `
         -raw $false -registry $source_registry -return_digest_only $true
       if (!$source_manifest_digest) {
         write-host "==> [error] get source manifest error, skip" -ForegroundColor Red
@@ -382,11 +382,11 @@ manifest $manifest_digest already exists" `
 
         $token = _getSourceToken $source_registry $source_image
         $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
-          $manifest.mediaType -raw $false -registry $source_registry
+        $manifest.mediaType -raw $false -registry $source_registry
 
         $dest_token = _getDestToken $dest_registry $dest_image
         _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
-          $dest_registry $manifestf.mediaType
+          $dest_registry $manifest.mediaType
 
         return $manifest_json_path
       }

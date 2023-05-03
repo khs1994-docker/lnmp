@@ -1,0 +1,192 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: logging
+  labels:
+    app.kubernetes.io/name: fluent-bit-es
+data:
+  # Configuration files: server, input, filters and output
+  # ======================================================
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Log_Level     info
+        Daemon        off
+        Parsers_File  parsers.conf
+        # Parsers_File custom_parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+        Health_Check  On
+
+    @INCLUDE input-kubernetes.conf
+    @INCLUDE input-systemd.conf
+    @INCLUDE filter-kubernetes.conf
+    @INCLUDE filter-systemd-key.conf
+    @INCLUDE filter-systemd.conf
+    @INCLUDE output-elasticsearch.conf
+
+  input-kubernetes.conf: |
+    [INPUT]
+        Name              tail
+        Tag               kube.*
+        Path              /var/log/containers/*.log
+        Parser            cri
+        DB                /var/log/flb_kube.db
+        Mem_Buf_Limit     5MB
+        Skip_Long_Lines   On
+        Refresh_Interval  10
+
+  input-systemd.conf: |
+    [INPUT]
+        Name              systemd
+        Tag               systemd.*
+        DB                /var/log/flb_systemd_kube.db
+        Path              /var/log/journal
+        Systemd_Filter    _SYSTEMD_UNIT=kube-apiserver.service
+        Systemd_Filter    _SYSTEMD_UNIT=kube-controller-manager.service
+        Systemd_Filter    _SYSTEMD_UNIT=kube-scheduler.service
+        Systemd_Filter    _SYSTEMD_UNIT=kubelet@crio.service
+        Systemd_Filter    _SYSTEMD_UNIT=kubelet@cri-containerd.service
+        Systemd_Filter    _SYSTEMD_UNIT=cri-o.service
+        Systemd_Filter    _SYSTEMD_UNIT=cri-containerd@1.7.service
+        Strip_Underscores On
+        # Read_From_Tail  On
+
+  filter-kubernetes.conf: |
+    [FILTER]
+        Name                kubernetes
+        Match               kube.*
+        Kube_URL            https://kubernetes.default.svc:443
+        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+        Kube_Tag_Prefix     kube.var.log.containers.
+        # 若 log 为 json 则解析
+        Merge_Log           On
+        # 前缀
+        Merge_Log_Key       log_processed
+        K8S-Logging.Parser  On
+        K8S-Logging.Exclude Off
+
+  filter-systemd-key.conf: |
+    [FILTER]
+        Name                modify
+        Match               systemd.*
+        Rename              BOOT_ID               SYSTEMD_BOOT_ID
+        Rename              CAP_EFFECTIVE         SYSTEMD_CAP_EFFECTIVE
+        Rename              CMDLINE               SYSTEMD_CMDLINE
+        Rename              COMM                  SYSTEMD_COMM
+        Rename              EXE                   SYSTEMD_EXE
+        Rename              GID                   SYSTEMD_GID
+        Rename              HOSTNAME              SYSTEMD_HOSTNAME
+        Rename              MACHINE_ID            SYSTEMD_MACHINE_ID
+        Rename              MESSAGE               SYSTEMD_MESSAGE
+        Rename              PID                   SYSTEMD_PID
+        Rename              PRIORITY              SYSTEMD_PRIORITY
+        Rename              STREAM_ID             SYSTEMD_STREAM_ID
+        Rename              SYSLOG_FACILITY       SYSTEMD_SYSLOG_FACILITY
+        Rename              SYSLOG_IDENTIFIER     SYSTEMD_SYSLOG_IDENTIFIER
+        # Rename              SYSTEMD_CGROUP
+        # Rename              SYSTEMD_INVOCATION_ID
+        # Rename              SYSTEMD_SLICE
+        # Rename              SYSTEMD_UNIT
+        Rename              TRANSPORT             SYSTEMD_TRANSPORT
+        Rename              UID                   SYSTEMD_UID
+
+  filter-systemd.conf: |
+    [FILTER]
+        Name                parser
+        Match               systemd.kube*
+        Key_Name            SYSTEMD_MESSAGE
+        Reserve_Data        On
+        Preserve_Key        On
+        # Unescape_Key        On
+        Parser              systemd_kube_json
+
+    [FILTER]
+        Name                parser
+        Match               systemd.cri-containerd*
+        Key_Name            SYSTEMD_MESSAGE
+        Reserve_Data        On
+        Preserve_Key        On
+        Unescape_Key        On
+        Parser              systemd_cri_containerd
+
+    [FILTER]
+        Name                parser
+        Match               systemd.cri-o*
+        Key_Name            SYSTEMD_MESSAGE
+        Reserve_Data        On
+        Preserve_Key        On
+        Unescape_Key        On
+        Parser              systemd_cri_o
+
+    [FILTER]
+        Name                modify
+        Match               systemd.cri-*
+        Rename              msg message
+
+  parsers.conf: |
+    [PARSER]
+        Name        json
+        Format      json
+        Time_Key    time
+        # https://linux.die.net/man/3/strptime
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+
+    [PARSER]
+        Name        json_not_include_time
+        Format      json
+        Time_Key    nil
+
+    [PARSER]
+        # http://rubular.com/r/tjUt3Awgg4
+        # 2016-02-17T00:04:05.931087621Z stdout F [info:2016-02-16T16:04:05.930-08:00] XXXX
+        Name        cri
+        Format      regex
+        Regex       ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<message>.*)$
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+        # Time_Keep   On
+
+    [PARSER]
+        # {"ts":1682935217117.9512,"caller":"controlplane/services.go:37","msg":"msg","v":0}
+        Name        systemd_kube_json
+        Format      json
+        Time_Key    ts
+        # Time_Keep   On
+
+    [PARSER]
+        # {"level":"info","msg":"msg","time":"2023-05-01T17:44:20.036533975+08:00"}
+        Name        systemd_cri_containerd
+        Format      json
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+        # Time_Keep   On
+        # Decode_Field_As    escaped     SYSTEMD_MESSAGE
+
+    [PARSER]
+        # {"level":"info","msg":"msg","time":"2023-05-01T03:57:08Z"}
+        Name        systemd_cri_o
+        Format      json
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S %z
+        # Time_Keep   On
+        # Decode_Field_As    escaped     SYSTEMD_MESSAGE
+
+  output-elasticsearch.conf: |
+    [OUTPUT]
+        Name es
+        Match kube.*
+        Host elasticsearch-logging
+        Logstash_Format On
+        Retry_Limit False
+
+    [OUTPUT]
+        Name es
+        Match systemd.*
+        Host elasticsearch-logging
+        Logstash_Format On
+        Logstash_Prefix node
+        Retry_Limit False

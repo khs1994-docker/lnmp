@@ -1,5 +1,5 @@
 resources:
 - ./es
-- ./fluentd
+- ./fluent-bit
 - ./kibana
 - ./create-logging-namespace.yaml
