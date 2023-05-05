@@ -1,8 +1,8 @@
 {
   "name": "zstd",
   "description": "Zstandard - Fast real-time compression algorithm",
-  "version": "1.5.2",
-  "pre-version": "1.5.2",
+  "version": "1.5.5",
+  "pre-version": "1.5.5",
   "homepage": "",
   "bug": "",
   "github": "facebook/zstd",

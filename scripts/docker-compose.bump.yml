@@ -65,7 +65,7 @@ services:
     image: tonistiigi/binfmt:latest
 
   docker:
-    image: docker:20.10.17
+    image: docker:23.0.5
 
   gogs:
     image: gogs/gogs:0.13

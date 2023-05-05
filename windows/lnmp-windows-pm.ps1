@@ -640,7 +640,13 @@ function __info($soft) {
 
 function __homepage($soft) {
   $lwpm = manifest $soft
-  start-process $lwpm.homepage
+  if ($lwpm.homepage) {
+    start-process $lwpm.homepage
+  }
+
+  if ($lwpm.github) {
+    start-process "https://github.com/$($lwpm.github)"
+  }
 }
 
 function __releases($soft) {
