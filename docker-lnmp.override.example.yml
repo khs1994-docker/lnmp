@@ -27,11 +27,11 @@ services:
   # php8:
   #   &php8
   #   # ! change php8 default image
-  #   image: username/php:${LNMP_PHP8_VERSION:-8.2.2}-fpm-alpine
+  #   image: username/php:${LNMP_PHP8_VERSION:-8.2.3}-fpm-alpine
   #   # ! cn mirror image
-  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP8_VERSION:-8.2.2}-fpm-alpine
+  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP8_VERSION:-8.2.3}-fpm-alpine
   #   # ! s6
-  #   # image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.2.2}-s6-alpine
+  #   # image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.2.3}-s6-alpine
   #   # command: []
   #   # ! open more port
   #   ports:
@@ -74,7 +74,7 @@ services:
 
   swoole:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.2.2}-swoole-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.2.3}-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php
