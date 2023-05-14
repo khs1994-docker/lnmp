@@ -84,8 +84,8 @@
     "dest": "library-mirror/mariadb:latest"
   },
   {
-    "source": "library/mariadb:10.8.3",
-    "dest": "library-mirror/mariadb:10.8.3"
+    "source": "library/mariadb:10.11.3",
+    "dest": "library-mirror/mariadb:10.11.3"
   },
   {
     "source": "library/mariadb:10.7.4",
