@@ -24,3 +24,4 @@
 !s6
 !s6-overlay
 !crontabs
+!.git.template

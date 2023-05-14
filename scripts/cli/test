@@ -125,7 +125,7 @@ server {
     git clone --depth=1 https://github.com/pcit-ce/pcit app/.pcit; \
   fi
 
-  cp pcit/.env.example pcit/.env.production
+  cp lrew/pcit/.env.example lrew/pcit/.env.production
 
   docker stack deploy -c docker-production.yml lnmp
 

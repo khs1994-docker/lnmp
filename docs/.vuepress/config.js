@@ -19,7 +19,7 @@ module.exports = {
     },
     {
       text: '捐赠',
-      link: 'https://github.com/khs1994/donate'
+      link: 'https://zan.khs1994.com'
     },
     {
       text: '腾讯云服务器限时秒杀',

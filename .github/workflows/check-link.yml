@@ -28,7 +28,6 @@ jobs:
           "docker.domain.com","YourIP","register",\
           "https://www.freedesktop.org/wiki/Software/systemd/",\
           "cloud.tencent.com",\
-          "zan.khs1994.com",\
           "storage.khs1994.com",\
           "test2.t.khs1994.com",\
           "harbor.t.khs1994.com",\

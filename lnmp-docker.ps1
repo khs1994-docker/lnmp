@@ -1165,19 +1165,19 @@ XXX
   zan {
     clear
     printInfo "Thank You"
-    Start-Process -FilePath http://zan.khs1994.com
+    Start-Process -FilePath https://zan.khs1994.com
   }
 
   donate {
     clear
     printInfo "Thank You"
-    Start-Process -FilePath http://zan.khs1994.com
+    Start-Process -FilePath https://zan.khs1994.com
   }
 
   fund {
     clear
     printInfo "Thank You"
-    Start-Process -FilePath http://zan.khs1994.com
+    Start-Process -FilePath https://zan.khs1994.com
   }
 
   pcit-cp {
