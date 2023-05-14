@@ -1,0 +1,13 @@
+[Service]
+
+ExecStartPre=/bin/sh -cx 'echo "127.0.0.1       localhost" | tee /etc/hosts'
+ExecStartPre=/bin/sh -cx 'echo "# The following lines are desirable for IPv6 capable hosts" | tee -a /etc/hosts'
+ExecStartPre=/bin/sh -cx 'echo "::1     ip6-localhost ip6-loopback" | tee -a /etc/hosts'
+ExecStartPre=/bin/sh -cx 'echo "fe00::0 ip6-localnet" | tee -a /etc/hosts'
+ExecStartPre=/bin/sh -cx 'echo "ff00::0 ip6-mcastprefix" | tee -a /etc/hosts'
+ExecStartPre=/bin/sh -cx 'echo "ff02::1 ip6-allnodes" | tee -a /etc/hosts'
+ExecStartPre=/bin/sh -cx 'echo "ff02::2 ip6-allrouters" | tee -a /etc/hosts'
+ExecStartPre=/bin/sh -cx 'echo "$WSL2_IP wsl2 wsl2.k8s.khs1994.com" | tee -a /etc/hosts'
+ExecStartPre=/bin/sh -cx 'echo "$WINDOWS_IP windows.k8s.khs1994.com" | tee -a /etc/hosts'
+ExecStart=/bin/echo 'write hosts success'
+RemainAfterExit=yes

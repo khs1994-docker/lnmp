@@ -1,6 +1,6 @@
-bases:
+resources:
   - "../docker-desktop"
-patchesJson6902:
+patches:
   - path: service.patch.json
     target:
       kind: Service

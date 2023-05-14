@@ -1,5 +1,4 @@
-bases:
-- ../overlays/development
 resources:
+- ../overlays/development
 - pv.yaml
 - pvc.yaml

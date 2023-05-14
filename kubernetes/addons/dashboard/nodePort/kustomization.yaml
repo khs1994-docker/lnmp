@@ -1,6 +1,6 @@
-bases:
+resources:
   - "../base"
-patchesJson6902:
+patches:
   - path: nodeport.patch.json
     target:
       group: ""

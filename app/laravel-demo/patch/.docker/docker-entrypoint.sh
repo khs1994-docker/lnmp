@@ -20,9 +20,8 @@ cd /app
 cp -a ${APP_PATH}/public/. ${APP_PATH}-public-volume
 
 # chown
-chown $APP_OWN ${APP_PATH}/storage/framework/views
-
-chown $APP_OWN ${APP_PATH}/bootstrap/cache
+chown -R $APP_OWN ${APP_PATH}/storage
+chown -R $APP_OWN ${APP_PATH}/bootstrap/cache
 
 # s6
 cp -a $APP_PATH/.docker/s6/. /etc/services.d

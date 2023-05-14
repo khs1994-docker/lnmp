@@ -17,7 +17,7 @@ vars:
       kind: ConfigMap
     fieldref:
       fieldpath: data.ipip
-patchesJson6902:
+patches:
   - target:
       group: apps
       version: v1

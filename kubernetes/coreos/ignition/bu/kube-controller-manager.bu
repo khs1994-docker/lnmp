@@ -14,7 +14,7 @@ systemd:
             # ExecStartPre=/usr/bin/env chmod +x ${K8S_ROOT}/bin/kube-controller-manager
             ExecStartPre=-/bin/podman kill kube-controller-manager
             ExecStartPre=-/bin/podman rm kube-controller-manager
-            # ExecStartPre=-/bin/podman pull k8s.gcr.io/kube-controller-manager:{{KUBERNETES_VERSION}}
+            # ExecStartPre=-/bin/podman pull registry.k8s.io/kube-controller-manager:{{KUBERNETES_VERSION}}
 
             ExecStop=/bin/podman stop kube-controller-manager
 storage:

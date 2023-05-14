@@ -37,6 +37,12 @@ $ Remove-Item \\wsl$\wsl-k8s\non-systemd
 $ wsl -d wsl-k8s
 ```
 
+## 更新其他组件
+
+```powershell
+$ wsl -d wsl-k8s -- ./lnmp-k8s _containerd_install -f
+```
+
 ## 启动 K8S
 
 请查看 [02-README.systemd.md](02-README.systemd.md)

@@ -4,7 +4,7 @@
 # kustomization.yaml
 # 基于 ../overlays/production 进行修改
 
-bases:
+resources:
 - ../overlays/production
 ```
 

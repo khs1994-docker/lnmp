@@ -1,6 +1,6 @@
-bases:
+resources:
   - ../calico-custom
-patchesJson6902:
+patches:
   - target:
       group: apps
       version: v1

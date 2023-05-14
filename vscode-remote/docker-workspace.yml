@@ -9,7 +9,7 @@ x-common:
 services:
   workspace:
     &workspace
-    image: khs1994/php:8.1.9-composer-alpine
+    image: khs1994/php:8.2.3-composer-alpine
     networks:
       - backend
     volumes:
@@ -65,14 +65,16 @@ services:
       - 9003:9003
 
   composer:
-    << : *workspace
-    << : *common
-    image: "khs1994/php:8.1.9-composer-alpine"
+    << :
+      - *workspace
+      - *common
+    image: "khs1994/php:8.2.3-composer-alpine"
     command: [] # install | update
 
   npm:
-    << : *workspace
-    << : *common
+    << :
+      - *workspace
+      - *common
     image: node:18.2.0-alpine
     entrypoint: npm
     command: [] # install | "run","dev" |

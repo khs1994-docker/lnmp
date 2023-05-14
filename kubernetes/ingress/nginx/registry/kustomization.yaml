@@ -1,5 +1,4 @@
-bases:
-- ../../secrets/t.khs1994.com
 resources:
+- ../../secrets/t.khs1994.com
 - registry.yaml
 namespace: default

@@ -38,16 +38,10 @@
 └── lnmp   # khs1994-docker/lnmp
 ```
 
-我们也可以将项目放置于 **WSL2** 中，例如我们想要将项目文件放置于 **WSL2** `Ubuntu` 中的 `/app/*` 目录，那么请在 `.env` 和 `.env.ps1` 中进行如下设置
+我们也可以将项目放置于 **WSL2** 中，例如我们想要将项目文件放置于 **WSL2** `Ubuntu` 中的 `/app/*` 目录，那么请在 `.env` 中进行如下设置
 
 ```bash
-# .env
-APP_ROOT=/app
-```
-
-```powershell
-# .env.ps1
-$WSL2_DIST="ubuntu"
+APP_ROOT=\\wsl$\Ubuntu\app
 ```
 
 ## 如何正确的自定义配置文件

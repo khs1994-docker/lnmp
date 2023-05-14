@@ -418,7 +418,8 @@ _swift(){
   if [ "${UBUNTU_CODENAME}" != 'xenial' \
     -a "${UBUNTU_CODENAME}" != 'bionic' \
     -a "${UBUNTU_CODENAME}" != 'focal' \
-     ]; then set +x ; echo -e "\nOnly Support Ubuntu 16.04/18.04/20.04\n"; exit 1; fi
+    -a "${UBUNTU_CODENAME}" != 'focal' \
+     ]; then set +x ; echo -e "\nOnly Support Ubuntu 16.04/18.04/20.04/22.04\n"; exit 1; fi
 
   $(_sudo) apt install -y clang libicu-dev
 

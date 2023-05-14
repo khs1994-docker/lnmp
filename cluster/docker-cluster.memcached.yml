@@ -16,7 +16,7 @@ x-common:
   networks:
     - cluster_memcached
   env_file:
-    - ./cli/timezone.env
+    - ./scripts/cli/timezone.env
 
 x-deploy:
   &default-deploy
@@ -41,13 +41,15 @@ services:
 
   memcached-1:
     &memcached
-    << : *common
-    << : *default-labels
+    << :
+      - *common
+      - *default-labels
     ports:
       - "21211:11211"
     deploy:
-      << : *default-deploy
-      << : *default-labels
+      << :
+        - *default-deploy
+        - *default-labels
       # placement:
       #   constraints: [node.role == manager]
       # resources:

@@ -1,6 +1,5 @@
-bases:
-- ../../../../kubernetes/lnmp/mysql/overlays/production
-namespace: ci
 resources:
+- ../../../../kubernetes/lnmp/mysql/overlays/production
 - pv.yaml
 - pvc.yaml
+namespace: ci

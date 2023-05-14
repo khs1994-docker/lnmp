@@ -1,0 +1,9 @@
+resources:
+- ../es
+- ../fluent-bit
+- ../kibana
+- ./create-logging-namespace.yaml
+images:
+- name: quay.io/fluentd_elasticsearch/elasticsearch:v7.16.2
+  newName: ccr.ccs.tencentyun.com/quay-mirror/elasticsearch
+  newTag: v7.16.2

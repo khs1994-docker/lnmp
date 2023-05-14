@@ -39,7 +39,7 @@ ExecStart=/opt/k8s/bin/kube-scheduler \
 --requestheader-group-headers=X-Remote-Group \
 --requestheader-username-headers=X-Remote-User \
 --authorization-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig \
-# --logging-format=json \
+--logging-format=json \
 # --write-config-to /kube-scheduler.config.yaml \
 --v=2
 

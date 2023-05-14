@@ -48,14 +48,14 @@ export EXEC_CMD_DIR=`pwd`
 
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-if [ -f cli/khs1994-robot.enc ];then
+if [ -f scripts/cli/khs1994-robot.enc ];then
     print_info "Use LNMP CLI in LNMP Root $PWD"
 else
     print_info "Use LNMP CLI in $PWD"
     cd ${ScriptRoot}
 fi
 
-if ! [ -f cli/khs1994-robot.enc ];then
+if ! [ -f scripts/cli/khs1994-robot.enc ];then
     exit 1
 fi
 
@@ -129,10 +129,6 @@ Docker-LNMP CLI ${LNMP_DOCKER_VERSION}
 Official WebSite https://lnmp.khs1994.com
 
 Usage: ./docker-lnmp COMMAND
-
-PCIT EE:
-  pcit-up              Up(Run) PCIT EE https://github.com/pcit-ce/pcit
-  pcit-cp              Copy PCIT files to app/.pcit
 
 Commands:
   up                   Up LNMP (Support x86_64 arm64v8)
@@ -841,22 +837,22 @@ restore(){
 pcit_nginx_init(){
   # 判断 nginx 配置文件是否存在
 
-  if ! [ -f pcit/conf/pcit.conf ];then
-    $(_sudo) cp pcit/conf/pcit.config pcit/conf/pcit.conf
+  if ! [ -f lrew/pcit/conf/pcit.conf ];then
+    $(_sudo) cp lrew/pcit/conf/pcit.config lrew/pcit/conf/pcit.conf
   fi
 
-  cat pcit/conf/pcit.conf | grep -q demo.ci.khs1994.com && print_error "PCIT conf error, please see pcit/README.md"
+  cat lrew/pcit/conf/pcit.conf | grep -q demo.ci.khs1994.com && print_error "PCIT conf error, please see lrew/pcit/README.md"
 
   # SSL 证书
 
-  if ! [ -f pcit/ssl/ci.crt ];then
-    print_error "PCIT Website SSL key not found, please see pcit/README.md"
+  if ! [ -f lrew/pcit/ssl/ci.crt ];then
+    print_error "PCIT Website SSL key not found, please see lrew/pcit/README.md"
     exit 1
   fi
 
-  $(_sudo) cp pcit/ssl/ci.crt config/${LNMP_NGINX_CONF_D:-nginx}/ssl/ci.crt
+  $(_sudo) cp lrew/pcit/ssl/ci.crt config/${LNMP_NGINX_CONF_D:-nginx}/ssl/ci.crt
 
-  $(_sudo) cp pcit/conf/pcit.conf config/${LNMP_NGINX_CONF_D:-nginx}/pcit.conf
+  $(_sudo) cp lrew/pcit/conf/pcit.conf config/${LNMP_NGINX_CONF_D:-nginx}/pcit.conf
 }
 
 pcit_init(){
@@ -867,7 +863,7 @@ pcit_init(){
   docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
 
   if ! [ -f pcit/.env.${APP_ENV:-development} ];then
-    cp pcit/.env.example pcit/.env.${APP_ENV:-development}
+    cp lrew/pcit/.env.example lrew/pcit/.env.${APP_ENV:-development}
   fi
 
   # if ! [ -f ${APP_ROOT}/pcit/public/.env.development ];then
@@ -876,8 +872,8 @@ pcit_init(){
 
   # GitHub App private key
 
-  if ! [ -f pcit/key/private.key ];then
-    print_error "PCIT GitHub App private key not found, please see pcit/README.md"
+  if ! [ -f lrew/pcit/key/private.key ];then
+    print_error "PCIT GitHub App private key not found, please see lrew/pcit/README.md"
     exit 1
   fi
 }
@@ -991,13 +987,13 @@ main() {
     ;;
 
   test )
-    _docker_is_run; cli/test $@
+    _docker_is_run; $(_sudo) chmod +x scripts/cli/test ; scripts/cli/test $@
     ;;
 
   completion )
     ROOT_PATH=$HOME/.config/fish/completions
     if ! [ -d $ROOT_PATH ];then mkdir -p $ROOT_PATH ; fi
-    ln -sf $PWD/cli/completion/fish/* $ROOT_PATH
+    ln -sf $PWD/scripts/cli/completion/fish/* $ROOT_PATH
     ls -la $ROOT_PATH
     ;;
 
@@ -1544,11 +1540,9 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   checkout )
-    if [ -z "${DOCKER_VERSION_YY}" ];then print_error "check Docker version error"; exit 1; fi
-
-    git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} --depth=2
-    git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
-    BRANCH=${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
+    git fetch origin 23.11:23.11 --depth=2
+    git checkout 23.11
+    BRANCH=23.11
     update
     ;;
 
@@ -1584,7 +1578,7 @@ COMPOSE_LINK=https://download.fastgit.org/docker/compose/releases/download
 if [ -n "${LNMP_SERVICES}" ];then LNMP_SERVICES_SYSTEM_ENV=$LNMP_SERVICES;fi
 if [ -n "${LREW_INCLUDE}" ];then LREW_INCLUDE_SYSTEM_ENV=$LREW_INCLUDE;fi
 
-env_status && . ./.env && . cli/.env
+env_status && . ./.env && . scripts/cli/.env
 
 if [ -n "${LNMP_SERVICES_SYSTEM_ENV}" ];then export LNMP_SERVICES=$LNMP_SERVICES_SYSTEM_ENV;fi
 if [ -n "${LREW_INCLUDE_SYSTEM_ENV}" ];then export LREW_INCLUDE=$LREW_INCLUDE_SYSTEM_ENV;fi
@@ -1597,20 +1591,6 @@ if [ -d .git ];then
   command -v git > /dev/null 2>&1 && BRANCH=`git rev-parse --abbrev-ref HEAD` || BRANCH="unknow"
   print_info "Branch is ${BRANCH}"
 fi
-
-_check_docker_version(){
-  if [ -z "${BRANCH}" ];then return;fi
-  if [ "${BRANCH}" = "unknow" ];then return;fi
-
-  DOCKER_VERSION_YY=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 1)
-  DOCKER_VERSION_MM=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 2)
-
-  if [ "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" != "${BRANCH}" ];then
-    print_warning "Current branch ${BRANCH} incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout"
-  fi
-}
-
-command -v docker > /dev/null 2>&1 && _check_docker_version
 
 # 写入版本号
 

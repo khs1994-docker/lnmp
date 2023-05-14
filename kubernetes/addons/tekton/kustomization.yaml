@@ -44,7 +44,7 @@ images:
     newName: ccr.ccs.tencentyun.com/khs1994/tektoncd-triggers-webhook
     newTag: v0.9.0
     digest: sha256:1c7fb974323417566027db2efbd80498e4cb625cead855bf5416473d41a4ae84
-patchesJson6902:
+patches:
   - path: tekton.patch.json
     target:
       group: apps

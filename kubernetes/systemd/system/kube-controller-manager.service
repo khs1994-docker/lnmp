@@ -51,9 +51,9 @@ ExecStart=/opt/k8s/bin/kube-controller-manager \
 --kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
 --cluster-cidr=10.244.0.0/16,fc00::/48 \
 --allocate-node-cidrs=true \
---feature-gates="IPv6DualStack=true" \
+#--feature-gates="IPv6DualStack=true" \
 --cluster-signing-duration=876000h \
-# --logging-format=json \
+--logging-format=json \
 --v=2
 
 # --cluster-signing-duration=876000h

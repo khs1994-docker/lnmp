@@ -45,6 +45,7 @@ ExecStart=/opt/k8s/bin/kubelet \
 --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
 --hostname-override=${NODE_NAME} \
 --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
+--logging-format=json \
 --v=2 \
 $KUBELET_CRI
 

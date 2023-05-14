@@ -3,7 +3,7 @@
 x-common:
   &common
   restart: always
-  env_file: ./cli/timezone.env
+  env_file: ./scripts/cli/timezone.env
   networks:
     - backend
   # dns:
@@ -17,8 +17,9 @@ x-common-label:
 
 services:
   rabbitmq:
-    << : *common
-    << : *common-label
+    << :
+      - *common
+      - *common-label
     image: ${LNMP_LIBRARY_NS:-library}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.9.0}-management-alpine
     volumes:
       - type: volume

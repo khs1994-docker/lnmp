@@ -7,9 +7,7 @@ vendor
 
 node_modules/
 
-public/js/
-public/css/
-public/mix-manifest.json
+public/build/
 
 yarn-error.log
 

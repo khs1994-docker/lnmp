@@ -1,4 +1,4 @@
-bases:
+resources:
 - base
 # - ../drone-runner/docker
 # - ../drone-runner/kubernetes

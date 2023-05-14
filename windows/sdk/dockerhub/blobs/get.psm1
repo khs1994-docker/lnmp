@@ -51,6 +51,7 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
       "https://$registry/v2/$image/blobs/$digest" `
       -PassThru `
       -OutFile $distTemp `
+      -PreserveAuthorizationOnRedirect `
       -UserAgent "Docker-Client/20.10.16 (Windows)"
   }
   catch {

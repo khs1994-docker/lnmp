@@ -14,8 +14,8 @@ services:
     # restart: always
     image: pcit/pcit:unit
     volumes:
-      - ./pcit/key:/app/pcit/framework/storage/private_key
-      - ./pcit/.env.${APP_ENV:-development}:/app/pcit/.env.${APP_ENV:-development}
+      - ./lrew/pcit/key:/app/pcit/framework/storage/private_key
+      - ./lrew/pcit/.env.${APP_ENV:-development}:/app/pcit/.env.${APP_ENV:-development}
       - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
       - type: volume
         source: pcit-tmp
@@ -38,8 +38,8 @@ services:
     << : *pcit
     image: pcit/pcit:fpm
     volumes:
-      - ./pcit/key:/app/.pcit/framework/storage/private_key
-      - ./pcit/.env.${APP_ENV:-development}:/app/.pcit/.env.${APP_ENV:-development}
+      - ./lrew/pcit/key:/app/.pcit/framework/storage/private_key
+      - ./lrew/pcit/.env.${APP_ENV:-development}:/app/.pcit/.env.${APP_ENV:-development}
       - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
       - type: volume
         source: pcit-tmp

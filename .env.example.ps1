@@ -5,9 +5,9 @@ $CI_HOST="ci.khs1994.com:1218"
 # wsl name
 # $ wslconfig /l
 # $ wsl -l
-$DistributionName="Ubuntu-18.04"
+$DistributionName="Ubuntu-22.04"
 
-$LNMP_PHP_IMAGE="khs1994/php:8.1.9-composer-alpine"
+$LNMP_PHP_IMAGE="khs1994/php:8.2.3-composer-alpine"
 
 $NGINX_PATH="C:/nginx"
 $PHP_PATH="C:/php"
@@ -19,10 +19,6 @@ $LNMP_NODE_IMAGE="node:alpine"
 # $LNMP_NODE_IMAGE="khs1994/node:git"
 
 # $LNMP_CACHE=
-
-# 项目存储在 WSL2
-# 推荐使用 Ubuntu，其他系统（例如 alpine）可能会遇到错误
-# $WSL2_DIST="Ubuntu"
 
 # 挂载物理硬盘到 WSL2
 # $ wmic diskdrive list brief

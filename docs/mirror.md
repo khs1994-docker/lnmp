@@ -6,7 +6,6 @@
 
 * `https://hub-mirror.c.163.com`
 * `https://mirror.baidubce.com`
-* `https://docker.mirrors.ustc.edu.cn`
 
 ## k8s.gcr.io
 

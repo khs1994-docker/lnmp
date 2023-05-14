@@ -13,7 +13,7 @@
       "ms-vscode-remote.remote-wsl",
       "ms-vscode-remote.remote-containers",
       // "ms-vscode-remote.remote-ssh",
-      "ms-vscode.powershell-preview",
+      "ms-vscode.powershell",
       "editorconfig.editorconfig",
       "ivory-lab.jenkinsfile-support",
       // "ms-python.vscode-pylance",

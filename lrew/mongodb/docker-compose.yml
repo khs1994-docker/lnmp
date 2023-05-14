@@ -3,7 +3,7 @@
 x-common:
   &common
   restart: always
-  env_file: ./cli/timezone.env
+  env_file: ./scripts/cli/timezone.env
   networks:
     - backend
   # dns:
@@ -17,8 +17,9 @@ x-common-label:
 
 services:
   mongodb:
-    << : *common
-    << : *common-label
+    << :
+      - *common
+      - *common-label
     image: ${LNMP_LIBRARY_NS:-library}/mongo:${LNMP_MONGODB_VERSION:-5.0.3}
     volumes:
       - ./config/mongodb/${LNMP_MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro

@@ -4,24 +4,24 @@ metadata:
   name: kibana-logging
   namespace: logging
   labels:
-    k8s-app: kibana-logging
+    app.kubernetes.io/name: kibana-logging
     addonmanager.kubernetes.io/mode: Reconcile
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-app: kibana-logging
+      app.kubernetes.io/name: kibana-logging
   template:
     metadata:
       labels:
-        k8s-app: kibana-logging
+        app.kubernetes.io/name: kibana-logging
     spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
       containers:
         - name: kibana-logging
-          image: docker.elastic.co/kibana/kibana-oss:7.10.2
+          image: docker.elastic.co/kibana/kibana:7.16.0
           resources:
             # need more cpu upon initialization, therefore burstable class
             limits:

@@ -1,6 +1,5 @@
-bases:
-- ./rbac
 resources:
+- ./rbac
 - namespace.yaml
 - csi-hostpath-attacher.yaml
 - csi-hostpath-driverinfo.yaml

@@ -11,7 +11,7 @@ services:
   php5:
     << : *common
     restart: ${LNMP_RESTART:-always}
-    env_file: ./cli/timezone.env
+    env_file: ./scripts/cli/timezone.env
     # build:
     #   context: ./dockerfile/php/
     # 5.x 只支持 5.6.37 -- 5.6.40 其他版本请自行构建

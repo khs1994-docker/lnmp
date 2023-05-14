@@ -1,6 +1,6 @@
-bases:
+resources:
   - ../base
-patchesJson6902:
+patches:
   - target:
       name: kong-proxy
       namespace: kong

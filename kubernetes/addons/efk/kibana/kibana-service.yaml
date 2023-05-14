@@ -4,7 +4,7 @@ metadata:
   name: kibana-logging
   namespace: logging
   labels:
-    k8s-app: kibana-logging
+    app.kubernetes.io/name: kibana-logging
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
     kubernetes.io/name: "Kibana"
@@ -14,4 +14,4 @@ spec:
     protocol: TCP
     targetPort: ui
   selector:
-    k8s-app: kibana-logging
+    app.kubernetes.io/name: kibana-logging

@@ -59,14 +59,14 @@ fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=2.5.1
+export COMPOSER_VERSION=2.5.5
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
 # export CC=clang CXX=clang
 export CC=gcc CXX=g++
 
-export PHP_LATEST_VERSION=8.1.9
+export PHP_LATEST_VERSION=8.2.3
 ################################################################################
 
 for command in "$@"

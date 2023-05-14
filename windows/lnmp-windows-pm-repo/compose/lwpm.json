@@ -26,7 +26,7 @@
       "architecture": "arm64"
     }
   ],
-  "pre-version": "2.10.0",
+  "pre-version": "2.17.3",
   "scripts": {
     "dist": "_mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}\n\nif(${env:lwpm_os} -ne \"windows\"){\n  $url = $url.trim('.exe')\n  $filename = $filename.trim('.exe')\n}\n\ncurl -L `\n$url `\n-o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename\n",
     "install": [
@@ -39,5 +39,5 @@
   },
   "url": "https://github.com/docker/compose/releases/download/v${VERSION}/docker-compose-${env:lwpm_os}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})",
   "url-mirror": "https://download.fastgit.org/docker/compose/releases/download/v${VERSION}/docker-compose-${env:lwpm_os}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})",
-  "version": "2.10.0"
+  "version": "2.17.3"
 }

@@ -1,6 +1,6 @@
-bases:
+resources:
   - ../linux
-patchesJson6902:
+patches:
   - path: patch-app.json
     target:
       group: ""

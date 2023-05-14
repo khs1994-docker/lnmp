@@ -640,7 +640,13 @@ function __info($soft) {
 
 function __homepage($soft) {
   $lwpm = manifest $soft
-  start-process $lwpm.homepage
+  if ($lwpm.homepage) {
+    start-process $lwpm.homepage
+  }
+
+  if ($lwpm.github) {
+    start-process "https://github.com/$($lwpm.github)"
+  }
 }
 
 function __releases($soft) {
@@ -1084,7 +1090,7 @@ switch ($command) {
 
   "install-service" {
 
-    if($PSVersionTable.PSVersion.Major -ne 5){
+    if ($PSVersionTable.PSVersion.Major -ne 5) {
       Write-Host "==> Please exec this command on powershell.exe" -ForegroundColor Red
       cd $HOME/lnmp
       powershell.exe
@@ -1109,7 +1115,9 @@ switch ($command) {
 
         if ($pkg_root) {
           $service = (ConvertFrom-Json (Get-Content $pkg_root/lwpm.json -raw)).scripts.service
-
+          if ((ConvertFrom-Json (Get-Content $pkg_root/lwpm.json -raw)).serviceName) {
+            $ServiceName = (ConvertFrom-Json (Get-Content $pkg_root/lwpm.json -raw)).serviceName
+          }
           if ($service) {
             $CommandLine = $service
             $LogFile = "C:\logs\${ServiceName}.log"

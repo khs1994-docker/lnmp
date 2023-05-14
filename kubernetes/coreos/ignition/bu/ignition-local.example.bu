@@ -139,7 +139,7 @@ systemd:
         -v ${K8S_ROOT}:${K8S_ROOT} \
         -v /opt/k8s/var/log/kubernetes:${K8S_ROOT}/var/log/kubernetes \
         --network host \
-        k8s.gcr.io/kube-apiserver:{{KUBERNETES_VERSION}} \
+        registry.k8s.io/kube-apiserver:{{KUBERNETES_VERSION}} \
         kube-apiserver \
         --advertise-address=192.168.57.200 \
         --default-not-ready-toleration-seconds=360 \
@@ -188,6 +188,7 @@ systemd:
         --proxy-client-key-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-client-key.pem \
         --service-cluster-ip-range=10.254.0.0/16 \
         --service-node-port-range="1-65535" \
+        --logging-format=json \
         --v=2
 
         Restart=on-failure
@@ -219,7 +220,7 @@ systemd:
         --name kube-controller-manager \
         -v ${K8S_ROOT}:${K8S_ROOT} \
         --network host \
-        k8s.gcr.io/kube-controller-manager:{{KUBERNETES_VERSION}} \
+        registry.k8s.io/kube-controller-manager:{{KUBERNETES_VERSION}} \
         kube-controller-manager \
         --profiling \
         --cluster-name=kubernetes \
@@ -253,6 +254,7 @@ systemd:
         --root-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --service-account-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/sa.key \
         --kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
+        --logging-format=json \
         --v=2
 
         Restart=on-failure
@@ -277,7 +279,7 @@ systemd:
         ExecStart=/bin/podman run --name=kube-scheduler \
         --network host \
         -v ${K8S_ROOT}:${K8S_ROOT} \
-        k8s.gcr.io/kube-scheduler:{{KUBERNETES_VERSION}} \
+        registry.k8s.io/kube-scheduler:{{KUBERNETES_VERSION}} \
         kube-scheduler \
         --config=${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml \
         --bind-address=192.168.57.200 \
@@ -292,6 +294,7 @@ systemd:
         --requestheader-group-headers=X-Remote-Group \
         --requestheader-username-headers=X-Remote-User \
         --authorization-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig \
+        --logging-format=json \
         --v=2
 
         Restart=on-failure
@@ -366,6 +369,7 @@ systemd:
         --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
         --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
         --hostname-override=coreos1 \
+        --logging-format=json \
         --v=2
 
         ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
@@ -390,7 +394,7 @@ storage:
         inline: |
           127.0.0.1 localhost
           ::1       localhost
-          192.168.57.200 gcr.io k8s.gcr.io docker.khs1994.com docker.domain.com
+          192.168.57.200 gcr.io registry.k8s.io docker.khs1994.com docker.domain.com
           192.168.57.200 coreos1
     - path: ${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml
       mode: 0644

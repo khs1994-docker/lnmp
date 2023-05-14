@@ -13,7 +13,8 @@ After=cri-containerd.service \
 cri-containerd@1.3.service \
 cri-containerd@1.4.service \
 cri-containerd@1.5.service \
-cri-containerd@1.6.service
+cri-containerd@1.6.service \
+cri-containerd@1.7.service
 
 After=cri-o.service
 
@@ -112,8 +113,7 @@ ExecStart=/opt/k8s/bin/kubelet \
 --hostname-override=${NODE_NAME} \
 --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
 --v=2 \
---container-runtime=remote \
-# --logging-format=json \
+--logging-format=json \
 --container-runtime-endpoint=unix:///run/%i/%i.sock
 
 ; kubelet@cri-containerd

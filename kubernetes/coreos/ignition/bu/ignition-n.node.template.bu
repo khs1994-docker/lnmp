@@ -89,6 +89,7 @@ systemd:
         --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
         --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
         --hostname-override=coreos{{n}} \
+        --logging-format=json \
         --v=2
 
         # cri is docker
@@ -124,7 +125,7 @@ storage:
         inline: |
           127.0.0.1 localhost
           ::1       localhost
-          {{IP_1}} gcr.io k8s.gcr.io docker.khs1994.com docker.domain.com
+          {{IP_1}} gcr.io k8s.gcr.io registry.k8s.io docker.khs1994.com docker.domain.com
           {{IP_1}} coreos1
           {{IP_2}} coreos2
           {{IP_3}} coreos3

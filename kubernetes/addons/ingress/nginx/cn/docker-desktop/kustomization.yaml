@@ -1,12 +1,12 @@
 resources:
 - ../../docker-desktop
 images:
-  - name: registry.k8s.io/ingress-nginx/controller:v1.3.0@sha256:d1707ca76d3b044ab8a28277a2466a02100ee9f58a86af1535a3edf9323ea1b5
+  - name: registry.k8s.io/ingress-nginx/controller:v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7
     # newName: ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller
-    newTag: v1.3.0@sha256:d1707ca76d3b044ab8a28277a2466a02100ee9f58a86af1535a3edf9323ea1b5
+    newTag: v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7
     newName: registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-ingress-controller
 
-  - name: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+  - name: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20230312-helm-chart-4.5.2-28-g66a760794@sha256:01d181618f270f2a96c04006f33b2699ad3ccb02da48d0f89b22abce084b292f
     # newName: ccr.ccs.tencentyun.com/khs1994/nginx-ingress-kube-webhook-certgen
-    newTag: v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+    newTag: v20230312-helm-chart-4.5.2-28-g66a760794@sha256:01d181618f270f2a96c04006f33b2699ad3ccb02da48d0f89b22abce084b292f
     newName: registry.cn-hangzhou.aliyuncs.com/google_containers/kube-webhook-certgen

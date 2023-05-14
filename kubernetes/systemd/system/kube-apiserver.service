@@ -83,7 +83,7 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 # --feature-gates="IPv6DualStack=true" \
 #
 ;
-# --logging-format=json \
+--logging-format=json \
 --v=2
 
 Restart=on-failure

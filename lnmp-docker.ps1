@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 20.10.23
+.VERSION 20.10.25
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -110,7 +110,7 @@ if ($args[0] -eq "env-file") {
   exit
 }
 
-if (!(Test-Path $PSScriptRoot\cli\khs1994-robot.enc )) {
+if (!(Test-Path $PSScriptRoot\scripts\cli\khs1994-robot.enc )) {
   Write-Host "lnmp-docker.ps1 not in lnmp ROOT PATH" -ForegroundColor Red
 
   Write-Host "Please remove $((get-command lnmp-docker).Source)" -ForegroundColor Red
@@ -122,7 +122,7 @@ printInfo "Load env file [ $LNMP_ENV_FILE ] and [ $LNMP_ENV_FILE_PS1 ]"
 
 . "$PSScriptRoot/.env.example.ps1"
 
-. "$PSScriptRoot/cli/.env.ps1"
+. "$PSScriptRoot/scripts/cli/.env.ps1"
 
 if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
   . "$PSScriptRoot/$LNMP_ENV_FILE_PS1"
@@ -284,24 +284,6 @@ Function New-LogFile() {
   }
 }
 
-Function Test-DockerVersion() {
-  if (!(Test-Command git)) {
-    printError "Git not install"
-    return
-  }
-
-  if (!(Test-Command docker)) {
-    printError "Docker not install"
-    return
-  }
-
-  ${BRANCH} = (git rev-parse --abbrev-ref HEAD)
-
-  if (!("${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" -eq "${BRANCH}" )) {
-    printWarning "Current branch ${BRANCH} incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}`.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout"
-  }
-}
-
 Function init() {
   New-LogFile
   # git submodule update --init --recursive
@@ -319,9 +301,6 @@ Usage: ./docker-lnmp COMMAND
 
 Donate:
   zan                  Donate
-
-PCIT EE:
-  pcit-up              Up(Run) PCIT EE https://github.com/pcit-ce/pcit
 
 Commands:
   up                   Up LNMP (Support x86_64 arm64v8)
@@ -575,29 +554,9 @@ Function Get-ComposeOptions($compose_files) {
 
   $COMPOSE_FILE_ARRAY += "docker-workspace.yml"
 
-  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-    $COMPOSE_FILE_ARRAY_FULL_PATH = @()
-
-    foreach ($item in $COMPOSE_FILE_ARRAY) {
-      $COMPOSE_FILE_ARRAY_FULL_PATH += (Get-Item $item).FullName
-    }
-
-    $env:COMPOSE_FILE = $COMPOSE_FILE_ARRAY_FULL_PATH -join ';'
-
-    $env:WSLENV = 'COMPOSE_FILE/ul'
-
-    #@debug
-    printInfo $(wsl -d ${WSL2_DIST} -- sh -c 'echo Load compose files: $COMPOSE_FILE')
-  }
-  else {
-    $env:COMPOSE_FILE = $COMPOSE_FILE_ARRAY -join ';'
-  }
+  $env:COMPOSE_FILE = $COMPOSE_FILE_ARRAY -join ';'
 
   # write-host $env:COMPOSE_FILE
-
-  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-    return $options
-  }
 
   return $options.split(' ')
 }
@@ -618,26 +577,6 @@ function Copy-PCIT() {
   docker pull pcit/pcit:frontend
 
   docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
-}
-
-function convert_args_to_string_if_use_wsl2() {
-  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '0') {
-    return $args
-  }
-
-  $string = ""
-
-  foreach ($item in $args) {
-    if ($item.getType().Name -eq 'Object[]' ) {
-      foreach ($i in $item) {
-        $string += " $i"
-      }
-      continue
-    }
-    $string += " $item"
-  }
-
-  return $string
 }
 
 function Edit-Hosts() {
@@ -682,59 +621,30 @@ function Get-Env($ENV_NAME, $ENV_FILE, $ENV_DEFAULT) {
 # APP_ROOT
 $APP_ROOT = Get-Env 'APP_ROOT' $LNMP_ENV_FILE './app'
 
-$env:USE_WSL2_DOCKER_COMPOSE = '0'
-$env:USE_WSL2_BUT_DOCKER_NOT_RUNNING = '0'
+$env:USE_WSL2_BUT_DOCKER_NOT_RUNNING = '3'
 
-# 判断项目是否存储在 WSL2
+if (($APP_ROOT.length -gt 7) -and ($APP_ROOT.Substring(0, 7) -eq '\\wsl$\')) {
+  $env:USE_WSL2_BUT_DOCKER_NOT_RUNNING = '0'
 
-function docker-compose() {
-  foreach ($item in $args) {
-    if (!($item)) { continue }
-    if ($item.getType().Name -eq 'Object[]' ) {
-      foreach ($i in $item) {
-        $string += " $i"
-      }
-      continue
-    }
-    $string += " $item"
+  $WSL2_DIST = $APP_ROOT.Split('\')[3]
+
+  if ($APP_ROOT.length -le (8 + $WSL2_DIST.length)) {
+    printError "please check APP_ROOT value in .env file"
+
+    exit 1
   }
 
-  printInfo "Load compose file: $env:COMPOSE_FILE"
-  printInfo "Exec:              $ docker compose $string"
+  $WSL2_DIST_PATH = '/' + $APP_ROOT.Substring(8 + $WSL2_DIST.length)
 
-  Invoke-Expression "docker compose $string"
-}
+  if ($WSL2_DIST_PATH.Length -eq 1) {
+    printError "please check APP_ROOT value in .env file"
 
-if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
-  $env:USE_WSL2_DOCKER_COMPOSE = '1'
+    exit 1
+  }
 
   if (!(Test-Path \\wsl$\$WSL2_DIST/mnt/wsl/docker-desktop/cli-tools/usr/bin/docker)) {
     $env:USE_WSL2_BUT_DOCKER_NOT_RUNNING = '1'
   }
-
-  function docker-compose() {
-    #@debug
-    printInfo "Exec docker compose command in WSL2 [ ${WSL2_DIST} ]"
-
-    $COMPOSE_BIN = "/mnt/wsl/docker-desktop/cli-tools/usr/bin/docker"
-
-    $cmd = convert_args_to_string_if_use_wsl2 $args
-
-    wsl -d $WSL2_DIST -- sh -c "command -v $COMPOSE_BIN > /dev/null || exit 1"
-
-    if ($?) {
-      wsl -d $WSL2_DIST -- sh -xc "$COMPOSE_BIN compose $cmd"
-    }
-    else {
-      printWarning "Docker Desktop not running"
-    }
-  }
-}
-
-if ($APP_ROOT.Substring(0, 1) -eq '/' -and !($WSL2_DIST)) {
-  printError "APP_ROOT $APP_ROOT start with '/', but `$WSL2_DIST not set in .env.ps1"
-
-  exit 1
 }
 
 # APP_ENV
@@ -742,12 +652,12 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and !($WSL2_DIST)) {
 $APP_ENV = Get-Env -ENV_NAME 'APP_ENV' -ENV_FILE $LNMP_ENV_FILE -ENV_DEFAULT 'development'
 
 # cd LNMP_ROOT
-if (!(Test-Path cli/khs1994-robot.enc )) {
+if (!(Test-Path scripts/cli/khs1994-robot.enc )) {
   # 在项目目录外
   printInfo "Use LNMP CLI in $PWD"
   cd $PSScriptRoot
-  if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-    printInfo "APP_ROOT is WSL2 [ $WSL2_DIST ] PATH $APP_ROOT"
+  if (($APP_ROOT.length -gt 7) -and ($APP_ROOT.Substring(0, 7) -eq '\\wsl$\')) {
+    printInfo "APP_ROOT is WSL2 [ $WSL2_DIST ] PATH $WSL2_DIST_PATH"
   }
   else {
     # cd $PSScriptRoot
@@ -762,8 +672,8 @@ if (!(Test-Path cli/khs1994-robot.enc )) {
 }
 else {
   printInfo "Use LNMP CLI in LNMP Root $pwd"
-  if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-    printInfo "APP_ROOT is WSL2 [ $WSL2_DIST ] PATH $APP_ROOT"
+  if (($APP_ROOT.length -gt 7) -and ($APP_ROOT.Substring(0, 7) -eq '\\wsl$\')) {
+    printInfo "APP_ROOT is WSL2 [ $WSL2_DIST ] PATH $WSL2_DIST_PATH"
   }
   else {
     if (!(Test-Path $APP_ROOT)) {
@@ -807,25 +717,19 @@ printInfo "Exec custom script"
 . ./lnmp-docker-custom-script.example.ps1
 . ./lnmp-docker-custom-script.ps1
 
-if (Test-Command docker) {
-  $DOCKER_VERSION = $(docker --version).split(' ')[2].split('-')[0].trim(',')
-}
-
-$DOCKER_VERSION_YY = ([System.Version]$DOCKER_VERSION).Major
-$DOCKER_VERSION_MM = ([System.Version]$DOCKER_VERSION).Minor
-
-if ($DOCKER_VERSION_MM -lt 10) {
-  $DOCKER_VERSION_MM = '0' + $DOCKER_VERSION_MM
-}
-
 New-InitFile
 New-LogFile
-Test-DockerVersion
 
 docker compose version | out-null
 
 if (!($?)) {
   printError "Docker Compose V2 not found, please install, see https://docs.docker.com/compose/install/compose-plugin/"
+  exit 1
+}
+
+if (!((docker compose version).split( )[-1].trim('v') -ge $REQUIRE_DOCKER_COMPOSE_VERSION)) {
+  printError "your compose version is not ge v$REQUIRE_DOCKER_COMPOSE_VERSION"
+
   exit 1
 }
 
@@ -878,8 +782,6 @@ switch -regex ($command) {
   }
 
   "^build$" {
-    $env:USE_WSL2_DOCKER_COMPOSE = '0'
-
     if ($other) {
       $services = $other
     }
@@ -896,8 +798,6 @@ switch -regex ($command) {
   }
 
   push {
-    $env:USE_WSL2_DOCKER_COMPOSE = '0'
-
     if ($other) {
       $services = $other
     }
@@ -925,12 +825,12 @@ switch -regex ($command) {
     $options = Get-ComposeOptions "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options config $other }
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options config $other
   }
 
   checkout {
-    git fetch origin "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}":"${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" --depth=1
-    git checkout "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}"
+    git fetch origin 23.11:23.11 --depth=1
+    git checkout 23.11
     _update
   }
 
@@ -954,15 +854,14 @@ switch -regex ($command) {
     #@custom
     __lnmp_custom_pre_up $services
 
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up --no-build -d $services }
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options config > compose-up.yaml
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up --no-build -d $services
 
     #@custom
     __lnmp_custom_post_up $services
   }
 
   "^pull$" {
-    $env:USE_WSL2_DOCKER_COMPOSE = '0'
-
     if ($other) {
       $services = $other
     }
@@ -983,8 +882,6 @@ switch -regex ($command) {
   }
 
   "^down$" {
-    $env:USE_WSL2_DOCKER_COMPOSE = '0'
-
     $options = Get-ComposeOptions "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
@@ -1029,8 +926,6 @@ switch -regex ($command) {
   }
 
   restart {
-    $env:USE_WSL2_DOCKER_COMPOSE = '0'
-
     $options = Get-ComposeOptions "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
@@ -1270,19 +1165,19 @@ XXX
   zan {
     clear
     printInfo "Thank You"
-    Start-Process -FilePath http://zan.khs1994.com
+    Start-Process -FilePath https://zan.khs1994.com
   }
 
   donate {
     clear
     printInfo "Thank You"
-    Start-Process -FilePath http://zan.khs1994.com
+    Start-Process -FilePath https://zan.khs1994.com
   }
 
   fund {
     clear
     printInfo "Thank You"
-    Start-Process -FilePath http://zan.khs1994.com
+    Start-Process -FilePath https://zan.khs1994.com
   }
 
   pcit-cp {
@@ -1296,44 +1191,44 @@ XXX
     #   cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.production
     # }
 
-    if (!(Test-Path pcit/.env.development)) {
-      cp pcit/.env.example pcit/.env.development
+    if (!(Test-Path lrew/pcit/.env.development)) {
+      cp lrew/pcit/.env.example lrew/pcit/.env.development
     }
 
     # 判断 nginx 配置文件是否存在
 
-    if (!(Test-Path pcit/conf/pcit.conf)) {
-      cp pcit/conf/pcit.config pcit/conf/pcit.conf
+    if (!(Test-Path lrew/pcit/conf/pcit.conf)) {
+      cp lrew/pcit/conf/pcit.config lrew/pcit/conf/pcit.conf
     }
 
-    $a = Select-String 'demo.ci.khs1994.com' pcit/conf/pcit.conf
+    $a = Select-String 'demo.ci.khs1994.com' lrew/pcit/conf/pcit.conf
 
     if ($a.Length -ne 0) {
-      printError "PCIT nginx conf error, please see pcit/README.md"
+      printError "PCIT nginx conf error, please see lrew/pcit/README.md"
     }
 
-    if (!(Test-Path pcit/ssl/ci.crt)) {
-      printError "PCIT Website SSL key not found, please see pcit/README.md"
+    if (!(Test-Path lrew/pcit/ssl/ci.crt)) {
+      printError "PCIT Website SSL key not found, please see lrew/pcit/README.md"
     }
 
-    if (!(Test-Path pcit/key/private.key)) {
-      printError "PCIT GitHub App private key not found, please see pcit/README.md"
+    if (!(Test-Path lrew/pcit/key/private.key)) {
+      printError "PCIT GitHub App private key not found, please see lrew/pcit/README.md"
     }
 
-    if (!(Test-Path pcit/key/public.key)) {
-      docker run -it --rm -v $PWD/pcit/key:/app pcit/pcit `
+    if (!(Test-Path lrew/pcit/key/public.key)) {
+      docker run -it --rm -v $PWD/lrew/pcit/key:/app pcit/pcit `
         openssl rsa -in private.key -pubout -out public.key
     }
 
-    cp pcit/ssl/ci.crt config/nginx/ssl/ci.crt
+    cp lrew/pcit/ssl/ci.crt config/nginx/ssl/ci.crt
 
-    cp pcit/conf/pcit.conf config/nginx/pcit.conf
+    cp lrew/pcit/conf/pcit.conf config/nginx/pcit.conf
 
     # 启动
     $options = Get-ComposeOptions "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d ${LNMP_SERVICES} pcit }
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d ${LNMP_SERVICES} pcit
   }
 
   daemon-socket {
@@ -1360,7 +1255,7 @@ XXX
     if ((Test-Path $EXEC_CMD_DIR/.devcontainer) -And (Test-Path $EXEC_CMD_DIR/docker-workspace.yml)) {
       printInfo "Exec composer command in [ vscode remote ] or [ PhpStorm ] project folder"
       cd $EXEC_CMD_DIR
-      docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-workspace.yml run --rm composer $args
+      docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-workspace.yml run --rm composer $args
 
       exit
     }
@@ -1381,7 +1276,7 @@ Example: ./lnmp-docker composer /app/demo install
     $options = Get-ComposeOptions "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options run -w $WORKING_DIR --rm composer $COMPOSER_COMMAND }
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options run -w $WORKING_DIR --rm composer $COMPOSER_COMMAND
   }
 
   hosts {
@@ -1399,7 +1294,7 @@ Example: ./lnmp-docker composer /app/demo install
   "^code-run$" {
     cd $EXEC_CMD_DIR
 
-    docker-compose -f docker-workspace.yml run --rm $other
+    docker compose -f docker-workspace.yml run --rm $other
   }
 
   "^code-exec$" {
@@ -1409,6 +1304,13 @@ Example: ./lnmp-docker composer /app/demo install
   }
 
   "mount" {
+    if ($env:USE_WSL2_BUT_DOCKER_NOT_RUNNING -eq '0') {
+      printError "Docker is running"
+      printError "Please run [ ./lnmp-docker mount ] before docker start"
+
+      exit 1
+    }
+
     if (!$WSL2_DIST) {
       $WSL2_DIST = 'ubuntu'
     }
@@ -1426,10 +1328,10 @@ Example: ./lnmp-docker composer /app/demo install
     }
 
     printInfo "try mount physical disk to WSL2 [ $WSL2_DIST ]"
-    wsl -d $WSL2_DIST -u root -- sh -c "mountpoint -q /app"
+    wsl -d $WSL2_DIST -u root -- sh -c "mountpoint -q $WSL2_DIST_PATH"
 
     if ($?) {
-      printInfo "$WSL2_DIST /app already mount"
+      printInfo "$WSL2_DIST $WSL2_DIST_PATH already mount"
 
       exit
     }
@@ -1457,7 +1359,7 @@ Example: ./lnmp-docker composer /app/demo install
       $dev_sdx = Get-wsl2_mount_physicaldiskdevice_dev_sdx $MountPhysicalDiskType2WSL2
     }
     else {
-      printInfo "physical disk already mount to $dev_sdx, I will mount $dev_sdx to /app"
+      printInfo "physical disk already mount to $dev_sdx, I will mount $dev_sdx to $WSL2_DIST_PATH"
     }
 
     if (!$dev_sdx) {
@@ -1469,15 +1371,15 @@ Example: ./lnmp-docker composer /app/demo install
     $wsl2_mount_physicaldiskdevice_path = Get-wsl2_mount_physicaldiskdevice_path $MountPhysicalDiskType2WSL2
 
     & $PSScriptRoot/kubernetes/wsl2/bin/wsl2d.ps1 $WSL2_DIST
-    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p /app"
-    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p $wsl2_mount_physicaldiskdevice_path/app"
-    wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind $wsl2_mount_physicaldiskdevice_path/app /app"
-    wsl -d $WSL2_DIST -u root -- sh -cx "chown 1000:1000 /app"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p $WSL2_DIST_PATH"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p ${wsl2_mount_physicaldiskdevice_path}${WSL2_DIST_PATH}"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind ${wsl2_mount_physicaldiskdevice_path}${WSL2_DIST_PATH} $WSL2_DIST_PATH"
+    wsl -d $WSL2_DIST -u root -- sh -cx "chown 1000:1000 $WSL2_DIST_PATH"
   }
 
   "^code$" {
-    if ($env:USE_WSL2_DOCKER_COMPOSE -eq '0') {
-      printError "APP_ROOT is not in WSL2, exit"
+    if ($env:USE_WSL2_BUT_DOCKER_NOT_RUNNING -eq '3') {
+      printError "APP_ROOT is not WSL2 dir"
 
       exit 1
     }
@@ -1489,29 +1391,29 @@ Example: ./lnmp-docker composer /app/demo install
           $path = $path.substring(1)
         }
 
-        wsl -d $WSL2_DIST -u root -- test -d $APP_ROOT/$path
+        wsl -d $WSL2_DIST -u root -- test -d $WSL2_DIST_PATH/$path
         if (!$?) {
           # 不是 dir
-          printError WSL2 $WSL2_DIST [ ${APP_ROOT}/${path} ] `
-            is not`'t a dir`, [ ${APP_ROOT} ] include this dir:
+          printError WSL2 $WSL2_DIST [ $WSL2_DIST_PATH/${path} ] `
+            is not`'t a dir`, [ $WSL2_DIST_PATH ] include this dir:
 
           write-host `n
-          wsl -d $WSL2_DIST -u root -- ls -la $APP_ROOT
+          wsl -d $WSL2_DIST -u root -- ls -la $WSL2_DIST_PATH
 
           write-host `n`n
 
-          exit
+          exit 1
         }
-        printInfo Open WSL2 $WSL2_DIST [ $APP_ROOT/$path ]
-        code --remote wsl+$WSL2_DIST $APP_ROOT/$path
+        printInfo Open WSL2 $WSL2_DIST [ $WSL2_DIST_PATH/$path ]
+        code --remote wsl+$WSL2_DIST $WSL2_DIST_PATH/$path
 
         cd $EXEC_CMD_DIR
 
         exit
       }
     }
-    printInfo Open WSL2 $WSL2_DIST [ $APP_ROOT ]
-    code --remote wsl+$WSL2_DIST $APP_ROOT
+    printInfo Open WSL2 $WSL2_DIST [ $WSL2_DIST_PATH ]
+    code --remote wsl+$WSL2_DIST $WSL2_DIST_PATH
   }
 
   outdated {
@@ -1579,7 +1481,7 @@ Example: ./lnmp-docker composer /app/demo install
       "docker-lnmp.override.yml"
 
     $command, $other = $args
-    & { docker-compose $options $command $other }
+    docker compose $options $command $other
   }
 }
 

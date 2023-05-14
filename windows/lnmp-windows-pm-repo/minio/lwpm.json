@@ -21,7 +21,16 @@
       "(mc-new --version)[0].split(' ')[2]"
     ],
     "uninstall": "_cleanup C:\\bin\\minio-new.exe C:\\bin\\mc-new.exe",
-    "version": "(minio-new --version)[0].split(' ')[2]"
+    "version": "(minio-new --version)[0].split(' ')[2]",
+    "service": [
+      "C:\\bin\\minio-new.exe",
+      "server",
+      "C:\\app\\s3-new",
+      "--address",
+      ":39080",
+      "--console-address",
+      ":39090"
+    ]
   },
   "path": [
     "C:\\bin"
