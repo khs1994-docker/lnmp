@@ -8,11 +8,12 @@
   "github": "",
   "releases": "https://developer.android.google.cn/studio/releases/platform-tools",
   "url": "https://dl.google.com/android/repository/platform-tools-latest-${env:LWPM_OS}.zip",
-  "url-mirror": "",
+  "url-mirror": "https://dl.google.com/android/repository/platform-tools_r${VERSION}-windows.zip",
   "pre-url": "",
   "pre-url-mirror": "",
   "command": "adb",
   "download-filename": "",
+  "winget-pkgs": "https://hub.fgit.ml/microsoft/winget-pkgs/tree/master/manifests/g/Google/PlatformTools",
   "scripts": {
     "preinstall": [
       "# _cleanup \"$unzipDesc\""

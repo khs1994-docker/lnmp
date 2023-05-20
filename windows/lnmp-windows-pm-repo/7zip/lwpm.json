@@ -2,12 +2,13 @@
   "name": "7zip",
   "description": "7-Zip is a file archiver with a high compression ratio",
   "version": "2201",
-  "pre-version": "2201",
+  "pre-version": "2300",
   "homepage": "https://www.7-zip.org/",
   "bug": "https://www.7-zip.org/support.html",
   "github": "",
   "releases": "https://github.com/microsoft/winget-pkgs/tree/master/manifests/7/7zip/7zip",
   "url": "https://www.7-zip.org/a/7z${VERSION}-x64.msi",
+  "url-mirror": "https://experiments-alicdn.sparanoid.net/7z/7z${VERSION}-x64.msi",
   "command": "7z.exe",
   "scripts": {
     "version": [

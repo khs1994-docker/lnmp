@@ -12,6 +12,10 @@ path:
   - C:\nginx
 command: nginx
 scripts:
+  service:
+    - C:/nginx/nginx.exe
+    - -p
+    - C:/nginx
   version: |
     nginx -v > $env:TEMP/.nginx.version 2>&1
     $(Get-Content $env:TEMP/.nginx.version).split(' ')[2].split('/')[1]

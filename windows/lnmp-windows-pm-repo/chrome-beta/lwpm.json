@@ -1,17 +1,16 @@
 {
-  "name": "chrome",
-  "description": "A more simple, secure, and faster web browser than ever, with Google's smarts built-in.",
+  "name": "chrome-beta",
+  "description": "",
   "version": "",
   "pre-version": "",
   "homepage": "https://www.google.cn/chrome/index.html",
   "bug": "",
   "github": "",
-  "releases": "https://www.google.cn/chrome/index.html",
-  "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi",
+  "releases": "https://www.google.cn/intl/zh-CN/chrome/beta/",
+  "url": "https://dl.google.com/tag/s/dl/chrome/install/beta/googlechromebetastandaloneenterprise64.msi",
   "url-mirror": "",
   "pre-url": "",
   "pre-url-mirror": "",
-  "winget-pkgs": "https://hub.fgit.ml/microsoft/winget-pkgs/tree/master/manifests/g/Google/Chrome",
   "scripts": {
     "preinstall": "",
     "install": [

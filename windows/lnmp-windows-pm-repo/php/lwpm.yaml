@@ -12,6 +12,11 @@ path:
 command: php
 download-filename: php-${VERSION}-${VC_VERSION}-x64.zip
 scripts:
+  service:
+    - C:/php/php-cgi-spawner.exe
+    - c:/php/php-cgi.exe
+    - "9000"
+    - 4+16
   platform-reqs: ["if(!$IsWindows){echo $False}"]
   uninstall: |
     if($isPre -eq 1){_cleanup "C:\php-pre"}else{_cleanup "C:\php"}

@@ -17,6 +17,11 @@
     "preinstall": [
       "# https://docs.microsoft.com/zh-cn/cpp/windows/redistributing-visual-cpp-files?view=msvc-170#install-the-redistributable-packages\n# check vclib installed\nif(!(Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\X64')){\n  PrintError 'Please install vclib first, exec $ lpm install vclib'\n\n  exit 1\n}\n\nif((Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\X64').Installed -ne 1){\n  PrintError 'Please install vclib first, exec $ lpm install vclib'\n\n  exit 1\n}\n\nprintInfo 'vclib already installed, continue ...'\n\nGet-Process nginx -ErrorAction \"SilentlyContinue\" | out-null\n\nif ($?){\n  PrintError 'Please stop nginx first, exec $.\\windows\\lnmp-wnamp.ps1 stop nginx'\n\n  exit 1\n}\n"
     ],
+    "service": [
+      "C:/nginx/nginx.exe",
+      "-p",
+      "C:/nginx"
+    ],
     "test": "nginx -v",
     "uninstall": "Get-Process nginx -ErrorAction \"SilentlyContinue\" | out-null\nif ($?){\n  PrintError 'Please stop nginx first, exec $.\\windows\\lnmp-wnamp.ps1 stop nginx'\n\n  exit 1\n}\n_cleanup C:\\nginx\n",
     "version": "nginx -v > $env:TEMP/.nginx.version 2>&1\n$(Get-Content $env:TEMP/.nginx.version).split(' ')[2].split('/')[1]\n"
