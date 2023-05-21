@@ -14,7 +14,7 @@ services:
     image: memcached:1.6.15-alpine
 
   php:
-    image: php:8.2.3-fpm-alpine
+    image: php:8.2.4-fpm-alpine
 
   composer:
     image: composer:2.5.5
@@ -23,7 +23,7 @@ services:
     image: nginx:1.23.3-alpine
 
   nginx-unit:
-    image: docker.io/nginx/unit:1.28.0-minimal
+    image: docker.io/nginx/unit:1.30.0-minimal
 
   rabbitmq:
     image: rabbitmq:3.9.0-management-alpine
