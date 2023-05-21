@@ -1,10 +1,6 @@
 
 <#PSScriptInfo
 
-.VERSION 20.10.25
-
-.GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
-
 .AUTHOR khs1994@khs1994.com
 
 .COMPANYNAME khs1994-docker
