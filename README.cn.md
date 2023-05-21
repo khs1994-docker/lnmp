@@ -288,9 +288,3 @@ https://docs.lnmp.khs1994.com
 ## 赞助项目
 
 请访问 [https://zan.khs1994.com](https://zan.khs1994.com)
-
-## 数据收集
-
-本项目每日默认会将用户的系统和 IP 信息发送到数据收集服务器。建议用户保持开启状态来帮助提升本项目。
-
-你可以通过在 `.env` 文件中设置 `DATA_COLLECTION=false` 来禁用数据收集服务。

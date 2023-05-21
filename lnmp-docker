@@ -206,23 +206,6 @@ Donate https://zan.khs1994.com
 "
 }
 
-_tongji(){
-  if ! [ -f log/tongji.txt ];then
-    print_info "Send OS type and IP data to khs1994-docker/lnmp, Thanks you help us improve"
-    if [ -f /etc/os-release ];then . /etc/os-release ; fi
-    curl -s -X GET --user-agent "${OS:-unkown os}-${ID:-unknow id}-${VERSION:-unkown version}" https://developer.khs1994.com/lnmp/tongji --connect-timeout 5 > /dev/null || echo 'ERROR=true' > log/tongji.txt
-    TIMESTAMP=`date +%s`
-    echo "TIMESTAMP=${TIMESTAMP}" > log/tongji.txt
-  else
-    . ./log/tongji.txt
-
-    if [ `date +%s` -gt $((TIMESTAMP + 86400)) ];then
-      rm -rf log/tongji.txt
-      _tongji
-    fi
-  fi
-}
-
 test -f cluster/help.sh && source cluster/help.sh || true
 
 # composer satis
@@ -1616,9 +1599,6 @@ fi
 set -e
 
 print_info $(docker compose version)
-
-# data collaction
-if ! [ "${DATA_COLLECTION}" = "false" ];then _tongji; fi
 
 # output help
 if [ $# = 0 ];then help; exit 0; fi

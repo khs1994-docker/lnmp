@@ -278,9 +278,3 @@ Please see [Contributing](CONTRIBUTING.md)
 ## Donate
 
 Please see [https://zan.khs1994.com](https://zan.khs1994.com)
-
-## Privacy
-
-We send OS type and IP data to us data collection server, please set true (default) to help us improve.
-
-You can edit `.env` file `DATA_COLLECTION=false` to disable it.
