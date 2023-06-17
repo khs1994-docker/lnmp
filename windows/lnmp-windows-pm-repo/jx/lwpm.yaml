@@ -2,7 +2,7 @@ name: jx
 description: Jenkins X provides automated CI+CD for Kubernetes with Preview Environments on Pull Requests using Tekton, Knative, Prow, Skaffold and Helm
 version: 2.1.33
 url: https://github.com/jenkins-x/jx/releases/download/v${VERSION}/jx-${env:lwpm_os}-${env:lwpm_architecture}.zip
-url-mirror: https://download.fastgit.org/jenkins-x/jx/releases/download/v${VERSION}/jx-${env:lwpm_os}-${env:lwpm_architecture}.zip
+url-mirror: https://download.fgit.ml/jenkins-x/jx/releases/download/v${VERSION}/jx-${env:lwpm_os}-${env:lwpm_architecture}.zip
 github: jenkins-x/jx
 command: jx
 scripts:

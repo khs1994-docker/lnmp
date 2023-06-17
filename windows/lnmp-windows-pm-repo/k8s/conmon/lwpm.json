@@ -15,6 +15,6 @@
     "platform-reqs": "if(!$IsLinux){echo $False}"
   },
   "url": "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}",
-  "url-mirror": "https://download.fastgit.org/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}",
+  "url-mirror": "https://download.fgit.ml/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}",
   "version": "2.1.3"
 }

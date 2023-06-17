@@ -35,6 +35,6 @@
     "version": ""
   },
   "url": "https://github.com/deemru/php-cgi-spawner/releases/download/${VERSION}/php-cgi-spawner.exe",
-  "url-mirror": "https://download.fastgit.org/deemru/php-cgi-spawner/releases/download/${VERSION}/php-cgi-spawner.exe",
+  "url-mirror": "https://download.fgit.ml/deemru/php-cgi-spawner/releases/download/${VERSION}/php-cgi-spawner.exe",
   "version": "1.1.23"
 }

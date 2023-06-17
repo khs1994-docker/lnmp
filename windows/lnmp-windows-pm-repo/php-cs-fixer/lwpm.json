@@ -8,7 +8,7 @@
   "github": "FriendsOfPHP/PHP-CS-Fixer",
   "releases": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases",
   "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${VERSION}/php-cs-fixer.phar",
-  "url-mirror": "https://download.fastgit.org/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${VERSION}/php-cs-fixer.phar",
+  "url-mirror": "https://download.fgit.ml/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${VERSION}/php-cs-fixer.phar",
   "command": "php-cs-fixer",
   "download-filename": "php-cs-fixer-${VERSION}.phar",
   "scripts": {

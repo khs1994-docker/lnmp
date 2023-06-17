@@ -34,7 +34,7 @@ scripts:
     }
 
     $GITHUB_DOWNLOAD_URL='github.com'
-    $GITHUB_DOWNLOAD_URL='download.fastgit.org'
+    $GITHUB_DOWNLOAD_URL='download.fgit.ml'
     $PHP_EXT=${lwpm}.name.replace('php-','')
 
     if (Test-Path $HOME/github/pickle/bin/pickle){

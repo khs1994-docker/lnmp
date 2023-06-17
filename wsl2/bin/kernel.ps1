@@ -59,7 +59,7 @@ Function _downloader($name, $url) {
 $GITHUB_RELEASE = "github.com"
 
 if ($env:LNMP_CN_ENV -ne "false") {
-  $GITHUB_RELEASE = "download.fastgit.org"
+  $GITHUB_RELEASE = "download.fgit.ml"
 }
 
 _downloader "kernel-${kernelversion}-microsoft-standard-WSL2.img" "https://${GITHUB_RELEASE}/khs1994/WSL2-Linux-Kernel/releases/download/${kernelversion}-microsoft-standard-WSL2/kernel-${kernelversion}-microsoft-standard-WSL2.img"

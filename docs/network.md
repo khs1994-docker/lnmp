@@ -11,7 +11,7 @@
 $ git clone https://hub.fastgit.org/author/repo
 
 #      https://github.com/A/A/releases/download/1.0/1.0.tar.gz
-$ wget https://download.fastgit.org/A/A/releases/download/1.0/1.0.tar.gz
+$ wget https://download.fgit.ml/A/A/releases/download/1.0/1.0.tar.gz
 
 # https://raw.githubusercontent.com/
 # https://raw.fastgit.org/

@@ -8,7 +8,7 @@
   "github": "coredns/coredns",
   "releases": "https://github.com/coredns/coredns/releases",
   "url": "https://github.com/coredns/coredns/releases/download/v${VERSION}/coredns_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.tgz",
-  "url-mirror": "https://download.fastgit.org/coredns/coredns/releases/download/v${VERSION}/coredns_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.tgz",
+  "url-mirror": "https://download.fgit.ml/coredns/coredns/releases/download/v${VERSION}/coredns_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.tgz",
   "command": "coredns",
   "scripts": {
     "test": "printInfo $(coredns --version)[0] install success",

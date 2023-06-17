@@ -1,7 +1,7 @@
 name: conmon
 version: 2.1.3
 url: "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}"
-url-mirror: https://download.fastgit.org/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}
+url-mirror: https://download.fgit.ml/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}
 scripts:
   dist: |
     _mkdir $env:LWPM_PKG_ROOT/dist

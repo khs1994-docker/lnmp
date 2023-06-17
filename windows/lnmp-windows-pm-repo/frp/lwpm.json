@@ -8,7 +8,7 @@
   "github": "fatedier/frp",
   "releases": "https://github.com/fatedier/frp/releases",
   "url": "https://github.com/fatedier/frp/releases/download/v${VERSION}/frp_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.$(if($_IsWindows){echo zip}else{echo tar.gz})",
-  "url-mirror": "https://download.fastgit.org/fatedier/frp/releases/download/v${VERSION}/frp_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.$(if($_IsWindows){echo zip}else{echo tar.gz})",
+  "url-mirror": "https://download.fgit.ml/fatedier/frp/releases/download/v${VERSION}/frp_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.$(if($_IsWindows){echo zip}else{echo tar.gz})",
   "command": "frpc",
   "scripts": {
     "service": [

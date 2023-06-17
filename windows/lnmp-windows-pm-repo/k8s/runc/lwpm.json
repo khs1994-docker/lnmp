@@ -15,6 +15,6 @@
     "platform-reqs": "if(!$IsLinux){echo $False}"
   },
   "url": "https://github.com/opencontainers/runc/releases/download/v${VERSION}/runc.${env:lwpm_architecture}",
-  "url-mirror": "https://download.fastgit.org/opencontainers/runc/releases/download/v${VERSION}/runc.${env:lwpm_architecture}",
+  "url-mirror": "https://download.fgit.ml/opencontainers/runc/releases/download/v${VERSION}/runc.${env:lwpm_architecture}",
   "version": "1.1.3"
 }
