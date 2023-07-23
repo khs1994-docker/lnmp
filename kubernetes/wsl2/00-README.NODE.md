@@ -75,21 +75,7 @@ $ wsl -d wsl-k8s -- sh -xc 'debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --ski
 
 ## kubectl
 
-在 `WSL2` 中执行
-
-```bash
-$ wsl -d wsl-k8s
-
-$ kubectl
-```
-
-在 `Windows` 中执行
-
-```powershell
-$ ./wsl2/bin/kubectl-config-set-cluster
-
-$ kubectl
-```
+请查看 [04-README.kubectl.md](04-README.kubectl.md)
 
 ## crictl
 

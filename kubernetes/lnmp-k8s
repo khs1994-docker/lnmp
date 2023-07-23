@@ -1300,8 +1300,11 @@ _k8s_install_systemd(){
     #                  > /dev/null
 
     $(_sudo) mkdir -p ${K8S_ROOT}/etc/systemd/system/kube-.service.d
+    $(_sudo) mkdir -p /etc/systemd/system/systemd-journald.service.d
 
     $(_sudo) cp -r kube-.service.d/. ${K8S_ROOT}/etc/systemd/system/kube-.service.d/
+
+    $(_sudo) cp -r systemd-journald.service.d/. /etc/systemd/system/systemd-journald.service.d/
 
     $(_sudo) mkdir -p /etc/systemd/system-environment-generators/
     $(_sudo) cp -r ../system-environment-generators/. /etc/systemd/system-environment-generators/

@@ -16,3 +16,5 @@ $ kubectl apply -k addons/cni/calico-eBPF-nft
 ### 2. 部署 CoreDNS 等其他组件
 
 > 等待 CNI 处于 `Running` 状态，再部署其他组件。
+
+* 具体请查看 `kubernetes/addons` 文件夹内容。

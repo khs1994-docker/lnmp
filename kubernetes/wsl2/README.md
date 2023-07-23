@@ -2,4 +2,6 @@
 
 ## [node](00-README.NODE.md)
 
-## [systemd](02-README.systemd.md)
+## 使用 [systemd](02-README.systemd.md) 启动组件
+
+## [kubectl](04-README.kubectl.md)

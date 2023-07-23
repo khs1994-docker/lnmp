@@ -4,6 +4,9 @@
 
 ```bash
 $ kubectl apply -k addons/coredns
+
+# cn
+$ kubectl apply -k addons/coredns/cn
 ```
 
 ## Test

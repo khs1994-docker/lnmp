@@ -66,9 +66,6 @@ $ wsl -d wsl-k8s -- apt install -y procps bash-completion iproute2 jq curl vim f
 $ wsl -d wsl-k8s -- apt install -y systemd dbus dbus-user-session udev
 ```
 
-bsd-mailx cron-daemon-common exim4-base exim4-config exim4-daemon-light laptop-detect libevent-2.1-7 libfribidi0 libgnutls-dane0 libidn12 liblockfile-bin liblockfile1
-  libunbound8
-
 ### 复制配置文件
 
 ```powershell
