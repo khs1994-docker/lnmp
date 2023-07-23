@@ -18,8 +18,8 @@ systemd:
         # ExecStart=${K8S_ROOT}/kube-nginx/sbin/nginx -c ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf -p ${K8S_ROOT}/kube-nginx
         # ExecReload=${K8S_ROOT}/kube-nginx/sbin/nginx -c ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf -p ${K8S_ROOT}/kube-nginx -s reload
         ExecStartPre=-/bin/podman container rm kube-nginx
-        ExecStartPre=/bin/podman container run --rm $OPTIONS khs1994/kube-nginx:1.23.3 -t
-        ExecStart=/bin/podman container run --name kube-nginx $OPTIONS khs1994/kube-nginx:1.23.3
+        ExecStartPre=/bin/podman container run --rm $OPTIONS khs1994/kube-nginx:1.25.1 -t
+        ExecStart=/bin/podman container run --name kube-nginx $OPTIONS khs1994/kube-nginx:1.25.1
         ExecStop=/bin/podman container stop kube-nginx
         ExecStopPost=/bin/podman container rm kube-nginx
         PrivateTmp=true
