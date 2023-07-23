@@ -9,7 +9,7 @@
 # !! 搜索 /app/EXAMPLE 替换为自己的项目目录 !!
 
 ARG NODE_VERSION=18.2.0
-ARG PHP_VERSION=8.2.4
+ARG PHP_VERSION=8.2.5
 ARG NGINX_VERSION=1.15.0
 ARG DOCKER_HUB_USERNAME=khs1994
 
@@ -28,7 +28,7 @@ RUN cd /app \
            --no-plugins
 
 # 2.将项目打入 PHP 镜像
-# $ docker build -t khs1994/php:8.2.4-pro-GIT_TAG-alpine --target=php .
+# $ docker build -t khs1994/php:8.2.5-pro-GIT_TAG-alpine --target=php .
 
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as php
 

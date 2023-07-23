@@ -25,7 +25,7 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-# ENV SWOOLE_VERSION=v5.0.0
+# ENV SWOOLE_VERSION=v5.0.3
 ENV SWOOLE_VERSION=master
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
