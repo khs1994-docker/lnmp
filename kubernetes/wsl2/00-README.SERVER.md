@@ -186,7 +186,7 @@ $env:CFSSL_ROOTFS="/wsl/wsl-k8s-data/cfssl/rootfs"
 $ wsl -d wsl-k8s -- sh -xc 'mkdir ${CFSSL_ROOT:?err}'
 $ . ../windows/sdk/dockerhub/rootfs
 # 该命令执行结果最后一行会给出<文件地址>
-$ rootfs khs1994-docker/khs1994/k8s-cfssl -ref all-in-one -registry pcit-docker.pkg.coding.net
+$ rootfs khs1994-docker/khs1994/k8s-cfssl -ref latest -registry pcit-docker.pkg.coding.net
 $ cp <文件地址> \\wsl$\wsl-k8s\"${env:CFSSL_ROOTFS}".tar.gz
 
 $ wsl -d wsl-k8s -- sh -xc 'mkdir ${CFSSL_ROOTFS:?err}'
