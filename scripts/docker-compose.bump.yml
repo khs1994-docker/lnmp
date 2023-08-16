@@ -32,7 +32,7 @@ services:
     image: postgres:14.0-alpine
 
   mongodb:
-    image: mongo:5.0.3
+    image: mongo:6.0.9
 
   phpmyadmin:
     image: phpmyadmin:5.2.0
