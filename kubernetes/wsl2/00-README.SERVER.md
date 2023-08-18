@@ -209,8 +209,8 @@ $ wsl -d wsl-k8s -- sh -xc 'cp ${K8S_ROOT:?err}/etc/kubernetes/pki/*.yaml       
 $ wsl -d wsl-k8s -- sh -xc 'cp ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kubernetes'
 
 $ $env:WSLENV="K8S_ROOT/u:KUBERNETES_VERSION"
-# 请将 1.27.0 替换为实际的 k8s 版本号
-$ $env:KUBERNETES_VERSION='1.27.0'
+# 请将 1.28.0 替换为实际的 k8s 版本号
+$ $env:KUBERNETES_VERSION='1.28.0'
 $ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v${KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin'
 ```
 
