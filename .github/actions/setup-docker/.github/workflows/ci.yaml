@@ -17,8 +17,8 @@ jobs:
       fail-fast: false
       matrix:
         docker_version:
-          - 18.09
-          - 19.03
+          # - 18.09
+          # - 19.03
           - "20.10"
           - "23.0"
           - "24.0"
@@ -137,36 +137,36 @@ jobs:
           # channel: ${{ matrix.docker_channel }}
           push_image: ${{ github.event_name == 'push' }}
 
-  docker-nightly:
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-20.04
-          - ubuntu-22.04
-          - ubuntu-latest
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash --noprofile --norc -exo pipefail {0}
-    steps:
-      - uses: actions/checkout@main
-        with:
-          fetch-depth: 2
-      - uses: azure/docker-login@v1
-        if: |
-          github.event_name == 'push'
-        with:
-          # login-server: contoso.azurecr.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: setup docker
-        uses: ./
-        # uses: docker-practice/actions-setup-docker@master
-        with:
-          docker_nightly_version: snapshot-20210202
-          docker_channel: nightly
-      - run: docker version
+  # docker-nightly:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os:
+  #         - ubuntu-20.04
+  #         - ubuntu-22.04
+  #         - ubuntu-latest
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash --noprofile --norc -exo pipefail {0}
+  #   steps:
+  #     - uses: actions/checkout@main
+  #       with:
+  #         fetch-depth: 2
+  #     - uses: azure/docker-login@v1
+  #       if: |
+  #         github.event_name == 'push'
+  #       with:
+  #         # login-server: contoso.azurecr.io
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
+  #     - name: setup docker
+  #       uses: ./
+  #       # uses: docker-practice/actions-setup-docker@master
+  #       with:
+  #         docker_nightly_version: snapshot-20210202
+  #         docker_channel: nightly
+  #     - run: docker version
 
   notsupport-platform:
     strategy:

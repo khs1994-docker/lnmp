@@ -216,73 +216,73 @@ system_profiler SPHardwareDataType || true
   ]).catch(() => { });
   core.endGroup();
 
-  if (DOCKER_CHANNEL === 'nightly') {
-    if (os.arch() !== 'x64') {
-      core.warning('nightly version only support x86_64, os arch is ' + os.arch());
+  // if (DOCKER_CHANNEL === 'nightly') {
+  //   if (os.arch() !== 'x64') {
+  //     core.warning('nightly version only support x86_64, os arch is ' + os.arch());
 
-      return;
-    }
+  //     return;
+  //   }
 
-    core.exportVariable('DOCKER_CONFIG', '/home/runner/.docker');
+  //   core.exportVariable('DOCKER_CONFIG', '/home/runner/.docker');
 
-    core.startGroup('download deb');
-    await exec.exec('curl', [
-      '-fsSL',
-      '-o',
-      '/tmp/moby-snapshot-ubuntu-focal-x86_64-deb.tbz',
-      `https://github.com/AkihiroSuda/moby-snapshot/releases/download/${DOCKER_NIGHTLY_VERSION}/moby-snapshot-ubuntu-focal-x86_64-deb.tbz`
-    ]);
-    core.endGroup();
+  //   core.startGroup('download deb');
+  //   await exec.exec('curl', [
+  //     '-fsSL',
+  //     '-o',
+  //     '/tmp/moby-snapshot-ubuntu-focal-x86_64-deb.tbz',
+  //     `https://github.com/AkihiroSuda/moby-snapshot/releases/download/${DOCKER_NIGHTLY_VERSION}/moby-snapshot-ubuntu-focal-x86_64-deb.tbz`
+  //   ]);
+  //   core.endGroup();
 
-    await exec.exec('sudo', [
-      'rm',
-      '-rf',
-      '/tmp/*.deb'
-    ]);
+  //   await exec.exec('sudo', [
+  //     'rm',
+  //     '-rf',
+  //     '/tmp/*.deb'
+  //   ]);
 
-    core.startGroup('unpack tbz file');
-    await exec.exec('tar', [
-      'xjvf',
-      '/tmp/moby-snapshot-ubuntu-focal-x86_64-deb.tbz',
-      '-C',
-      '/tmp'
-    ]);
-    core.endGroup();
+  //   core.startGroup('unpack tbz file');
+  //   await exec.exec('tar', [
+  //     'xjvf',
+  //     '/tmp/moby-snapshot-ubuntu-focal-x86_64-deb.tbz',
+  //     '-C',
+  //     '/tmp'
+  //   ]);
+  //   core.endGroup();
 
-    core.startGroup('remove default moby');
-    await exec.exec('sudo', [
-      'sh',
-      '-c',
-      "apt remove -y moby-buildx moby-cli moby-compose moby-containerd moby-engine moby-runc"
-    ]).catch(() => { });
-    core.endGroup();
+  //   core.startGroup('remove default moby');
+  //   await exec.exec('sudo', [
+  //     'sh',
+  //     '-c',
+  //     "apt remove -y moby-buildx moby-cli moby-compose moby-containerd moby-engine moby-runc"
+  //   ]).catch(() => { });
+  //   core.endGroup();
 
-    core.startGroup('update apt cache');
-    await exec.exec('sudo', [
-      'apt-get',
-      'update',
-    ]).catch(() => { });
-    core.endGroup();
+  //   core.startGroup('update apt cache');
+  //   await exec.exec('sudo', [
+  //     'apt-get',
+  //     'update',
+  //   ]).catch(() => { });
+  //   core.endGroup();
 
-    core.startGroup('install docker');
-    await exec.exec('sudo', [
-      'sh',
-      '-c',
-      'apt-get install -y /tmp/*.deb'
-    ]).catch(async () => {
-      core.endGroup();
+  //   core.startGroup('install docker');
+  //   await exec.exec('sudo', [
+  //     'sh',
+  //     '-c',
+  //     'apt-get install -y /tmp/*.deb'
+  //   ]).catch(async () => {
+  //     core.endGroup();
 
-      core.startGroup('install docker');
-      await exec.exec('sudo', [
-        'sh',
-        '-c',
-        'dpkg -i /tmp/*.deb'
-      ]);
-      core.endGroup();
-    });
-    core.endGroup();
+  //     core.startGroup('install docker');
+  //     await exec.exec('sudo', [
+  //       'sh',
+  //       '-c',
+  //       'dpkg -i /tmp/*.deb'
+  //     ]);
+  //     core.endGroup();
+  //   });
+  //   core.endGroup();
 
-  } else {
+  // } else {
     core.exportVariable('DOCKER_CONFIG', '/home/runner/.docker');
 
     core.debug('add apt-key');
@@ -318,7 +318,7 @@ system_profiler SPHardwareDataType || true
       'docker-ce',
       '|',
       'grep',
-      '24.0'
+      `${DOCKER_VERSION}`
     ]);
     core.endGroup()
 
@@ -360,7 +360,7 @@ system_profiler SPHardwareDataType || true
       'docker-compose-plugin',
     ]).catch(() => { });
     core.endGroup();
-  }
+  // }
 
   message = 'check docker version';
   core.debug(message);
