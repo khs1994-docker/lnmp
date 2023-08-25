@@ -20,6 +20,8 @@ jobs:
           - 18.09
           - 19.03
           - "20.10"
+          - "23.0"
+          - "24.0"
         docker_channel:
           - stable
           - test
@@ -28,7 +30,7 @@ jobs:
           - ubuntu-20.04
           - ubuntu-22.04
           - ubuntu-latest
-          - macos-12
+          - macos-13
         include:
           # macOS
           - os: macos-latest
@@ -140,7 +142,6 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-18.04
           - ubuntu-20.04
           - ubuntu-22.04
           - ubuntu-latest

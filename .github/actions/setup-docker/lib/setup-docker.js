@@ -318,7 +318,7 @@ system_profiler SPHardwareDataType || true
       'docker-ce',
       '|',
       'grep',
-      '20.10'
+      '24.0'
     ]);
     core.endGroup()
 
@@ -347,6 +347,7 @@ system_profiler SPHardwareDataType || true
     await exec.exec('sudo', [
       'apt-get',
       '-y',
+      '--allow-downgrades',
       'install',
       DOCKER_VERSION_STRING ? `docker-ce=${DOCKER_VERSION_STRING}` : 'docker-ce',
       DOCKER_VERSION_STRING ? `docker-ce-cli=${DOCKER_VERSION_STRING}` : 'docker-ce-cli'
