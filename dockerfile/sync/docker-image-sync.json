@@ -8,12 +8,12 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:18.2.0-alpine",
-    "dest": "library-mirror/node:18.2.0-alpine"
+    "source": "node:20.5.1-alpine",
+    "dest": "library-mirror/node:20.5.1-alpine"
   },
   {
-    "source": "node:16.15.0-alpine",
-    "dest": "library-mirror/node:16.15.0-alpine"
+    "source": "node:18.17.1-alpine",
+    "dest": "library-mirror/node:18.17.1-alpine"
   },
   {
     "source": "golang:1.20.1-alpine",
@@ -48,6 +48,14 @@
     "dest": "library-mirror/alpine:3.16"
   },
   {
+    "source": "library/alpine:3.17",
+    "dest": "library-mirror/alpine:3.16"
+  },
+  {
+    "source": "library/alpine:3.18",
+    "dest": "library-mirror/alpine:3.16"
+  },
+  {
     "source": "library/alpine:edge",
     "dest": "library-mirror/alpine:edge"
   },
@@ -68,40 +76,40 @@
     "dest": "library-mirror/mysql:latest"
   },
   {
-    "source": "library/mysql:8.0.33",
-    "dest": "library-mirror/mysql:8.0.33"
-  },
-  {
     "source": "library/mysql:5.7.33",
     "dest": "library-mirror/mysql:5.7.33"
   },
   {
-    "source": "library/mysql:5.6.51",
-    "dest": "library-mirror/mysql:5.6.51"
+    "source": "library/mysql:8.0.33",
+    "dest": "library-mirror/mysql:8.0.33"
+  },
+  {
+    "source": "library/mysql:8.1.0",
+    "dest": "library-mirror/mysql:8.1.0"
   },
   {
     "source": "library/mariadb:latest",
     "dest": "library-mirror/mariadb:latest"
   },
   {
-    "source": "library/mariadb:10.11.3",
-    "dest": "library-mirror/mariadb:10.11.3"
+    "source": "library/mariadb:10.10.6",
+    "dest": "library-mirror/mariadb:10.10.6"
   },
   {
-    "source": "library/mariadb:10.7.4",
-    "dest": "library-mirror/mariadb:10.7.4"
+    "source": "library/mariadb:10.11.5",
+    "dest": "library-mirror/mariadb:10.11.5"
   },
   {
-    "source": "library/mariadb:10.6.8",
-    "dest": "library-mirror/mariadb:10.6.8"
+    "source": "library/mariadb:11.0.3",
+    "dest": "library-mirror/mariadb:11.0.3"
   },
   {
     "source": "library/registry:latest",
     "dest": "library-mirror/registry:latest"
   },
   {
-    "source": "library/registry:2.7.1",
-    "dest": "library-mirror/registry:2.7.1"
+    "source": "library/registry:2.8.2",
+    "dest": "library-mirror/registry:2.8.2"
   },
   {
     "source": "library/mongo:latest",

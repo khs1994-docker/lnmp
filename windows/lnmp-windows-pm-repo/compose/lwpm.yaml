@@ -2,7 +2,7 @@ name: compose
 version: 2.17.3
 pre-version: 2.17.3
 url: https://github.com/docker/compose/releases/download/v${VERSION}/docker-compose-${env:lwpm_os}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})
-url-mirror: https://download.fgit.ml/docker/compose/releases/download/v${VERSION}/docker-compose-${env:lwpm_os}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})
+url-mirror: https://${env:GITHUB_MIRROR}/docker/compose/releases/download/v${VERSION}/docker-compose-${env:lwpm_os}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})
 scripts:
   install:
     - _mkdir $HOME/.docker/cli-plugins/

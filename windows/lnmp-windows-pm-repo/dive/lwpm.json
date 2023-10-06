@@ -8,7 +8,7 @@
   "github": "wagoodman/dive",
   "releases": "https://github.com/wagoodman/dive/releases",
   "url": "https://github.com/wagoodman/dive/releases/download/v${VERSION}/dive_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.$(if($_IsWindows){echo zip}else{echo tar.gz})",
-  "url-mirror": "https://download.fgit.ml/wagoodman/dive/releases/download/v${VERSION}/dive_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.$(if($_IsWindows){echo zip}else{echo tar.gz})",
+  "url-mirror": "https://${env:GITHUB_MIRROR}/wagoodman/dive/releases/download/v${VERSION}/dive_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.$(if($_IsWindows){echo zip}else{echo tar.gz})",
   "hash-url": {
     "sha256": "https://github.com/wagoodman/dive/releases/download/v${VERSION}/dive_${VERSION}_checksums.txt"
   },

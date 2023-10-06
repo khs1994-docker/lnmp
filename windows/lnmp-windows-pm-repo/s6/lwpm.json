@@ -11,6 +11,6 @@
     "platform-reqs": "if(!$_IsLinux){echo $false}"
   },
   "url": "https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-x86_64.tar.xz",
-  "url-mirror": "https://download.fgit.ml/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-x86_64.tar.xz",
+  "url-mirror": "https://${env:GITHUB_MIRROR}/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-x86_64.tar.xz",
   "version": "3.1.4.2"
 }

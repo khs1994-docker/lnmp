@@ -13,7 +13,7 @@
 #
 # $ docker build --target=laravel -t khs1994/laravel:10 --build-arg NODE_REGISTRY=https://registry.npmmirror.com --build-arg CI=false .
 
-ARG NODE_VERSION=18.2.0
+ARG NODE_VERSION=20.5.1
 ARG PHP_VERSION=8.2.5
 ARG NGINX_VERSION=1.25.1-alpine
 ARG DOCKER_HUB_USERNAME=khs1994
@@ -40,7 +40,7 @@ RUN set -x ; cd /app \
              --optimize-autoloader
 
 # 1.前端构建
-FROM node:${NODE_VERSION:-18.2.0}-alpine as frontend
+FROM node:${NODE_VERSION:-20.5.1}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 

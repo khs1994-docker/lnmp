@@ -42,7 +42,7 @@ RUN --mount=type=cache,target=/tmp,id=laravel_caches \
              --optimize-autoloader
 
 # 1.前端构建，并上传到 CDN
-FROM node:${NODE_VERSION:-18.2.0}-alpine as frontend
+FROM node:${NODE_VERSION:-20.5.1}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 

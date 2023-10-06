@@ -74,7 +74,7 @@ services:
     << :
       - *workspace
       - *common
-    image: node:18.2.0-alpine
+    image: node:20.5.1-alpine
     entrypoint: npm
     command: [] # install | "run","dev" |
 

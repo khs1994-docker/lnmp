@@ -1,7 +1,7 @@
 name: mariadb
 description: 'MariaDB server is a community developed fork of MySQL server. '
-version: "10.11.4"
-pre-version: "10.11.4"
+version: "10.11.5"
+pre-version: "10.11.5"
 homepage: "https://mariadb.org/"
 bug: ""
 github: "MariaDB/server"
@@ -11,15 +11,13 @@ download-filename: mariadb-${VERSION}-winx64.zip
 scripts:
   postinstall: |
     if(!(Test-Path C:\mariadb\data)){
-    mkdir C:\mariadb\data
-
     Write-Host "MariaDB is init ..."
 
-    C:\mariadb\bin\mysql_install_db.exe --port 3307 -D -R -proot
+    C:\mariadb\bin\mariadb-install-db.exe --port 3307 -D -R -proot
 
     # 安装服务
 
-    _sudo mariadbd --install mariadb
+    _sudo C:\mariadb\bin\mariadbd --install mariadb
 
     # 禁止开机启动
 
@@ -42,7 +40,7 @@ scripts:
     Copy-item -r -force "mariadb\mariadb-${VERSION}-winx64\*" "C:\mariadb\"
 
     _cleanup mariadb
-  test: printInfo mariadb (C:\mariadb\bin\mysql --version).split(' ')[5].split('-')[0] install success
+  test: printInfo mariadb (C:\mariadb\bin\mariadb --version).split(' ')[5].split('-')[0] install success
   uninstall: |
     _sudo mariadbd --remove
     _cleanup C:\mariadb

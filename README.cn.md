@@ -1,5 +1,14 @@
 # LNMP Docker
 
+## 由于 Docker 镜像默认地址国内访问不畅，请进行如下配置
+
+`.env` 文件增加如下内容
+
+```bash
+LNMP_DOCKER_IMAGE_PREFIX=pcit-docker.pkg.coding.net/khs1994-docker/khs1994
+LNMP_LIBRARY_NS=ccr.ccs.tencentyun.com/library-mirror
+```
+
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=20.10)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
 
 [![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers)
@@ -205,7 +214,7 @@ $ ./lnmp-docker down
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.2.5-unit-alpine`| **1.30.0**          |`alpine:3.16`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.53-alpine`           | **2.4.53**          |`alpine:3.16`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.33`                  | **8.0.33**          |`oraclelinux:8-slim`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.11.3`                | **10.11.3**          |`ubuntu:jammy`  |
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.11.5`                | **10.11.5**          |`ubuntu:jammy`  |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:7.0.0-alpine`            | **7.0.0**           |`alpine:3.16`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.2.5-fpm-alpine`     | **8.2.5**      |`alpine:3.16`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.2.5-composer-alpine`| **2.5.8**     |`alpine:3.16`    |

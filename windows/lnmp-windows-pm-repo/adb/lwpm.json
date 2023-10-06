@@ -13,7 +13,7 @@
   "pre-url-mirror": "",
   "command": "adb",
   "download-filename": "",
-  "winget-pkgs": "https://hub.fgit.ml/microsoft/winget-pkgs/tree/master/manifests/g/Google/PlatformTools",
+  "winget-pkgs": "https://hub.nuaa.cf/microsoft/winget-pkgs/tree/master/manifests/g/Google/PlatformTools",
   "scripts": {
     "preinstall": [
       "# _cleanup \"$unzipDesc\""

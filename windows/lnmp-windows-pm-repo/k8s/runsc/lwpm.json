@@ -13,6 +13,6 @@
     "dist": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$filename\n"
   },
   "url": "https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz",
-  "url-mirror": "https://download.fgit.ml/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz",
+  "url-mirror": "https://${env:GITHUB_MIRROR}/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz",
   "version": "nightly"
 }

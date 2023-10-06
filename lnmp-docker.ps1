@@ -1371,6 +1371,19 @@ Example: ./lnmp-docker composer /app/demo install
     wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p ${wsl2_mount_physicaldiskdevice_path}${WSL2_DIST_PATH}"
     wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind ${wsl2_mount_physicaldiskdevice_path}${WSL2_DIST_PATH} $WSL2_DIST_PATH"
     wsl -d $WSL2_DIST -u root -- sh -cx "chown 1000:1000 $WSL2_DIST_PATH"
+    $WSL2_DIST_USER=$(wsl -d ubuntu-22.04 -- sh -c 'echo $USER')
+
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p /home/$WSL2_DIST_USER/.cache/JetBrains"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.cache/JetBrains"
+    wsl -d $WSL2_DIST -u root -- sh -cx "chown -R ${WSL2_DIST_USER}:${WSL2_DIST_USER} /home/$WSL2_DIST_USER/.cache/JetBrains"
+    wsl -d $WSL2_DIST -u root -- sh -cx "chown -R ${WSL2_DIST_USER}:${WSL2_DIST_USER} ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.cache/JetBrains"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.cache/JetBrains /home/$WSL2_DIST_USER/.cache/JetBrains"
+
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p /home/$WSL2_DIST_USER/.vscode-server"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.vscode-server"
+    wsl -d $WSL2_DIST -u root -- sh -cx "chown -R ${WSL2_DIST_USER}:${WSL2_DIST_USER} /home/$WSL2_DIST_USER/.vscode-server"
+    wsl -d $WSL2_DIST -u root -- sh -cx "chown -R ${WSL2_DIST_USER}:${WSL2_DIST_USER} ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.vscode-server"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.vscode-server /home/$WSL2_DIST_USER/.vscode-server"
   }
 
   "^code$" {

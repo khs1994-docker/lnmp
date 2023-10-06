@@ -1,13 +1,13 @@
 {
   "name": "vclib",
   "description": "Microsoft Visual C++ 2015-2022 Redistributable (x64)",
-  "version": "14.32.31332.00",
-  "pre-version": "14.32.31332.00",
+  "version": "14.x",
+  "pre-version": "14.x",
   "homepage": "https://docs.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist",
   "bug": "",
   "github": "",
   "releases": "https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/Microsoft/VC%2B%2B2015-2022Redist-x64",
-  "url": "https://aka.ms/vs/${VERSION}/release/vc_redist.x64.exe",
+  "url": "https://aka.ms/vs/17/release/vc_redist.x64.exe",
   "scripts": {
     "platform-reqs": "if(!$IsWindows){echo $False}",
     "install": [

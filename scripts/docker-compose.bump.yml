@@ -5,7 +5,7 @@ services:
     image: mysql:8.0.33
 
   mariadb:
-    image: mariadb:10.11.3
+    image: mariadb:10.11.5
 
   redis:
     image: redis:7.0.0-alpine
@@ -47,7 +47,7 @@ services:
     image: kong:2.8.1-alpine
 
   node:
-    image: node:18.2.0-alpine
+    image: node:20.5.1-alpine
 
   go:
     image: golang:1.20.1-alpine
@@ -72,3 +72,9 @@ services:
 
   acme.sh:
     image: neilpang/acme.sh:3.0.0
+
+  powershell:
+    image:
+
+  powershell-preview:
+    image:
