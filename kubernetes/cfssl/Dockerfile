@@ -13,10 +13,9 @@ RUN set -x \
     ; apk add --no-cache cfssl \
     ; apk add --no-cache bash \
     ; apk add --no-cache openssl \
-    ; cp -a /usr/bin/cfssl /usr/bin/cfssljson /usr/local/bin \
     ; curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl > /usr/local/bin/kubectl \
     && apk del --no-network curl \
-    && chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson /usr/local/bin/kubectl
+    && chmod +x /usr/local/bin/kubectl
 
 WORKDIR /srv/cfssl
 

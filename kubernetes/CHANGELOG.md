@@ -6,7 +6,7 @@
 
 ## v1.29.0
 
-* KubeSchedulerConfiguration v1beta3 is deprecated in v1.26, will be removed in v1.29
+* Kube-scheduler component config (`KubeSchedulerConfiguration`) `kubescheduler.config.k8s.io/v1beta3` is removed in v1.29. Migrate kube-scheduler configuration files to `kubescheduler.config.k8s.io/v1`
 
 ## v1.27.0
 
