@@ -17,7 +17,7 @@ server {
 }
 
 server{
-  listen                     443 ssl http2;
+  listen                     443 ssl;
   server_name                www.t.khs1994.com;
 
   # 「重要」 此处为容器内路径（注意不是本机路径）！ 本机 ./app/ 对应容器内 /app/
