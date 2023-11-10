@@ -16,6 +16,6 @@
     "install": "Start-Process -FilePath $filename -wait",
     "uninstall": "& ${env:ProgramFiles(x86)}\\Tencent\\WeChat\\Uninstall.exe",
     "version": "echo ${VERSION}",
-    "test": "& get-command ${env:ProgramFiles(x86)}\\Tencent\\WeChat\\WeChat.exe"
+    "test": "if($IsWindows){& get-command ${env:ProgramFiles(x86)}\\Tencent\\WeChat\\WeChat.exe}"
   }
 }

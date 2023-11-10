@@ -5,7 +5,7 @@
   "pre-version": "1.06.2305042",
   "homepage": "https://developers.weixin.qq.com/miniprogram/dev/devtools/devtools.html",
   "bug": "https://developers.weixin.qq.com/community/develop/question",
-  "github": "https://github.com/wechat-miniprogram",
+  "github": "wechat-miniprogram",
   "releases": "https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html",
   "url": "https://dldir1.qq.com/WechatWebDev/nightly/p-3bd19c2db3a642a0b39af853efaf67f8/0.54.1/wechat_devtools_${VERSION}$(if($IsWindows){echo _win32_x64.exe}else{if(${env:lwpm_architecture} -eq 'amd64'){echo _darwin_x64.dmg}else{echo _darwin_arm64.dmg}})",
   "command": "'C:\\Program Files (x86)\\Tencent\\微信web开发者工具\\cli.bat'",
