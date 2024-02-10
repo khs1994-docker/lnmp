@@ -205,6 +205,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
   && export CFLAGS="$PHP_CFLAGS" \
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
+            PHP_BUILD_PROVIDER='https://github.com/khs1994-docker/php' \
   && docker-php-source extract \
   && cd /usr/src/php \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
