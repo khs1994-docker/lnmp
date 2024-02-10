@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=8.3.0beta1
+ARG PHP_VERSION=8.3.0
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.18 as php
 
