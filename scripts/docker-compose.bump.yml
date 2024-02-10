@@ -71,7 +71,7 @@ services:
     image: gogs/gogs:0.13
 
   acme.sh:
-    image: neilpang/acme.sh:3.0.0
+    image: neilpang/acme.sh:3.0.7
 
   powershell:
     image:
