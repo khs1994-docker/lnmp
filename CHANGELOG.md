@@ -14,3 +14,4 @@
 
 * [PHP `8.2.10` `8.1.23` `8.0.30`](https://www.php.net/ChangeLog-8.php#8.1.23)
 * [nginx `1.25.3`](https://nginx.org/en/CHANGES)
+* [Kubernetes `1.29.0`](https://hub.nuaa.cf/kubernetes/kubernetes/releases/tag/v1.29.0)
