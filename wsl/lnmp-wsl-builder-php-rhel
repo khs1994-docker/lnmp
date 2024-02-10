@@ -478,7 +478,6 @@ _builder(){
         \
         --with-curl \
         --with-gettext \
-        --with-kerberos \
         --with-libedit \
         --with-openssl \
           --with-system-ciphers \
@@ -537,6 +536,7 @@ _builder(){
         --with-gmp \
         --with-imap=shared \
             --with-imap-ssl \
+            --with-kerberos \
         \
         --with-pic \
         --with-enchant=shared \

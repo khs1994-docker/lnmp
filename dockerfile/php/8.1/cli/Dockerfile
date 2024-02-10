@@ -97,9 +97,9 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-bz2=shared \
         # --with-tidy=shared \
         --with-gmp=shared \
-        --with-kerberos \
         --with-imap=shared \
             --with-imap-ssl \
+            --with-kerberos \
         --with-pic \
         --with-enchant=shared \
         --enable-fileinfo=shared \

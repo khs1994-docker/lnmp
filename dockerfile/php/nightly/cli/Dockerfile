@@ -98,15 +98,15 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-bz2=shared \
         # --with-tidy=shared \
         --with-gmp=shared \
-        --with-kerberos \
-        --with-imap=shared \
-            --with-imap-ssl \
+        # --with-imap=shared \ # 8.4 removed # https://hub.nuaa.cf/php/php-src/commit/f62f6a6d4b9567530775d684db55e9990952c737
+        #    --with-imap-ssl \
+        #    --with-kerberos \
         --with-pic \
         --with-enchant=shared \
         --enable-fileinfo=shared \
         --with-ldap=shared \
             --with-ldap-sasl \
-        --with-pspell=shared \
+        # --with-pspell=shared \ # 8.4 removed # https://hub.nuaa.cf/php/php-src/commit/b035cb6c8e31bea351f169b3e9f34fdc562e77e1
         --enable-shmop=shared \
         # --with-snmp=shared \
         --with-mysqli=shared \
@@ -220,7 +220,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           gmp-dev \
           bzip2-dev \
           enchant2-dev \
-          imap-dev \
+          # imap-dev \ # 8.4 removed # https://hub.nuaa.cf/php/php-src/commit/f62f6a6d4b9567530775d684db55e9990952c737
           gettext-dev \
           icu-dev \
           krb5-dev \
@@ -297,7 +297,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            # gd \
                            gettext \
                            gmp \
-                           imap \
+                           # imap \ # 8.4 removed # https://hub.nuaa.cf/php/php-src/commit/f62f6a6d4b9567530775d684db55e9990952c737
                            intl \
                            ldap \
                            pcntl \
@@ -308,7 +308,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
-                           pspell \
+                           # pspell \ # 8.4 removed # https://hub.nuaa.cf/php/php-src/commit/b035cb6c8e31bea351f169b3e9f34fdc562e77e1
                            shmop \
                            # snmp \
                            # soap \
