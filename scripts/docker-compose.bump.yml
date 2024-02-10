@@ -53,7 +53,7 @@ services:
     image: golang:1.20.1-alpine
 
   alpine:
-    image: alpine:3.16
+    image: alpine:3.19
 
   python:
     image: python:3.11.1-alpine
