@@ -1,4 +1,4 @@
-FROM nginx:1.25.1-alpine
+FROM nginx:1.25.3-alpine
 
 LABEL maintainer="khs1994@khs1994.com"
 
