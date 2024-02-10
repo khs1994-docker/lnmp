@@ -2,7 +2,7 @@
 
 services:
   mysql:
-    image: mysql:8.0.33
+    image: mysql:8.3.0
 
   mariadb:
     image: mariadb:10.11.5
