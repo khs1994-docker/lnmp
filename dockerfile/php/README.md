@@ -14,28 +14,28 @@
 
 ## 后缀
 
-* 8.2.5-cli-alpine
-* 8.2.5-fpm-alpine
-* 8.2.5-unit-alpine         (based cli)
-* 8.2.5-composer-alpine     (based fpm)
-* 8.2.5-swoole-alpine       (based cli)
-* 8.2.5-s6-alpine           (based fpm)
+* 8.2.10-cli-alpine
+* 8.2.10-fpm-alpine
+* 8.2.10-unit-alpine         (based cli)
+* 8.2.10-composer-alpine     (based fpm)
+* 8.2.10-swoole-alpine       (based cli)
+* 8.2.10-s6-alpine           (based fpm)
 
 ## Supported tags and respective `Dockerfile` links
 
-* [`8.2.5-fpm-alpine` (8.2/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.5/8.2/fpm/Dockerfile)
+* [`8.2.10-fpm-alpine` (8.2/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.10/8.2/fpm/Dockerfile)
 
-* [`8.1.15-fpm-alpine` (8.1/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.5/8.1/fpm/Dockerfile)
+* [`8.1.23-fpm-alpine` (8.1/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.10/8.1/fpm/Dockerfile)
 
-* [`8.0.28-fpm-alpine` (8.0/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.5/8.0/fpm/Dockerfile)
+* [`8.0.30-fpm-alpine` (8.0/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.10/8.0/fpm/Dockerfile)
 
 * [`nightly-fpm-alpine` (nightly/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/master/nightly/fpm/Dockerfile)
 
-* [`7.4.33-fpm-alpine` (7.4/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.5/7.4/fpm/Dockerfile)
+* [`7.4.33-fpm-alpine` (7.4/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.10/7.4/fpm/Dockerfile)
 
-* [`7.3.33-fpm-alpine` (7.3/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.5/7.3/fpm/Dockerfile)
+* [`7.3.33-fpm-alpine` (7.3/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.10/7.3/fpm/Dockerfile)
 
-* [`7.2.34-fpm-alpine` (7.2/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.5/7.2/fpm/Dockerfile)
+* [`7.2.34-fpm-alpine` (7.2/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.2.10/7.2/fpm/Dockerfile)
 
 ## Overview
 
@@ -168,7 +168,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 
 * https://sources.debian.org/src/php7.4/7.4.33-1+deb11u1/debian/control/
 
-* https://sources.debian.org/src/php8.1/8.2.5-1/debian/control/
+* https://sources.debian.org/src/php8.1/8.2.10-1/debian/control/
 
 * https://ram.tianon.xyz/post/2017/12/26/dockerize-compiled-software.html
 
