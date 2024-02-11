@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: deploy/test.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION:-8.2.10}
+        - PHP_VERSION=${PHP_VERSION:-8.2.13}
     image: ${DOCKER_HUB_USERNAME:-khs1994}/EXAMPLE
 
   nginx:
@@ -39,7 +39,7 @@ services:
       dockerfile: Dockerfile
       target: php
       args:
-        - PHP_VERSION=${PHP_VERSION:-8.2.10}
+        - PHP_VERSION=${PHP_VERSION:-8.2.13}
         - NODE_VERSION=${NODE_VERSION:-20.5.1}
         - NODE_REGISTRY=https://registry.npmmirror.com
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION:-8.2.10}-pro-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION:-8.2.13}-pro-alpine
