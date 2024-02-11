@@ -1,5 +1,3 @@
-
-
 x-common:
   &common
   restart: always
@@ -24,7 +22,7 @@ services:
     image: "${LNMP_LIBRARY_NS:-library}/mariadb:${LNMP_MARIADB_VERSION:-10.11.5}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mariadb_db_root_password
       # MYSQL_ROOT_PASSWORD: ${LNMP_MYSQL_ROOT_PASSWORD:-mytest}
       MYSQL_DATABASE: ${LNMP_MYSQL_DATABASE:-test}
       # MYSQL_USER:
@@ -44,7 +42,7 @@ services:
       - mysqld
       - --character-set-server=utf8mb4
     secrets:
-      - db_root_password
+      - mariadb_db_root_password
       # - source: mariadb_conf
       #   target: /etc/mysql/conf.d/my.cnf
         # mode: 0644
@@ -52,10 +50,10 @@ services:
         # gid: "999"
     healthcheck:
       # test: ["CMD", "mysqladmin", "ping", "-p${LNMP_MYSQL_ROOT_PASSWORD:-mytest}"]
-      test: ["CMD-SHELL", "mysqladmin ping -p`cat /run/secrets/db_root_password`"]
+      test: ["CMD-SHELL", "mysqladmin ping -p`cat /run/secrets/mariadb_db_root_password`"]
 
 secrets:
-  db_root_password:
+  mariadb_db_root_password:
     << : *common-label
     file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
 #   mariadb_conf:
