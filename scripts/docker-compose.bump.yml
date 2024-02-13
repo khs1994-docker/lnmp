@@ -3,7 +3,7 @@ services:
     image: mysql:8.0.33
 
   mariadb:
-    image: mariadb:10.11.5
+    image: mariadb:10.11.7
 
   redis:
     image: redis:7.0.0-alpine
