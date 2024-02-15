@@ -18,7 +18,7 @@ services:
     image: composer:2.5.8
 
   nginx:
-    image: nginx:1.25.3-alpine
+    image: nginx:1.25.4-alpine
 
   nginx-unit:
     image: docker.io/nginx/unit:1.30.0-minimal
