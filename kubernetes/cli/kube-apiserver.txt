@@ -19,10 +19,9 @@ Generic flags:
                                                            APIListChunking=true|false (BETA - default=true)
                                                            APIPriorityAndFairness=true|false (BETA - default=true)
                                                            APIResponseCompression=true|false (BETA - default=true)
-                                                           APISelfSubjectReview=true|false (BETA - default=true)
                                                            APIServerIdentity=true|false (BETA - default=true)
                                                            APIServerTracing=true|false (BETA - default=true)
-                                                           AdmissionWebhookMatchConditions=true|false (ALPHA - default=false)
+                                                           AdmissionWebhookMatchConditions=true|false (BETA - default=true)
                                                            AggregatedDiscoveryEndpoint=true|false (BETA - default=true)
                                                            AllAlpha=true|false (ALPHA - default=false)
                                                            AllBeta=true|false (BETA - default=false)
@@ -31,32 +30,32 @@ Generic flags:
                                                            CPUManagerPolicyAlphaOptions=true|false (ALPHA - default=false)
                                                            CPUManagerPolicyBetaOptions=true|false (BETA - default=true)
                                                            CPUManagerPolicyOptions=true|false (BETA - default=true)
+                                                           CRDValidationRatcheting=true|false (ALPHA - default=false)
                                                            CSIMigrationPortworx=true|false (BETA - default=false)
-                                                           CSIMigrationRBD=true|false (ALPHA - default=false)
                                                            CSINodeExpandSecret=true|false (BETA - default=true)
                                                            CSIVolumeHealth=true|false (ALPHA - default=false)
                                                            CloudControllerManagerWebhook=true|false (ALPHA - default=false)
                                                            CloudDualStackNodeIPs=true|false (ALPHA - default=false)
                                                            ClusterTrustBundle=true|false (ALPHA - default=false)
                                                            ComponentSLIs=true|false (BETA - default=true)
+                                                           ConsistentListFromCache=true|false (ALPHA - default=false)
                                                            ContainerCheckpoint=true|false (ALPHA - default=false)
                                                            ContextualLogging=true|false (ALPHA - default=false)
+                                                           CronJobsScheduledAnnotation=true|false (BETA - default=true)
                                                            CrossNamespaceVolumeDataSource=true|false (ALPHA - default=false)
                                                            CustomCPUCFSQuotaPeriod=true|false (ALPHA - default=false)
                                                            CustomResourceValidationExpressions=true|false (BETA - default=true)
+                                                           DevicePluginCDIDevices=true|false (ALPHA - default=false)
                                                            DisableCloudProviders=true|false (ALPHA - default=false)
                                                            DisableKubeletCloudCredentialProviders=true|false (ALPHA - default=false)
                                                            DynamicResourceAllocation=true|false (ALPHA - default=false)
                                                            ElasticIndexedJob=true|false (BETA - default=true)
                                                            EventedPLEG=true|false (BETA - default=false)
-                                                           ExpandedDNSConfig=true|false (BETA - default=true)
-                                                           ExperimentalHostUserNamespaceDefaulting=true|false (BETA - default=false)
                                                            GracefulNodeShutdown=true|false (BETA - default=true)
                                                            GracefulNodeShutdownBasedOnPodPriority=true|false (BETA - default=true)
                                                            HPAContainerMetrics=true|false (BETA - default=true)
                                                            HPAScaleToZero=true|false (ALPHA - default=false)
                                                            HonorPVReclaimPolicy=true|false (ALPHA - default=false)
-                                                           IPTablesOwnershipCleanup=true|false (BETA - default=true)
                                                            InPlacePodVerticalScaling=true|false (ALPHA - default=false)
                                                            InTreePluginAWSUnregister=true|false (ALPHA - default=false)
                                                            InTreePluginAzureDiskUnregister=true|false (ALPHA - default=false)
@@ -64,18 +63,20 @@ Generic flags:
                                                            InTreePluginGCEUnregister=true|false (ALPHA - default=false)
                                                            InTreePluginOpenStackUnregister=true|false (ALPHA - default=false)
                                                            InTreePluginPortworxUnregister=true|false (ALPHA - default=false)
-                                                           InTreePluginRBDUnregister=true|false (ALPHA - default=false)
                                                            InTreePluginvSphereUnregister=true|false (ALPHA - default=false)
+                                                           JobBackoffLimitPerIndex=true|false (ALPHA - default=false)
                                                            JobPodFailurePolicy=true|false (BETA - default=true)
+                                                           JobPodReplacementPolicy=true|false (ALPHA - default=false)
                                                            JobReadyPods=true|false (BETA - default=true)
                                                            KMSv2=true|false (BETA - default=true)
+                                                           KMSv2KDF=true|false (BETA - default=false)
+                                                           KubeProxyDrainingTerminatingNodes=true|false (ALPHA - default=false)
+                                                           KubeletCgroupDriverFromCRI=true|false (ALPHA - default=false)
                                                            KubeletInUserNamespace=true|false (ALPHA - default=false)
-                                                           KubeletPodResources=true|false (BETA - default=true)
                                                            KubeletPodResourcesDynamicResources=true|false (ALPHA - default=false)
                                                            KubeletPodResourcesGet=true|false (ALPHA - default=false)
-                                                           KubeletPodResourcesGetAllocatable=true|false (BETA - default=true)
                                                            KubeletTracing=true|false (BETA - default=true)
-                                                           LegacyServiceAccountTokenTracking=true|false (BETA - default=true)
+                                                           LegacyServiceAccountTokenCleanUp=true|false (ALPHA - default=false)
                                                            LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (ALPHA - default=false)
                                                            LogarithmicScaleDown=true|false (BETA - default=true)
                                                            LoggingAlphaOptions=true|false (ALPHA - default=false)
@@ -85,35 +86,35 @@ Generic flags:
                                                            MemoryManager=true|false (BETA - default=true)
                                                            MemoryQoS=true|false (ALPHA - default=false)
                                                            MinDomainsInPodTopologySpread=true|false (BETA - default=true)
-                                                           MinimizeIPTablesRestore=true|false (BETA - default=true)
                                                            MultiCIDRRangeAllocator=true|false (ALPHA - default=false)
                                                            MultiCIDRServiceAllocator=true|false (ALPHA - default=false)
-                                                           NetworkPolicyStatus=true|false (ALPHA - default=false)
                                                            NewVolumeManagerReconstruction=true|false (BETA - default=true)
                                                            NodeInclusionPolicyInPodTopologySpread=true|false (BETA - default=true)
                                                            NodeLogQuery=true|false (ALPHA - default=false)
-                                                           NodeOutOfServiceVolumeDetach=true|false (BETA - default=true)
-                                                           NodeSwap=true|false (ALPHA - default=false)
+                                                           NodeSwap=true|false (BETA - default=false)
                                                            OpenAPIEnums=true|false (BETA - default=true)
                                                            PDBUnhealthyPodEvictionPolicy=true|false (BETA - default=true)
+                                                           PersistentVolumeLastPhaseTransitionTime=true|false (ALPHA - default=false)
                                                            PodAndContainerStatsFromCRI=true|false (ALPHA - default=false)
                                                            PodDeletionCost=true|false (BETA - default=true)
                                                            PodDisruptionConditions=true|false (BETA - default=true)
-                                                           PodHasNetworkCondition=true|false (ALPHA - default=false)
+                                                           PodHostIPs=true|false (ALPHA - default=false)
+                                                           PodIndexLabel=true|false (BETA - default=true)
+                                                           PodReadyToStartContainersCondition=true|false (ALPHA - default=false)
                                                            PodSchedulingReadiness=true|false (BETA - default=true)
-                                                           ProbeTerminationGracePeriod=true|false (BETA - default=true)
                                                            ProcMountType=true|false (ALPHA - default=false)
-                                                           ProxyTerminatingEndpoints=true|false (BETA - default=true)
                                                            QOSReserved=true|false (ALPHA - default=false)
                                                            ReadWriteOncePod=true|false (BETA - default=true)
                                                            RecoverVolumeExpansionFailure=true|false (ALPHA - default=false)
                                                            RemainingItemCount=true|false (BETA - default=true)
-                                                           RetroactiveDefaultStorageClass=true|false (BETA - default=true)
                                                            RotateKubeletServerCertificate=true|false (BETA - default=true)
                                                            SELinuxMountReadWriteOncePod=true|false (BETA - default=true)
+                                                           SchedulerQueueingHints=true|false (BETA - default=true)
                                                            SecurityContextDeny=true|false (ALPHA - default=false)
-                                                           ServiceNodePortStaticSubrange=true|false (ALPHA - default=false)
+                                                           ServiceNodePortStaticSubrange=true|false (BETA - default=true)
+                                                           SidecarContainers=true|false (ALPHA - default=false)
                                                            SizeMemoryBackedVolumes=true|false (BETA - default=true)
+                                                           SkipReadOnlyValidationGCE=true|false (ALPHA - default=false)
                                                            StableLoadBalancerNodeSet=true|false (BETA - default=true)
                                                            StatefulSetAutoDeletePVC=true|false (BETA - default=true)
                                                            StatefulSetStartOrdinal=true|false (BETA - default=true)
@@ -121,10 +122,11 @@ Generic flags:
                                                            StorageVersionHash=true|false (BETA - default=true)
                                                            TopologyAwareHints=true|false (BETA - default=true)
                                                            TopologyManagerPolicyAlphaOptions=true|false (ALPHA - default=false)
-                                                           TopologyManagerPolicyBetaOptions=true|false (BETA - default=false)
-                                                           TopologyManagerPolicyOptions=true|false (ALPHA - default=false)
-                                                           UserNamespacesStatelessPodsSupport=true|false (ALPHA - default=false)
-                                                           ValidatingAdmissionPolicy=true|false (ALPHA - default=false)
+                                                           TopologyManagerPolicyBetaOptions=true|false (BETA - default=true)
+                                                           TopologyManagerPolicyOptions=true|false (BETA - default=true)
+                                                           UnknownVersionInteroperabilityProxy=true|false (ALPHA - default=false)
+                                                           UserNamespacesSupport=true|false (ALPHA - default=false)
+                                                           ValidatingAdmissionPolicy=true|false (BETA - default=false)
                                                            VolumeCapacityPriority=true|false (ALPHA - default=false)
                                                            WatchList=true|false (ALPHA - default=false)
                                                            WinDSR=true|false (ALPHA - default=false)
@@ -166,7 +168,7 @@ Etcd flags:
 
 Secure serving flags:
 
-      --bind-address ip                        The IP address on which to listen for the --secure-port port. The associated interface(s) must be reachable by the rest of the cluster, and by CLI/web clients. If blank or an unspecified address (0.0.0.0 or ::), all interfaces will be used. (default 0.0.0.0)
+      --bind-address ip                        The IP address on which to listen for the --secure-port port. The associated interface(s) must be reachable by the rest of the cluster, and by CLI/web clients. If blank or an unspecified address (0.0.0.0 or ::), all interfaces and IP address families will be used. (default 0.0.0.0)
       --cert-dir string                        The directory where the TLS certs are located. If --tls-cert-file and --tls-private-key-file are provided, this flag will be ignored. (default "/var/run/kubernetes")
       --http2-max-streams-per-connection int   The limit that the server gives to clients for the maximum number of streams in an HTTP/2 connection. Zero means to use golang's default.
       --permit-address-sharing                 If true, SO_REUSEADDR will be used when binding the port. This allows binding to wildcard IPs like 0.0.0.0 and specific IPs in parallel, and it avoids waiting for the kernel to release sockets in TIME_WAIT state. [default=false]
@@ -260,11 +262,6 @@ Authorization flags:
       --authorization-webhook-config-file string                File with webhook configuration in kubeconfig format, used with --authorization-mode=Webhook. The API server will query the remote service to determine access on the API server's secure port.
       --authorization-webhook-version string                    The API version of the authorization.k8s.io SubjectAccessReview to send to and expect from the webhook. (default "v1beta1")
 
-Cloud provider flags:
-
-      --cloud-config string     The path to the cloud provider configuration file. Empty string for no configuration file.
-      --cloud-provider string   The provider for cloud services. Empty string for no provider.
-
 API enablement flags:
 
       --runtime-config mapStringString   A set of key=value pairs that enable or disable built-in APIs. Supported options are:
@@ -320,13 +317,21 @@ Misc flags:
       --kubelet-timeout duration                  Timeout for kubelet operations. (default 5s)
       --kubernetes-service-node-port int          If non-zero, the Kubernetes master service (which apiserver creates/maintains) will be of type NodePort, using this as the value of the port. If zero, the Kubernetes master service will be of type ClusterIP.
       --max-connection-bytes-per-sec int          If non-zero, throttle each user connection to this number of bytes/sec. Currently only applies to long-running requests.
+      --peer-advertise-ip string                  If set and the UnknownVersionInteroperabilityProxy feature gate is enabled, this IP will be used by peer kube-apiservers to proxy requests to this kube-apiserver when the request cannot be handled by the peer due to version skew between the kube-apiservers. This flag is only used in clusters configured with multiple kube-apiservers for high availability.
+      --peer-advertise-port string                If set and the UnknownVersionInteroperabilityProxy feature gate is enabled, this port will be used by peer kube-apiservers to proxy requests to this kube-apiserver when the request cannot be handled by the peer due to version skew between the kube-apiservers. This flag is only used in clusters configured with multiple kube-apiservers for high availability.
+      --peer-ca-file string                       If set and the UnknownVersionInteroperabilityProxy feature gate is enabled, this file will be used to verify serving certificates of peer kube-apiservers. This flag is only used in clusters configured with multiple kube-apiservers for high availability.
       --proxy-client-cert-file string             Client certificate used to prove the identity of the aggregator or kube-apiserver when it must call out during a request. This includes proxying requests to a user api-server and calling out to webhook admission plugins. It is expected that this cert includes a signature from the CA in the --requestheader-client-ca-file flag. That CA is published in the 'extension-apiserver-authentication' configmap in the kube-system namespace. Components receiving calls from kube-aggregator should use that CA to perform their half of the mutual TLS verification.
       --proxy-client-key-file string              Private key for the client certificate used to prove the identity of the aggregator or kube-apiserver when it must call out during a request. This includes proxying requests to a user api-server and calling out to webhook admission plugins.
       --service-account-signing-key-file string   Path to the file that contains the current private key of the service account token issuer. The issuer will sign issued ID tokens with this private key.
       --service-cluster-ip-range string           A CIDR notation IP range from which to assign service cluster IPs. This must not overlap with any IP ranges assigned to nodes or pods. Max of two dual-stack CIDRs is allowed.
       --service-node-port-range portRange         A port range to reserve for services with NodePort visibility.  This must not overlap with the ephemeral port range on nodes.  Example: '30000-32767'. Inclusive at both ends of the range. (default 30000-32767)
 
+Cloud provider flags:
+
+      --cloud-config string     The path to the cloud provider configuration file. Empty string for no configuration file.
+      --cloud-provider string   The provider for cloud services. Empty string for no provider.
+
 Global flags:
 
   -h, --help                     help for kube-apiserver
-      --version version[=true]   Print version information and quit
+      --version version[=true]   --version, --version=raw prints version information and quits; --version=vX.Y.Z... sets the reported version
