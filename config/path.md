@@ -10,6 +10,9 @@
 ├── default.sh
 ├── docker-compose.yml
 ├── etc
+│   ├── apt
+│   │   ├── sources.list.debian
+│   │   └── sources.list.debian.wsl
 │   ├── buildkit
 │   │   ├── buildkitd.default.toml
 │   │   └── buildkitd.toml
@@ -45,6 +48,8 @@
 │   │   └── t.khs1994.com.key
 │   └── demo-vhost.conf
 ├── mariadb
+│   ├── conf.d
+│   │   └── docker.cnf
 │   ├── default
 │   │   └── etc
 │   │       └── mysql
@@ -53,9 +58,9 @@
 │   │           ├── debian.cnf
 │   │           ├── mariadb.cnf
 │   │           ├── mariadb.conf.d
+│   │           │   ├── 05-skipcache.cnf
 │   │           │   ├── 50-client.cnf
 │   │           │   ├── 50-mysql-clients.cnf
-│   │           │   ├── 50-mysqld_safe.cnf
 │   │           │   ├── 50-server.cnf
 │   │           │   ├── 60-galera.cnf
 │   │           │   └── 99-enable-encryption.cnf.preset
@@ -71,12 +76,9 @@
 │   │   └── docker.cnf
 │   ├── default
 │   │   └── etc
+│   │       ├── my.cnf
 │   │       └── mysql
-│   │           ├── conf.d
-│   │           │   ├── docker.cnf
-│   │           │   └── mysql.cnf
-│   │           ├── my.cnf
-│   │           └── my.cnf.fallback
+│   │           └── conf.d
 │   ├── docker.cnf
 │   └── docker.production.cnf
 ├── nginx
@@ -84,13 +86,9 @@
 │   ├── auth
 │   │   └── README.md
 │   ├── demo-ajax-header.config
-│   ├── demo-fzjh-80.config
-│   ├── demo-fzjh.config
 │   ├── demo-include-php.config
 │   ├── demo-include-ssl-common.config
 │   ├── demo-include-ssl.config
-│   ├── demo-linuxkit.config
-│   ├── demo-registry.config
 │   ├── demo-satis.conf
 │   ├── demo-ssl
 │   │   ├── root-ca.crt
@@ -98,19 +96,22 @@
 │   │   └── t.khs1994.com.key
 │   ├── demo-ssl.config
 │   ├── demo-www.conf
-│   ├── demo-www.config
 │   ├── demo.config
+│   │   ├── docker-registry.config
 │   │   ├── docker.mirror.config
+│   │   ├── fzjh-80.config
+│   │   ├── fzjh.config
 │   │   ├── gitlab.config
+│   │   ├── gogs.config
 │   │   ├── gzip.config
 │   │   ├── http3.config
+│   │   ├── laravel.config
+│   │   ├── linuxkit.config
+│   │   ├── minio.config
 │   │   ├── phpmyadmin.config
 │   │   ├── ppm.config
 │   │   ├── unit-laravel.config
 │   │   └── unit-proxy.config
-│   ├── fzjh.conf
-│   ├── gogs.config
-│   ├── minio.config
 │   ├── ssl-self
 │   └── wait-for-php.sh
 ├── nginx-unit
@@ -128,6 +129,7 @@
 │   │           └── etc
 │   │               ├── php
 │   │               │   ├── conf.d
+│   │               │   │   ├── docker-fpm.ini
 │   │               │   │   ├── docker-php-ext-sodium.ini
 │   │               │   │   ├── docker-php-ext-zip.ini
 │   │               │   │   ├── php-ext-bcmath.ini
@@ -183,6 +185,7 @@
 │   │               ├── pear.conf
 │   │               ├── php
 │   │               │   ├── conf.d
+│   │               │   │   ├── docker-fpm.ini
 │   │               │   │   ├── docker-php-ext-sodium.ini
 │   │               │   │   ├── docker-php-ext-zip.ini
 │   │               │   │   ├── php-ext-bcmath.ini
@@ -246,19 +249,100 @@
 │   └── nginx.htpasswd.demo
 ├── s6
 │   ├── README.md
-│   ├── s6-rc.d
-│   │   ├── laravel-horizon
-│   │   │   ├── log
-│   │   │   │   └── run
-│   │   │   └── run
-│   │   ├── php-fpm
-│   │   │   ├── finish
-│   │   │   ├── run
-│   │   │   └── type
-│   │   └── user
-│   │       └── contents.d
-│   │           ├── laravel-horizon
-│   │           └── php-fpm
+│   ├── demo
+│   │   ├── README.md
+│   │   ├── cont-init.d
+│   │   │   └── 01-contenv-example
+│   │   ├── fix-attrs.d
+│   │   │   ├── 01-mysql-data-dir
+│   │   │   └── 02-mysql-log-dirs
+│   │   ├── s6-overlay
+│   │   │   ├── s6-rc.d
+│   │   │   │   ├── README.md
+│   │   │   │   ├── myapp
+│   │   │   │   │   ├── finish
+│   │   │   │   │   ├── producer-for
+│   │   │   │   │   ├── run
+│   │   │   │   │   └── type
+│   │   │   │   ├── myapp-log
+│   │   │   │   │   ├── consumer-for
+│   │   │   │   │   ├── dependencies
+│   │   │   │   │   ├── pipeline-name
+│   │   │   │   │   ├── run
+│   │   │   │   │   └── type
+│   │   │   │   ├── myapp-log-prepare
+│   │   │   │   │   ├── type
+│   │   │   │   │   └── up
+│   │   │   │   └── user
+│   │   │   │       └── contents.d
+│   │   │   │           └── myapp
+│   │   │   └── scripts
+│   │   │       └── myapp-log-prepare
+│   │   └── services.d
+│   │       └── myapp
+│   │           ├── finish
+│   │           ├── log
+│   │           │   └── run
+│   │           └── run
+│   ├── s6-overlay
+│   │   ├── s6-rc.d
+│   │   │   ├── crond
+│   │   │   │   ├── producer-for
+│   │   │   │   ├── run
+│   │   │   │   └── type
+│   │   │   ├── crond-log
+│   │   │   │   ├── consumer-for
+│   │   │   │   ├── dependencies
+│   │   │   │   ├── pipeline-name
+│   │   │   │   ├── run
+│   │   │   │   └── type
+│   │   │   ├── laravel-horizon
+│   │   │   │   ├── dependencies
+│   │   │   │   ├── producer-for
+│   │   │   │   ├── run
+│   │   │   │   └── type
+│   │   │   ├── laravel-horizon-log
+│   │   │   │   ├── consumer-for
+│   │   │   │   ├── dependencies
+│   │   │   │   ├── pipeline-name
+│   │   │   │   ├── run
+│   │   │   │   └── type
+│   │   │   ├── laravel-prepare
+│   │   │   │   ├── type
+│   │   │   │   └── up
+│   │   │   ├── laravel-queue
+│   │   │   │   ├── dependencies
+│   │   │   │   ├── producer-for
+│   │   │   │   ├── run
+│   │   │   │   └── type
+│   │   │   ├── laravel-queue-log
+│   │   │   │   ├── consumer-for
+│   │   │   │   ├── dependencies
+│   │   │   │   ├── pipeline-name
+│   │   │   │   ├── run
+│   │   │   │   └── type
+│   │   │   ├── php-fpm
+│   │   │   │   ├── finish
+│   │   │   │   ├── run
+│   │   │   │   └── type
+│   │   │   ├── user
+│   │   │   │   ├── contents.d
+│   │   │   │   │   ├── crond
+│   │   │   │   │   ├── crond-log
+│   │   │   │   │   ├── crond-pipeline
+│   │   │   │   │   ├── laravel-horizon
+│   │   │   │   │   ├── laravel-horizon-log
+│   │   │   │   │   ├── laravel-horizon-pipeline
+│   │   │   │   │   ├── laravel-queue
+│   │   │   │   │   ├── laravel-queue-log
+│   │   │   │   │   ├── laravel-queue-pipeline
+│   │   │   │   │   └── php-fpm
+│   │   │   │   └── type
+│   │   │   └── user2
+│   │   │       ├── contents.d
+│   │   │       └── type
+│   │   └── scripts
+│   │       └── laravel-prepare
 │   └── services.d
 │       ├── crond
 │       │   └── run
@@ -271,13 +355,9 @@
 │       └── php-fpm
 │           ├── finish
 │           └── run
-├── s6-overlay
-│   ├── README.md
-│   └── fix-attrs.d
-│       └── 01-mysql-data-dir
 ├── supervisord
 │   └── supervisord.ini.example
 └── yarn
 
-70 directories, 208 files
+93 directories, 265 files
 ```
