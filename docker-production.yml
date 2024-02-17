@@ -381,7 +381,7 @@ services:
       - backend
     environment:
       - APP_ENV=production
-      - LNMP_DOCKER_VERSION=v20.10 x86_64 Docker Swarm
+      - LNMP_VERSION=v23.11 x86_64 Docker Swarm
       - PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     # logging: *default-logging
     deploy:

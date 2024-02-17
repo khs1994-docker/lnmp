@@ -1,0 +1,225 @@
+#!/usr/bin/env bash
+
+help(){
+  echo  -e "
+ClusterKit:
+  clusterkit-help      Print ClusterKit help info"
+}
+
+test -f help.sh && source help.sh || true
+
+get_clusterkit_service_container_id(){
+  local ENV_NAME=$1
+  local SERVICE_NAME=$2
+
+  container_id=`docker container ls \
+      --format "{{.ID}}" \
+      --filter \
+      label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+      --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$ENV_NAME \
+      --filter label=com.docker.compose.service=$SERVICE_NAME -n 1`
+
+  if [ -z "$container_id" ];then
+    container_id=`docker container ls \
+        --format "{{.ID}}" \
+        --filter \
+        label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$ENV_NAME \
+        --filter label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$SERVICE_NAME -n 1`
+  fi
+
+  if [ -z "$container_id" ];then print_error "This Service No Container Running"; exit; fi
+}
+
+clusterkit_bash_cli(){
+  local ENV_NAME=$1
+  local SERVICE_NAME=$2
+  get_clusterkit_service_container_id $ENV_NAME $SERVICE_NAME
+  shift 2
+  docker exec -i ${tty} $container_id $@ || docker exec -i $container_id $@
+
+  exit $?
+}
+
+main() {
+  local command=$1; shift
+  case $command in
+  clusterkit-help )
+    clusterkit_help
+    ;;
+
+  clusterkit )
+     _get_compose_options "docker-lnmp.yml" \
+                          "docker-lnmp.override.yml" \
+                          "cluster/docker-cluster.mysql.yml" \
+                          "cluster/docker-cluster.redis.yml"
+     exec docker compose $options up "$@"
+     ;;
+
+  clusterkit-mysql-up )
+     docker compose --project-directory=$PWD -f cluster/docker-cluster.mysql.yml up "$@"
+     ;;
+
+  clusterkit-mysql-down )
+     docker compose --project-directory=$PWD -f cluster/docker-cluster.mysql.yml down "$@"
+     ;;
+
+  clusterkit-mysql-exec )
+
+  if [ "$#" -lt 2 ];then
+     print_error '$ ./lnmp-docker clusterkit-mysql-exec {master|node-N} {COMMAND}' ; exit 1
+  fi
+
+     NODE=$1
+     shift
+     COMMAND=$@
+
+       clusterkit_bash_cli clusterkit_mysql mysql_$NODE ${COMMAND:-bash}
+     ;;
+
+  clusterkit-mysql-deploy )
+    cp cluster/docker-cluster.mysql.yml docker-cluster.mysql.yml
+    docker stack deploy -c docker-cluster.mysql.yml mysql_cluster
+    ;;
+
+  clusterkit-mysql-remove )
+    docker stack rm mysql_cluster
+    ;;
+
+  clusterkit-memcached-up )
+    docker compose --project-directory=$PWD -f cluster/docker-cluster.memcached.yml up "$@"
+    ;;
+
+  clusterkit-memcached-down )
+    docker compose --project-directory=$PWD -f cluster/docker-cluster.memcached.yml down "$@"
+    ;;
+
+  clusterkit-memcached-exec )
+    if [ "$#" -lt 2 ];then
+      print_error '$ ./lnmp-docker clusterkit-memcached-exec {N} {COMMAND}' ; exit 1
+    fi
+
+    NODE=$1
+    shift
+    COMMAND=$@
+
+    clusterkit_bash_cli clusterkit_memcached memcached-$NODE ${COMMAND:-bash}
+    ;;
+
+  clusterkit-memcached-deploy )
+    cp cluster/docker-cluster.memcached.yml docker-cluster.memcached.yml
+    docker stack deploy -c docker-cluster.memcached.yml memcached_cluster
+    ;;
+
+  clusterkit-memcached-remove )
+    docker stack rm memcached_cluster
+    ;;
+
+  clusterkit-redis-up )
+    if [ -z "$CLUSTERKIT_REDIS_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
+    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.yml up "$@"
+    ;;
+
+  clusterkit-redis-down )
+    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.yml down "$@"
+    ;;
+
+  clusterkit-redis-exec )
+    if [ "$#" -lt 2 ];then
+      print_error '$ ./lnmp-docker clusterkit-redis-exec {master-N|slave-N} {COMMAND}' ; exit 1
+    fi
+    NODE=$1
+    shift
+    COMMAND=$@
+
+    clusterkit_bash_cli clusterkit_redis redis_$NODE ${COMMAND:-bash}
+    ;;
+
+  clusterkit-redis-deploy )
+    cp cluster/docker-cluster.redis.yml docker-cluster.redis.yml
+    docker stack deploy -c docker-cluster.redis.yml redis_cluster
+    ;;
+
+  clusterkit-redis-remove )
+    docker stack rm redis_cluster
+    ;;
+
+  clusterkit-redis-replication-up )
+    if [ -z "$CLUSTERKIT_REDIS_M_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_M_S_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
+    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.replication.yml up "$@"
+    ;;
+
+  clusterkit-redis-replication-down )
+    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.replication.yml down "$@"
+    ;;
+
+  clusterkit-redis-replication-exec )
+    if [ "$#" -lt 2 ];then \
+      print_error \
+      '$ ./lnmp-docker clusterkit-redis-replication-exec {master | slave-N} {COMMAND}' ; exit 1 ; fi
+
+      NODE="$1"
+      shift
+      COMMAND="$@"
+      clusterkit_bash_cli clusterkit_redis_replication redis_m_s_$NODE ${COMMAND:-bash}
+    ;;
+
+  clusterkit-redis-replication-deploy )
+    cp cluster/docker-cluster.redis.replication.yml docker-cluster.redis.replication.yml
+    docker stack deploy -c docker-cluster.redis.replication.yml redis_m_s_cluster
+    ;;
+
+  clusterkit-redis-replication-remove )
+    docker stack rm redis_m_s_cluster
+    ;;
+
+  clusterkit-redis-sentinel-up )
+    if [ -z "$CLUSTERKIT_REDIS_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_S_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
+    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.sentinel.yml up "$@"
+    ;;
+
+  clusterkit-redis-sentinel-down )
+    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.sentinel.yml down "$@"
+    ;;
+
+  clusterkit-redis-sentinel-exec )
+    if [ "$#" -lt 2 ];then \
+      print_error \
+      '$ ./lnmp-docker clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}' ; exit 1 ; fi
+
+      NODE=$1
+      shift
+      COMMAND=$@
+      clusterkit_bash_cli clusterkit_redis_sentinel redis_sentinel_$NODE ${COMMAND:-bash}
+    ;;
+
+  clusterkit-redis-sentinel-deploy )
+    cp cluster/docker-cluster.redis.sentinel.yml docker-cluster.redis.sentinel.yml
+    docker stack deploy -c docker-cluster.redis.sentinel.yml redis_s_cluster
+    ;;
+
+  clusterkit-redis-sentinel-remove )
+    docker stack rm redis_s_cluster
+    ;;
+
+  clusterkit-* )
+    command=$(echo $command | cut -d '-' -f 2)
+    _get_compose_options "docker-lnmp.yml" \
+                             "docker-lnmp.override.yml" \
+                             "cluster/docker-cluster.mysql.yml" \
+                             "cluster/docker-cluster.redis.yml"
+    exec docker compose $options $command "$@"
+    ;;
+
+  swarm-clusterkit )
+    cp cluster/docker-cluster.mysql.yml docker-cluster.mysql.yml
+    docker stack deploy -c docker-production.yml -c docker-cluster.mysql.yml lnmp
+    ;;
+
+  -h | --help | help )
+    help
+    ;;
+  esac
+}
+
+main "$@"

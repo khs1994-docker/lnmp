@@ -1,3 +1,12 @@
+# 本项目全局变量
+
+# 是否为国内环境，默认为 true，当处于非国内环境(例如：GitHub Actions)时请改为 false
+${env:LNMP_CN_ENV}=$true # true or false
+
+
+
+# end
+
 # You can overwrite this file in .env.ps1
 
 $CI_HOST="ci.khs1994.com:1218"
