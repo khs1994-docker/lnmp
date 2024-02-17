@@ -4,7 +4,8 @@ workspace:
 
 steps:
   bash:
-    image: khs1994/php:8.2.13-composer-alpine
+    # latest php version
+    image: khs1994/php:8.3.0-composer-alpine
     run:
       - pwd
       - bash ./lnmp-docker
@@ -18,4 +19,4 @@ steps:
 
 branches:
 - master
-- "20.10"
+- "23.11"

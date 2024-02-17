@@ -37,7 +37,7 @@ pipeline {
     //   steps {
     //     // sh "pwsh -c 'echo $env:LWPM_DOCKER_USERNAME' "
     //     // sh "pwsh -c 'echo $env:LWPM_DOCKER_PASSWORD' "
-    //     // sh "git clone --depth=1 -b 20.10 https://github.com/khs1994-docker/lnmp"
+    //     // sh "git clone --depth=1 -b 23.11 https://github.com/khs1994-docker/lnmp"
     //     // sh "pwsh ./lnmp/kubernetes/bin/lwpm.ps1"
     //     sh "docker run -i --rm -e LWPM_DOCKER_USERNAME \
     //         -e LWPM_DOCKER_PASSWORD \
@@ -75,7 +75,7 @@ pipeline {
 
     stage('同步镜像') {
       steps {
-        sh "curl -L -O https://gitee.com/khs1994-docker/lnmp/raw/20.10/kubernetes/kubernetes-release/sync/docker-image-sync.json"
+        sh "curl -L -O https://gitee.com/khs1994-docker/lnmp/raw/23.11/kubernetes/kubernetes-release/sync/docker-image-sync.json"
 
         sh '''
         sed -i -e "s#K8S_VERSION#${LWPM_K8S_VERSION}#g" \
@@ -94,7 +94,7 @@ pipeline {
             -e DEST_DOCKER_REGISTRY=\${LWPM_DOCKER_REGISTRY_MIRROR} \
             -e SYNC_WINDOWS=true \
             -e CI=true \
-            -e CONFIG_URL=https://gitee.com/khs1994-docker/lnmp/raw/20.10/kubernetes/kubernetes-release/sync/docker-image-sync.json \
+            -e CONFIG_URL=https://gitee.com/khs1994-docker/lnmp/raw/23.11/kubernetes/kubernetes-release/sync/docker-image-sync.json \
             -v \$PWD/docker-image-sync.json:/docker-entrypoint.d/docker-image-sync.json \
             pcit-docker.pkg.coding.net/khs1994-docker/khs1994/docker-image-sync"
       }

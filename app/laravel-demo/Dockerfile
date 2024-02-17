@@ -14,12 +14,12 @@
 # $ docker build --target=laravel -t khs1994/laravel:10 --build-arg NODE_REGISTRY=https://registry.npmmirror.com --build-arg CI=false .
 
 ARG NODE_VERSION=20.5.1
-ARG PHP_VERSION=8.2.13
+ARG PHP_VERSION=8.3.0
 ARG NGINX_VERSION=1.25.3-alpine
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 2.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME}/php:8.2.13-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME}/php:8.3.0-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
 COPY composer.json /app/

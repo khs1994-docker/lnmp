@@ -158,7 +158,7 @@ jobs:
          sudo go env GOPATH
          sudo go version
 
-         git clone --depth=1 -b 20.10 https://github.com/khs1994-docker/lnmp ~/lnmp
+         git clone --depth=1 -b 23.11 https://github.com/khs1994-docker/lnmp ~/lnmp
          cp -r ~/lnmp/. /home/runner/work/lnmp-k8s
          ls -la /home/runner/work/lnmp-k8s
          # remove some apt source

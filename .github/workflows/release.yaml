@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-    - v20.10.*
+    - v23.11.*
   workflow_dispatch:
 
 name: Release
@@ -93,7 +93,7 @@ jobs:
         fi
 
         export GITHUB_TAG=$(echo $GITHUB_REF | cut -d '/' -f 3)
-        gh release create $GITHUB_TAG -F CHANGELOG.md --target 20.10 -t $GITHUB_TAG || true
+        gh release create $GITHUB_TAG -F CHANGELOG.md --target 23.11 -t $GITHUB_TAG || true
 
         # deb
         sh scripts/cli/build.sh deb ${GITHUB_TAG}

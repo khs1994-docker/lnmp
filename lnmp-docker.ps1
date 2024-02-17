@@ -49,7 +49,7 @@ $env:COMPOSE_FILE = $null
 
 if ($args[0] -eq "install") {
   if (get-command git) {
-    git clone -b 20.10 --depth=1 https://github.com/khs1994-docker/lnmp.git $home\lnmp
+    git clone -b 23.11 --depth=1 https://github.com/khs1994-docker/lnmp.git $home\lnmp
 
     exit
   }

@@ -20,7 +20,7 @@ services:
     << :
       - *common
       - *common-label
-    image: "khs1994/php:${LNMP_PHP_VERSION:-8.2.13}-unit-alpine"
+    image: "khs1994/php:${LNMP_PHP_VERSION:-8.3.0}-unit-alpine"
     volumes:
       - ./config/${LNMP_NGINX_UNIT_CONF:-nginx-unit}:/etc/nginx-unit
       # ./path/unit-init-conf:/docker-entrypoint.d

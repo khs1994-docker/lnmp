@@ -6,7 +6,7 @@ author: 'khs1994'
 inputs:
   lnmp_branch:
     description: lnmp branch
-    default: "20.10"
+    default: "23.11"
     required: false
   lnmp_services:
     description: lnmp services
