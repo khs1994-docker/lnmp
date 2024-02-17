@@ -1,0 +1,39 @@
+name: sshd
+description: ""
+version: 9.5.0.0p1-Beta
+pre-version: 9.5.0.0p1-Beta
+homepage: ""
+bug: ""
+github: PowerShell/Win32-OpenSSH
+releases: ""
+url: https://github.com/PowerShell/Win32-OpenSSH/releases/download/v${VERSION}/OpenSSH-Win64.zip
+url-mirror: ""
+pre-url: https://github.com/PowerShell/Win32-OpenSSH/releases/download/v${VERSION}/OpenSSH-Win64.zip
+pre-url-mirror: ""
+command: "sshd"
+download-filename: OpenSSH-Win64.zip
+architecture: amd64
+os: windows
+scripts:
+  preinstall:
+  - '_cleanup $env:ProgramFiles\OpenSSH-Win64'
+  install:
+  - '_unzip $filename $env:ProgramFiles'
+  - 'cd $env:ProgramFiles\OpenSSH-Win64 ; powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1'
+  - 'Set-Service sshd -StartupType Automatic'
+  - 'net start sshd'
+  - 'sleep 5'
+  - 'new-item C:\ProgramData\ssh\administrators_authorized_keys'
+  - 'icacls.exe "C:\ProgramData\ssh\administrators_authorized_keys" /inheritance:r /grant "Administrators:F" /grant "SYSTEM:F"'
+  - 'net stop sshd'
+  postinstall: ""
+  preuninstall: ""
+  uninstall: 'cd $env:ProgramFiles\OpenSSH-Win64 ; powershell.exe -ExecutionPolicy Bypass -File uninstall-sshd.ps1'
+  postuninstall: ""
+  pruneuninstall: ""
+  pretest: ""
+  test: ""
+  posttest: ""
+  version: ""
+path:
+- $env:ProgramFiles\OpenSSH-Win64

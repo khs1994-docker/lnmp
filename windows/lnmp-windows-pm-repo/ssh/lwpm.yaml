@@ -1,0 +1,35 @@
+name: ssh
+description: ""
+version: 9.5.0.0p1-Beta
+pre-version: 9.5.0.0p1-Beta
+homepage: ""
+bug: ""
+github: PowerShell/Win32-OpenSSH
+releases: ""
+url: https://github.com/PowerShell/Win32-OpenSSH/releases/download/v${VERSION}/OpenSSH-Win64.zip
+url-mirror: ""
+pre-url: https://github.com/PowerShell/Win32-OpenSSH/releases/download/v${VERSION}/OpenSSH-Win64.zip
+pre-url-mirror: ""
+command: "sshd"
+download-filename: OpenSSH-Win64.zip
+architecture: amd64
+os: windows
+scripts:
+  preinstall:
+  - '_cleanup $env:ProgramFiles\OpenSSH-Win64'
+  install:
+  - '_unzip $filename $env:ProgramFiles'
+  - 'cd $env:ProgramFiles\OpenSSH-Win64 ; powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1'
+  - 'Get-Service ssh-agent | Set-Service -StartupType Automatic'
+  - 'net start ssh-agent'
+  postinstall: ""
+  preuninstall: ""
+  uninstall: 'cd $env:ProgramFiles\OpenSSH-Win64 ; powershell.exe -ExecutionPolicy Bypass -File uninstall-sshd.ps1'
+  postuninstall: ""
+  pruneuninstall: ""
+  pretest: ""
+  test: ""
+  posttest: ""
+  version: ""
+path:
+- $env:ProgramFiles\OpenSSH-Win64

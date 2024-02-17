@@ -10,7 +10,7 @@
   "os": "windows",
   "pre-url": "",
   "pre-url-mirror": "",
-  "pre-version": "3.2.0",
+  "pre-version": "3.3.1",
   "releases": "",
   "scripts": {
     "install": [
@@ -31,5 +31,5 @@
   },
   "url": "",
   "url-mirror": "",
-  "version": "3.2.0"
+  "version": "3.3.1"
 }

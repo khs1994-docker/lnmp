@@ -1,8 +1,8 @@
 {
-  "name": "frp",
+  "name": "frpc",
   "description": "A fast reverse proxy to help you expose a local server behind a NAT or firewall to the internet",
-  "version": "0.48.0",
-  "pre-version": "0.48.0",
+  "version": "0.54.0",
+  "pre-version": "0.54.0",
   "homepage": "https://github.com/fatedier/frp",
   "bug": "https://github.com/fatedier/frp/issues",
   "github": "fatedier/frp",
@@ -20,13 +20,12 @@
     "version": "frpc --version",
     "install": [
       "if($IsWindows){_unzip $filename $unzipDesc}else{_mkdir frp ; tar -zxf $filename -C frp}",
-      "if($IsWindows){Copy-item frp\\frp_${VERSION}_windows_amd64\\frpc.exe C:\\bin\\}",
-      "if($IsWindows){Copy-item frp\\frp_${VERSION}_windows_amd64\\frpc.ini C:\\bin\\frpc.example.ini}",
+      "if($IsWindows){Copy-item frpc\\frp_${VERSION}_windows_amd64\\frpc.exe C:\\bin\\}",
+      "if($IsWindows){Copy-item frpc\\frp_${VERSION}_windows_amd64\\frpc.toml C:\\bin\\frpc.example.toml}",
       "if(!$IsWindows){sudo install -m755 frp/frp_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}/frpc /usr/local/bin}",
-      "if(!$IsWindows){sudo install -m755 frp/frp_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}/frps /usr/local/bin}",
       "_cleanup frp"
     ],
-    "uninstall": "if($IsWindows){Remove-item C:\\bin\\frpc.exe ; Remove-item C:\\bin\\frps.exe}else{sudo rm -rf /usr/local/bin/frpc ; sudo rm -rf /usr/local/bin/frps }"
+    "uninstall": "if($IsWindows){Remove-item C:\\bin\\frpc.exe}else{sudo rm -rf /usr/local/bin/frpc}"
   },
   "path": [
     "C:\\bin"
