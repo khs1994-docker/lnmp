@@ -57,7 +57,7 @@ services:
     image: python:3.11.1-alpine
 
   deno:
-    image: denoland/deno:1.31.1
+    image: denoland/deno:1.41.0
 
   docker-binfmt:
     image: tonistiigi/binfmt:latest
