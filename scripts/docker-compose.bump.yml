@@ -24,7 +24,7 @@ services:
     image: docker.io/nginx/unit:1.30.0-minimal
 
   rabbitmq:
-    image: rabbitmq:3.9.0-management-alpine
+    image: rabbitmq:3.13.0-management-alpine
 
   postgresql:
     image: postgres:14.0-alpine
