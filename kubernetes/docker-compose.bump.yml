@@ -25,7 +25,7 @@ services:
     image: kong/kubernetes-ingress-controller:2.5.0
 
   metrics_server:
-    image: registry.k8s.io/metrics-server/metrics-server:v0.6.3
+    image: registry.k8s.io/metrics-server/metrics-server:v0.7.1
 
   butane:
     image: quay.io/coreos/butane:v0.13.1
