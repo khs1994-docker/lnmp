@@ -30,7 +30,6 @@ ENV PHPIZE_DEPS \
       file \
       g++ \
       gcc \
-      libc-dev \
       make \
       pkgconf \
       re2c
