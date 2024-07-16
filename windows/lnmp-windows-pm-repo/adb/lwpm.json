@@ -7,25 +7,28 @@
   "bug": "",
   "github": "",
   "releases": "https://developer.android.google.cn/studio/releases/platform-tools",
-  "url": "https://dl.google.com/android/repository/platform-tools-latest-${env:LWPM_OS}.zip",
-  "url-mirror": "",
+  "url": "https://dl.google.com/android/repository/platform-tools-latest-${env:lwpm_os}.zip",
+  "url-mirror": "https://dl.google.com/android/repository/platform-tools_r${VERSION}-${env:lwpm_os}.zip",
   "pre-url": "",
   "pre-url-mirror": "",
   "command": "adb",
   "download-filename": "",
+  "winget-pkgs": "https://hub.nuaa.cf/microsoft/winget-pkgs/tree/master/manifests/g/Google/PlatformTools",
   "scripts": {
     "preinstall": [
-      "# _cleanup \"$unzipDesc\""
+      "_cleanup \"$unzipDesc\""
     ],
     "install": [
       "if($IsWindows){_unzip $filename $env:ProgramData}",
-      "if(!$IsWindows){_unzip $filename /usr/local/platform-tools}"
+      "if(!$IsWindows){_unzip $filename $unzipDesc ; sudo cp -r $unzipDesc/platform-tools /usr/local/}",
+      "if(!$IsWindows){sudo ln -s /usr/local/platform-tools/adb /usr/local/bin/adb}"
     ],
     "postinstall": "",
     "preuninstall": "",
     "uninstall": [
       "if($IsWindows){_cleanup $env:ProgramData\\platform-tools}",
-      "if(!$IsWindows){_cleanup /usr/local/platform-tools}"
+      "if(!$IsWindows){sudo rm -rf /usr/local/platform-tools}",
+      "if(!$IsWindows){sudo rm -rf /usr/local/bin/adb}"
     ],
     "postuninstall": "",
     "pruneuninstall": "",

@@ -1,16 +1,16 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=8.2.3
+ARG PHP_VERSION=8.2.13
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
 
-FROM --platform=$TARGETPLATFORM alpine:3.17
+FROM --platform=$TARGETPLATFORM alpine:3.19
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=8.2.3
+ARG PHP_VERSION=8.2.13
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -100,9 +100,9 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-bz2=shared \
         # --with-tidy=shared \
         --with-gmp=shared \
-        --with-kerberos \
         --with-imap=shared \
             --with-imap-ssl \
+            --with-kerberos \
         --with-enchant=shared \
         --enable-fileinfo=shared \
         --with-ldap=shared \
@@ -204,6 +204,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
   && export CFLAGS="$PHP_CFLAGS" \
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
+            PHP_BUILD_PROVIDER='https://github.com/khs1994-docker/php' \
   && docker-php-source extract \
   && cd /usr/src/php \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
@@ -366,8 +367,8 @@ ENV PECL_RUN_DEPS \
 ENV PECL_EXTENSION \
       # mongodb \
       # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
-      # igbinary \
-      https://github.com/igbinary/igbinary/archive/master.tar.gz \
+      igbinary \
+      # https://github.com/igbinary/igbinary/archive/master.tar.gz \
       # redis \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       memcached \

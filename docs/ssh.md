@@ -1,5 +1,11 @@
 # SSH
 
+## 生成密钥
+
+```bash
+$ ssh-keygen -t rsa
+```
+
 ## 错误
 
 ```bash

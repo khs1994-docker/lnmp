@@ -1,7 +1,7 @@
 name: s6
 version: 3.1.4.2
 url: https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-x86_64.tar.xz
-url-mirror: https://download.fastgit.org/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-x86_64.tar.xz
+url-mirror: https://${env:GITHUB_MIRROR}/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-x86_64.tar.xz
 scripts:
   platform-reqs: if(!$_IsLinux){echo $false}
   install: |-

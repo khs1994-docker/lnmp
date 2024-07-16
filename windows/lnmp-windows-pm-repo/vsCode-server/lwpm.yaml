@@ -1,0 +1,35 @@
+name: vscode-server
+description: ""
+version: ""
+pre-version: ""
+homepage: ""
+bug: ""
+github: ""
+releases: ""
+url: https://vscode.download.prss.microsoft.com/dbazure/download/stable/${VERSION}/vscode-server-win32-x64.zip
+url-mirror: ""
+pre-url: ""
+pre-url-mirror: ""
+command: ""
+download-filename: ""
+architecture: amd64
+os: windows
+scripts:
+  get-version: |
+    $VERSION=$((code --version).split(' ')[1])
+  preinstall:
+  - '_cleanup $HOME/.vscode-server/bin/vscode-server-win32-x64'
+  install:
+  - '_unzip $filename $HOME/.vscode-server/bin/'
+  - 'mv $HOME/.vscode-server/bin/vscode-server-win32-x64 $HOME/.vscode-server/bin/${VERSION}'
+  postinstall: ""
+  preuninstall: ""
+  uninstall: '_cleanup $HOME/.vscode-server/bin/${VERSION}'
+  postuninstall: ""
+  pruneuninstall: ""
+  pretest: ""
+  test: ""
+  posttest: ""
+  version: ""
+path:
+- C:\bin

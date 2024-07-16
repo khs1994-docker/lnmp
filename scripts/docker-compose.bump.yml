@@ -1,11 +1,9 @@
-
-
 services:
   mysql:
     image: mysql:8.0.33
 
   mariadb:
-    image: mariadb:10.8.3
+    image: mariadb:10.11.5
 
   redis:
     image: redis:7.0.0-alpine
@@ -14,16 +12,16 @@ services:
     image: memcached:1.6.15-alpine
 
   php:
-    image: php:8.2.3-fpm-alpine
+    image: php:8.3.0-fpm-alpine
 
   composer:
-    image: composer:2.5.5
+    image: composer:2.5.8
 
   nginx:
-    image: nginx:1.23.3-alpine
+    image: nginx:1.25.3-alpine
 
   nginx-unit:
-    image: docker.io/nginx/unit:1.28.0-minimal
+    image: docker.io/nginx/unit:1.30.0-minimal
 
   rabbitmq:
     image: rabbitmq:3.9.0-management-alpine
@@ -47,7 +45,7 @@ services:
     image: kong:2.8.1-alpine
 
   node:
-    image: node:18.2.0-alpine
+    image: node:20.5.1-alpine
 
   go:
     image: golang:1.20.1-alpine
@@ -72,3 +70,9 @@ services:
 
   acme.sh:
     image: neilpang/acme.sh:3.0.0
+
+  powershell:
+    image:
+
+  powershell-preview:
+    image:

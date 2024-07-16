@@ -167,7 +167,7 @@ version = 2
       key_model = "node"
 
     [plugins."io.containerd.grpc.v1.cri".registry]
-      config_path = "/opt/k8s/etc/cri-containerd/1.6/certs.d"
+      config_path = "/opt/k8s/etc/cri-containerd/1.7/certs.d"
 
       # [plugins."io.containerd.grpc.v1.cri".registry.auths]
 

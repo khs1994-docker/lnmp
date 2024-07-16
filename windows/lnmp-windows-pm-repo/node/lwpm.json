@@ -1,8 +1,8 @@
 {
   "name": "node",
   "description": "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine",
-  "version": "16.15.0",
-  "pre-version": "18.2.0",
+  "version": "18.17.1",
+  "pre-version": "20.5.1",
   "homepage": "https://nodejs.org/en/",
   "bug": "https://github.com/nodejs/node/issues",
   "github": "nodejs/node",

@@ -15,6 +15,3 @@ server = "https://registry.k8s.io"
 [host."https://k8s.dockerproxy.com"]
   capabilities = ["pull", "resolve"]
   skip_verify = false
-[host."https://k8s.gcr.io"]
-  capabilities = ["pull", "resolve"]
-  skip_verify = false

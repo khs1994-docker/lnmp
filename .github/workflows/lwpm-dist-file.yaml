@@ -3,7 +3,7 @@ name: LWPM Dist File
 on:
   push:
     branches:
-      - "20.10"
+      - "23.11"
   workflow_dispatch:
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
         with:
           repository: khs1994-docker/lnmp
           fetch-depth: 1
-          # ref: "20.10"
+          # ref: "23.11"
           path: lnmp
       - name: handle-conmon
         shell: pwsh

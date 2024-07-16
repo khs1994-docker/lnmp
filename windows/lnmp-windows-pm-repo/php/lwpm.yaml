@@ -1,7 +1,7 @@
 name: "php"
 description: "PHP is a popular general-purpose scripting language that is especially suited to web development"
-version: "8.2.3"
-pre-version: "8.2.3"
+version: "8.3.0"
+pre-version: "8.3.0"
 homepage: "https://www.php.net/"
 bug: "https://www.php.net/"
 github: "php/php-src"
@@ -12,6 +12,11 @@ path:
 command: php
 download-filename: php-${VERSION}-${VC_VERSION}-x64.zip
 scripts:
+  service:
+    - C:/php/php-cgi-spawner.exe
+    - c:/php/php-cgi.exe
+    - "9000"
+    - 4+16
   platform-reqs: ["if(!$IsWindows){echo $False}"]
   uninstall: |
     if($isPre -eq 1){_cleanup "C:\php-pre"}else{_cleanup "C:\php"}

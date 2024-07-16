@@ -89,3 +89,5 @@ lwpm.lock.json
 /.docker
 
 .patch
+
+*.msi

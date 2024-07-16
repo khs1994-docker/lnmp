@@ -59,14 +59,14 @@ fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=2.5.5
+export COMPOSER_VERSION=2.5.8
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
 # export CC=clang CXX=clang
 export CC=gcc CXX=g++
 
-export PHP_LATEST_VERSION=8.2.3
+export PHP_LATEST_VERSION=8.3.0
 ################################################################################
 
 for command in "$@"
@@ -476,7 +476,6 @@ set +e
       \
       --with-curl \
       --with-gettext \
-      --with-kerberos \
       --with-libedit \
       --with-openssl \
         --with-system-ciphers \
@@ -537,6 +536,7 @@ set +e
       --with-gmp \
       --with-imap=shared \
           --with-imap-ssl \
+          --with-kerberos \
       \
       --with-pic \
       --with-enchant=shared \

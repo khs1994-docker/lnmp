@@ -1,0 +1,27 @@
+{
+  "name": "edge-beta",
+  "description": "World-class performance with more privacy, more productivity, and more value while you browse.",
+  "version": "113.0.1774.50",
+  "pre-version": "",
+  "homepage": "https://www.microsoft.com/zh-cn/edge/download/insider",
+  "bug": "",
+  "github": "",
+  "releases": "https://www.microsoft.com/zh-cn/edge/download/insider",
+  "url": "https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/f434ea34-14a1-4469-94e0-f96cf6e6426e/MicrosoftEdgeBetaEnterpriseX64.msi",
+  "url-mirror": "",
+  "winget-pkgs": "https://hub.nuaa.cf/microsoft/winget-pkgs/tree/master/manifests/m/Microsoft/Edge",
+  "scripts": {
+    "preinstall": "",
+    "install": "start-process $filename",
+    "postinstall": "",
+    "preuninstall": "",
+    "uninstall": "",
+    "postuninstall": "",
+    "pretest": "",
+    "test": "",
+    "posttest":""
+  },
+  "path": [
+
+  ]
+}

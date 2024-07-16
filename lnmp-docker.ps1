@@ -1,10 +1,6 @@
 
 <#PSScriptInfo
 
-.VERSION 20.10.25
-
-.GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
-
 .AUTHOR khs1994@khs1994.com
 
 .COMPANYNAME khs1994-docker
@@ -53,7 +49,7 @@ $env:COMPOSE_FILE = $null
 
 if ($args[0] -eq "install") {
   if (get-command git) {
-    git clone -b 20.10 --depth=1 https://github.com/khs1994-docker/lnmp.git $home\lnmp
+    git clone -b 23.11 --depth=1 https://github.com/khs1994-docker/lnmp.git $home\lnmp
 
     exit
   }
@@ -293,7 +289,7 @@ Function init() {
 }
 
 Function help_information() {
-  "Docker-LNMP CLI ${LNMP_DOCKER_VERSION}
+  "Docker-LNMP CLI ${LNMP_VERSION}
 
 Official WebSite https://lnmp.khs1994.com
 
@@ -353,9 +349,6 @@ Swarm mode:
 Container Tools:
   SERVICE-cli          Execute a command in a running LNMP container
 
-ClusterKit:
-  clusterkit-help      Print ClusterKit help info
-
 Developer Tools:
 
 Read './docs/*.md' for more information about CLI commands.
@@ -369,53 +362,6 @@ Exec '$ lnmp-docker zan' donate
 
   cd $EXEC_CMD_DIR
 
-  exit
-}
-
-Function clusterkit_help() {
-  "
-ClusterKit:
-  clusterkit [-d]              UP LNMP With Mysql Redis Memcached Cluster [Background]
-  clusterkit-COMMAND           Run docker-compsoe commands(config, pull, etc)
-
-  swarm-clusterkit             UP LNMP With Mysql Redis Memcached Cluster IN Swarm mode
-
-  clusterkit-mysql-up          Up MySQL Cluster
-  clusterkit-mysql-down        Stop MySQL Cluster
-  clusterkit-mysql-exec        Execute a command in a running MySQL Cluster node
-
-  clusterkit-mysql-deploy      Deploy MySQL Cluster in Swarm mode
-  clusterkit-mysql-remove      Remove MySQL Cluster in Swarm mode
-
-  clusterkit-memcached-up      Up memcached Cluster
-  clusterkit-memcached-down    Stop memcached Cluster
-  clusterkit-memcached-exec    Execute a command in a running memcached Cluster node
-
-  clusterkit-memcached-deploy  Deploy memcached Cluster in Swarm mode
-  clusterkit-memcached-remove  Remove memcached Cluster in Swarm mode
-
-  clusterkit-redis-up          Up Redis Cluster(By Ruby)
-  clusterkit-redis-down        Stop Redis Cluster(By Ruby)
-  clusterkit-redis-exec        Execute a command in a running Redis Cluster node(By Ruby)
-
-  clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode(By Ruby)
-  clusterkit-redis-remove      Remove Redis Cluster in Swarm mode(By Ruby)
-
-  clusterkit-redis-replication-up       Up Redis M-S (replication)
-  clusterkit-redis-replication-down     Stop Redis M-S (replication)
-  clusterkit-redis-replication-exec     Execute a command in a running Redis M-S (replication) node
-
-  clusterkit-redis-replication-deploy   Deploy Redis M-S (replication) in Swarm mode
-  clusterkit-redis-replication-remove   Remove Redis M-S (replication) in Swarm mode
-
-  clusterkit-redis-sentinel-up           Up Redis S
-  clusterkit-redis-sentinel-down         Stop Redis S
-  clusterkit-redis-sentinel-exec         Execute a command in a running Redis S node
-
-  clusterkit-redis-sentinel-deploy       Deploy Redis S in Swarm mode
-  clusterkit-redis-sentinel-remove       Remove Redis S in Swarm mode
-
-"
   exit
 }
 
@@ -481,16 +427,6 @@ Function Invoke-DockerExec($service, $command) {
   }
 
   docker exec -it $container_id $command
-}
-
-Function clusterkit_bash_cli($env, $service, $command) {
-  docker exec -it `
-  $( docker container ls `
-      --format "{{.ID}}" `
-      -f label=com.khs1994.lnmp `
-      -f label=com.khs1994.lnmp.app.env=$env `
-      -f label=com.docker.compose.service=$service -n 1 ) `
-    $command
 }
 
 Function satis() {
@@ -957,145 +893,12 @@ switch -regex ($command) {
     Invoke-DockerExec $service sh
   }
 
-  "^clusterkit$" {
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml", `
-      "cluster/docker-cluster.mysql.yml", `
-      "cluster/docker-cluster.redis.yml"
-
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up $other
-  }
-
-  clusterkit-mysql-up {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml up $other
-  }
-
-  clusterkit-mysql-down {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml down $other
-  }
-
-  clusterkit-mysql-config {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml config $other
-  }
-
-  clusterkit-mysql-exec {
-    $service, $cmd = $other
-    if ($cmd.Count -eq 0) {
-      '$ ./lnmp-docker.ps1 clusterkit-mysql-exec {master|node-N} {COMMAND}'
-
-      cd $EXEC_CMD_DIR
-
-      exit 1
-    }
-    clusterkit_bash_cli clusterkit_mysql mysql_$service $cmd
-  }
-
-  clusterkit-memcached-up {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml up $other
-  }
-
-  clusterkit-memcached-down {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml down $other
-  }
-
-  clusterkit-memcached-config {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml config $other
-  }
-
-  clusterkit-memcached-exec {
-    $service, $cmd = $other
-    if ($cmd.Count -eq 0) {
-      '$ ./lnmp-docker.ps1 clusterkit-memcached-exec {N} {COMMAND}'
-
-      cd $EXEC_CMD_DIR
-
-      exit 1
-    }
-    clusterkit_bash_cli clusterkit_memcached memcached-$service $cmd
-  }
-
-  clusterkit-redis-up {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml up $other
-  }
-
-  clusterkit-redis-down {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml down $other
-  }
-
-  clusterkit-redis-config {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml config $other
-  }
-
-  clusterkit-redis-exec {
-    $service, $cmd = $other
-    if ($cmd.Count -eq 0) {
-      '$ ./lnmp-docker.ps1 clusterkit-redis-exec {master-N|slave-N} {COMMAND}'
-
-      cd $EXEC_CMD_DIR
-
-      exit 1
-    }
-    clusterkit_bash_cli clusterkit_redis redis_$service $cmd
-  }
-
-  clusterkit-redis-replication-up {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml up $other
-  }
-
-  clusterkit-redis-replication-down {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml down $other
-  }
-
-  clusterkit-redis-replication-config {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml config $other
-  }
-
-  clusterkit-redis-replication-exec {
-    $service, $cmd = $other
-    if ($cmd.Count -eq 0) {
-      '$ ./lnmp-docker.ps1 clusterkit-redis-replication-exec {master|slave-N} {COMMAND}'
-
-      cd $EXEC_CMD_DIR
-
-      exit 1
-    }
-    clusterkit_bash_cli clusterkit_redis_replication redis_m_s_$service $cmd
-  }
-
-  clusterkit-redis-sentinel-up {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml up $other
-  }
-
-  clusterkit-redis-sentinel-down {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml down $other
-  }
-
-  clusterkit-redis-sentinel-config {
-    docker compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml config $other
-  }
-
-  clusterkit-redis-sentinel-exec {
-    $service, $cmd = $other
-    if ($cmd.Count -eq 0) {
-      '$ ./lnmp-docker.ps1 clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}'
-
-      cd $EXEC_CMD_DIR
-
-      exit 1
-    }
-    clusterkit_bash_cli clusterkit_redis_sentinel redis_sentinel_$service $cmd
-  }
-
   { $_ -in "update", "upgrade" } {
     _update
   }
 
   { $_ -in "-h", "--help", "help" } {
     help_information
-  }
-
-  clusterkit-help {
-    clusterkit_help
   }
 
   bug {
@@ -1375,6 +1178,19 @@ Example: ./lnmp-docker composer /app/demo install
     wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p ${wsl2_mount_physicaldiskdevice_path}${WSL2_DIST_PATH}"
     wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind ${wsl2_mount_physicaldiskdevice_path}${WSL2_DIST_PATH} $WSL2_DIST_PATH"
     wsl -d $WSL2_DIST -u root -- sh -cx "chown 1000:1000 $WSL2_DIST_PATH"
+    $WSL2_DIST_USER=$(wsl -d ubuntu-22.04 -- sh -c 'echo $USER')
+
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p /home/$WSL2_DIST_USER/.cache/JetBrains"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.cache/JetBrains"
+    wsl -d $WSL2_DIST -u root -- sh -cx "chown -R ${WSL2_DIST_USER}:${WSL2_DIST_USER} /home/$WSL2_DIST_USER/.cache/JetBrains"
+    wsl -d $WSL2_DIST -u root -- sh -cx "chown -R ${WSL2_DIST_USER}:${WSL2_DIST_USER} ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.cache/JetBrains"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.cache/JetBrains /home/$WSL2_DIST_USER/.cache/JetBrains"
+
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p /home/$WSL2_DIST_USER/.vscode-server"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.vscode-server"
+    wsl -d $WSL2_DIST -u root -- sh -cx "chown -R ${WSL2_DIST_USER}:${WSL2_DIST_USER} /home/$WSL2_DIST_USER/.vscode-server"
+    wsl -d $WSL2_DIST -u root -- sh -cx "chown -R ${WSL2_DIST_USER}:${WSL2_DIST_USER} ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.vscode-server"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.vscode-server /home/$WSL2_DIST_USER/.vscode-server"
   }
 
   "^code$" {

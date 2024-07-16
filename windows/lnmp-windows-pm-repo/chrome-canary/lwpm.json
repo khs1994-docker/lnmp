@@ -1,0 +1,30 @@
+{
+  "name": "chrome-canary",
+  "description": "",
+  "version": "",
+  "pre-version": "",
+  "homepage": "https://www.google.cn/chrome/index.html",
+  "bug": "",
+  "github": "",
+  "releases": "https://www.google.cn/intl/zh-CN/chrome/canary/",
+  "url": "https://dl.google.com/tag/s/appguid%3D%7B4EA16AC7-FD5A-47C3-875B-DBF4A2008C20%7D%26usagestats%3D1%26ap%3Dx64-canary-statsdef_1/update2/installers/ChromeSetup.exe",
+  "url-mirror": "",
+  "pre-url": "",
+  "pre-url-mirror": "",
+  "scripts": {
+    "preinstall": "",
+    "install": [
+      "start-process $filename"
+    ],
+    "postinstall": "",
+    "preuninstall": "",
+    "uninstall": "",
+    "postuninstall": "",
+    "pretest": "",
+    "test": "",
+    "posttest":""
+  },
+  "path": [
+    "C:\\bin"
+  ]
+}

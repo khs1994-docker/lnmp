@@ -1,20 +1,21 @@
 {
   "name": "chrome",
-  "description": "",
+  "description": "A more simple, secure, and faster web browser than ever, with Google's smarts built-in.",
   "version": "",
   "pre-version": "",
   "homepage": "https://www.google.cn/chrome/index.html",
   "bug": "",
   "github": "",
-  "releases": "https://www.google.cn/intl/zh-CN/chrome/canary/",
-  "url": "",
+  "releases": "https://www.google.cn/chrome/index.html",
+  "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi",
   "url-mirror": "",
   "pre-url": "",
   "pre-url-mirror": "",
+  "winget-pkgs": "https://hub.fgit.ml/microsoft/winget-pkgs/tree/master/manifests/g/Google/Chrome",
   "scripts": {
     "preinstall": "",
     "install": [
-      "Write-Host \"`nPlease download on this website: ${releases}`n\" -ForegroundColor Green"
+      "start-process $filename"
     ],
     "postinstall": "",
     "preuninstall": "",

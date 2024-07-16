@@ -1,4 +1,4 @@
-FROM mariadb:10.8.3
+FROM mariadb:10.11.5
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

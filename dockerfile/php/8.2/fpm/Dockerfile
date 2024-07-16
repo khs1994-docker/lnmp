@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=8.2.3
+ARG PHP_VERSION=8.2.13
 
-FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.17 as php
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.19 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -46,10 +46,10 @@ ENV PHP_EXTENSION \
 ENV PECL_EXTENSION \
       # mongodb \
       # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
-      # igbinary \
-      https://github.com/igbinary/igbinary/archive/master.tar.gz \
-      # redis \
-      https://github.com/phpredis/phpredis/archive/develop.tar.gz \
+      igbinary \
+      # https://github.com/igbinary/igbinary/archive/master.tar.gz \
+      redis \
+      # https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       memcached \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       # xdebug-beta \

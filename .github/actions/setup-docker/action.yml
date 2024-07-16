@@ -6,7 +6,7 @@ author: 'khs1994'
 inputs:
   docker_version:
     description: Docker Version
-    default: "20.10"
+    default: "24.0"
     required: false
   docker_nightly_version:
     # https://github.com/AkihiroSuda/moby-snapshot/releases

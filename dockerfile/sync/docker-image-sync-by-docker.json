@@ -92,8 +92,8 @@
     "dest": "nginx-ingress-kube-webhook-certgen:v20230312-helm-chart-4.5.2-28-g66a760794@sha256:01d181618f270f2a96c04006f33b2699ad3ccb02da48d0f89b22abce084b292f"
   },
   {
-    "source": "registry.k8s.io/metrics-server/metrics-server:v0.6.0",
-    "dest": "gcr-mirror/metrics-server:v0.6.0"
+    "source": "registry.k8s.io/metrics-server/metrics-server:v0.6.3",
+    "dest": "gcr-mirror/metrics-server:v0.6.3"
   },
   {
     "source": "gcr.io/k8s-staging-metrics-server/metrics-server:master",

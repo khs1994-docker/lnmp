@@ -41,5 +41,5 @@ exec docker run -i ${tty} --rm \
     --entrypoint npm \
     --user ${LNMP_USER:-root:root} \
     --network $network \
-    ${LNMP_NODE_IMAGE:-node:alpine} \
+    ${LNMP_NODE_IMAGE:-${ccr.ccs.tencentyun.com/library-mirror:-library}/node:alpine} \
     "$@"

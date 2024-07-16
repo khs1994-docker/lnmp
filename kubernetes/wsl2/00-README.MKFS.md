@@ -3,6 +3,7 @@
 如果硬盘不存在 `ext4` 分区，先在 Windows 磁盘管理中分出一个未分配卷（可以从一个分区中压缩出一个，然后在未分配卷中点击右键选择[新建简单卷]，选择 [不要格式化这个卷]）。然后挂载整块硬盘到 `WSL2`。
 
 ```bash
+$ wmic diskdrive list brief
 # 请将 PHYSICALDRIVE<N> 替换为具体的值
 $ wsl --mount \\.\PHYSICALDRIVE1 --bare
 ```

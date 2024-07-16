@@ -4,6 +4,6 @@ scripts:
   platform-reqs: if($env:lwpm_os -eq 'linux'){echo $false}
   install: Start-Process -FilePath $filename -wait
 url: https://github.com/balena-io/etcher/releases/download/v${VERSION}/balenaEtcher-$(if($env:lwpm_os -eq 'windows'){echo Setup-${VERSION}.exe}else{echo ${VERSION.dmg}})
-url-mirror: https://download.fastgit.org/balena-io/etcher/releases/download/v${VERSION}/balenaEtcher-$(if($env:lwpm_os -eq 'windows'){echo Setup-${VERSION}.exe}else{echo ${VERSION.dmg}})
+url-mirror: https://${env:GITHUB_MIRROR}/balena-io/etcher/releases/download/v${VERSION}/balenaEtcher-$(if($env:lwpm_os -eq 'windows'){echo Setup-${VERSION}.exe}else{echo ${VERSION.dmg}})
 version: 1.18.4
 github: balena-io/etcher

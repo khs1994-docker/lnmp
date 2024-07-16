@@ -6,7 +6,6 @@ branches:
   # - windows
   - /^master$/
   - master
-  - "20.10"
   # - /v*/
 
 # skip_non_tags: true

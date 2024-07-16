@@ -66,9 +66,6 @@ $ wsl -d wsl-k8s -- apt install -y procps bash-completion iproute2 jq curl vim f
 $ wsl -d wsl-k8s -- apt install -y systemd dbus dbus-user-session udev
 ```
 
-bsd-mailx cron-daemon-common exim4-base exim4-config exim4-daemon-light laptop-detect libevent-2.1-7 libfribidi0 libgnutls-dane0 libidn12 liblockfile-bin liblockfile1
-  libunbound8
-
 ### 复制配置文件
 
 ```powershell
@@ -188,12 +185,14 @@ $env:CFSSL_ROOTFS="/wsl/wsl-k8s-data/cfssl/rootfs"
 
 $ wsl -d wsl-k8s -- sh -xc 'mkdir ${CFSSL_ROOT:?err}'
 $ . ../windows/sdk/dockerhub/rootfs
-# 该命令执行结果最后一行会给出<文件地址>
-$ rootfs khs1994-docker/khs1994/k8s-cfssl -ref all-in-one -registry pcit-docker.pkg.coding.net
-$ cp <文件地址> \\wsl$\wsl-k8s\"${env:CFSSL_ROOTFS}".tar.gz
+$ foreach($item in 0,1,2,3,4){ `
+      $tar_gz_file=rootfs khs1994-docker/khs1994/k8s-cfssl `
+          -ref latest -registry pcit-docker.pkg.coding.net -layersIndex $item ; `
+       cp $tar_gz_file \\wsl$\wsl-k8s\"${env:CFSSL_ROOTFS}${item}".tar.gz
+  }
 
 $ wsl -d wsl-k8s -- sh -xc 'mkdir ${CFSSL_ROOTFS:?err}'
-$ wsl -d wsl-k8s -- sh -xc 'tar -C ${CFSSL_ROOTFS:?err} -zxvf ${CFSSL_ROOTFS:?err}.tar.gz'
+$ wsl -d wsl-k8s -- sh -xc 'for tar in ${CFSSL_ROOT:?err}/*.tar.gz ; do tar -C ${CFSSL_ROOTFS:?err} -zxvf \$tar;done'
 
 $ wsl -d wsl-k8s -- sh -xc 'cp wsl2/cfssl/config.json ${CFSSL_ROOT:?err}/'
 $ wsl -d wsl-k8s -- bash -xc 'cp wsl2/{.env,.env.example} cfssl/{docker-entrypoint.sh,kube-scheduler.config.yaml} ${CFSSL_ROOTFS:?err}/'
@@ -212,8 +211,8 @@ $ wsl -d wsl-k8s -- sh -xc 'cp ${K8S_ROOT:?err}/etc/kubernetes/pki/*.yaml       
 $ wsl -d wsl-k8s -- sh -xc 'cp ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kubernetes'
 
 $ $env:WSLENV="K8S_ROOT/u:KUBERNETES_VERSION"
-# 请将 1.27.0 替换为实际的 k8s 版本号
-$ $env:KUBERNETES_VERSION='1.27.0'
+# 请将 1.30.0 替换为实际的 k8s 版本号
+$ $env:KUBERNETES_VERSION='1.30.0'
 $ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v${KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin'
 ```
 

@@ -41,7 +41,7 @@ services:
     command: php-fpm -R -F
     # command: php-fpm -F
     environment:
-      - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v20.10} PHP_EOL VERSION
+      - LNMP_VERSION=${LNMP_VERSION:-v23.11} PHP_EOL VERSION
       - APP_ENV=${APP_ENV:-development}
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}

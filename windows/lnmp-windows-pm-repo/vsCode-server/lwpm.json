@@ -1,0 +1,40 @@
+{
+  "architecture": "amd64",
+  "bug": "",
+  "command": "",
+  "description": "",
+  "download-filename": "",
+  "github": "",
+  "homepage": "",
+  "name": "vscode-server",
+  "os": "windows",
+  "path": [
+    "C:\\bin"
+  ],
+  "pre-url": "",
+  "pre-url-mirror": "",
+  "pre-version": "",
+  "releases": "",
+  "scripts": {
+    "get-version": "$VERSION=$((code --version).split(' ')[1])\n",
+    "install": [
+      "_unzip $filename $HOME/.vscode-server/bin/",
+      "mv $HOME/.vscode-server/bin/vscode-server-win32-x64 $HOME/.vscode-server/bin/${VERSION}"
+    ],
+    "postinstall": "",
+    "posttest": "",
+    "postuninstall": "",
+    "preinstall": [
+      "_cleanup $HOME/.vscode-server/bin/vscode-server-win32-x64"
+    ],
+    "pretest": "",
+    "preuninstall": "",
+    "pruneuninstall": "",
+    "test": "",
+    "uninstall": "_cleanup $HOME/.vscode-server/bin/${VERSION}",
+    "version": ""
+  },
+  "url": "https://vscode.download.prss.microsoft.com/dbazure/download/stable/${VERSION}/vscode-server-win32-x64.zip",
+  "url-mirror": "",
+  "version": ""
+}

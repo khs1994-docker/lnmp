@@ -54,12 +54,3 @@ $ Invoke-WSLK8S systemctl status kubelet@cri-containerd
 # 你也可以执行其他命令供调试
 # $ Invoke-WSLK8S CMD
 ```
-
-## 禁用 systemd
-
-```powershell
-$ New-Item \\wsl$\wsl-k8s\non-systemd
-
-# 启用 systemd
-# $ Remove-Item \\wsl$\wsl-k8s\non-systemd
-```

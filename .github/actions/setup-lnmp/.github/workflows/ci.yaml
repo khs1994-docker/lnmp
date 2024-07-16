@@ -10,7 +10,7 @@ jobs:
       matrix:
         lnmp_branch:
           - 19.03
-          - "20.10"
+          - "23.11"
           - master
     runs-on: ubuntu-latest
     steps:

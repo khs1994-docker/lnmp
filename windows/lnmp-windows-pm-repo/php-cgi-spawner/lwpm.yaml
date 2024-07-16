@@ -7,7 +7,7 @@ bug: ""
 github: deemru/php-cgi-spawner
 releases: ""
 url: "https://github.com/deemru/php-cgi-spawner/releases/download/${VERSION}/php-cgi-spawner.exe"
-url-mirror: "https://download.fastgit.org/deemru/php-cgi-spawner/releases/download/${VERSION}/php-cgi-spawner.exe"
+url-mirror: "https://${env:GITHUB_MIRROR}/deemru/php-cgi-spawner/releases/download/${VERSION}/php-cgi-spawner.exe"
 pre-url: ""
 pre-url-mirror: ""
 command: ""

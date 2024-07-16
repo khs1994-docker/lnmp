@@ -1,7 +1,7 @@
 name: php-xdebug
 description: ""
-version: "3.2.0"
-pre-version: "3.2.0"
+version: "3.3.1"
+pre-version: "3.3.1"
 homepage: ""
 bug: ""
 github: xdebug/xdebug
@@ -34,7 +34,7 @@ scripts:
     }
 
     $GITHUB_DOWNLOAD_URL='github.com'
-    $GITHUB_DOWNLOAD_URL='download.fastgit.org'
+    $GITHUB_DOWNLOAD_URL='${env:GITHUB_MIRROR}'
     $PHP_EXT=${lwpm}.name.replace('php-','')
 
     if (Test-Path $HOME/github/pickle/bin/pickle){

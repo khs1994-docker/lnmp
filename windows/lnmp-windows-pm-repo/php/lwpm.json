@@ -10,7 +10,7 @@
     "C:\\php",
     "C:\\php-pre"
   ],
-  "pre-version": "8.2.3",
+  "pre-version": "8.3.0",
   "releases": "https://www.php.net/downloads.php",
   "scripts": {
     "get-version": "if(!($VERSION)){\n$VERSION=$stable_version\n}\nif($isPre){\n$VC_VERSION=\"nts-Win32-vs16\"\n$VERSION=$pre_version\n$url=\"https://windows.php.net/downloads/qa/php-${VERSION}-${VC_VERSION}-x64.zip\"\n$url_mirror=\"https://windows.php.net/downloads/qa/archives/php-${VERSION}-${VC_VERSION}-x64.zip\"\n$unzipDesc=\"php-pre\"\n$global:PHP_PREFIX=\"C:\\php-pre\"\n}else{\n$VC_VERSION=\"nts-Win32-vs16\"\n$url=\"https://windows.php.net/downloads/releases/php-${VERSION}-${VC_VERSION}-x64.zip\"\n$url_mirror=\"https://windows.php.net/downloads/releases/archives/php-${VERSION}-${VC_VERSION}-x64.zip\"\n$unzipDesc=\"php\"\n$global:PHP_PREFIX=\"C:\\php\"\n}",
@@ -22,9 +22,15 @@
     "preinstall": [
       "# https://docs.microsoft.com/zh-cn/cpp/windows/redistributing-visual-cpp-files?view=msvc-170#install-the-redistributable-packages\n# check vclib installed\nif(!(Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\X64')){\n  PrintError 'Please install vclib first, exec $ lpm install vclib'\n\n  exit 1\n}\n\nif((Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\X64').Installed -ne 1){\n  PrintError 'Please install vclib first, exec $ lpm install vclib'\n\n  exit 1\n}\n\nprintInfo 'vclib already installed, continue ...'\n"
     ],
+    "service": [
+      "C:/php/php-cgi-spawner.exe",
+      "c:/php/php-cgi.exe",
+      "9000",
+      "4+16"
+    ],
     "test": "& ${PHP_PREFIX}/php -v\n",
     "uninstall": "if($isPre -eq 1){_cleanup \"C:\\php-pre\"}else{_cleanup \"C:\\php\"}\n",
     "version": "(php -v).split(\" \")[1]"
   },
-  "version": "8.2.3"
+  "version": "8.3.0"
 }

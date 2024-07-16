@@ -1,7 +1,7 @@
 name: runsc
 version: nightly
 url: "https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz"
-url-mirror: https://download.fastgit.org/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz
+url-mirror: https://${env:GITHUB_MIRROR}/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz
 scripts:
   platform-reqs: if(!$IsLinux){echo $False}
   dist: |

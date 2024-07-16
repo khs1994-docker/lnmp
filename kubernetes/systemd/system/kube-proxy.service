@@ -34,7 +34,6 @@ cat ${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml.temp \
 
 ExecStart=/opt/k8s/bin/kube-proxy \
 --config=${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml \
---logging-format=json \
 --v=2
 
 Restart=on-failure

@@ -8,7 +8,7 @@
   "github": "PowerShell/PowerShell",
   "releases": "https://github.com/PowerShell/PowerShell/releases",
   "url": "https://github.com/PowerShell/PowerShell/releases/download/v${VERSION}/PowerShell-${VERSION}-$(if($IsWindows){echo win}else{echo osx})-x64.$(if($IsWindows){echo msi}else{echo pkg})",
-  "url-mirror": "https://download.fastgit.org/PowerShell/PowerShell/releases/download/v${VERSION}/PowerShell-${VERSION}-$(if($IsWindows){echo win}else{echo osx})-x64.$(if($IsWindows){echo msi}else{echo pkg})",
+  "url-mirror": "https://${env:GITHUB_MIRROR}/PowerShell/PowerShell/releases/download/v${VERSION}/PowerShell-${VERSION}-$(if($IsWindows){echo win}else{echo osx})-x64.$(if($IsWindows){echo msi}else{echo pkg})",
   "command": "pwsh",
   "scripts": {
     "platform-reqs": [

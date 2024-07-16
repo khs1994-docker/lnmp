@@ -97,8 +97,9 @@ $ cd ~/lnmp/bin
 $ $env:WSLENV="LNMP_BIN_WIN_PATH/p"
 $ $env:LNMP_BIN_WIN_PATH=$PWD
 
-$ wsl -d <WSL名称> -- sh -c 'echo $LNMP_BIN_WIN_PATH'
-# 将结果追加到 WSL2 中的 PATH 环境变量中
+$ wsl -d <WSL名称> -- sh -c 'echo PATH=\\\$PATH:$LNMP_BIN_WIN_PATH >> ~/.bashrc; tail ~/.bashrc'
+
+# $ sudo usermod -aG docker $USER
 ```
 
 **以上步骤仅需执行一次，后续开发从以下步骤开始**

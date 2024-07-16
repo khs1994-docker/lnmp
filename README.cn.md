@@ -57,7 +57,7 @@
 
 :one: [Git](https://mirrors.huaweicloud.com/git-for-windows/)
 
-:two: [Docker](https://github.com/yeasy/docker_practice/tree/master/install) 20.10 Stable +
+:two: [Docker](https://github.com/yeasy/docker_practice/tree/master/install) 23.11 Stable +
 
 :three: [Docker Compose v2.17.0+](https://github.com/yeasy/docker_practice/blob/master/compose/install.md)
 
@@ -94,7 +94,7 @@ $ ./lnmp-docker up
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v20.10 x86_64 With Pull Docker Image
+Welcome use khs1994-docker/lnmp v23.11 x86_64 With Pull Docker Image
 
 development
 
@@ -201,14 +201,14 @@ $ ./lnmp-docker down
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:3.0.0`            | **3.0.0**           |`alpine:3.16`    |
-|[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.23.3-alpine`           | **1.23.3**          |`alpine:3.13`    |
-|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.2.3-unit-alpine`| **1.28.0**          |`alpine:3.16`    |
+|[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.25.3-alpine`           | **1.25.3**          |`alpine:3.13`    |
+|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.3.0-unit-alpine`| **1.30.0**          |`alpine:3.16`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.53-alpine`           | **2.4.53**          |`alpine:3.16`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.33`                  | **8.0.33**          |`oraclelinux:8-slim`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.8.3`                | **10.8.3**          |`ubuntu:jammy`  |
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.11.5`                | **10.11.5**          |`ubuntu:jammy`  |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:7.0.0-alpine`            | **7.0.0**           |`alpine:3.16`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.2.3-fpm-alpine`     | **8.2.3**      |`alpine:3.16`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.2.3-composer-alpine`| **2.5.5**     |`alpine:3.16`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.3.0-fpm-alpine`     | **8.3.0**      |`alpine:3.19`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.3.0-composer-alpine`| **2.5.8**     |`alpine:3.19`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.15-alpine`           | **1.6.15**       |`alpine:3.16`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.9.0-management-alpine` | **3.9.0**       |`alpine:3.13`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:14.0-alpine`             | **14.0**        |`alpine:3.14`    |
@@ -288,9 +288,3 @@ https://docs.lnmp.khs1994.com
 ## 赞助项目
 
 请访问 [https://zan.khs1994.com](https://zan.khs1994.com)
-
-## 数据收集
-
-本项目每日默认会将用户的系统和 IP 信息发送到数据收集服务器。建议用户保持开启状态来帮助提升本项目。
-
-你可以通过在 `.env` 文件中设置 `DATA_COLLECTION=false` 来禁用数据收集服务。

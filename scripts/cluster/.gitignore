@@ -6,3 +6,5 @@
 !mysql
 !docker-cluster.*
 !help.sh
+!cluster
+!cluster.ps1

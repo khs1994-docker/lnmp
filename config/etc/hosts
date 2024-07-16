@@ -2,10 +2,24 @@
 
 140.82.114.6     api.github.com
 151.101.129.69   cdn.sstatic.net
-52.216.185.147   github-cloud.s3.amazonaws.com
-52.217.16.124    github-production-release-asset-2e65be.s3.amazonaws.com
 199.232.69.194   github.global.ssl.fastly.net
+# https://api.github.com/meta
 # 140.82.114.3
+# 20.205.243.166
+# 192.30.252.0
+# 185.199.108.0
+# 140.82.112.0
+# 143.55.64.0
+# 2a0a:a440::
+# 2606:50c0::
+# 20.201.28.151
+# 20.87.225.212
+# 20.248.137.48
+# 20.207.73.82
+# 20.27.177.113
+# 20.200.245.247
+# 20.175.192.147
+# 20.233.83.145
 140.82.112.4     github.com gist.github.com
 199.232.68.133   avatars1.githubusercontent.com avatars2.githubusercontent.com
 199.232.68.133   avatars0.githubusercontent.com avatars3.githubusercontent.com
@@ -14,7 +28,7 @@
 216.58.199.16    storage.googleapis.com
 140.82.112.10    codeload.github.com
 199.232.68.133   raw.githubusercontent.com
-
+185.199.109.133   objects.githubusercontent.com
 172.217.174.209   proxy.golang.org
 
 140.82.114.34     pkg.github.com

@@ -10,7 +10,7 @@ on:
     tags:
       - '*'
     branches:
-      - "20.10"
+      - "23.11"
   workflow_dispatch:
 
 name: Build Docs

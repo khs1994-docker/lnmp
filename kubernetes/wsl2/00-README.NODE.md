@@ -44,8 +44,8 @@ $ ./wsl2/bin/kube-check
 
 $ $env:WSLENV="K8S_ROOT/u:KUBERNETES_VERSION"
 $ $env:K8S_ROOT="/wsl/wsl-k8s-data/k8s"
-# 请将 1.27.0 替换为实际的 k8s 版本号
-$ $env:KUBERNETES_VERSION='1.27.0'
+# 请将 1.30.0 替换为实际的 k8s 版本号
+$ $env:KUBERNETES_VERSION='1.30.0'
 
 $ wsl -d wsl-k8s -- sh -xc 'mkdir -p ${K8S_ROOT:?err}/bin'
 $ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v${KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin'
@@ -75,21 +75,7 @@ $ wsl -d wsl-k8s -- sh -xc 'debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --ski
 
 ## kubectl
 
-在 `WSL2` 中执行
-
-```bash
-$ wsl -d wsl-k8s
-
-$ kubectl
-```
-
-在 `Windows` 中执行
-
-```powershell
-$ ./wsl2/bin/kubectl-config-set-cluster
-
-$ kubectl
-```
+请查看 [04-README.kubectl.md](04-README.kubectl.md)
 
 ## crictl
 

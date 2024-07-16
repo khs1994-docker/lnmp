@@ -158,7 +158,7 @@ services:
     # command: php-fpm -R -F
     # command: php-fpm -F
     environment:
-      - &lnmp_docker_version LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v20.10} x86_64 With Pull Docker Image
+      - &lnmp_version LNMP_VERSION=${LNMP_VERSION:-v23.11} x86_64 With Pull Docker Image
       - APP_ENV=${APP_ENV:-development}
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
@@ -169,7 +169,7 @@ services:
   php8:
     &php8
     << : [*common,*common-labels]
-    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.2.3}-fpm-alpine"
+    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.3.0}-fpm-alpine"
     volumes:
       - *bind_app
       # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
@@ -209,7 +209,7 @@ services:
     # command: php-fpm -R -F
     # command: php-fpm -F
     environment:
-      - *lnmp_docker_version
+      - *lnmp_version
       - APP_ENV=${APP_ENV:-development}
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
@@ -220,7 +220,7 @@ services:
   composer:
     << : [*common,*common-labels]
     restart: "no"
-    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.2.3}-composer-alpine"
+    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.3.0}-composer-alpine"
     volumes:
       - *bind_app
       # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
@@ -265,7 +265,7 @@ services:
 
   nginx:
     << : [*common,*common-labels]
-    image: "${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.23.3}-alpine"
+    image: "${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.25.3}-alpine"
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/udp"
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/tcp"

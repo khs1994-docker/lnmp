@@ -4,19 +4,6 @@
 
 > 可以尝试自定义 [hosts](https://github.com/khs1994-docker/lnmp/blob/master/config/etc/hosts)
 
-* https://doc.fastgit.org/en-gb/guide.html#the-usage-of-web
-
-```bash
-#           https://github.com/author/repo
-$ git clone https://hub.fastgit.org/author/repo
-
-#      https://github.com/A/A/releases/download/1.0/1.0.tar.gz
-$ wget https://download.fastgit.org/A/A/releases/download/1.0/1.0.tar.gz
-
-# https://raw.githubusercontent.com/
-# https://raw.fastgit.org/
-```
-
 * 官方默认的 `apt` 镜像
 
 * `pecl`

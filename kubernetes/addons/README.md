@@ -2,11 +2,11 @@
 
 * EFK
 
-* metrics-server `0.6.0`
+* metrics-server `0.6.3`
 
 * CoreDNS `1.10.1`
 
-* Dashboard `2.6.0`
+* Dashboard `2.7.0`
 
 * Istio `1.10.0`
 

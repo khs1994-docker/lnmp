@@ -8,9 +8,9 @@
   "github": "cli/cli",
   "releases": "https://github.com/cli/cli/releases",
   "url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
-  "url-mirror": "https://download.fastgit.org/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
+  "url-mirror": "https://${env:GITHUB_MIRROR}/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
   "pre-url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
-  "pre-url-mirror": "https://download.fastgit.org/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
+  "pre-url-mirror": "https://${env:GITHUB_MIRROR}/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
   "command": "gh",
   "scripts": {
     "preinstall": "",

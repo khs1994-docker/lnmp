@@ -1,0 +1,41 @@
+{
+  "architecture": "amd64",
+  "bug": "",
+  "command": "sshd",
+  "description": "",
+  "download-filename": "OpenSSH-Win64.zip",
+  "github": "PowerShell/Win32-OpenSSH",
+  "homepage": "",
+  "name": "ssh",
+  "os": "windows",
+  "path": [
+    "$env:ProgramFiles\\OpenSSH-Win64"
+  ],
+  "pre-url": "https://github.com/PowerShell/Win32-OpenSSH/releases/download/v${VERSION}/OpenSSH-Win64.zip",
+  "pre-url-mirror": "",
+  "pre-version": "9.5.0.0p1-Beta",
+  "releases": "",
+  "scripts": {
+    "install": [
+      "_unzip $filename $env:ProgramFiles",
+      "cd $env:ProgramFiles\\OpenSSH-Win64 ; powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1",
+      "Get-Service ssh-agent | Set-Service -StartupType Automatic",
+      "net start ssh-agent"
+    ],
+    "postinstall": "",
+    "posttest": "",
+    "postuninstall": "",
+    "preinstall": [
+      "_cleanup $env:ProgramFiles\\OpenSSH-Win64"
+    ],
+    "pretest": "",
+    "preuninstall": "",
+    "pruneuninstall": "",
+    "test": "",
+    "uninstall": "cd $env:ProgramFiles\\OpenSSH-Win64 ; powershell.exe -ExecutionPolicy Bypass -File uninstall-sshd.ps1",
+    "version": ""
+  },
+  "url": "https://github.com/PowerShell/Win32-OpenSSH/releases/download/v${VERSION}/OpenSSH-Win64.zip",
+  "url-mirror": "",
+  "version": "9.5.0.0p1-Beta"
+}

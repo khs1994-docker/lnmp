@@ -1,0 +1,67 @@
+name: mariadb
+description: 'MariaDB server is a community developed fork of MySQL server. '
+version: "10.11.5"
+pre-version: "10.11.5"
+homepage: "https://mariadb.org/"
+bug: ""
+github: "MariaDB/server"
+url: "https://mirrors.aliyun.com/mariadb/mariadb-${VERSION}/winx64-packages/mariadb-${VERSION}-winx64.zip"
+url-mirror: "https://mirrors4.tuna.tsinghua.edu.cn/mariadb/mariadb-${VERSION}/winx64-packages/mariadb-${VERSION}-winx64.zip"
+download-filename: mariadb-${VERSION}-winx64.zip
+scripts:
+  postinstall: |
+    if(!(Test-Path C:\mariadb\data)){
+    Write-Host "MariaDB is init ..."
+
+    C:\mariadb\bin\mariadb-install-db.exe --port 3307 -D -R -proot
+
+    # 安装服务
+
+    _sudo C:\mariadb\bin\mariadbd --install mariadb
+
+    # 禁止开机启动
+
+    _sudo set-service mariadb -StartupType Manual
+    }
+
+    Write-host "
+
+    Please exec command start(or init) mariadb
+
+    $ net start mariadb
+
+    $ C:\mariadb\bin\mariadb.exe -uroot -proot
+    "
+  install: |
+    _cleanup mariadb
+    _unzip $filename mariadb
+
+    _mkdir C:\mariadb
+    Copy-item -r -force "mariadb\mariadb-${VERSION}-winx64\*" "C:\mariadb\"
+
+    _cleanup mariadb
+  test: printInfo mariadb (C:\mariadb\bin\mariadb --version).split(' ')[5].split('-')[0] install success
+  uninstall: |
+    _sudo mariadbd --remove
+    _cleanup C:\mariadb
+  version: (mariadb --version).split(" ")[3]
+  platform-reqs: if(!$IsWindows){echo $False}
+  preinstall:
+    - |
+      # https://docs.microsoft.com/zh-cn/cpp/windows/redistributing-visual-cpp-files?view=msvc-170#install-the-redistributable-packages
+      # check vclib installed
+      if(!(Test-Path 'HKLM:\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\X64')){
+        PrintError 'Please install vclib first, exec $ lpm install vclib'
+
+        exit 1
+      }
+
+      if((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\X64').Installed -ne 1){
+        PrintError 'Please install vclib first, exec $ lpm install vclib'
+
+        exit 1
+      }
+
+      printInfo 'vclib already installed, continue ...'
+path: ["C:\\mariadb\\bin"]
+command: mariadb

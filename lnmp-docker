@@ -124,7 +124,7 @@ _cp_only_not_exists config/registry/config.example.yml config/registry/config.ym
 
 help(){
   echo  -e "
-Docker-LNMP CLI ${LNMP_DOCKER_VERSION}
+Docker-LNMP CLI ${LNMP_VERSION}
 
 Official WebSite https://lnmp.khs1994.com
 
@@ -189,9 +189,6 @@ Container Tools:
   SERVICE-container-id Display SERVICE container id
   SERVICE-logs         Print LNMP containers logs (journald) [-f | ]
 
-ClusterKit:
-  clusterkit-help      Print ClusterKit help info
-
 Developer Tools:
   test                 Test LNMP
   pwsh                 Print pwsh docs url
@@ -205,25 +202,6 @@ Donate https://zan.khs1994.com
 
 "
 }
-
-_tongji(){
-  if ! [ -f log/tongji.txt ];then
-    print_info "Send OS type and IP data to khs1994-docker/lnmp, Thanks you help us improve"
-    if [ -f /etc/os-release ];then . /etc/os-release ; fi
-    curl -s -X GET --user-agent "${OS:-unkown os}-${ID:-unknow id}-${VERSION:-unkown version}" https://developer.khs1994.com/lnmp/tongji --connect-timeout 5 > /dev/null || echo 'ERROR=true' > log/tongji.txt
-    TIMESTAMP=`date +%s`
-    echo "TIMESTAMP=${TIMESTAMP}" > log/tongji.txt
-  else
-    . ./log/tongji.txt
-
-    if [ `date +%s` -gt $((TIMESTAMP + 86400)) ];then
-      rm -rf log/tongji.txt
-      _tongji
-    fi
-  fi
-}
-
-test -f cluster/help.sh && source cluster/help.sh || true
 
 # composer satis
 _satis(){
@@ -610,7 +588,7 @@ server {
 }
 
 server{
-  listen                     443 ssl http2;
+  listen                     443 ssl;
   server_name                $1;
   root                       ${LNMP_PHP_PATH:-/app}/$2;
   index                      index.html index.htm index.php;
@@ -782,39 +760,6 @@ bash_cli(){
   shift
   # avoid systemd error the input device is not a TTY
   docker exec -i ${tty} $container_id $@ || docker exec -i $container_id $@
-  exit $?
-}
-
-get_clusterkit_service_container_id(){
-  local ENV_NAME=$1
-  local SERVICE_NAME=$2
-
-  container_id=`docker container ls \
-      --format "{{.ID}}" \
-      --filter \
-      label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-      --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$ENV_NAME \
-      --filter label=com.docker.compose.service=$SERVICE_NAME -n 1`
-
-  if [ -z "$container_id" ];then
-    container_id=`docker container ls \
-        --format "{{.ID}}" \
-        --filter \
-        label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$ENV_NAME \
-        --filter label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$SERVICE_NAME -n 1`
-  fi
-
-  if [ -z "$container_id" ];then print_error "This Service No Container Running"; exit; fi
-}
-
-clusterkit_bash_cli(){
-  local ENV_NAME=$1
-  local SERVICE_NAME=$2
-  get_clusterkit_service_container_id $ENV_NAME $SERVICE_NAME
-  shift 2
-  docker exec -i ${tty} $container_id $@ || docker exec -i $container_id $@
-
   exit $?
 }
 
@@ -1293,15 +1238,11 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   version )
-    echo Docker-LNMP ${LNMP_DOCKER_VERSION}
+    echo Docker-LNMP ${LNMP_VERSION}
     ;;
 
   -h | --help | help )
     help
-    ;;
-
-  clusterkit-help )
-    clusterkit_help
     ;;
 
   restart )
@@ -1344,174 +1285,6 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
      khs1994/docker-proxy
    ;;
 
-  clusterkit )
-     _get_compose_options "docker-lnmp.yml" \
-                          "docker-lnmp.override.yml" \
-                          "cluster/docker-cluster.mysql.yml" \
-                          "cluster/docker-cluster.redis.yml"
-     exec docker compose $options up "$@"
-     ;;
-
-  clusterkit-mysql-up )
-     docker compose --project-directory=$PWD -f cluster/docker-cluster.mysql.yml up "$@"
-     ;;
-
-  clusterkit-mysql-down )
-     docker compose --project-directory=$PWD -f cluster/docker-cluster.mysql.yml down "$@"
-     ;;
-
-  clusterkit-mysql-exec )
-
-  if [ "$#" -lt 2 ];then
-     print_error '$ ./lnmp-docker clusterkit-mysql-exec {master|node-N} {COMMAND}' ; exit 1
-  fi
-
-     NODE=$1
-     shift
-     COMMAND=$@
-
-       clusterkit_bash_cli clusterkit_mysql mysql_$NODE ${COMMAND:-bash}
-     ;;
-
-  clusterkit-mysql-deploy )
-    cp cluster/docker-cluster.mysql.yml docker-cluster.mysql.yml
-    docker stack deploy -c docker-cluster.mysql.yml mysql_cluster
-    ;;
-
-  clusterkit-mysql-remove )
-    docker stack rm mysql_cluster
-    ;;
-
-  clusterkit-memcached-up )
-    docker compose --project-directory=$PWD -f cluster/docker-cluster.memcached.yml up "$@"
-    ;;
-
-  clusterkit-memcached-down )
-    docker compose --project-directory=$PWD -f cluster/docker-cluster.memcached.yml down "$@"
-    ;;
-
-  clusterkit-memcached-exec )
-    if [ "$#" -lt 2 ];then
-      print_error '$ ./lnmp-docker clusterkit-memcached-exec {N} {COMMAND}' ; exit 1
-    fi
-
-    NODE=$1
-    shift
-    COMMAND=$@
-
-    clusterkit_bash_cli clusterkit_memcached memcached-$NODE ${COMMAND:-bash}
-    ;;
-
-  clusterkit-memcached-deploy )
-    cp cluster/docker-cluster.memcached.yml docker-cluster.memcached.yml
-    docker stack deploy -c docker-cluster.memcached.yml memcached_cluster
-    ;;
-
-  clusterkit-memcached-remove )
-    docker stack rm memcached_cluster
-    ;;
-
-  clusterkit-redis-up )
-    if [ -z "$CLUSTERKIT_REDIS_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
-    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.yml up "$@"
-    ;;
-
-  clusterkit-redis-down )
-    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.yml down "$@"
-    ;;
-
-  clusterkit-redis-exec )
-    if [ "$#" -lt 2 ];then
-      print_error '$ ./lnmp-docker clusterkit-redis-exec {master-N|slave-N} {COMMAND}' ; exit 1
-    fi
-    NODE=$1
-    shift
-    COMMAND=$@
-
-    clusterkit_bash_cli clusterkit_redis redis_$NODE ${COMMAND:-bash}
-    ;;
-
-  clusterkit-redis-deploy )
-    cp cluster/docker-cluster.redis.yml docker-cluster.redis.yml
-    docker stack deploy -c docker-cluster.redis.yml redis_cluster
-    ;;
-
-  clusterkit-redis-remove )
-    docker stack rm redis_cluster
-    ;;
-
-  clusterkit-redis-replication-up )
-    if [ -z "$CLUSTERKIT_REDIS_M_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_M_S_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
-    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.replication.yml up "$@"
-    ;;
-
-  clusterkit-redis-replication-down )
-    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.replication.yml down "$@"
-    ;;
-
-  clusterkit-redis-replication-exec )
-    if [ "$#" -lt 2 ];then \
-      print_error \
-      '$ ./lnmp-docker clusterkit-redis-replication-exec {master | slave-N} {COMMAND}' ; exit 1 ; fi
-
-      NODE="$1"
-      shift
-      COMMAND="$@"
-      clusterkit_bash_cli clusterkit_redis_replication redis_m_s_$NODE ${COMMAND:-bash}
-    ;;
-
-  clusterkit-redis-replication-deploy )
-    cp cluster/docker-cluster.redis.replication.yml docker-cluster.redis.replication.yml
-    docker stack deploy -c docker-cluster.redis.replication.yml redis_m_s_cluster
-    ;;
-
-  clusterkit-redis-replication-remove )
-    docker stack rm redis_m_s_cluster
-    ;;
-
-  clusterkit-redis-sentinel-up )
-    if [ -z "$CLUSTERKIT_REDIS_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_S_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
-    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.sentinel.yml up "$@"
-    ;;
-
-  clusterkit-redis-sentinel-down )
-    docker compose --project-directory=$PWD -f cluster/docker-cluster.redis.sentinel.yml down "$@"
-    ;;
-
-  clusterkit-redis-sentinel-exec )
-    if [ "$#" -lt 2 ];then \
-      print_error \
-      '$ ./lnmp-docker clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}' ; exit 1 ; fi
-
-      NODE=$1
-      shift
-      COMMAND=$@
-      clusterkit_bash_cli clusterkit_redis_sentinel redis_sentinel_$NODE ${COMMAND:-bash}
-    ;;
-
-  clusterkit-redis-sentinel-deploy )
-    cp cluster/docker-cluster.redis.sentinel.yml docker-cluster.redis.sentinel.yml
-    docker stack deploy -c docker-cluster.redis.sentinel.yml redis_s_cluster
-    ;;
-
-  clusterkit-redis-sentinel-remove )
-    docker stack rm redis_s_cluster
-    ;;
-
-  clusterkit-* )
-    command=$(echo $command | cut -d '-' -f 2)
-    _get_compose_options "docker-lnmp.yml" \
-                             "docker-lnmp.override.yml" \
-                             "cluster/docker-cluster.mysql.yml" \
-                             "cluster/docker-cluster.redis.yml"
-    exec docker compose $options $command "$@"
-    ;;
-
-  swarm-clusterkit )
-    cp cluster/docker-cluster.mysql.yml docker-cluster.mysql.yml
-    docker stack deploy -c docker-production.yml -c docker-cluster.mysql.yml lnmp
-    ;;
-
   pcit-cp )
     pcit_init
     ;;
@@ -1547,7 +1320,23 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   pwsh )
-    print_info "please open https://docs.microsoft.com/zh-cn/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7.1"
+    command -v pwsh && pwsh || true
+    command -v pwsh && exit || true
+    if [ $OS = 'Darwin' ];then
+      # Download the powershell '.tar.gz' archive
+      curl -L -o $HOME/Downloads/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.3.9/powershell-7.3.9-osx-x64.tar.gz
+      # Create the target folder where powershell is placed
+      sudo mkdir -p /usr/local/microsoft/powershell/7.3.9
+      # Expand powershell to the target folder
+      sudo tar zxf $HOME/Downloads/powershell.tar.gz -C /usr/local/microsoft/powershell/7.3.9
+      # Set execute permissions
+      sudo chmod +x /usr/local/microsoft/powershell/7.3.9/pwsh
+      # Create the symbolic link that points to pwsh
+      sudo ln -s /usr/local/microsoft/powershell/7.3.9/pwsh /usr/local/bin/pwsh
+      exit
+    fi
+
+    print_info "please open https://docs.microsoft.com/zh-cn/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7.3"
     ;;
 
   * )
@@ -1572,7 +1361,7 @@ if [ "$debug" = 'true' -o "$DEBUG" = 'true' ];then set -x; fi
 
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
 # COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
-COMPOSE_LINK=https://download.fastgit.org/docker/compose/releases/download
+COMPOSE_LINK=https://download.fgit.ml/docker/compose/releases/download
 
 # 在加载 .env 文件之前，先检查是否在环境变量中设置了以下变量，若设置，则使用环境变量
 if [ -n "${LNMP_SERVICES}" ];then LNMP_SERVICES_SYSTEM_ENV=$LNMP_SERVICES;fi
@@ -1595,9 +1384,9 @@ fi
 # 写入版本号
 
 if [ ${OS} = "Darwin" ];then
-  /usr/bin/sed -i "" "s/^LNMP_DOCKER_VERSION.*/LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION}/g" $LNMP_ENV_FILE
+  /usr/bin/sed -i "" "s/^LNMP_VERSION.*/LNMP_VERSION=${LNMP_VERSION}/g" $LNMP_ENV_FILE
 else
-  sed -i "s/^LNMP_DOCKER_VERSION.*/LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION}/g" $LNMP_ENV_FILE
+  sed -i "s/^LNMP_VERSION.*/LNMP_VERSION=${LNMP_VERSION}/g" $LNMP_ENV_FILE || true
 fi
 
 print_info "ARCH is ${OS} ${ARCH}"
@@ -1616,9 +1405,6 @@ fi
 set -e
 
 print_info $(docker compose version)
-
-# data collaction
-if ! [ "${DATA_COLLECTION}" = "false" ];then _tongji; fi
 
 # output help
 if [ $# = 0 ];then help; exit 0; fi

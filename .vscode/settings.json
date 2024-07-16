@@ -87,5 +87,10 @@
       "source": "Git Bash"
     }
   },
-  "terminal.integrated.defaultProfile.windows": "PowerShell"
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "files.readonlyInclude": {
+    // ".env.example": true,
+    // ".env.example.ps1": true,
+    // ".env.global": true,
+  }
 }

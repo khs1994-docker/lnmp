@@ -8,7 +8,7 @@
   "github": "facebook/zstd",
   "releases": "",
   "url": "https://github.com/facebook/zstd/releases/download/v${VERSION}/zstd-v${VERSION}-win64.zip",
-  "url-mirror": "https://download.fastgit.org/facebook/zstd/releases/download/v${VERSION}/zstd-v${VERSION}-win64.zip",
+  "url-mirror": "https://${env:GITHUB_MIRROR}/facebook/zstd/releases/download/v${VERSION}/zstd-v${VERSION}-win64.zip",
   "pre-url": "",
   "pre-url-mirror": "",
   "command": "zstd",

@@ -41,7 +41,7 @@ docker run -i ${tty} --rm \
   "
 
 if [ "$LNMP_CN_ENV" = 'false' ];then
-  sed -i 's!https://mirrors.aliyun.com/composer/!https://repo.packagist.org!g' \
+  sudo sed -i 's!https://mirrors.aliyun.com/composer/!https://repo.packagist.org!g' \
   $ScriptRoot/../config/composer/config.json
 fi
 

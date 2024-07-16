@@ -27,6 +27,7 @@ list        List available softs
 outdated    Shows a list of installed packages that have updates available
 info        Shows information about packages
 homepage    Opens the package's repository URL or homepage in your browser
+github      Opens the package's repository URL in your browser
 bug         Opens the package's bug report page in your browser
 releases    Opens the package's releases page in your browser
 help        Print help info
@@ -81,6 +82,8 @@ Import-Module $PSScriptRoot/sdk/dockerhub/utils/Get-SHA.psm1
 # 配置环境变量
 [environment]::SetEnvironmentvariable("DOCKER_BUILDKIT", "1", "User")
 [environment]::SetEnvironmentvariable("APP_ENV", "$APP_ENV", "User")
+
+$env:GITHUB_MIRROR='download.fgit.ml'
 
 if (!$Env:PSModulePathSystem) {
   $Env:PSModulePathSystem = $Env:PSModulePath
@@ -642,8 +645,17 @@ function __homepage($soft) {
   $lwpm = manifest $soft
   if ($lwpm.homepage) {
     start-process $lwpm.homepage
+
+    return
   }
 
+  if ($lwpm.github) {
+    start-process "https://github.com/$($lwpm.github)"
+  }
+}
+
+function __github($soft) {
+  $lwpm = manifest $soft
   if ($lwpm.github) {
     start-process "https://github.com/$($lwpm.github)"
   }
@@ -1056,6 +1068,15 @@ if ($args[0] -eq 'homepage') {
     _exit
   }
   __homepage $args[1]
+  _exit
+}
+
+if ($args[0] -eq 'github') {
+  if ($args[1].length -eq 0) {
+    "Please input soft name"
+    _exit
+  }
+  __github $args[1]
   _exit
 }
 

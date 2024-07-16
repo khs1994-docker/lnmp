@@ -4,8 +4,8 @@ Documentation=https://github.com/kubernetes/kubernetes
 After=network-online.target network.target
 Wants=network-online.target network.target
 
-Requires=kube-reset-kubelet.service
-After=kube-reset-kubelet.service
+# Requires=kube-reset-kubelet.service
+# After=kube-reset-kubelet.service
 
 After=kube-apiserver.service
 

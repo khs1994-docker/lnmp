@@ -16,6 +16,7 @@ source ./.env.example
 source ./.env
 
 TMP_ROOT=$HOME/.khs1994-docker-lnmp/caches
+GITHUB_MIRROR=download.fgit.ml
 
 ################################################################################
 
@@ -462,7 +463,7 @@ _gvisor_install(){
 
   print_info "install gvisor(runsc) ..."
   local url_official="https://github.com/docker-practice/gvisor-mirror/releases/download/nightly"
-  local url="https://download.fastgit.org/docker-practice/gvisor-mirror/releases/download/nightly"
+  local url="https://${GITHUB_MIRROR}/docker-practice/gvisor-mirror/releases/download/nightly"
   local TAR_FILE="runsc-${GOOS}-${GOARCH}.tar.gz"
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
@@ -506,7 +507,7 @@ _runc_install(){
 
   local file_name=runc.${GOARCH}
   local url_official=https://github.com/opencontainers/runc/releases/download/v${RUNC_VERSION}
-  local url=https://download.fastgit.org/opencontainers/runc/releases/download/v${RUNC_VERSION}
+  local url=https://${GITHUB_MIRROR}/opencontainers/runc/releases/download/v${RUNC_VERSION}
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
     url=${CODING_URL}/${file_name}?version=${RUNC_VERSION}
@@ -556,7 +557,7 @@ _crun_install(){
   fi
 
   local file_name=crun-${CRUN_VERSION}-linux-${GOARCH}
-  local url=https://download.fastgit.org/containers/crun/releases/download/${CRUN_VERSION}
+  local url=https://${GITHUB_MIRROR}/containers/crun/releases/download/${CRUN_VERSION}
   local url_official=https://github.com/containers/crun/releases/download/${CRUN_VERSION}
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
@@ -569,7 +570,7 @@ _crun_install(){
   $(_sudo) $(_curl) ${url} -o /usr/bin/crun
 
   file_name=crun-${CRUN_VERSION}-linux-${GOARCH}-disable-systemd
-  url=https://download.fastgit.org/containers/crun/releases/download/${CRUN_VERSION}
+  url=https://${GITHUB_MIRROR}/containers/crun/releases/download/${CRUN_VERSION}
   url_official=https://github.com/containers/crun/releases/download/${CRUN_VERSION}
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
@@ -611,7 +612,7 @@ _containerd_install(){
   print_info "install containerd 1.7 ..."
 
   local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
-  local url="https://download.fastgit.org/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
+  local url="https://${GITHUB_MIRROR}/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
 
   local TAR_FILE="cri-containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
 
@@ -733,7 +734,7 @@ _crictl_install(){
   fi
 
   local url_official="https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
-  local url="https://download.fastgit.org/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
+  local url="https://${GITHUB_MIRROR}/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
   local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-${GOARCH}.tar.gz"
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
@@ -841,7 +842,7 @@ _conmon_install(){
   fi
 
   local url_official=https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
-  local url=https://download.fastgit.org/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
+  local url=https://${GITHUB_MIRROR}/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
 
   if [ $DOWNLOAD_FROM_CODING != "false" ];then
     url=$CODING_URL/conmon.$GOARCH?version=${CONMON_VERSION}
@@ -1300,8 +1301,11 @@ _k8s_install_systemd(){
     #                  > /dev/null
 
     $(_sudo) mkdir -p ${K8S_ROOT}/etc/systemd/system/kube-.service.d
+    $(_sudo) mkdir -p /etc/systemd/system/systemd-journald.service.d
 
     $(_sudo) cp -r kube-.service.d/. ${K8S_ROOT}/etc/systemd/system/kube-.service.d/
+
+    $(_sudo) cp -r systemd-journald.service.d/. /etc/systemd/system/systemd-journald.service.d/
 
     $(_sudo) mkdir -p /etc/systemd/system-environment-generators/
     $(_sudo) cp -r ../system-environment-generators/. /etc/systemd/system-environment-generators/
