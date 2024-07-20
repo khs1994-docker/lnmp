@@ -1,7 +1,7 @@
 name: "nginx"
 description: "small, powerful, scalable web/proxy server"
 version: "1.24.0"
-pre-version: "1.25.3"
+pre-version: "1.27.0"
 homepage: "https://nginx.org"
 bug: "http://nginx.org/en/support.html"
 github: "nginx/nginx"

@@ -168,8 +168,8 @@
     "dest": "library-mirror/nginx:1.24.0-alpine"
   },
   {
-    "source": "library/nginx:1.25.3-alpine",
-    "dest": "library-mirror/nginx:1.25.3-alpine"
+    "source": "library/nginx:1.27.0-alpine",
+    "dest": "library-mirror/nginx:1.27.0-alpine"
   },
   {
     "source": "library/httpd:alpine",
@@ -246,7 +246,7 @@
     "source": "khs1994/tls"
   },
   {
-    "source": "khs1994/kube-nginx:1.25.3"
+    "source": "khs1994/kube-nginx:1.27.0"
   },
   {
     "source": "khs1994/kube-nginx"
@@ -261,7 +261,7 @@
     "source": "khs1994/nginx:alpine"
   },
   {
-    "source": "khs1994/nginx:1.25.3-alpine"
+    "source": "khs1994/nginx:1.27.0-alpine"
   },
   {
     "source": "khs1994/docker-image-sync:latest"

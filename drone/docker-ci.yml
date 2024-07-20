@@ -89,8 +89,8 @@ services:
 
   nginx:
     << : *common
-    # image: khs1994/nginx:${CI_NGINX_VERSION:-1.25.3}-alpine
-    image: nginx:${CI_NGINX_VERSION:-1.25.3}-alpine
+    # image: khs1994/nginx:${CI_NGINX_VERSION:-1.27.0}-alpine
+    image: nginx:${CI_NGINX_VERSION:-1.27.0}-alpine
     networks:
       - frontend
     ports:

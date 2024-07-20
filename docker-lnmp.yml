@@ -265,7 +265,7 @@ services:
 
   nginx:
     << : [*common,*common-labels]
-    image: "${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.25.3}-alpine"
+    image: "${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.27.0}-alpine"
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/udp"
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/tcp"

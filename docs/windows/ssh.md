@@ -18,6 +18,11 @@ Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
 Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
 ```
 
+## 离线安装
+
+* https://learn.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_server_configuration
+* https://github.com/PowerShell/Win32-OpenSSH/wiki/Install-Win32-OpenSSH
+
 ## 启动
 
 ```powershell
