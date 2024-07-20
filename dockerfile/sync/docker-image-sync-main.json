@@ -1,0 +1,64 @@
+[
+  {
+    "source": "not-exists:latest",
+    "dest": "not-exists:latest"
+  },
+  {
+    "source": "node:alpine",
+    "dest": "library-mirror/node:alpine"
+  },
+  {
+    "source": "node:20.5.1-alpine",
+    "dest": "library-mirror/node:20.5.1-alpine"
+  },
+  {
+    "source": "library/alpine:latest",
+    "dest": "library-mirror/alpine:latest"
+  },
+  {
+    "source": "library/mysql:latest",
+    "dest": "library-mirror/mysql:latest"
+  },
+  {
+    "source": "library/mysql:8.0.33",
+    "dest": "library-mirror/mysql:8.0.33"
+  },
+  {
+    "source": "library/mariadb:latest",
+    "dest": "library-mirror/mariadb:latest"
+  },
+  {
+    "source": "library/mariadb:10.11.5",
+    "dest": "library-mirror/mariadb:10.11.5"
+  },
+  {
+    "source": "library/registry:latest",
+    "dest": "library-mirror/registry:latest"
+  },
+  {
+    "source": "library/redis:alpine",
+    "dest": "library-mirror/redis:alpine"
+  },
+  {
+    "source": "library/redis:7.0.0-alpine",
+    "dest": "library-mirror/redis:7.0.0-alpine"
+  },
+  {
+    "source": "library/nginx:alpine",
+    "dest": "library-mirror/nginx:alpine"
+  },
+  {
+    "source": "library/nginx:1.25.3-alpine",
+    "dest": "library-mirror/nginx:1.25.3-alpine"
+  },
+  {
+    "source": "library/phpmyadmin:fpm-alpine",
+    "dest": "library-mirror/phpmyadmin:fpm-alpine"
+  },
+  {
+    "source": "khs1994/acme:3.0.0"
+  },
+  {
+    "source": "khs1994/tls"
+  }
+]
