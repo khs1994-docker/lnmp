@@ -55,7 +55,7 @@ class ExampleCommand extends Command
             // $this->callSilent('email:send', [
             //    'user' => 1, '--queue' => 'default'
             // ]);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $this->error($e->getMessage());
         }
     }
