@@ -2,4 +2,4 @@
 
 services:
   drone:
-    image: drone/drone:2.16.0
+    image: drone/drone:2.24.0
