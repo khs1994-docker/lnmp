@@ -22,7 +22,7 @@ services:
     image: registry.k8s.io/ingress-nginx/controller:v1.7.0
 
   ingress-kong:
-    image: kong/kubernetes-ingress-controller:2.5.0
+    image: kong/kubernetes-ingress-controller:3.2.3
 
   metrics_server:
     image: registry.k8s.io/metrics-server/metrics-server:v0.6.3
