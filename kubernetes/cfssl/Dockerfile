@@ -13,7 +13,7 @@ RUN set -x \
     ; apk add --no-cache cfssl \
     ; apk add --no-cache bash \
     ; apk add --no-cache openssl \
-    ; curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl > /usr/local/bin/kubectl \
+    ; curl -L https://cdn.dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl > /usr/local/bin/kubectl \
     && apk del --no-network curl \
     && chmod +x /usr/local/bin/kubectl
 

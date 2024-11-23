@@ -17,7 +17,7 @@ cd $PSScriptRoot
 
 ################################################################################
 
-$KUBECTL_URL = "https://storage.googleapis.com/kubernetes-release/release"
+$KUBECTL_URL = "https://cdn.dl.k8s.io/release"
 $KUBECTL_URL = "https://mirror.azure.cn/kubernetes/kubectl"
 
 ################################################################################
@@ -84,7 +84,7 @@ if ($args.length -eq 0) {
 }
 
 Function get_kubectl_version() {
-  $url = "https://storage.googleapis.com/kubernetes-release/release/stable.txt"
+  $url = "https://cdn.dl.k8s.io/release/stable.txt"
   $url = "https://mirror.azure.cn/kubernetes/kubectl/stable.txt"
   return $KUBECTL_VERSION = $(curl.exe -fsSL $url)
 }

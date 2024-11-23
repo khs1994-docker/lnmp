@@ -14,7 +14,7 @@ ARG TYPE=server
 # ARG TYPE=client
 # ARG TYPE=node
 
-# https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz
+# https://cdn.dl.k8s.io/release/${KUBERNETES_VERSION}/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz
 
 RUN apk add --no-cache curl \
        && cd / \
