@@ -627,7 +627,7 @@ acme(){
          -v $PWD/config/${LNMP_NGINX_CONF_D:-nginx}/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/acme.sh \
          --env-file $LNMP_ENV_FILE \
-         khs1994/acme:${ACME_VERSION:-latest} acme.sh "$@"
+         ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/acme:${ACME_VERSION:-latest} acme.sh "$@"
 }
 
 ssl(){
@@ -675,7 +675,7 @@ $ ./lnmp-docker acme.sh
          --env-file $LNMP_ENV_FILE \
          -e HTTPD=${HTTPD:-0} \
          -e RSA=${RSA:-0} \
-         khs1994/acme:${ACME_VERSION:-latest} "$command"
+         ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/acme:${ACME_VERSION:-latest} "$command"
 }
 
 ssl_self(){

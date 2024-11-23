@@ -1,8 +1,8 @@
-FROM alpine:3.16
+FROM alpine:3.20
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ENV ACME_SH_VERSION=3.0.0 \
+ENV ACME_SH_VERSION=3.0.2 \
     AUTO_UPGRADE=1 \
     LE_CONFIG_HOME=/acme.sh
 

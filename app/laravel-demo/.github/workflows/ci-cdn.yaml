@@ -169,7 +169,7 @@ jobs:
 
       - name: Connect and Test Rootless
         run: |
-          echo 'LNMP_LARAVEL_TAG=9-rootless' >> $LNMP_PATH/.env
+          echo 'LNMP_LARAVEL_TAG=10-rootless' >> $LNMP_PATH/.env
           lnmp-docker up
 
           sleep 30
