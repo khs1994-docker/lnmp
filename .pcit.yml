@@ -5,7 +5,7 @@ workspace:
 steps:
   bash:
     # latest php version
-    image: khs1994/php:8.3.0-composer-alpine
+    image: khs1994/php:8.3.12-composer-alpine
     run:
       - pwd
       - bash ./lnmp-docker

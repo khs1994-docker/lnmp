@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-FROM --platform=$TARGETPLATFORM alpine:3.19 as php
+FROM --platform=$TARGETPLATFORM alpine:3.20 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

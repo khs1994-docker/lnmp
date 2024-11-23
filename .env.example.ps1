@@ -17,7 +17,7 @@ $CI_HOST="ci.khs1994.com:1218"
 $DistributionName="Ubuntu-22.04"
 
 # latest php version
-$LNMP_PHP_IMAGE="khs1994/php:8.3.0-composer-alpine"
+$LNMP_PHP_IMAGE="khs1994/php:8.3.12-composer-alpine"
 
 $NGINX_PATH="C:/nginx"
 $PHP_PATH="C:/php"
