@@ -240,7 +240,7 @@
     "dest": "dockerpracticesig/docker_practice:us-en"
   },
   {
-    "source": "khs1994/acme:3.0.2"
+    "source": "khs1994/acme:3.1.0"
   },
   {
     "source": "khs1994/tls"
