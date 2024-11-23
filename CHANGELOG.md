@@ -15,5 +15,5 @@
 
 ### Updates:
 
-* [PHP `8.3.0` `8.2.13` `8.1.26`](https://www.php.net/ChangeLog-8.php#8.1.26)
+* [PHP `8.3.0` `8.2.13` `8.1.26`](https://www.php.net/ChangeLog-8.php#PHP_8_3)
 * [nginx `1.27.0`](https://nginx.org/en/CHANGES)
