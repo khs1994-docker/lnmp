@@ -11,7 +11,7 @@
 ### Changes:
 
 * Switch **PHP** to `8.3.0`
-* Kuberentes `v1.30.0`
+* Kuberentes `v1.31.0`
 
 ### Updates:
 

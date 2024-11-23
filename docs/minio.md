@@ -126,7 +126,7 @@ $ composer require league/flysystem-aws-s3-v3
 > https://www.funkypenguin.co.nz/blog/how-to-run-minio-in-fs-mode-again/
 
 ```bash
-# /path-to-existing-data/.minio.sys/
+# /path-to-existing-data/.minio.sys/format.json
 {"version":"1","format":"fs","id":"avoid-going-into-snsd-mode-legacy-is-fine-with-me","fs":{"version":"2"}}
 ```
 

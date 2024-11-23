@@ -32,3 +32,9 @@ $ sudo ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
 # /etc/ssh/sshd_config.d/20-enable-passwords.conf
 PasswordAuthentication yes
 ```
+
+## 映射远程端口到本地
+
+```bash
+$ ssh -f username@remote_host -L 127.0.0.1:8088:127.0.0.1:8080  -N
+````
