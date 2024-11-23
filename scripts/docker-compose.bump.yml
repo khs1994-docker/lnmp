@@ -70,9 +70,3 @@ services:
 
   acme.sh:
     image: neilpang/acme.sh:3.1.0
-
-  powershell:
-    image:
-
-  powershell-preview:
-    image:
