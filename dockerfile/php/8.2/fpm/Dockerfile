@@ -159,8 +159,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
            --strip --cleanup \
 # 默认不启用的扩展
         && pickle install \
-             # xdebug \
-             https://github.com/xdebug/xdebug/archive/master.tar.gz \
+             xdebug \
+             # https://github.com/xdebug/xdebug/archive/master.tar.gz \
 # https://github.com/tideways/php-xhprof-extension.git
              https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
              -n --defaults --strip --cleanup --no-write \
