@@ -48,13 +48,13 @@ services:
     image: node:20.5.1-alpine
 
   go:
-    image: golang:1.20.1-alpine
+    image: golang:1.23.3-alpine
 
   alpine:
-    image: alpine:3.16
+    image: alpine:3.20
 
   python:
-    image: python:3.11.1-alpine
+    image: python:3.13.0-alpine
 
   deno:
     image: denoland/deno:1.31.1

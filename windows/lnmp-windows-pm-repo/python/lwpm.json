@@ -11,7 +11,7 @@
   ],
   "pre-url": "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-${env:lwpm_architecture}.exe",
   "pre-url-mirror": "https://repo.huaweicloud.com/python/${VERSION}/python-${VERSION}-${env:lwpm_architecture}.exe",
-  "pre-version": "3.11.1",
+  "pre-version": "3.13.0",
   "releases": "https://www.python.org/downloads/",
   "scripts": {
     "install": [
@@ -23,5 +23,5 @@
   },
   "url": "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-${env:lwpm_architecture}.exe",
   "url-mirror": "https://repo.huaweicloud.com/python/${VERSION}/python-${VERSION}-${env:lwpm_architecture}.exe",
-  "version": "3.11.1"
+  "version": "3.13.0"
 }

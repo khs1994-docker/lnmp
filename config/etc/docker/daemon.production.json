@@ -1,9 +1,7 @@
 {
   "registry-mirrors": [
-    "https://dockerproxy.com",
-    "https://hub-mirror.c.163.com",
-    "https://mirror.baidubce.com",
-    "https://docker.developer.khs1994.com"
+    "https://hub.atomgit.com",
+    "https://dockerproxy.com"
   ],
   "debug": true,
   "dns": [

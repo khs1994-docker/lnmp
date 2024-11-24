@@ -134,8 +134,12 @@ case "$1" in
 
   8.2.* )
      export PHP_NUM=82
-     export BUILD_FROM_GIT=1
-     export PHP_SRC_BRANCH=PHP-8.2
+     ;;
+
+  8.3.* )
+     export PHP_NUM=83
+    #  export BUILD_FROM_GIT=1
+    #  export PHP_SRC_BRANCH=PHP-8.2
      ;;
 
   nightly )
@@ -144,7 +148,7 @@ case "$1" in
     ;;
 
   * )
-    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3[EOL] 7.4 8.0 8.1 nightly"
+    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 7.4[EOL] 8.0 8.1 8.2 8.3 nightly"
     exit 1
 esac
 }
@@ -312,6 +316,7 @@ libkrb5-3 \
 libxpm4 \
 $( $(_sudo) apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 $( $(_sudo) apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
+$( $(_sudo) apt install -y libwebp7 > /dev/null 2>&1 && echo libwebp7 ) \
 $( _test_pkg libenchant1c2a ) \
 $( _test_pkg libenchant-2-2 ) \
 $( $(_sudo) apt install -y libssl1.1 > /dev/null 2>&1 && echo libssl1.1 ) \
@@ -1135,6 +1140,8 @@ fi
 
 $(_sudo) apt install -y curl
 
+if [ "$1" = 'apt-dev' ];then _install_php_build_dep ; exit $? ; fi
+
 command -v /usr/local/bin/pickle > /dev/null || _pickle
 command -v /usr/local/bin/composer > /dev/null || _composer
 
@@ -1153,7 +1160,6 @@ fi
 _install_php_run_dep
 
 if [ "$1" = 'apt' ];then exit 0;fi
-if [ "$1" = 'apt-dev' ];then _install_php_build_dep ; exit $? ; fi
 
 _install_php_build_dep
 
