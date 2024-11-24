@@ -287,7 +287,7 @@ system_profiler SPHardwareDataType || true
 
     core.debug('add apt-key');
     await shell(`
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor | sudo cat >/usr/share/keyrings/docker-archive-keyring.gpg
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor | sudo sh -c 'cat >/usr/share/keyrings/docker-archive-keyring.gpg'
     `);
 
     message = 'add apt source';

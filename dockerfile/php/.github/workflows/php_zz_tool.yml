@@ -84,7 +84,7 @@ jobs:
         fi
 
         VCS_REF=`git rev-parse --short HEAD`
-        CACHE_IMAGE=ghcr.io/${DOCKER_HUB_USERNAME}/php
+        CACHE_IMAGE=ghcr.io/${DOCKER_HUB_USERNAME}/php-cache
         # CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
 
             echo "::group::Build php-cs-fixer"
