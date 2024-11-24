@@ -16,8 +16,8 @@
     "dest": "library-mirror/node:18.17.1-alpine"
   },
   {
-    "source": "golang:1.20.1-alpine",
-    "dest": "library-mirror/golang:1.20.1-alpine"
+    "source": "golang:1.23.3-alpine",
+    "dest": "library-mirror/golang:1.23.3-alpine"
   },
   {
     "source": "golang:alpine",
@@ -40,8 +40,8 @@
     "dest": "library-mirror/docker:test-dind-rootless"
   },
   {
-    "source": "library/alpine:3.16",
-    "dest": "library-mirror/alpine:3.16"
+    "source": "library/alpine:3.20",
+    "dest": "library-mirror/alpine:3.20"
   },
   {
     "source": "library/alpine:3.17",
@@ -68,8 +68,8 @@
     "dest": "library-mirror/python:alpine"
   },
   {
-    "source": "library/python:3.11.1-alpine",
-    "dest": "library-mirror/python:3.11.1-alpine"
+    "source": "library/python:3.13.0-alpine",
+    "dest": "library-mirror/python:3.13.0-alpine"
   },
   {
     "source": "library/mysql:latest",
@@ -345,5 +345,9 @@
   {
     "source": "tonistiigi/binfmt",
     "dest": "khs1994/binfmt"
+  },
+  {
+    "source": "library/php:8.3.12-fpm-alpine",
+    "dest": "library-mirror/php:8.3.12-fpm-alpine"
   }
 ]
