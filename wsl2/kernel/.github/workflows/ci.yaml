@@ -17,15 +17,15 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        repo: ["microsoft/WSL2-Linux-Kernel","torvalds/linux"]
-        ref: ["master","linux-msft-wsl-5.15.y","linux-msft-wsl-6.1.y"]
-        exclude:
-        - repo: "torvalds/linux"
-          ref: "linux-msft-wsl-5.15.y"
-        - repo: "torvalds/linux"
-          ref: "linux-msft-wsl-6.1.y"
-        - repo: microsoft/WSL2-Linux-Kernel
-          ref: master
+        repo: ["microsoft/WSL2-Linux-Kernel",]
+        ref: ["linux-msft-wsl-6.6.y"]
+        # exclude:
+        # - repo: "torvalds/linux"
+        #   ref: "linux-msft-wsl-5.15.y"
+        # - repo: "torvalds/linux"
+        #   ref: "linux-msft-wsl-6.1.y"
+        # - repo: microsoft/WSL2-Linux-Kernel
+        #   ref: master
       fail-fast: false
     if: |
       ! contains( github.event.head_commit.message, '[skip ci]')
@@ -56,26 +56,26 @@ jobs:
             https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl-6.1
         fi
 
-        if [ $ref = "linux-msft-wsl-5.15.y" ];then
+        if [ $ref = "linux-msft-wsl-6.6.y" ];then
           curl -fsSL -o Microsoft/config-wsl \
-            https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl-5.15
+            https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl-6.6
         fi
 
         echo "
         # nfs
         # CONFIG_NFS_V4_1=y
-        CONFIG_NFS_V4_2=y
+        # CONFIG_NFS_V4_2=y
 
         # iscsi
-        CONFIG_ACPI_CONFIGFS=y
-        CONFIG_CONFIGFS_FS=y
-        CONFIG_SCSI_ISCSI_ATTRS=y
-        CONFIG_ISCSI_TCP=y
-        CONFIG_ISCSI_BOOT_SYSFS=y
-        CONFIG_ISCSI_TARGET=y
-        CONFIG_TARGET_CORE=y
+        CONFIG_ACPI_CONFIGFS=m
+        # CONFIG_CONFIGFS_FS=y
+        # CONFIG_SCSI_ISCSI_ATTRS=y
+        # CONFIG_ISCSI_TCP=y
+        # CONFIG_ISCSI_BOOT_SYSFS=y
+        # CONFIG_ISCSI_TARGET=y
+        # CONFIG_TARGET_CORE=y
 
-        CONFIG_NUMA=y
+        # CONFIG_NUMA=y
 
         # CNI Calico IPIP
         # CONFIG_NET_IPIP=y
@@ -84,23 +84,23 @@ jobs:
         # https://github.com/projectcalico/calico/blob/master/calicoctl/calicoctl/commands/node/checksystem.go#L40
         # https://projectcalico.docs.tigera.io/reference/calicoctl/node/checksystem
         # $ calicoctl node checksystem
-        CONFIG_BPFILTER=y
-        CONFIG_NETFILTER_XT_MATCH_BPF=y
-        CONFIG_NETFILTER_XT_MATCH_U32=y
+        CONFIG_BPFILTER=m
+        # CONFIG_NETFILTER_XT_MATCH_BPF=y
+        # CONFIG_NETFILTER_XT_MATCH_U32=y
         # CONFIG_NET_EMATCH_IPSET=y
-        CONFIG_NETFILTER_XT_TARGET_NOTRACK=y
+        # CONFIG_NETFILTER_XT_TARGET_NOTRACK=y
         # CONFIG_NET_CLS_BPF=y
         # CONFIG_NET_ACT_BPF=y
         # CONFIG_BPF_JIT=y
 
-        CONFIG_NET_SCH_SFQ=y
-        CONFIG_NET_ACT_POLICE=y
-        CONFIG_NET_ACT_GACT=y
+        # CONFIG_NET_SCH_SFQ=y
+        # CONFIG_NET_ACT_POLICE=y
+        # CONFIG_NET_ACT_GACT=y
 
-        CONFIG_CRYPTO_USER=y
-        CONFIG_CRYPTO_USER_API_RNG=y
+        # CONFIG_CRYPTO_USER=y
+        # CONFIG_CRYPTO_USER_API_RNG=y
         # CONFIG_CRYPTO_USER_API_HASH=y
-        CONFIG_CRYPTO_USER_API_AEAD=y
+        # CONFIG_CRYPTO_USER_API_AEAD=y
 
         # kata container
         # CONFIG_VHOST_VSOCK=y
@@ -166,6 +166,8 @@ jobs:
         cp linux.tar.gz           linux-headers-${kernelversion}.tar.gz
         cp linux/lib/modules/$kernelversion/modules.builtin \
                                   ${kernelversion}-modules.builtin
+        sudo ./Microsoft/scripts/gen_modules_vhdx.sh "$PWD/linux" \
+           $(make -s kernelrelease) ${kernelversion}-modules.vhdx
     - uses: actions/upload-artifact@main
       name: Upload Kernel
       with:
@@ -181,6 +183,11 @@ jobs:
       with:
         name: wsl2-kernel-${{ steps.build.outputs.kernelversion }}-modules.builtin
         path: linux/lib/modules/${{ steps.build.outputs.kernelversion }}/modules.builtin
+    - uses: actions/upload-artifact@main
+      name: Upload modules.vhdx file
+      with:
+        name: wsl2-kernel-${{ steps.build.outputs.kernelversion }}-modules.builtin
+        path: ${kernelversion}-modules.vhdx
     - name: Build deb
       id: deb
       env:
