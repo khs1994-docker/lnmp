@@ -56,7 +56,6 @@ if [ -z "$SYSTEMD_PID" ]; then
     WINDOWS_IP=$(cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f 2)
 
     echo "$WSL2_IP wsl2 wsl2.k8s.khs1994.com" >> /etc/hosts
-    echo "$WINDOWS_IP windows.k8s.khs1994.com" >> /etc/hosts
 
     "$DAEMONIZE" /usr/bin/unshare --fork --pid --mount-proc bash -c 'export container=wsl; mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc; exec '"$SYSTEMD_EXE"
     while [ -z "$SYSTEMD_PID" ]; do

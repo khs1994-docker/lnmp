@@ -18,14 +18,13 @@ Conflicts=wsl-k8s-shutdown.target
 ; BindsTo a,           启动该服务，a因为条件不满足而没有启动，该服务也不会启动
 
 # ConditionVirtualization=wsl
-# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
-# RequiresMountsFor=/wsl/wsl-k8s-data
+; ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+; RequiresMountsFor=/wsl/wsl-k8s-data
 [Service]
 Environment="K8S_ROOT=/opt/k8s"
 Environment="KUBE_APISERVER_HOST=192.168.199.100"
 ; Environment="KUBE_APISERVER_HOST=%i"
 Environment="K8S_ETCD_HOST=192.168.199.100"
-; Environment="_K8S_ETCD_HOST=windows.k8s.khs1994.com"
 ; Environment="_K8S_ETCD_HOST=wsl2.k8s.khs1994.com"
 Environment="_K8S_ETCD_HOST=127.0.0.1"
 

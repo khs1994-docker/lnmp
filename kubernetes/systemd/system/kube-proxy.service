@@ -9,8 +9,8 @@ After=kube-apiserver.service
 Conflicts=wsl-k8s-shutdown.target
 
 # ConditionVirtualization=wsl
-# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
-# RequiresMountsFor=/wsl/wsl-k8s-data
+; ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+; RequiresMountsFor=/wsl/wsl-k8s-data
 [Service]
 
 ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kube-proxy

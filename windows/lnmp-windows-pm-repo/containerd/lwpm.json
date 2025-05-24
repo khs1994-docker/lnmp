@@ -1,0 +1,46 @@
+{
+  "architecture": "amd64",
+  "bug": "",
+  "command": "",
+  "description": "",
+  "download-filename": "",
+  "github": "user/repo",
+  "homepage": "",
+  "name": "containerd",
+  "os": "windows",
+  "path": [
+    "C:\\bin"
+  ],
+  "pre-url": "",
+  "pre-url-mirror": "",
+  "pre-version": "x.y.z-alpha.1",
+  "releases": "",
+  "scripts": {
+    "install": [
+      "tar -zxvf $filename -C C:\\"
+    ],
+    "postinstall": [
+      "_mkdir C:\\bin\\containerd",
+      "containerd.exe config default | Out-File \"C:\\bin\\containerd\\ctn.toml\" -Encoding ascii"
+    ],
+    "posttest": "",
+    "postuninstall": "",
+    "preinstall": [
+      "_cleanup \"$unzipDesc\""
+    ],
+    "pretest": "",
+    "preuninstall": "",
+    "pruneuninstall": "",
+    "service": [
+      "C:\\bin\\containerd.exe",
+      "--log-level=debug",
+      "--config=C:\\bin\\containerd\\ctn.toml"
+    ],
+    "test": "",
+    "uninstall": "# _cleanup /soft/path",
+    "version": ""
+  },
+  "url": "https://github.com/containerd/containerd/releases/download/v${VERSION}/containerd-${VERSION}-windows-amd64.tar.gz",
+  "url-mirror": "",
+  "version": "2.0.2"
+}

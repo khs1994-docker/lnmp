@@ -1,6 +1,5 @@
 {
   "registry-mirrors": [
-    "https://hub.atomgit.com",
     "https://dockerproxy.com"
   ],
   "insecure-registries":[

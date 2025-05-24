@@ -18,3 +18,14 @@ patches:
       name: calico-node
       namespace: kube-system
     path: custom.patch.json
+images:
+- name: docker.io/calico/cni
+  newName: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/calico/cni
+- name: docker.io/calico/node
+  newName: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/calico/node
+- name: docker.io/calico/kube-controllers
+  newName: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/calico/kube-controllers
+- name: calico/csi
+  newName: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/calico/csi
+- name: calico/node-driver-registrar
+  newName: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/calico/node-driver-registrar

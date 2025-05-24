@@ -8,6 +8,5 @@ ExecStartPre=/bin/sh -cx 'echo "ff00::0 ip6-mcastprefix" | tee -a /etc/hosts'
 ExecStartPre=/bin/sh -cx 'echo "ff02::1 ip6-allnodes" | tee -a /etc/hosts'
 ExecStartPre=/bin/sh -cx 'echo "ff02::2 ip6-allrouters" | tee -a /etc/hosts'
 ExecStartPre=/bin/sh -cx 'echo "$WSL2_IP wsl2 wsl2.k8s.khs1994.com" | tee -a /etc/hosts'
-ExecStartPre=/bin/sh -cx 'echo "$WINDOWS_IP windows.k8s.khs1994.com" | tee -a /etc/hosts'
 ExecStart=/bin/echo 'write hosts success'
 RemainAfterExit=yes

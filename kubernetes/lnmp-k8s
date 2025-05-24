@@ -10,10 +10,18 @@ if ! [ -f nfs-server/.env ];then cp nfs-server/.env.example nfs-server/.env; fi
 if ! [ -f nfs-server/exports.txt ];then cp nfs-server/exports.example.txt nfs-server/exports.txt; fi
 if ! [ -f wsl2/.env ];then cp wsl2/.env.example wsl2/.env; fi
 
+if [ -n "$KUBERNETES_VERSION" ];then
+  KUBERNETES_VERSION_SETED=$KUBERNETES_VERSION
+fi
+
 source ./systemd/.env.example
 source ./systemd/.env
 source ./.env.example
 source ./.env
+
+if [ -n "$KUBERNETES_VERSION_SETED" ];then
+  KUBERNETES_VERSION=$KUBERNETES_VERSION_SETED
+fi
 
 TMP_ROOT=$HOME/.khs1994-docker-lnmp/caches
 GITHUB_MIRROR=download.fgit.ml
@@ -1286,8 +1294,8 @@ _k8s_install_systemd(){
     {
        echo "[Unit]";
        echo "ConditionVirtualization=wsl";
-       echo "ConditionPathIsMountPoint=/wsl/wsl-k8s-data";
-       echo "RequiresMountsFor=/wsl/wsl-k8s-data";
+       echo ";ConditionPathIsMountPoint=/wsl/wsl-k8s-data";
+       echo ";RequiresMountsFor=/wsl/wsl-k8s-data";
     } | $(_sudo) tee /etc/systemd/system/kube-.service.d/99-must-run-in-wsl2.conf \
                      /etc/systemd/system/cri-.service.d/99-must-run-in-wsl2.conf \
                      /etc/systemd/system/etcd.service.d/99-must-run-in-wsl2.conf \

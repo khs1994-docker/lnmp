@@ -11,8 +11,8 @@ Conflicts=wsl-k8s-shutdown.target
 
 Before=kubelet@cri-containerd.service
 # ConditionVirtualization=wsl
-# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
-# RequiresMountsFor=/wsl/wsl-k8s-data
+; ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+; RequiresMountsFor=/wsl/wsl-k8s-data
 
 After=var-lib-cni.mount \
 var-lib-k8s.mount \

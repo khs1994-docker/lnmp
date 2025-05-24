@@ -1,12 +1,12 @@
 resources:
 - ../../nodeport
 images:
-  - name: registry.k8s.io/ingress-nginx/controller:v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7
+  - name: registry.k8s.io/ingress-nginx/controller
     # newName: ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller
-    newTag: v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7
+    newTag: v1.12.1
     newName: registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-ingress-controller
 
-  - name: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20230312-helm-chart-4.5.2-28-g66a760794@sha256:01d181618f270f2a96c04006f33b2699ad3ccb02da48d0f89b22abce084b292f
+  - name: registry.k8s.io/ingress-nginx/kube-webhook-certgen
     # newName: ccr.ccs.tencentyun.com/khs1994/nginx-ingress-kube-webhook-certgen
-    newTag: v20230312-helm-chart-4.5.2-28-g66a760794@sha256:01d181618f270f2a96c04006f33b2699ad3ccb02da48d0f89b22abce084b292f
+    newTag: v1.5.2
     newName: registry.cn-hangzhou.aliyuncs.com/google_containers/kube-webhook-certgen

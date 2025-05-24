@@ -35,6 +35,8 @@ jobs:
         fetch-depth: 1
         repository: ${{ matrix.repo }}
         ref: ${{ matrix.ref }}
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
     - name: Build Kernel
       env:
         ref: ${{ matrix.ref }}
@@ -110,10 +112,10 @@ jobs:
 
         # sudo sed -i "s/microsoft-standard/microsoft-WSL2-standard/g" Microsoft/config-wsl
 
-        make LOCALVERSION="" KCONFIG_CONFIG=Microsoft/config-wsl -j $(nproc)
+        make LOCALVERSION="" KCONFIG_CONFIG=Microsoft/config-wsl -j $(nproc) > /dev/null
 
-        make LOCALVERSION="" INSTALL_MOD_PATH=linux modules_install
-        make LOCALVERSION="" INSTALL_HDR_PATH=linux/usr headers_install
+        make LOCALVERSION="" INSTALL_MOD_PATH=linux modules_install > /dev/null
+        make LOCALVERSION="" INSTALL_HDR_PATH=linux/usr headers_install > /dev/null
 
         ls -lah arch/x86/boot/bzImage
 
@@ -151,12 +153,12 @@ jobs:
         ls -la linux/lib/modules/$kernelversion
 
         ln -snf /usr/src/linux-headers-$kernelversion linux/lib/modules/$kernelversion/build
-        unlink linux/lib/modules/$kernelversion/source
+        unlink linux/lib/modules/$kernelversion/source || true
         rsync -a --files-from=../hdr_files ./ linux/usr/src/$hdr_dir
 
         cd linux
         sudo chown -R root:root .
-        sudo tar -zcvf ../linux.tar.gz .
+        sudo tar -zcf ../linux.tar.gz .
         cd ..
         mkdir wsl2_dist
         cp arch/x86/boot/bzImage wsl2_dist/wsl2Kernel

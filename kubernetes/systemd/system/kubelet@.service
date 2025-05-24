@@ -44,8 +44,8 @@ var-log-pods.mount
 ; RequiresMountsFor=/var/lib/kubelet
 
 # ConditionVirtualization=wsl
-# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
-# RequiresMountsFor=/wsl/wsl-k8s-data
+; ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+; RequiresMountsFor=/wsl/wsl-k8s-data
 
 ConditionFileIsExecutable=/opt/k8s/bin/kubelet
 ConditionFileIsExecutable=/opt/k8s/bin/kubeadm

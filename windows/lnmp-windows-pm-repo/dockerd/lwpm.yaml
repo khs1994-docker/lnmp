@@ -1,0 +1,46 @@
+name: dockerd
+description: ""
+version: "27.5.1"
+pre-version: "28.0.0-rc.1"
+homepage: ""
+bug: ""
+github: moby/moby
+releases: ""
+url: "https://mirrors4.tuna.tsinghua.edu.cn/docker-ce/win/static/stable/x86_64/docker-${VERSION}.zip"
+url-mirror: ""
+pre-url: "https://mirrors4.tuna.tsinghua.edu.cn/docker-ce/win/static/test/x86_64/docker-${VERSION}.zip"
+pre-url-mirror: ""
+command: "dockerd"
+download-filename: ""
+architecture: amd64
+os: windows
+scripts:
+  preinstall:
+  - '_cleanup "$unzipDesc"'
+  install:
+  - '_unzip $filename $unzipDesc'
+  - 'Copy-item -r -force "$unzipDesc/docker/*" C:/bin/'
+  - '_cleanup "$unzipDesc"'
+  postinstall:
+  - _mkdir C:\bin\dockerd\config
+  - echo {} | Out-File "C:\bin\dockerd\config\daemon.json" -Encoding ascii
+  - docker context create windows --description "windows" --docker "host=npipe:////./pipe/docker_engine"
+  preuninstall: ""
+  uninstall: '# _cleanup /soft/path'
+  postuninstall: ""
+  pruneuninstall: ""
+  pretest: ""
+  test: ""
+  posttest: ""
+  version: ""
+  service:
+  - C:\bin\dockerd.exe
+  - --containerd=\\.\pipe\containerd-containerd
+  - --debug
+  - --host=npipe:////./pipe/docker_engine
+  - --data-root=C:\bin\dockerd\moby-root
+  - --exec-root=C:\bin\dockerd\moby-exec
+  - --pidfile=C:\bin\dockerd\docker.pid
+  - --config-file=C:\bin\dockerd\config\daemon.json
+path:
+- C:\bin

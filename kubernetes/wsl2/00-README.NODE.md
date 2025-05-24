@@ -2,12 +2,8 @@
 
 ## 注意事项
 
-* `wsl2.k8s.khs1994.com` 解析到 WSL2 IP
-* `windows.k8s.khs1994.com` 解析到 Windows IP
-* k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(netsh 代理)`
+* k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443`
 * 新建 `wsl-k8s` WSL2 发行版用于 k8s 运行，`wsl-k8s-data`（可选） WSL2 发行版用于存储数据
-* 问题1: WSL2 暂时不能固定 IP,每次重启必须执行 `$ kubectl certificate approve csr-XXXX`
-* WSL2 IP 变化时必须重新执行 `./kube-wsl2windows k8s`
 * WSL2 **不要** 自定义 DNS 服务器(不要自行编辑 /etc/resolv.conf)
 * 本项目与 **Docker 桌面版** 冲突，请先停止 **Docker 桌面版** 并执行 `$ wsl --shutdown` 后使用本项目
 
@@ -40,8 +36,6 @@ export PATH=/wsl/wsl-k8s-data/k8s/bin:$PATH
 ## 复制文件
 
 ```powershell
-$ ./wsl2/bin/kube-check
-
 $ $env:WSLENV="K8S_ROOT/u:KUBERNETES_VERSION"
 $ $env:K8S_ROOT="/wsl/wsl-k8s-data/k8s"
 # 请将 1.31.0 替换为实际的 k8s 版本号

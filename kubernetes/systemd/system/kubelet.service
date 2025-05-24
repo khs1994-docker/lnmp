@@ -7,7 +7,7 @@ Wants=network-online.target network.target
 ; Requires=docker.service
 
 # ConditionVirtualization=wsl
-# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+; ConditionPathIsMountPoint=/wsl/wsl-k8s-data
 
 After=var-lib-kubelet.mount
 BindsTo=var-lib-kubelet.mount

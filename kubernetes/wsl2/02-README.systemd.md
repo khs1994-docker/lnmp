@@ -5,14 +5,12 @@
 **1. 挂载 `/wsl/wsl-k8s-data`**
 
 ```powershell
-$ ./wsl2/bin/kube-check
-
 $ wsl -d wsl-k8s -- systemctl start wsl-k8s.target
 ```
 
 **2. 手动签署 CSR**
 
-由于 WSL2 IP 不能固定, 每次重启时 **必须** 签署 kubelet 证书:
+首次部署时签署 kubelet 证书:
 
 ```powershell
 # 获取 csr

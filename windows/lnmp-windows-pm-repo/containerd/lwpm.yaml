@@ -1,0 +1,38 @@
+name: containerd
+description: ""
+version: 2.0.2
+pre-version: x.y.z-alpha.1
+homepage: ""
+bug: ""
+github: containerd/containerd
+releases: ""
+url: "https://github.com/containerd/containerd/releases/download/v${VERSION}/containerd-${VERSION}-windows-amd64.tar.gz"
+url-mirror: ""
+pre-url: ""
+pre-url-mirror: ""
+command: ""
+download-filename: ""
+architecture: amd64
+os: windows
+scripts:
+  preinstall:
+  - '_cleanup "$unzipDesc"'
+  install:
+  - 'tar -zxvf $filename -C C:\'
+  postinstall:
+  - _mkdir C:\bin\containerd
+  - containerd.exe config default | Out-File "C:\bin\containerd\ctn.toml" -Encoding ascii
+  preuninstall: ""
+  uninstall: '# _cleanup /soft/path'
+  postuninstall: ""
+  pruneuninstall: ""
+  pretest: ""
+  test: ""
+  posttest: ""
+  version: ""
+  service:
+  - C:\bin\containerd.exe
+  - --log-level=debug
+  - --config=C:\bin\containerd\ctn.toml
+path:
+- C:\bin

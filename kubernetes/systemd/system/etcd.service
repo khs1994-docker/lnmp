@@ -11,8 +11,8 @@ After=network-online.target
 ; Assert...：当前 Unit 运行必须满足的条件，否则会报启动失败
 
 # ConditionVirtualization=wsl
-# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
-# RequiresMountsFor=/wsl/wsl-k8s-data
+; ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+; RequiresMountsFor=/wsl/wsl-k8s-data
 
 Before=kube-apiserver.service
 

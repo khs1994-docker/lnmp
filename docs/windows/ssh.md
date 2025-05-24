@@ -40,3 +40,40 @@ if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyCon
     Write-Output "Firewall rule 'OpenSSH-Server-In-TCP' has been created and exists."
 }
 ```
+
+### 客户端密钥生成
+
+```powershell
+& $env:ProgramFiles\OpenSSH-Win64\ssh-keygen -t ed25519
+
+Get-Service ssh-agent | Set-Service -StartupType Automatic
+
+Start-Service ssh-agent
+
+& $env:ProgramFiles\OpenSSH-Win64\ssh-add $env:USERPROFILE\.ssh\id_ed25519
+```
+
+### 客户端公钥放置到服务器
+
+#### 标准账户 `C:\Users\username\.ssh\authorized_keys`
+
+#### 管理员账户 `C:\ProgramData\ssh\administrators_authorized_keys`
+
+```powershell
+icacls.exe "C:\ProgramData\ssh\administrators_authorized_keys" /inheritance:r /grant "Administrators:F" /grant "SYSTEM:F"
+```
+
+```powershell
+# 以管理员权限运行
+notepad C:\ProgramData\ssh\administrators_authorized_keys
+```
+
+### 配置只允许公钥登录
+
+* C:\ProgramData\ssh\sshd_config
+
+```powershell
+# 以管理员权限运行
+echo 'AuthenticationMethods publickey' >> C:\ProgramData\ssh\sshd_config
+# AuthenticationMethods password
+```
