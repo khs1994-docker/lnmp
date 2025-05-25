@@ -148,17 +148,6 @@ command -v curl > /dev/null || print_info "curl not install"
 
 CODING_URL=https://pcit-generic.pkg.coding.net/khs1994-docker/kubernetes
 
-_upload_to_coding(){
-  if [ "$UPLOAD_TO_CODING" != 'true' ];then return; fi
-
-  local PKG_PATH=$1
-  local PKG=$2
-  local PKG_VERSION=$3
-
-  curl -T ${PKG_PATH} -u ${CODING_USERNAME}:${CODING_TOKEN} \
-  "${CODING_URL}/${PKG}?version=${PKG_VERSION}"
-}
-
 _get_kubernetes_server_by_docker_image(){
   local TYPE=server
   test -n "${1}" && local GOOS=$1
@@ -484,8 +473,6 @@ _gvisor_install(){
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/local/bin
 
   runsc --version
-
-  _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} nightly
 }
 
 _runsc_install(){
@@ -496,7 +483,6 @@ _runc_install(){
   if [ `command -v runc` ];then
     print_info "runc already install"
     runc --version
-    _upload_to_coding /usr/bin/runc runc.${GOARCH} ${RUNC_VERSION}
     return
   fi
 
@@ -518,8 +504,6 @@ _runc_install(){
   $(_sudo) chmod +x /usr/bin/runc
 
   runc --version
-
-  _upload_to_coding /usr/bin/runc runc.${GOARCH} ${RUNC_VERSION}
 }
 
 _crun_containerd_conf(){
@@ -542,7 +526,6 @@ _crun_install(){
   if [ `command -v crun` ];then
     print_info "crun already install"
     crun --version
-    _upload_to_coding /usr/bin/crun crun-${CRUN_VERSION}-linux-${GOARCH} ${CRUN_VERSION}
     return
   fi
 
@@ -584,9 +567,6 @@ _crun_install(){
 
   crun --version
   crun-disable-systemd --version
-
-  _upload_to_coding /usr/bin/crun crun-${CRUN_VERSION}-linux-${GOARCH} ${CRUN_VERSION}
-  _upload_to_coding /usr/bin/crun-disable-systemd crun-${CRUN_VERSION}-linux-${GOARCH}-disable-systemd ${CRUN_VERSION}
 }
 
 _containerd_install(){
@@ -646,9 +626,7 @@ _containerd_install(){
   $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd              ${K8S_ROOT}/bin/cri-containerd
   $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd-shim-runc-v2 /usr/local/bin/
 
-  _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} ${CONTAINERD_VERSION}
   $(_sudo) $(_curl) ${sha256sum_url} -o ${TMP_ROOT}/${TAR_FILE}.sha256sum
-  _upload_to_coding ${TMP_ROOT}/${TAR_FILE}.sha256sum ${TAR_FILE}.sha256sum ${CONTAINERD_VERSION}
 }
 
 _cni_install(){
@@ -761,8 +739,6 @@ _crictl_install(){
 
   # $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/bin/
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/bin/
-
-  _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} ${CRICTL_VERSION}
 }
 
 _k8s_install_dep(){
@@ -850,8 +826,6 @@ _conmon_install(){
       $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon $url
 
       $(_sudo) chmod +x ${K8S_ROOT}/usr/local/bin/conmon
-
-      _upload_to_coding ${K8S_ROOT}/usr/local/bin/conmon conmon.$GOARCH ${CONMON_VERSION}
 
       return
     fi
