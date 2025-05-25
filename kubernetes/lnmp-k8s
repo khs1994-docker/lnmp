@@ -441,17 +441,6 @@ _gvisor_containerd_conf(){
 
     return
   fi
-print_info "config containerd with gvisor(runsc) ..."
-# containerd 1.7.x
-cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.7/config.toml
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
-  runtime_type = "io.containerd.runsc.v1"
-  # privileged_without_host_devices = false
-
-  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc.options]
-    SystemdCgroup = false
-EOF
 }
 
 _gvisor_crio_conf(){
@@ -614,15 +603,16 @@ _containerd_install(){
   fi
 
   if [ -f ${K8S_ROOT}/bin/cri-containerd -a ! "$1" = "--dry-run" ];then \
-    print_info "containerd 1.7 already install"; \
+    print_info "containerd 2.0 already install"; \
     ${K8S_ROOT}/bin/cri-containerd --version;return; fi
 
-  print_info "install containerd 1.7 ..."
+  print_info "install containerd 2.0 ..."
 
   local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
   local url="https://${GITHUB_MIRROR}/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
 
-  local TAR_FILE="cri-containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
+  # local TAR_FILE="cri-containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
+  local TAR_FILE="containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
     url=${CODING_URL}/${TAR_FILE}?version=${CONTAINERD_VERSION}
@@ -654,10 +644,7 @@ _containerd_install(){
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
 
   $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd              ${K8S_ROOT}/bin/cri-containerd
-  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd-shim         /usr/local/bin/cri-containerd-shim
-  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd-shim-runc-v1 /usr/local/bin/
   $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd-shim-runc-v2 /usr/local/bin/
-  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/sbin/runc                   /usr/bin/
 
   _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} ${CONTAINERD_VERSION}
   $(_sudo) $(_curl) ${sha256sum_url} -o ${TMP_ROOT}/${TAR_FILE}.sha256sum
@@ -1283,7 +1270,7 @@ _k8s_install_systemd(){
     _enable_wsl_k8s_systemd_target kube-apiserver.service
     _enable_wsl_k8s_systemd_target kube-controller-manager.service
     _enable_wsl_k8s_systemd_target kube-scheduler.service
-    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@1.7.service
+    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@2.0.service
     _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
     _enable_wsl_k8s_systemd_target etcd.service
 

@@ -216,7 +216,7 @@ jobs:
 
          tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes
        env:
-        CODING_USERNAME: khs1994-1601432822176
+        CODING_USERNAME: cnb
         CODING_TOKEN: ${{secrets.CODING_DOCKER_PASSWORD}}
         UPLOAD_TO_CODING: ${{matrix.UPLOAD_TO_CODING}}
      - name: Start k8s

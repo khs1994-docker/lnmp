@@ -10,8 +10,8 @@ on:
 
 env:
   LWPM_K8S_VERSION: ${{ github.event.inputs.LWPM_K8S_VERSION }}
-  CODING_DOCKER_REGISTRY: pcit-docker.pkg.coding.net
-  CODING_DOCKER_USERNAME: khs1994-1601432822176
+  CODING_DOCKER_REGISTRY: docker.cnb.cool
+  CODING_DOCKER_USERNAME: cnb
   CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
 
 jobs:

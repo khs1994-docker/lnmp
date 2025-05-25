@@ -5,7 +5,7 @@
 `.env` 文件增加如下内容
 
 ```bash
-LNMP_DOCKER_IMAGE_PREFIX=pcit-docker.pkg.coding.net/khs1994-docker/khs1994
+LNMP_DOCKER_IMAGE_PREFIX=docker.cnb.cool/khs1994-docker/khs1994
 LNMP_LIBRARY_NS=ccr.ccs.tencentyun.com/library-mirror
 ```
 

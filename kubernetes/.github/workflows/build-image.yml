@@ -23,7 +23,7 @@ jobs:
       - run: |
           echo ${DOCKER_PASSWORD} | docker login -u khs1994 --password-stdin
           echo ${GHCR_IO_TOKEN} | docker login -u khs1994 --password-stdin ghcr.io
-          echo ${CODING_DOCKER_PASSWORD} | docker login -u khs1994-1601432822176 --password-stdin pcit-docker.pkg.coding.net
+          echo ${CODING_DOCKER_PASSWORD} | docker login -u cnb --password-stdin docker.cnb.cool
         env:
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
           GHCR_IO_TOKEN: ${{ secrets.GHCR_IO_TOKEN }}
@@ -34,7 +34,7 @@ jobs:
           --cache-to=ghcr.io/khs1994/k8s-cfssl:cache \
           -t khs1994/k8s-cfssl \
           -t ghcr.io/khs1994/k8s-cfssl \
-          -t pcit-docker.pkg.coding.net/khs1994-docker/khs1994/k8s-cfssl \
+          -t docker.cnb.cool/khs1994-docker/khs1994/k8s-cfssl \
           --push \
           --platform linux/amd64,linux/arm64 \
           cfssl
@@ -46,7 +46,7 @@ jobs:
           --cache-to=ghcr.io/khs1994/fcos:cache \
           -t khs1994/fcos \
           -t ghcr.io/khs1994/fcos \
-          -t pcit-docker.pkg.coding.net/khs1994-docker/khs1994/fcos \
+          -t docker.cnb.cool/khs1994-docker/khs1994/fcos \
           --push \
           --platform linux/amd64,linux/arm64 \
           coreos/server

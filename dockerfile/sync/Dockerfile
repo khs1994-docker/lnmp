@@ -1,6 +1,6 @@
 # FROM khs1994/docker-image-sync
 
-FROM pcit-docker.pkg.coding.net/khs1994-docker/khs1994/docker-image-sync
+FROM docker.cnb.cool/khs1994-docker/khs1994/docker-image-sync
 
 WORKDIR /root/lnmp/windows/
 

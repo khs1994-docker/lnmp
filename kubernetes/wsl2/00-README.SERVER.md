@@ -99,7 +99,7 @@ $ wsl -d wsl-k8s -- sh -xc 'mkdir -p ${CFSSL_ROOT:?err}'
 $ . ../windows/sdk/dockerhub/rootfs
 $ foreach($item in 0,1,2,3,4){ `
       $tar_gz_file=rootfs khs1994-docker/khs1994/k8s-cfssl `
-          -ref latest -registry pcit-docker.pkg.coding.net -layersIndex $item ; `
+          -ref latest -registry docker.cnb.cool -layersIndex $item ; `
        cp $tar_gz_file \\wsl$\wsl-k8s\"${env:CFSSL_ROOTFS}${item}".tar.gz
   }
 

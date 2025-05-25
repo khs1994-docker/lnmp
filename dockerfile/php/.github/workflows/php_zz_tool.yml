@@ -38,7 +38,7 @@ jobs:
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
         echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-east-1.aliyuncs.com
         echo ${GHCR_IO_TOKEN} | docker login -u khs1994 --password-stdin ghcr.io
-        echo ${CODING_DOCKER_PASSWORD} | docker login -u khs1994-1601432822176 --password-stdin pcit-docker.pkg.coding.net
+        echo ${CODING_DOCKER_PASSWORD} | docker login -u cnb --password-stdin docker.cnb.cool
       name: 'Docker Login'
       env:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
@@ -182,5 +182,5 @@ jobs:
         FOLDER: "8.1"
         PHP_TAG_VERSION: "8.1.31"
         TYPE: ${{ matrix.TYPE }}
-        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php ghcr.io/khs1994/php
+        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php docker.cnb.cool/khs1994-docker/khs1994/php ghcr.io/khs1994/php
       name: 'Build Image'

@@ -88,7 +88,7 @@ pipeline {
             -e CI=true \
             -e CONFIG_URL=https://gitee.com/khs1994-docker/lnmp/raw/23.11/dockerfile/sync/docker-image-sync.json \
             -v \$PWD/docker-image-sync.json:/docker-entrypoint.d/docker-image-sync.json \
-            pcit-docker.pkg.coding.net/khs1994-docker/khs1994/docker-image-sync
+            docker.cnb.cool/khs1994-docker/khs1994/docker-image-sync
         '''
 
         // khs1994/docker-image-sync
