@@ -493,15 +493,24 @@ _runc_install(){
   local url=https://${GITHUB_MIRROR}/opencontainers/runc/releases/download/v${RUNC_VERSION}
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
-    url=${CODING_URL}/${file_name}?version=${RUNC_VERSION}
+    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+      khs1994-docker/lwpm/runc \
+      1.3.0 \
+      ${GOARCH} \
+      ${GOOS} \
+      "" 0 docker.cnb.cool)
+
+    tar -zxvf $rootfs -C /tmp
+    $(_sudo) install -m 755 /tmp/runc/dist/runc /usr/bin/runc
   else
     _use_cn_mirror ${url}/${file_name} && url=${url}/${file_name} \
                                        || url=${url_official}/${file_name}
+
+
+    $(_sudo) $(_curl) ${url} -o /usr/bin/runc
+
+    $(_sudo) chmod +x /usr/bin/runc
   fi
-
-  $(_sudo) $(_curl) ${url} -o /usr/bin/runc
-
-  $(_sudo) chmod +x /usr/bin/runc
 
   runc --version
 }
@@ -711,11 +720,17 @@ _crictl_install(){
   local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-${GOARCH}.tar.gz"
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
-    url=${CODING_URL}/${TAR_FILE}?version=${CRICTL_VERSION}
+    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+      khs1994-docker/lwpm/crictl \
+      ${CRICTL_VERSION} \
+      ${GOARCH} \
+      ${GOOS} \
+      "" 0 docker.cnb.cool)
+
+    $(_sudo) cp ${rootfs} ${TMP_ROOT}/${TAR_FILE}
   else
     _use_cn_mirror ${url}/${TAR_FILE} && url=${url}/${TAR_FILE} \
                                       || url=${url_official}/${TAR_FILE}
-  fi
 
   print_info "install crictl ..."
 
@@ -730,6 +745,7 @@ _crictl_install(){
   # else
   if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
       $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
+  fi
   fi
 
   if [ "$1" = "--dry-run" ];then

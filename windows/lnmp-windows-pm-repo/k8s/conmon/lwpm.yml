@@ -1,17 +1,17 @@
 name: conmon
-version: 2.1.3
+version: 2.1.13
 url: "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}"
 url-mirror: https://${env:GITHUB_MIRROR}/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}
 scripts:
   dist: |
-    _mkdir $env:LWPM_PKG_ROOT/dist
+    _mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}
 
     curl -L `
       $url `
-      -o $env:LWPM_PKG_ROOT/dist/conmon `
+      -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/conmon `
     || curl -L `
       $url-${VERSION} `
-      -o $env:LWPM_PKG_ROOT/dist/conmon `
+      -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/conmon `
   platform-reqs: if(!$IsLinux){echo $False}
 platform:
   - architecture: amd64

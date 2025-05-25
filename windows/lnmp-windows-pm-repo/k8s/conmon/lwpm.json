@@ -2,19 +2,19 @@
   "name": "conmon",
   "platform": [
     {
-      "architecture": "amd64",
-      "os": "linux"
+      "os": "linux",
+      "architecture": "amd64"
     },
     {
-      "architecture": "arm64",
-      "os": "linux"
+      "os": "linux",
+      "architecture": "arm64"
     }
   ],
   "scripts": {
-    "dist": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/conmon `\n|| curl -L `\n  $url-${VERSION} `\n  -o $env:LWPM_PKG_ROOT/dist/conmon `\n",
+    "dist": "_mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/conmon `\n|| curl -L `\n  $url-${VERSION} `\n  -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/conmon `\n",
     "platform-reqs": "if(!$IsLinux){echo $False}"
   },
   "url": "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}",
   "url-mirror": "https://${env:GITHUB_MIRROR}/containers/conmon/releases/download/v${VERSION}/conmon.${env:lwpm_architecture}",
-  "version": "2.1.3"
+  "version": "2.1.13"
 }
