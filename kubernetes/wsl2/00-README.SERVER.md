@@ -79,13 +79,13 @@ $ wsl --shutdown
 ## 获取 kubernetes
 
 ```powershell
-$ wsl -d wsl-k8s -- KUBERNETES_VERSION=1.31.0 ./lnmp-k8s kubernetes-server --url
+$ wsl -d wsl-k8s -- KUBERNETES_VERSION=1.32.0 ./lnmp-k8s kubernetes-server --url
 # 如果上面的命令出现错误，可以执行这个命令
-# $ wsl -d wsl-k8s -- KUBERNETES_VERSION=1.31.0 ./lnmp-k8s kubernetes-server
+# $ wsl -d wsl-k8s -- KUBERNETES_VERSION=1.32.0 ./lnmp-k8s kubernetes-server
 
 # 其他架构
-# $ wsl -d wsl-k8s -- KUBERNETES_VERSION=1.31.0 ./lnmp-k8s kubernetes-server --url linux arm64
-# $ wsl -d wsl-k8s -- KUBERNETES_VERSION=1.31.0 ./lnmp-k8s kubernetes-server linux arm64
+# $ wsl -d wsl-k8s -- KUBERNETES_VERSION=1.32.0 ./lnmp-k8s kubernetes-server --url linux arm64
+# $ wsl -d wsl-k8s -- KUBERNETES_VERSION=1.32.0 ./lnmp-k8s kubernetes-server linux arm64
 ```
 
 ## 生成证书文件
@@ -123,8 +123,8 @@ $ wsl -d wsl-k8s -- sh -xc 'cp ${K8S_ROOT:?err}/etc/kubernetes/pki/*.yaml       
 $ wsl -d wsl-k8s -- sh -xc 'cp ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kubernetes'
 
 $ $env:WSLENV="K8S_ROOT/u:KUBERNETES_VERSION"
-# 请将 1.31.0 替换为实际的 k8s 版本号
-$ $env:KUBERNETES_VERSION='1.31.0'
+# 请将 1.32.0 替换为实际的 k8s 版本号
+$ $env:KUBERNETES_VERSION='1.32.0'
 $ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v${KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin'
 ```
 

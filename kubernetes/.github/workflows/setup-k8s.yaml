@@ -32,8 +32,8 @@ jobs:
      GENERATE_CLI_HELP: ${{matrix.GENERATE_CLI_HELP}}
      IPV6: ${{matrix.IPV6}}
      DOWNLOAD_FROM_CODING: "false"
-     LNMP_K8S_STABLE_VERSION: "1.31.0"
-     LNMP_K8S_NEXT_VERSION: "1.32.0-beta.0"
+     LNMP_K8S_STABLE_VERSION: "1.32.0"
+     LNMP_K8S_NEXT_VERSION: "1.33.0"
    strategy:
      max-parallel: 1
      matrix:
@@ -48,21 +48,21 @@ jobs:
       # next version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.32.0-beta.0
+         CI_KUBERNETES_VERSION: 1.33.0
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
 
        # current stable version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.31.0
+         CI_KUBERNETES_VERSION: 1.32.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --crio
          K8S_IMAGE_NS: khs1994
          K8S_IMAGE_REGISTRY: useccr.ccs.tencentyun.com
          UPLOAD_TO_CODING: "true"
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.31.0
+         CI_KUBERNETES_VERSION: 1.32.0
          LNMP_K8S_GET: --url
 
          GENERATE_CLI_HELP: "true"
@@ -71,12 +71,12 @@ jobs:
        # ipv6
        # - os: ubuntu
        #  dist: 20.04
-       #  CI_KUBERNETES_VERSION: 1.31.0
+       #  CI_KUBERNETES_VERSION: 1.32.0
        #  LNMP_K8S_GET: --url
        #  IPV6: "true"
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.31.0
+         CI_KUBERNETES_VERSION: 1.32.0
          LNMP_K8S_GET: --url
          CNI_CALICO_EBPF: 'true'
       # v1.24.0+ not support docker
@@ -86,21 +86,21 @@ jobs:
       #    LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.31.0
+         CI_KUBERNETES_VERSION: 1.32.0
          LNMP_K8S_GET: --url
          K8S_ROOT: /opt/k8s-custom
        # old version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.30.6
+         CI_KUBERNETES_VERSION: 1.31.6
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.29.11
+         CI_KUBERNETES_VERSION: 1.30.11
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.28.15
+         CI_KUBERNETES_VERSION: 1.29.15
          LNMP_K8S_GET: --url
      fail-fast: false
    steps:

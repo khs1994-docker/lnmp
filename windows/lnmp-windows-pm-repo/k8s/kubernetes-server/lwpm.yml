@@ -1,5 +1,5 @@
 name: kubernetes-server
-version: 1.31.0
+version: 1.32.0
 url: "https://cdn.dl.k8s.io/release/v${VERSION}/kubernetes-server-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz"
 scripts:
   platform-reqs: if(!$IsLinux){echo $False}

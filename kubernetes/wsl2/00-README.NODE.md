@@ -38,8 +38,8 @@ export PATH=/wsl/wsl-k8s-data/k8s/bin:$PATH
 ```powershell
 $ $env:WSLENV="K8S_ROOT/u:KUBERNETES_VERSION"
 $ $env:K8S_ROOT="/wsl/wsl-k8s-data/k8s"
-# 请将 1.31.0 替换为实际的 k8s 版本号
-$ $env:KUBERNETES_VERSION='1.31.0'
+# 请将 1.32.0 替换为实际的 k8s 版本号
+$ $env:KUBERNETES_VERSION='1.32.0'
 
 $ wsl -d wsl-k8s -- sh -xc 'mkdir -p ${K8S_ROOT:?err}/bin'
 $ wsl -d wsl-k8s -- bash -xc 'cp -a kubernetes-release/release/v${KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin'
