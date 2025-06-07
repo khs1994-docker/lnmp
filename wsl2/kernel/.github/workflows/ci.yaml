@@ -14,7 +14,7 @@ defaults:
 jobs:
   build:
     name: Kernel
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         repo: ["microsoft/WSL2-Linux-Kernel",]

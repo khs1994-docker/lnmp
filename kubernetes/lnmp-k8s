@@ -673,9 +673,7 @@ _cni_install(){
         ${GOOS} \
         "" 0 docker.cnb.cool)
 
-      $(_sudo) tar -zxf $rootfs -C ${TMP_ROOT}/
-      $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}/
-      mv ${TMP_ROOT}/cni/dist/${TAR_FILE} ${TMP_ROOT}
+      $(_sudo) cp $rootfs  ${TMP_ROOT}/${TAR_FILE}
     else
       $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
     fi
