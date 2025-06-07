@@ -73,7 +73,6 @@ Commands:
   nfs                    Up NFS server { down | logs }
 
 ENV:
-  UPLOAD_TO_CODING=false
   DOWNLOAD_FROM_CODING=true
   CODING_USERNAME
   CODING_TOKEN

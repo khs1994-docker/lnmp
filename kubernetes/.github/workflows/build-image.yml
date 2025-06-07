@@ -34,7 +34,7 @@ jobs:
           --cache-to=ghcr.io/khs1994/k8s-cfssl:cache \
           -t khs1994/k8s-cfssl \
           -t ghcr.io/khs1994/k8s-cfssl \
-          -t docker.cnb.cool/khs1994-docker/khs1994/k8s-cfssl \
+          -t docker.cnb.cool/khs1994/k8s-cfssl \
           --push \
           --platform linux/amd64,linux/arm64 \
           cfssl
@@ -46,7 +46,7 @@ jobs:
           --cache-to=ghcr.io/khs1994/fcos:cache \
           -t khs1994/fcos \
           -t ghcr.io/khs1994/fcos \
-          -t docker.cnb.cool/khs1994-docker/khs1994/fcos \
+          -t docker.cnb.cool/khs1994/fcos \
           --push \
           --platform linux/amd64,linux/arm64 \
           coreos/server
