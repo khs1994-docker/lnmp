@@ -547,7 +547,7 @@ jobs:
          BASE_BRANCH=v1.29.0-alpha.1-config
          BASE_BRANCH=master
          #  BASE_BRANCH=v1.28.0-config
-         if [ $CI_KUBERNETES_VERSION != ${LNMP_K8S_NEXT_VERSION} ];then
+         if ! [ $CI_KUBERNETES_VERSION = ${LNMP_K8S_NEXT_VERSION} -a "$GENERATE_CLI_HELP" = "true" ];then
            exit 0
          fi
 

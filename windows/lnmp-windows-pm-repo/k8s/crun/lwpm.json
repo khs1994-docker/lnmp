@@ -14,6 +14,6 @@
     "dist": "_mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/crun-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}\n",
     "platform-reqs": "if(!$IsLinux){echo $False}"
   },
-  "url": "https://github.com/containers/crun/releases/download/v${VERSION}/crun-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}",
+  "url": "https://github.com/containers/crun/releases/download/${VERSION}/crun-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}",
   "version": "1.21"
 }
