@@ -1,32 +1,32 @@
 NAME:
    containerd -
-                    __        _                     __
-  _________  ____  / /_____ _(_)___  ___  _________/ /
- / ___/ __ \/ __ \/ __/ __ `/ / __ \/ _ \/ ___/ __  /
-/ /__/ /_/ / / / / /_/ /_/ / / / / /  __/ /  / /_/ /
-\___/\____/_/ /_/\__/\__,_/_/_/ /_/\___/_/   \__,_/
+                                    __        _                     __
+                  _________  ____  / /_____ _(_)___  ___  _________/ /
+                 / ___/ __ \/ __ \/ __/ __ `/ / __ \/ _ \/ ___/ __  /
+                / /__/ /_/ / / / / /_/ /_/ / / / / /  __/ /  / /_/ /
+                \___/\____/_/ /_/\__/\__,_/_/_/ /_/\___/_/   \__,_/
 
-high performance container runtime
+                high performance container runtime
 
 
 USAGE:
-   cri-containerd [global options] command [command options] [arguments...]
+   containerd [global options] command [command options]
 
 VERSION:
-   v1.7.0
+   v2.0.0
 
 DESCRIPTION:
 
-containerd is a high performance container runtime whose daemon can be started
-by using this command. If none of the *config*, *publish*, *oci-hook*, or *help* commands
-are specified, the default action of the **containerd** command is to start the
-containerd daemon in the foreground.
+   containerd is a high performance container runtime whose daemon can be started
+   by using this command. If none of the *config*, *publish*, *oci-hook*, or *help* commands
+   are specified, the default action of the **containerd** command is to start the
+   containerd daemon in the foreground.
 
 
-A default configuration is used if no TOML configuration is specified or located
-at the default file location. The *containerd config* command can be used to
-generate the default configuration for containerd. The output of that command
-can be used and modified as necessary as a custom configuration.
+   A default configuration is used if no TOML configuration is specified or located
+   at the default file location. The *containerd config* command can be used to
+   generate the default configuration for containerd. The output of that command
+   can be used and modified as necessary as a custom configuration.
 
 COMMANDS:
    config    Information on the containerd config
@@ -40,5 +40,5 @@ GLOBAL OPTIONS:
    --address value, -a value    Address for containerd's GRPC server
    --root value                 containerd root directory
    --state value                containerd state directory
-   --help, -h                   show help
-   --version, -v                print the version
+   --help, -h                   Show help (default: false)
+   --version, -v                Print the version (default: false)
