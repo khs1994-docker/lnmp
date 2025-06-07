@@ -638,8 +638,8 @@ _containerd_install(){
 
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
 
-  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd              ${K8S_ROOT}/bin/cri-containerd
-  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd-shim-runc-v2 /usr/local/bin/
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd              ${K8S_ROOT}/bin/cri-containerd
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
 
   # $(_sudo) $(_curl) ${sha256sum_url} -o ${TMP_ROOT}/${TAR_FILE}.sha256sum
 }
@@ -1029,14 +1029,14 @@ _crio_config(){
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
   print_info "config containerd ..."
-  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/1.7
+  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/2.0
   $(_sudo) mkdir -p $CONTAINERD_CONF_ROOT/certs.d
   # containerd config default > ${K8S_ROOT}/etc/cri-containerd/config.toml
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/1.7/config.toml \
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/2.0/config.toml \
     | $(_sudo) tee $CONTAINERD_CONF_ROOT/config.toml
 
   if ! [ "${LNMP_CN_ENV}" = 'false' ];then
-  $(_sudo) cp -r systemd/etc/cri-containerd/1.7/certs.d $CONTAINERD_CONF_ROOT
+  $(_sudo) cp -r systemd/etc/cri-containerd/2.0/certs.d $CONTAINERD_CONF_ROOT
   fi
 
   if [ -n "$GITHUB_ACTIONS" ];then
@@ -1347,7 +1347,7 @@ _k8s_install(){
   _k8s_install_dep
 
   $(_sudo) mkdir -p /etc/{docker,systemd/system}
-  $(_sudo) chmod -R 755 /opt
+  $(_sudo) chmod -R 755 ${K8S_ROOT}
 
   _k8s_install_disable_firewalld
 
@@ -1456,7 +1456,7 @@ _k8s_join(){
   _k8s_install_dep
 
   $(_sudo) mkdir -p /etc/{docker,systemd/system}
-  $(_sudo) chmod -R 755 /opt
+  $(_sudo) chmod -R 755 ${K8S_ROOT}
 
   _k8s_install_disable_firewalld
 
@@ -1516,7 +1516,7 @@ $ $(_sudo) systemctl start kubelet@cri-containerd
 $ $(_sudo) systemctl start kubelet@crio
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
-$ $(_sudo) systemctl start cri-containerd@1.7 (Containerd runtime only)
+$ $(_sudo) systemctl start cri-containerd@2.0 (Containerd runtime only)
 $ $(_sudo) systemctl start cri-o (CRI-O runtime only)
 "
 }
@@ -1525,7 +1525,7 @@ _local_cleanup(){
   $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
-    docker cri-containerd@1.7 crio || true
+    docker cri-containerd@2.0 crio || true
 
   set +e
   $(_sudo) rm -rf ${K8S_ROOT}

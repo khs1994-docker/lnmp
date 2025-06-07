@@ -106,7 +106,7 @@ imports = []
         [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.crun]
           runtime_type = "io.containerd.runc.v2"
 
-          [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc.options]
+          [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.crun.options]
             BinaryName = "crun"
             SystemdCgroup = true
 

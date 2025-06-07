@@ -382,11 +382,7 @@ system_profiler SPHardwareDataType || true
 
   // /etc/docker/daemon.json
   core.debug('set /etc/docker/daemon.json');
-  core.startGroup('show default daemon json content');
-  await exec.exec('sudo', [
-    'cat',
-    '/etc/docker/daemon.json',
-  ]);
+  core.startGroup('show default daemon json content_');
   core.endGroup();
 
   await shell(`echo '${DOCKER_DAEMON_JSON}' | sudo tee /etc/docker/daemon.json`);

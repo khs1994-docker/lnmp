@@ -5,20 +5,20 @@
 ```bash
 $ kubectl apply -k addons/coredns
 
-# cn
+# 国内环境使用如下命令
 $ kubectl apply -k addons/coredns/cn
 ```
 
 ## Test
 
 ```bash
-$ kubectl run nginx --image=nginx:alpine
+$ kubectl run nginx --image=ccr.ccs.tencentyun.com/library-mirror/nginx:alpine
 
 $ kubectl get pod
 
 $ kubectl expose pod nginx-6b4b85b77b-sxskl --port 80
 
-$ kubectl run nginx2 --image=nginx:alpine
+$ kubectl run nginx2 --image=ccr.ccs.tencentyun.com/library-mirror/nginx:alpine
 
 $ kubectl get pod
 

@@ -1,0 +1,21 @@
+name: sync docker image
+main:
+  push:
+    - stages:
+      - name: sync docker image
+        script: |
+          cd /root/lnmp/windows/
+          ./docker-image-sync.ps1
+      docker:
+        image: ghcr.io/khs1994/docker-image-sync
+      env:
+        DEST_DOCKER_USERNAME: ${DOCKER_USERNAME}
+        DEST_DOCKER_PASSWORD: ${DOCKER_PASSWORD}
+        DEST_DOCKER_REGISTRY: ccr.ccs.tencentyun.com
+        DEST_NAMESPACE: dpsigs
+        CI: true
+        LNMP_CN_ENV: false
+        SOURCE_DOCKER_USERNAME:
+        SOURCE_DOCKER_PASSWORD:
+        SOURCE_DOCKER_REGISTRY:
+        CONFIG_URL: https://gitee.com/khs1994-docker/lnmp/raw/23.11/dockerfile/sync/docker-image-sync.json

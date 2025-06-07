@@ -1,4 +1,4 @@
-# https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/dns/coredns
+# __MACHINE_GENERATED_WARNING__
 
 apiVersion: v1
 kind: ServiceAccount
@@ -133,7 +133,7 @@ spec:
         kubernetes.io/os: linux
       containers:
       - name: coredns
-        image: registry.k8s.io/coredns/coredns:v1.12.0
+        image: registry.k8s.io/coredns/coredns:v1.12.1
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -176,7 +176,7 @@ spec:
             add:
             - NET_BIND_SERVICE
             drop:
-            - all
+            - ALL
           readOnlyRootFilesystem: true
       dnsPolicy: Default
       volumes:

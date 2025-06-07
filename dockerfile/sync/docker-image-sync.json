@@ -16,8 +16,8 @@
     "dest": "library-mirror/node:18.17.1-alpine"
   },
   {
-    "source": "golang:1.23.3-alpine",
-    "dest": "library-mirror/golang:1.23.3-alpine"
+    "source": "golang:1.24.4-alpine",
+    "dest": "library-mirror/golang:1.24.4-alpine"
   },
   {
     "source": "golang:alpine",
@@ -40,20 +40,12 @@
     "dest": "library-mirror/docker:test-dind-rootless"
   },
   {
-    "source": "library/alpine:3.20",
-    "dest": "library-mirror/alpine:3.20"
-  },
-  {
-    "source": "library/alpine:3.17",
-    "dest": "library-mirror/alpine:3.17"
-  },
-  {
-    "source": "library/alpine:3.18",
-    "dest": "library-mirror/alpine:3.18"
-  },
-  {
-    "source": "library/alpine:3.19",
+    "source": "library/alpine:3.21",
     "dest": "library-mirror/alpine:3.19"
+  },
+  {
+    "source": "library/alpine:3.22",
+    "dest": "library-mirror/alpine:3.20"
   },
   {
     "source": "library/alpine:edge",
@@ -108,8 +100,8 @@
     "dest": "library-mirror/registry:latest"
   },
   {
-    "source": "library/registry:2.8.2",
-    "dest": "library-mirror/registry:2.8.2"
+    "source": "library/registry:3.0.0",
+    "dest": "library-mirror/registry:3.0.0"
   },
   {
     "source": "library/mongo:latest",
