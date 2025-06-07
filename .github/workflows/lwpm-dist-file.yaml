@@ -145,6 +145,25 @@ jobs:
           $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/runsc@${env:VERSION}
+      - name: handle-cni
+        shell: pwsh
+        if: matrix.os == 'windows' &&
+            ( contains( github.event.head_commit.message, '[k8s]') || github.event_name == 'workflow_dispatch')
+        env:
+          VERSION: 1.7.1
+        run: |
+          $env:LWPM_DOCKER_USERNAME=$env:LWPM_DOCKER_USERNAME_
+          $env:LWPM_DOCKER_PASSWORD=$env:LWPM_DOCKER_PASSWORD_
+          $env:LWPM_DOCKER_REGISTRY=$env:LWPM_DOCKER_REGISTRY_
+
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist cni@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push cni@${env:VERSION}
+
+          $env:LWPM_DOCKER_USERNAME=$env:CODING_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
+          $NS="khs1994-docker/lwpm"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/cni@${env:VERSION}
       - name: handle-compose
         shell: pwsh
         if: matrix.os == 'windows' &&

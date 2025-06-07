@@ -42,7 +42,6 @@ ExecStartPre=-/usr/bin/env mkdir --parents /opt/k8s/var/lib/etcd
 ExecStartPre=-/usr/bin/env chmod 700 /opt/k8s/var/lib/etcd
 
 ExecStart= /opt/k8s/bin/etcd \
-  --enable-v2=false \
   --name="node1" \
   --listen-peer-urls="https://${K8S_ETCD_HOST}:2380" \
   --listen-client-urls="https://${K8S_ETCD_HOST}:2379,http://127.0.0.1:2379" \

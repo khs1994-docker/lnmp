@@ -81,7 +81,6 @@ systemd:
           -v ${K8S_ROOT}/etc/kubernetes/pki:${K8S_ROOT}/etc/kubernetes/pki \
           quay.io/coreos/etcd:v${ETCD_VERSION} \
           etcd \
-          --enable-v2=true \
           --name="coreos{{n}}" \
           --cert-file=${K8S_ROOT}/etc/kubernetes/pki/etcd.pem \
           --key-file=${K8S_ROOT}/etc/kubernetes/pki/etcd-key.pem \

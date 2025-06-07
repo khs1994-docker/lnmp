@@ -1,0 +1,22 @@
+name: cni
+version: 1.7.1
+url: "https://github.com/containernetworking/plugins/releases/download/v${VERSION}/cni-plugins-${env:lwpm_os}-${env:lwpm_architecture}-v${VERSION}.tgz"
+scripts:
+  dist: |
+    _mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}
+
+    # https://github.com/containernetworking/plugins/releases/download/v1.7.1/cni-plugins-linux-amd64-v1.7.1.tgz
+    curl -L `
+      $url `
+      -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename
+platform:
+  - architecture: amd64
+    os: windows
+    # hash:
+    #   sha512: 18adffab5d1be146906fd8531f4eae7153576aac235150ce2da05aee5ae161f6bd527e8dec34ae6131396cd4b3771e0d54ce770c065244ad3175a1afa63c89e1
+  - architecture: amd64
+    os: linux
+  - architecture: arm64
+    os: linux
+  - architecture: arm
+    os: linux

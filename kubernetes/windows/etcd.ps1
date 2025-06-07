@@ -24,7 +24,6 @@ Start-Process -FilePath etcd `
   -RedirectStandardOutput "$HOME/.khs1994-docker-lnmp/wsl-k8s/log/etcd.log" `
   -WorkingDirectory "$HOME/.khs1994-docker-lnmp/wsl-k8s/etcd" `
   -ArgumentList (Write-Output --data-dir="$HOME/.khs1994-docker-lnmp/wsl-k8s/etcd" `
-    --enable-v2=false `
     --name="node1" `
     --listen-peer-urls="https://${K8S_ETCD_HOST}:$K8S_ETCD_LISTEN_PEER_PORT" `
     --listen-client-urls="https://0.0.0.0:${K8S_ETCD_LISTEN_CLIENT_PORT},http://127.0.0.1:${K8S_ETCD_LISTEN_CLIENT_PORT}" `
