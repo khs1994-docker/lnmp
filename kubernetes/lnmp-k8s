@@ -667,13 +667,15 @@ _cni_install(){
   __download(){
     if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
       rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
-        khs1994-docker/lwpm/runc \
-        ${RUNC_VERSION} \
+        khs1994-docker/lwpm/cni \
+        ${CNI_VERSION} \
         ${GOARCH} \
         ${GOOS} \
         "" 0 docker.cnb.cool)
 
-      cp rootfs ${TMP_ROOT}/${TAR_FILE}
+      $(_sudo) tar -zxf $rootfs -C ${TMP_ROOT}/
+      $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}/
+      mv ${TMP_ROOT}/cni/dist/${TAR_FILE} ${TMP_ROOT}
     else
       $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
     fi
@@ -681,15 +683,16 @@ _cni_install(){
 
   print_info "install cni ..."
 
-  # if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-  #     local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
-  #   if ! [ $sha256 = `curl -fsSL ${url}/${TAR_FILE}.sha256 | cut -d " " -f 1` ];then
-  #     $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
-  #     __download
-  #   fi
-  # else
-  #     __download
-  # fi
+  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
+      # local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
+    # if ! [ $sha256 = `curl -fsSL ${url}/${TAR_FILE}.sha256 | cut -d " " -f 1` ];then
+    #   $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
+    #   __download
+    # fi
+    true
+  else
+      __download
+  fi
 
   if [ "$1" = "--dry-run" ];then
     print_info "download cni success"

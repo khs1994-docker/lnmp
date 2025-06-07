@@ -811,6 +811,15 @@ function _push($opt) {
 
         break
       }
+    }elseif(Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tgz){
+      write-host "==> found platform .tgz file, use it" -ForegroundColor Blue
+
+      foreach ($item in $(Get-ChildItem $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tgz)) {
+        write-host "==> Add already exists .tgz file: $item" -ForegroundColor Blue
+        $layers_file += , ${item}.FullName
+
+        break
+      }
     }
     elseif (Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}) {
       # pkg/dist/linux-amd64/file
