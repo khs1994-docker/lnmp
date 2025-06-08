@@ -48,8 +48,8 @@ ENV PECL_EXTENSION \
       # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
       # igbinary \
       https://github.com/igbinary/igbinary/archive/master.tar.gz \
-      # redis \
-      https://github.com/phpredis/phpredis/archive/develop.tar.gz \
+      redis \
+      # https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       memcached \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       # xdebug-beta \

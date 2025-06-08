@@ -262,7 +262,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
     $(test "$gnuArch" = 's390x-linux-musl' && echo '--without-pcre-jit') \
     \
     $PHP_EXTRA_CONFIGURE_ARGS \
-  && make -j "$(nproc)" ; cat config.log \
+  && make -j "$(nproc)" \
   && find -type f -name '*.a' -delete \
   && make install \
   && cp -v php.ini-* "$PHP_INI_DIR/" \
@@ -370,8 +370,8 @@ ENV PECL_EXTENSION \
       # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
       # igbinary \
       https://github.com/igbinary/igbinary/archive/master.tar.gz \
-      # redis \
-      https://github.com/phpredis/phpredis/archive/develop.tar.gz \
+      redis \
+      # https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       memcached \
       # xdebug-beta \
       # yaml \
