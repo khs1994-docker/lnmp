@@ -54,7 +54,7 @@ RUN --mount=type=bind,from=composer:2.5.5,source=/usr/bin/composer,target=/opt/b
     && chmod +x /docker-entrypoint.composer \
     && cp -a /opt/bin/composer /usr/bin/composer \
     && composer --ansi --version --no-interaction \
-    && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+    && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk add --no-cache gosu \
     \
 # laravel 安装程序

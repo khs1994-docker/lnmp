@@ -28,7 +28,7 @@ jobs:
       matrix:
         # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
         TYPE: [CLI, FPM, COMPOSER, S6, UNIT, SWOOLE]
-        DIST: ["24.04-arm64","24.04"]
+        DIST: ["24.04-arm","24.04"]
     runs-on: ubuntu-${{ matrix.DIST }}
     steps:
     - uses: actions/checkout@main
@@ -54,7 +54,7 @@ jobs:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         GHCR_IO_TOKEN: ${{secrets.GHCR_IO_TOKEN}}
         CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
-        ARM: ${{ matrix.DIST == '24.04-arm64' && 'true' || 'false' }}
+        ARM: ${{ matrix.DIST == '24.04-arm' }}
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: test
