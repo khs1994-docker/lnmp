@@ -28,7 +28,8 @@ jobs:
       matrix:
         # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
         TYPE: [CLI, FPM, COMPOSER, S6, UNIT, SWOOLE]
-    runs-on: ubuntu-latest
+        DIST: ["24.04-arm64","24.04"]
+    runs-on: ubuntu-${{ matrix.DIST }}
     steps:
     - uses: actions/checkout@main
       with:
@@ -53,6 +54,7 @@ jobs:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         GHCR_IO_TOKEN: ${{secrets.GHCR_IO_TOKEN}}
         CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
+        ARM: ${{ matrix.DIST == '24.04-arm64' && 'true' || 'false' }}
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: test
@@ -73,30 +75,41 @@ jobs:
         echo $GITHUB_REF | grep -q 'refs/tags/' && IS_TAG_EVENT=1 || true
 
         if ! [ -n "${IS_TAG_EVENT}" -o "${GITHUB_EVENT_NAME}" = 'workflow_dispatch' ];then \
-          export PLATFORM=linux/amd64; \
-          if [ "$PHP_VERSION" = 8_X_X -o "$PHP_VERSION" = nightly ];then \
-            export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
-            IS_PUSH=--push; \
-            mirror="${add_mirror}"; \
-          else \
             IS_PUSH=--push; \
             DOCKER_HUB_USERNAME=$DOCKER_HUB_USERNAME_TEST; \
             mirror="${add_mirror2}"; \
-          fi; \
         else \
           IS_PUSH=--push \
           && mirror="${add_mirror}"; \
         fi
 
         VCS_REF=`git rev-parse --short HEAD`
-        CACHE_IMAGE=ghcr.io/${DOCKER_HUB_USERNAME}/php-cache
-        # CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
 
-        options="--build-arg USERNAME=$DOCKER_HUB_USERNAME \
+        if [ "${ARM}" -eq "true" ];then
+          IS_PUSH=""
+          PLATFORM="linux/arm64"
+          CACHE_IMAGE=ghcr.io/${DOCKER_HUB_USERNAME}/php-cache-arm
+
+          options="--build-arg USERNAME=$DOCKER_HUB_USERNAME \
         --build-arg VCS_REF=$VCS_REF \
         --build-arg PHP_VERSION=$PHP_TAG_VERSION \
         --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
         --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
+        else
+          CACHE_IMAGE=ghcr.io/${DOCKER_HUB_USERNAME}/php-cache
+          CACHE_IMAGE_ARM=ghcr.io/${DOCKER_HUB_USERNAME}/php-cache-arm
+
+          options="--build-arg USERNAME=$DOCKER_HUB_USERNAME \
+        --build-arg VCS_REF=$VCS_REF \
+        --build-arg PHP_VERSION=$PHP_TAG_VERSION \
+        --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
+        --cache-from=${CACHE_IMAGE_ARM}:${FOLDER}-${TYPE,,}-cache \
+        --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
+        fi
+
+
+        # CACHE_IMAGE_ARM=ghcr.io/${DOCKER_HUB_USERNAME}/php-cache-arm
+        # CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
 
         if [ "$TYPE" = "UNIT" ];then
           echo ::group::Build $TYPE
