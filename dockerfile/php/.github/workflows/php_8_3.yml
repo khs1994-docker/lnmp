@@ -54,7 +54,6 @@ jobs:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         GHCR_IO_TOKEN: ${{secrets.GHCR_IO_TOKEN}}
         CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
-        ARM: ${{ matrix.DIST == '24.04-arm' }}
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: test
@@ -211,4 +210,5 @@ jobs:
         TYPE: ${{ matrix.TYPE }}
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php docker.cnb.cool/khs1994-docker/khs1994/php ghcr.io/khs1994/php
         add_mirror2: ghcr.io/lrew/php
+        ARM: ${{ matrix.DIST == '24.04-arm' }}
       name: 'Build Image'
