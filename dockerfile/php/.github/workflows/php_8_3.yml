@@ -84,7 +84,7 @@ jobs:
 
         VCS_REF=`git rev-parse --short HEAD`
 
-        if [ "${ARM}" -eq "true" ];then
+        if [ "${ARM}" = "true" ];then
           IS_PUSH=""
           PLATFORM="linux/arm64"
           CACHE_IMAGE=ghcr.io/${DOCKER_HUB_USERNAME}/php-cache-arm
