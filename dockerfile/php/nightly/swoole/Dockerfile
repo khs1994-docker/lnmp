@@ -36,12 +36,16 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                                     openssl-dev \
                                     pcre2-dev \
     && export PATH=$PATH:/opt/bin \
-    && echo "--enable-openssl" \
-           > /tmp/swoole.configure.options \
-    && pickle install https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz \
-           -n --defaults --strip --cleanup \
+    && curl -fsSL -o /tmp/swoole.tar.gz https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz \
+    && tar -zxvf /tmp/swoole.tar.gz -C /tmp \
+    && mkdir -p /usr/src/php/ext \
+    && mv /tmp/swoole-master /usr/src/php/ext/swoole \
+    && docker-php-ext-configure swoole --enable-openssl \
+    && docker-php-ext-install swoole \
+    && docker-php-ext-enbable swoole \
     && apk del --no-network .pecl_build_deps \
     && rm -rf /tmp/* \
+    && rm -rf /usr/src/php \
     && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
 # smoke test
     && php --version

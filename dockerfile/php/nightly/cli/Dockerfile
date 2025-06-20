@@ -368,10 +368,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 # ENTRYPOINT ["docker-php-entrypoint"]
   \
 # RUN set -ex \
-  && rm -rf /usr/src/php \
-  && curl -fsSL -o /usr/local/bin/pickle \
-       https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
-  && chmod +x /usr/local/bin/pickle
+  && rm -rf /usr/src/php
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
@@ -388,38 +385,46 @@ ENV PECL_RUN_DEPS \
       zlib \
       zstd-libs
 
-ENV PECL_EXTENSION \
-      # mongodb \
-      # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
-      # igbinary \
-      https://github.com/igbinary/igbinary/archive/master.tar.gz \
-      # redis \
-      https://github.com/phpredis/phpredis/archive/develop.tar.gz \
-      memcached \
-      # xdebug-beta \
-      # yaml \
-      # https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
-      https://github.com/kjdev/php-ext-zstd/archive/0.11.0.tar.gz \
-      ${PECL_EXTENSION_EXTRA:-}
-
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     --mount=type=cache,target=/usr/local/lib/php/test \
     --mount=type=cache,target=/usr/local/lib/php/doc \
+    --mount=type=bind,from=ghcr.io/php/pie:bin,source=/usr/bin/pie,target=/usr/bin/pie,rw \
       set -x \
       && export PATH=$PATH:/opt/bin \
+      && curl -fsSL -o /tmp/igbinary.tar.gz https://github.com/igbinary/igbinary/archive/master.tar.gz \
+      && tar -zxvf /tmp/igbinary.tar.gz -C /tmp \
+      && mkdir -p /usr/src/php/ext \
+      && mv /tmp/igbinary-master /usr/src/php/ext/igbinary \
+      && docker-php-ext-configure igbinary --enable-igbinary \
+      && docker-php-ext-install igbinary \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && echo "--enable-redis-igbinary --enable-redis-zstd" > /tmp/redis.configure.options \
-      && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
-      && echo "--with-libzstd" > /tmp/zstd.configure.options \
-      && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup --continue-on-error \
-      && pickle install \
-           https://github.com/xdebug/xdebug/archive/master.tar.gz \
-# https://github.com/tideways/php-xhprof-extension.git
-           https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
-           -n --defaults --no-write --strip --cleanup --continue-on-error \
+      && export PIE_CONFIG="--with-php-config=/usr/local/bin/php-config \
+                           --with-php-path=/usr/local/bin/php \
+                           --with-phpize-path=/usr/local/bin/phpize \
+                           --skip-enable-extension" \
+      && pie -n install ${PIE_CONFIG} \
+                     kjdev/zstd:dev-master \
+      # && pie -n install ${PIE_CONFIG} \
+      #                igbinary/igbinary:dev-main \
+      && pie -n install ${PIE_CONFIG} \
+                     phpredis/phpredis:dev-develop \
+                     --enable-redis-igbinary --enable-redis-zstd \
+      && pie -n install ${PIE_CONFIG} \
+                     php-memcached/php-memcached:dev-main \
+                     --enable-memcached-igbinary \
+      && pie -n install ${PIE_CONFIG} \
+                     xdebug/xdebug:dev-main \
+      && docker-php-ext-enable zstd \
+                               redis \
+                               igbinary \
+                               memcached \
+                               xdebug \
       && apk del --no-network .pecl_build_deps \
       && rm -rf /tmp/* \
+      && rm -rf /root/.pie \
+      && rm -rf /root/.composer \
+      && rm -rf /usr/src/php \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \
       && ls -la $(php-config --extension-dir) \
