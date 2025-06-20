@@ -415,7 +415,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && export PIE_CONFIG="--with-php-config=/usr/local/bin/php-config \
                            --with-php-path=/usr/local/bin/php \
                            --with-phpize-path=/usr/local/bin/phpize \
-                           --skip-enable-extension" \
+                           --skip-enable-extension \
+                           --force " \
       && pie -n install ${PIE_CONFIG} \
                      kjdev/zstd:dev-master \
       # && pie -n install ${PIE_CONFIG} \
