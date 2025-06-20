@@ -67,14 +67,17 @@ jobs:
             export PLATFORM=linux/amd64,linux/arm64; \
             IS_PUSH=--push; \
             mirror="${add_mirror}"; \
-          fi; \
         else \
           IS_PUSH=--push ; \
-          DOCKER_HUB_USERNAME=$DOCKER_HUB_USERNAME_TEST; \
-          && mirror="${add_mirror}"; \
+          mirror="${add_mirror}"; \
         fi
 
         VCS_REF=`git rev-parse --short HEAD`
+
+        if [ -z "${PHP_VCS_REF}" -o "${PHP_VCS_REF}" = 'master' ];then
+          git clone --depth=1 https://github.com/php/php-src $HOME/php-src
+          PHP_VCS_REF=`git -C $HOME/php-src rev-parse --short HEAD`
+        fi
 
         if [ "${ARM}" = "true" ];then
           IS_PUSH=""
@@ -82,32 +85,21 @@ jobs:
           CACHE_IMAGE=ghcr.io/${DOCKER_HUB_USERNAME}/php-cache-arm
           options="--build-arg USERNAME=$DOCKER_HUB_USERNAME \
           --build-arg VCS_REF=$VCS_REF \
+          --build-arg PHP_VCS_REF=$PHP_VCS_REF \
           --build-arg PHP_VERSION=$PHP_TAG_VERSION \
           --cache-from=${CACHE_IMAGE_ARM}:${FOLDER}-${TYPE,,}-cache \
           --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
         else
           CACHE_IMAGE=ghcr.io/${DOCKER_HUB_USERNAME}/php-cache
           CACHE_IMAGE_ARM=ghcr.io/${DOCKER_HUB_USERNAME}/php-cache-arm
-
           options="--build-arg USERNAME=$DOCKER_HUB_USERNAME \
           --build-arg VCS_REF=$VCS_REF \
+          --build-arg PHP_VCS_REF=$PHP_VCS_REF \
           --build-arg PHP_VERSION=$PHP_TAG_VERSION \
           --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
           --cache-from=${CACHE_IMAGE_ARM}:${FOLDER}-${TYPE,,}-cache \
           --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
         fi
-
-        if [ -z "${PHP_VCS_REF}" -o "${PHP_VCS_REF}" = 'master' ];then
-          git clone --depth=1 https://github.com/php/php-src $HOME/php-src
-          PHP_VCS_REF=`git -C $HOME/php-src rev-parse --short HEAD`
-        fi
-
-        options="--build-arg VCS_REF=$VCS_REF \
-        --build-arg PHP_VCS_REF=$PHP_VCS_REF \
-        --build-arg PHP_VERSION=$PHP_TAG_VERSION \
-        --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
-        --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
-        echo $options
 
         if [ "$TYPE" = "UNIT" ];then
           echo "type=unit" >> $GITHUB_OUTPUT
@@ -217,7 +209,6 @@ jobs:
       env:
         GITHUB_EVENT_NAME: ${{github.event_name}}
         DOCKER_HUB_USERNAME: khs1994
-        DOCKER_HUB_USERNAME_TEST: lrew
         PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v7
         PHP_VERSION: nightly
         FOLDER: nightly

@@ -388,9 +388,9 @@ ENV PECL_RUN_DEPS \
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     --mount=type=cache,target=/usr/local/lib/php/test \
     --mount=type=cache,target=/usr/local/lib/php/doc \
-    --mount=type=bind,from=ghcr.io/php/pie:bin,source=/usr/bin/pie,target=/usr/bin/pie,rw \
+    --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
       set -x \
-      && export PATH=$PATH:/opt/bin \
+      && export PATH=$PATH:/opt/bin:/opt/bin2 \
       && curl -fsSL -o /tmp/igbinary.tar.gz https://github.com/igbinary/igbinary/archive/master.tar.gz \
       && tar -zxvf /tmp/igbinary.tar.gz -C /tmp \
       && mkdir -p /usr/src/php/ext \
