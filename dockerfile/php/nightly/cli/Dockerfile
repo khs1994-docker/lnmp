@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-FROM --platform=$TARGETPLATFORM alpine:3.20
+FROM --platform=$TARGETPLATFORM alpine:3.22
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -394,6 +394,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && curl -fsSL -o /tmp/igbinary.tar.gz https://github.com/igbinary/igbinary/archive/master.tar.gz \
       && tar -zxvf /tmp/igbinary.tar.gz -C /tmp \
       && mkdir -p /usr/src/php/ext \
+      && touch /usr/src/php/.docker-extracted \
       && mv /tmp/igbinary-master /usr/src/php/ext/igbinary \
       && docker-php-ext-configure igbinary --enable-igbinary \
       && docker-php-ext-install igbinary \
