@@ -1,8 +1,8 @@
 {
   "name": "mpv",
   "description": "Video player based on MPlayer/mplayer2",
-  "version": "0.35.1",
-  "pre-version": "20230402-git-0f13c38",
+  "version": "0.39.0",
+  "pre-version": "20250615-git-e8ade13",
   "homepage": "https://mpv.io/",
   "bug": "https://mpv.io/bug-reports/",
   "github": "mpv-player/mpv",

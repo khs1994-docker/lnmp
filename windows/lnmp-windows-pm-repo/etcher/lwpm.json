@@ -1,12 +1,12 @@
 {
   "description": "Flash OS images to SD cards & USB drives, safely and easily.",
+  "github": "balena-io/etcher",
   "name": "etcher",
   "scripts": {
-    "install": "Start-Process -FilePath $filename -wait",
+    "install": "_unzip $filename $unzipDesc\n# Start-Process -FilePath $filename -wait\n",
     "platform-reqs": "if($env:lwpm_os -eq 'linux'){echo $false}"
   },
-  "url": "https://github.com/balena-io/etcher/releases/download/v${VERSION}/balenaEtcher-$(if($env:lwpm_os -eq 'windows'){echo Setup-${VERSION}.exe}else{echo ${VERSION.dmg}})",
-  "url-mirror": "https://${env:GITHUB_MIRROR}/balena-io/etcher/releases/download/v${VERSION}/balenaEtcher-$(if($env:lwpm_os -eq 'windows'){echo Setup-${VERSION}.exe}else{echo ${VERSION.dmg}})",
-  "version": "1.18.4",
-  "github": "balena-io/etcher"
+  "url": "https://github.com/balena-io/etcher/releases/download/v${VERSION}/balenaEtcher-$(if($env:lwpm_os -eq 'windows'){echo win32-x64-${VERSION}.zip}else{echo darwin-x64-${VERSION}.zip})",
+  "url-mirror": "https://${env:GITHUB_MIRROR}/balena-io/etcher/releases/download/v${VERSION}/balenaEtcher-$(if($env:lwpm_os -eq 'windows'){echo win32-x64-${VERSION}.zip}else{echo darwin-x64-${VERSION}.zip})",
+  "version": "2.1.2"
 }

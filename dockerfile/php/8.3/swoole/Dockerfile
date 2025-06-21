@@ -22,12 +22,11 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-# ENV SWOOLE_VERSION=v5.0.3
-ENV SWOOLE_VERSION=master
+ENV SWOOLE_VERSION=6.0.2
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN --mount=type=bind,from=php:8.3.12-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     set -x \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     && apk add --no-cache --virtual .pecl_build_deps \
@@ -35,13 +34,16 @@ RUN --mount=type=bind,from=php:8.3.12-alpine,source=/usr/local/bin,target=/opt/b
                                     openssl-dev \
                                     pcre2-dev \
     && export PATH=$PATH:/opt/bin \
-    && echo " \
-           --enable-openssl \
-           " > /tmp/swoole.configure.options \
-    && pickle install https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz \
-         -n --defaults --strip --cleanup \
+    && curl -fsSL -o /tmp/swoole.tar.gz https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
+    && tar -zxvf /tmp/swoole.tar.gz -C /tmp \
+    && mkdir -p /usr/src/php/ext \
+    && touch /usr/src/php/.docker-extracted \
+    && mv /tmp/swoole-src-${SWOOLE_VERSION} /usr/src/php/ext/swoole \
+    && docker-php-ext-configure swoole --enable-openssl \
+    && docker-php-ext-install swoole \
     && apk del --no-network .pecl_build_deps \
     && rm -rf /tmp/* \
+    && rm -rf /usr/src/php \
     && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
 # smoke test
     && php --version

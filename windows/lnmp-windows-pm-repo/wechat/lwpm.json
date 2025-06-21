@@ -7,7 +7,7 @@
   "bug": "",
   "github": "",
   "releases": "",
-  "url": "https://dldir1.qq.com/weixin/$(if($IsMacOs){echo mac/WeChatMac.dmg}else{echo Windows/WeChatSetup.exe})",
+  "url": "https://dldir1v6.qq.com/weixin/Universal/$(if($IsMacOs){echo Mac/WeChatMac.dmg}else{echo Windows/WeChatWin.exe})",
   "command": "${env:ProgramFiles}\\Tencent\\WeChat\\WeChat.exe",
   "scripts": {
     "platform-reqs": [
@@ -16,6 +16,6 @@
     "install": "Start-Process -FilePath $filename -wait",
     "uninstall": "& ${env:ProgramFiles}\\Tencent\\WeChat\\Uninstall.exe",
     "version": "echo ${VERSION}",
-    "test": "if($IsWindows){& get-command ${env:ProgramFiles}\\Tencent\\WeChat\\WeChat.exe}"
+    "test": "if($IsWindows){& get-command ${env:ProgramFiles}\\Tencent\\Weixin\\Weixin.exe}"
   }
 }

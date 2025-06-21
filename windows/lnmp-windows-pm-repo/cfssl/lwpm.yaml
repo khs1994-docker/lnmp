@@ -1,5 +1,5 @@
 name: cfssl
-version: 1.6.4
+version: 1.6.5
 github: cloudflare/cfssl
 releases: https://github.com/cloudflare/cfssl/releases
 scripts:
