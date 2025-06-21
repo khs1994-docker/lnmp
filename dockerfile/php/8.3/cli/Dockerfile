@@ -365,41 +365,51 @@ ENV PECL_RUN_DEPS \
       zlib \
       zstd-libs
 
-ENV PECL_EXTENSION \
-      # mongodb \
-      # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
-      # igbinary \
-      https://github.com/igbinary/igbinary/archive/master.tar.gz \
-      redis \
-      # https://github.com/phpredis/phpredis/archive/develop.tar.gz \
-      memcached \
-      # xdebug-beta \
-      # yaml \
-      # https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
-      https://github.com/kjdev/php-ext-zstd/archive/0.11.0.tar.gz \
-      ${PECL_EXTENSION_EXTRA:-}
-
-RUN --mount=type=bind,from=upstream,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
+    --mount=type=cache,target=/usr/local/lib/php/test \
+    --mount=type=cache,target=/usr/local/lib/php/doc \
+    --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
       set -x \
-      && cp -a /opt/bin/docker-php-entrypoint /usr/local/bin \
-      && export PATH=$PATH:/opt/bin \
+      && export PATH=$PATH:/opt/bin:/opt/bin2 \
+      && curl -fsSL -o /tmp/igbinary.tar.gz https://github.com/igbinary/igbinary/archive/master.tar.gz \
+      && tar -zxvf /tmp/igbinary.tar.gz -C /tmp \
+      && mkdir -p /usr/src/php/ext \
+      && touch /usr/src/php/.docker-extracted \
+      && mv /tmp/igbinary-master /usr/src/php/ext/igbinary \
+      && docker-php-ext-configure igbinary \
+      && docker-php-ext-install igbinary \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && curl -fsSL -o /usr/local/bin/pickle \
-           https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
-      && chmod +x /usr/local/bin/pickle \
-      && echo "--enable-redis-igbinary --enable-redis-zstd" > /tmp/redis.configure.options \
-      && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
-      && echo "--with-libzstd" > /tmp/zstd.configure.options \
-      && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
-      && pickle install \
-         xdebug \
-         # https://github.com/xdebug/xdebug/archive/master.tar.gz \
-# https://github.com/tideways/php-xhprof-extension.git
-         https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
-         -n --defaults --no-write --strip --cleanup \
+      && export PIE_CONFIG="--with-php-config=/usr/local/bin/php-config \
+                           --with-php-path=/usr/local/bin/php \
+                           --with-phpize-path=/usr/local/bin/phpize \
+                           --skip-enable-extension \
+                           --force" \
+      && pie -n install ${PIE_CONFIG} \
+                     kjdev/zstd \
+      # && pie -n install ${PIE_CONFIG} \
+      #                igbinary/igbinary:dev-main \
+      && pie -n install ${PIE_CONFIG} \
+                     phpredis/phpredis \
+                     --enable-redis-igbinary --enable-redis-zstd \
+      && pie -n install ${PIE_CONFIG} \
+                     php-memcached/php-memcached \
+                     --enable-memcached-igbinary \
+      && pie -n install ${PIE_CONFIG} \
+                     xdebug/xdebug \
+      && docker-php-ext-enable zstd \
+      && echo "extension=redis" > $PHP_INI_DIR/conf.d/docker-php-ext-z-redis.ini \
+      && echo "extension=memcached" > $PHP_INI_DIR/conf.d/docker-php-ext-z-memcached.ini \
+      && strip --strip-all $(php-config --extension-dir)/redis.so \
+      && strip --strip-all $(php-config --extension-dir)/memcached.so \
+      && strip --strip-all $(php-config --extension-dir)/zstd.so \
+      && strip --strip-all $(php-config --extension-dir)/xdebug.so \
       && apk del --no-network .pecl_build_deps \
       && rm -rf /tmp/* \
+      && rm -rf /root/.pie \
+      && rm -rf /root/.composer \
+      && rm -rf /usr/src/php \
+      && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \
       && ls -la $(php-config --extension-dir) \
       && php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));' \

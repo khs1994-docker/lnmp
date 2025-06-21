@@ -397,8 +397,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && pie -n install ${PIE_CONFIG} \
                      xdebug/xdebug \
       && docker-php-ext-enable zstd \
-                               redis \
-                               memcached \
+      && echo "extension=redis" > $PHP_INI_DIR/conf.d/docker-php-ext-z-redis.ini \
+      && echo "extension=memcached" > $PHP_INI_DIR/conf.d/docker-php-ext-z-memcached.ini \
       && strip --strip-all $(php-config --extension-dir)/redis.so \
       && strip --strip-all $(php-config --extension-dir)/memcached.so \
       && strip --strip-all $(php-config --extension-dir)/zstd.so \
