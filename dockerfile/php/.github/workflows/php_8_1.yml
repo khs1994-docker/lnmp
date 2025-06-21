@@ -206,4 +206,5 @@ jobs:
         TYPE: ${{ matrix.TYPE }}
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php docker.cnb.cool/khs1994-docker/khs1994/php ghcr.io/khs1994/php
         add_mirror2: ghcr.io/lrew/php docker.cnb.cool/khs1994-docker/lrew/php
+        ARM: ${{ matrix.DIST == '24.04-arm' }}
       name: 'Build Image'

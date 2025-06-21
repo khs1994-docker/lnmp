@@ -67,7 +67,6 @@ jobs:
           || contains( github.event.head_commit.message, '[action skip]')
       - run: docker version
       - run: docker info
-      - run: docker-compose --version
       - run: docker compose version
       - name: System info
         run: |
