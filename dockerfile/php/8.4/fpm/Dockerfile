@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-ARG PHP_VERSION=8.4.0
+ARG PHP_VERSION=8.4.8
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.22 as php
 
@@ -132,9 +132,6 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
-        && curl -fsSL -o /usr/local/bin/pickle \
-           https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
-        && chmod +x /usr/local/bin/pickle \
 # 安装内置扩展
         && docker-php-source extract \
         && docker-php-ext-configure zip \
