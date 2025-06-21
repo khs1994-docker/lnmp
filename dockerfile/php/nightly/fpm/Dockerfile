@@ -8,7 +8,8 @@ ARG PHP_VCS_REF="master"
 LABEL com.github.php.php-src.revision=$PHP_VCS_REF
 
 ENV TZ=Asia/Shanghai \
-    APP_ENV=development
+    APP_ENV=development \
+    BOX_REQUIREMENT_CHECKER=0
 
 ARG PHP_VERSION=nightly
 

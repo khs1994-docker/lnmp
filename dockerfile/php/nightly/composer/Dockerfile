@@ -25,6 +25,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_HOME=/tmp/composer \
     COMPOSER_NO_INTERACTION=1 \
     COMPOSER_VERSION=2.8.3 \
+    BOX_REQUIREMENT_CHECKER=0 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
