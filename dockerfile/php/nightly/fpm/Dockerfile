@@ -409,7 +409,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && mkdir -p /usr/src/php/ext \
       && touch /usr/src/php/.docker-extracted \
       && mv /tmp/igbinary-master /usr/src/php/ext/igbinary \
-      && docker-php-ext-configure igbinary --enable-igbinary \
+      && docker-php-ext-configure igbinary \
       && docker-php-ext-install igbinary \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
@@ -434,7 +434,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                                redis \
                                igbinary \
                                memcached \
-                               xdebug \
       && apk del --no-network .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /root/.pie \
