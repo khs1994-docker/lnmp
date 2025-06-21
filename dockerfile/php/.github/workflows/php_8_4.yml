@@ -27,7 +27,7 @@ jobs:
       max-parallel: 1
       matrix:
         # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
-        TYPE: [CLI, FPM, COMPOSER, S6, UNIT, SWOOLE]
+        TYPE: [CLI, FPM, COMPOSER, S6, UNIT, SWOOLE, ZTS]
         DIST: ["24.04-arm","24.04"]
     runs-on: ubuntu-${{ matrix.DIST }}
     steps:
@@ -109,6 +109,16 @@ jobs:
 
         # CACHE_IMAGE_ARM=ghcr.io/${DOCKER_HUB_USERNAME}/php-cache-arm
         # CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
+
+        if [ "$TYPE" = "ZTS" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-frankenphp-alpine \
+          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-frankenphp-alpine ";done) \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/zts
+          echo ::endgroup::
+        fi
 
         if [ "$TYPE" = "UNIT" ];then
           echo ::group::Build $TYPE
