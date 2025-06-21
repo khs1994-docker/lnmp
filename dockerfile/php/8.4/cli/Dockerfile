@@ -100,14 +100,14 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-bz2=shared \
         # --with-tidy=shared \
         --with-gmp=shared \
-        --with-imap=shared \
-            --with-imap-ssl \
-            --with-kerberos \
+        # --with-imap=shared \ # 8.4 removed # https://github.com/php/php-src/commit/f62f6a6d4b9567530775d684db55e9990952c737
+        #    --with-imap-ssl \
+        #    --with-kerberos \
         --with-enchant=shared \
         --enable-fileinfo=shared \
         --with-ldap=shared \
             --with-ldap-sasl \
-        --with-pspell=shared \
+        # --with-pspell=shared \ # 8.4 removed # https://github.com/php/php-src/commit/b035cb6c8e31bea351f169b3e9f34fdc562e77e1
         --enable-shmop=shared \
         # --with-snmp=shared \
         --with-mysqli=shared \
@@ -187,7 +187,6 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
           gmp-dev \
           bzip2-dev \
           enchant2-dev \
-          imap-dev \
           gettext-dev \
           icu-dev \
           krb5-dev \
@@ -278,7 +277,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
                            # gd \
                            gettext \
                            gmp \
-                           imap \
+                           # imap \ 8.4 removed
                            intl \
                            ldap \
                            pcntl \
@@ -289,7 +288,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
-                           pspell \
+                           # pspell \ 8.4 removed
                            shmop \
                            # snmp \
                            # soap \

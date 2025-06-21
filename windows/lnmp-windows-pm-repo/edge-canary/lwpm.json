@@ -9,7 +9,7 @@
   "releases": "https://www.microsoft.com/zh-cn/edge/download/insider",
   "url": "https://c2rsetup.edog.officeapps.live.com/c2r/downloadEdge.aspx?platform=Default&source=EdgeInsiderPage&Channel=Canary&language=en",
   "url-mirror": "",
-  "winget-pkgs": "https://hub.nuaa.cf/microsoft/winget-pkgs/tree/master/manifests/m/Microsoft/Edge",
+  "winget-pkgs": "https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/Microsoft/Edge",
   "scripts": {
     "preinstall": "",
     "install": "start-process $filename",

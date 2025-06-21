@@ -9,13 +9,13 @@
 
 ### Remove ext/imap — it has been moved to PECL
 
-* https://hub.nuaa.cf/php/php-src/commit/f62f6a6d4b9567530775d684db55e9990952c737
-* https://hub.nuaa.cf/php/php-src/commits/master/ext/imap
+* https://github.com/php/php-src/commit/f62f6a6d4b9567530775d684db55e9990952c737
+* https://github.com/php/php-src/commits/master/ext/imap
 
 ### PSpell has been moved to PECL
 
-* https://hub.nuaa.cf/php/php-src/commit/b035cb6c8e31bea351f169b3e9f34fdc562e77e1
-* https://hub.nuaa.cf/php/php-src/commits/master/ext/pspell
+* https://github.com/php/php-src/commit/b035cb6c8e31bea351f169b3e9f34fdc562e77e1
+* https://github.com/php/php-src/commits/master/ext/pspell
 
 ## docker image ftp ext removed
 

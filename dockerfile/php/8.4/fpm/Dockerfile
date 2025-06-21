@@ -25,7 +25,6 @@ ENV PHP_EXTENSION \
       gd \
       gettext \
       gmp \
-      imap \
       intl \
       mysqli \
       pcntl \
@@ -118,7 +117,6 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
                          gmp-dev \
                          bzip2-dev \
                          enchant2-dev \
-                         imap-dev \
                          gettext-dev \
                          libwebp-dev \
                          icu-dev \

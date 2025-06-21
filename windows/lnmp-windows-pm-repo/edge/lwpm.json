@@ -9,7 +9,7 @@
   "releases": "https://www.microsoft.com/zh-cn/edge/download",
   "url": "https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/d9d8b4d4-0136-4c8f-8dfe-4c3ff29b2473/MicrosoftEdgeEnterpriseX64.msi",
   "url-mirror": "",
-  "winget-pkgs": "https://hub.nuaa.cf/microsoft/winget-pkgs/tree/master/manifests/m/Microsoft/Edge",
+  "winget-pkgs": "https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/Microsoft/Edge",
   "scripts": {
     "preinstall": "",
     "install": "start-process $filename",
