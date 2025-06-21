@@ -233,6 +233,6 @@ jobs:
         image: ${{ steps.build.outputs.image }}
         args: --file=nightly/${{ steps.build.outputs.type }}/Dockerfile
     - name: Upload result to GitHub Code Scanning
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: snyk.sarif
