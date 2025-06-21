@@ -22,7 +22,7 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-ENV SWOOLE_VERSION=v6.0.2
+ENV SWOOLE_VERSION=6.0.2
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -34,11 +34,11 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                                     openssl-dev \
                                     pcre2-dev \
     && export PATH=$PATH:/opt/bin \
-    && curl -fsSL -o /tmp/swoole.tar.gz https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz \
+    && curl -fsSL -o /tmp/swoole.tar.gz https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
     && tar -zxvf /tmp/swoole.tar.gz -C /tmp \
     && mkdir -p /usr/src/php/ext \
     && touch /usr/src/php/.docker-extracted \
-    && mv /tmp/swoole-src-master /usr/src/php/ext/swoole \
+    && mv /tmp/swoole-src-${SWOOLE_VERSION} /usr/src/php/ext/swoole \
     && docker-php-ext-configure swoole --enable-openssl \
     && docker-php-ext-install swoole \
     && apk del --no-network .pecl_build_deps \
