@@ -419,17 +419,17 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            --skip-enable-extension \
                            --force " \
       && pie -n install ${PIE_CONFIG} \
-                     kjdev/zstd:dev-master \
+                     kjdev/zstd \
       # && pie -n install ${PIE_CONFIG} \
       #                igbinary/igbinary:dev-main \
       && pie -n install ${PIE_CONFIG} \
                      phpredis/phpredis:dev-develop \
                      --enable-redis-igbinary --enable-redis-zstd \
       && pie -n install ${PIE_CONFIG} \
-                     php-memcached/php-memcached:dev-main \
+                     php-memcached/php-memcached:dev-master \
                      --enable-memcached-igbinary \
       && pie -n install ${PIE_CONFIG} \
-                     xdebug/xdebug:dev-main \
+                     xdebug/xdebug:dev-master \
       && docker-php-ext-enable zstd \
                                redis \
                                igbinary \
