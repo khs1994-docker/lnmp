@@ -432,8 +432,11 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                      xdebug/xdebug:dev-master \
       && docker-php-ext-enable zstd \
                                redis \
-                               igbinary \
                                memcached \
+      && strip --strip-all $(php-config --extension-dir)/redis.so \
+      && strip --strip-all $(php-config --extension-dir)/memcached.so \
+      && strip --strip-all $(php-config --extension-dir)/zstd.so \
+      && strip --strip-all $(php-config --extension-dir)/xdebug.so \
       && apk del --no-network .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /root/.pie \

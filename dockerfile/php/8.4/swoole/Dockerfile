@@ -1,17 +1,11 @@
 # syntax=docker/dockerfile:labs
+ARG PHP_VERSION=8.4.0
 ARG USERNAME=khs1994
 ARG BASE=cli
 
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:nightly-${BASE}-alpine
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
-
-ARG VCS_REF="unknow"
-
-LABEL org.opencontainers.image.revision=$VCS_REF \
-      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
-
-ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 ARG PHP_EXTENSION_EXTRA
 
@@ -21,13 +15,16 @@ ARG APK_EXTRA
 
 ARG APK_DEV_EXTRA
 
+ENV TZ=Asia/Shanghai \
+    APP_ENV=development
+
 ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-# ENV SWOOLE_VERSION=v5.0.3
-ENV SWOOLE_VERSION=master \
-    BOX_REQUIREMENT_CHECKER=0
+ENV SWOOLE_VERSION=v6.0.2
+
+ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     set -x \
@@ -54,5 +51,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 WORKDIR /app
 
 ENTRYPOINT ["php"]
-
 CMD ["index.php"]
+
+ARG VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
