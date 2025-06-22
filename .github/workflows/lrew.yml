@@ -42,14 +42,20 @@ jobs:
         lnmp-docker.ps1 lrew-init test2
     - name: lrew-add-etcd
       shell: pwsh
+      env:
+        LREW_DOCKER_REGISTRY: "docker.cnb.cool"
       run: |
         lnmp-docker.ps1 lrew-add etcd
     - name: lrew-add-smee
       shell: pwsh
+      env:
+        LREW_DOCKER_REGISTRY: "docker.cnb.cool"
       run: |
         ./lrew/lrew.ps1 add smee
     - name: lrew-add-not-exists-pkg
       shell: pwsh
+      env:
+        LREW_DOCKER_REGISTRY: "docker.cnb.cool"
       run: |
         ./lrew/lrew.ps1 add ooooo
     - name: list vendor

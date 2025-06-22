@@ -340,7 +340,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
   )" \
   && apk add --no-cache $runDeps \
   \
-  && strip --strip-all /usr/local/lib/libphp.so \
+  # && strip --strip-all /usr/local/lib/libphp.so \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && apk del --no-network .build-deps \
   && rm -rf /usr/local/include/php/TSRM/tsrm_win32.h \
