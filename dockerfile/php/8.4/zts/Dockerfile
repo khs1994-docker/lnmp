@@ -509,7 +509,7 @@ RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
   # && cp -a /usr/local/lib/libwatcher* /usr/local/lib/ \
   && apk add --no-cache libstdc++ && \
 	ldconfig /usr/local/lib \
-  && cp -a /usr/local/bin/frankenphp /usr/local/bin/frankenphp \
+  # && cp -a /usr/local/bin/frankenphp /usr/local/bin/frankenphp \
   && rm -rf /go \
   && rm -rf /usr/local/src/watcher \
   && apk del --no-network .build-deps \
