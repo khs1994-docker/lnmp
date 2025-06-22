@@ -236,7 +236,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
 	curl -fL 'https://github.com/php/php-src/commit/4c7220322bc74b0fc8416e1958cadd7bc51fe1b7.diff?full_index=1' -o 18743.patch; \
 	echo 'a19e795b24c52d4d1aa3d45b67339e1b62a5365b37cf4418b83e2709fc98bcb5 *18743.patch' | sha256sum -c -; \
 	filterdiff -x '*/NEWS' 18743.patch | patch -p1; \
-	rm 18743.patch; \
+	rm 18743.patch \
   \
   && ./configure \
     --build="$gnuArch" \
