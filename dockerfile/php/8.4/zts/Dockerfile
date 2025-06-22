@@ -5,6 +5,8 @@ FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
 
 FROM --platform=$TARGETPLATFORM alpine:3.22 as php_zts
 
+FROM --platform=$TARGETPLATFORM golang:1.24-alpine as go
+
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 ENV TZ=Asia/Shanghai \
@@ -437,43 +439,18 @@ ARG VCS_REF="unknow"
 LABEL org.opencontainers.image.revision=$VCS_REF \
       org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
+ENV GODEBUG=cgocheck=0
 
-FROM php_zts as common
+ARG FRANKENPHP_VERSION='v1.7.0'
 
-RUN apk add --no-cache \
+RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
+    --mount=type=cache,target=/go/pkg,rw \
+  set -x \
+  && apk add --no-cache \
 	# ca-certificates \
 	libcap \
-	mailcap
-
-COPY --link frankenphp/caddy/frankenphp/Caddyfile /etc/caddy/Caddyfile
-
-RUN ln /etc/caddy/Caddyfile /etc/frankenphp/Caddyfile
-
-CMD ["--config", "/etc/frankenphp/Caddyfile", "--adapter", "caddyfile"]
-HEALTHCHECK CMD curl -f http://localhost:2019/metrics || exit 1
-
-# See https://caddyserver.com/docs/conventions#file-locations for details
-ENV XDG_CONFIG_HOME=/config
-ENV XDG_DATA_HOME=/data
-
-EXPOSE 80
-EXPOSE 443
-EXPOSE 443/udp
-EXPOSE 2019
-
-FROM --platform=$TARGETPLATFORM golang:1.24-alpine as go
-
-FROM common AS builder
-
-ARG FRANKENPHP_VERSION='dev'
-ARG NO_COMPRESS=''
-SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
-
-ENV PATH=/usr/local/go/bin:$PATH
-ENV GOTOOLCHAIN=local
-
-# hadolint ignore=SC2086
-RUN apk add --no-cache --virtual .build-deps \
+	mailcap \
+  && apk add --no-cache --virtual .build-deps \
 	$PHPIZE_DEPS \
 	argon2-dev \
 	# Needed for the custom Go build
@@ -494,12 +471,17 @@ RUN apk add --no-cache --virtual .build-deps \
 	openssl-dev \
 	readline-dev \
 	sqlite-dev \
-	upx
-
-# Install e-dant/watcher (necessary for file watching)
-WORKDIR /usr/local/src/watcher
-RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
-    curl -s https://api.github.com/repos/e-dant/watcher/releases/latest | \
+	upx \
+  && git clone -b ${FRANKENPHP_VERSION} --depth=1 https://github.com/php/frankenphp /go/src/app \
+  && cp /go/src/app/caddy/frankenphp/Caddyfile /etc/caddy/Caddyfile \
+  && ln /etc/caddy/Caddyfile /etc/frankenphp/Caddyfile \
+  && export FRANKENPHP_VERSION=${FRANKENPHP_VERSION} \
+  && export NO_COMPRESS='' \
+  && export PATH=/usr/local/go/bin:$PATH \
+  && export GOTOOLCHAIN=local \
+  && mkdir -p /usr/local/src/watcher \
+  && cd /usr/local/src/watcher \
+  && curl -s https://api.github.com/repos/e-dant/watcher/releases/latest | \
 		grep tarball_url | \
 		awk '{ print $2 }' | \
 		sed 's/,$//' | \
@@ -508,48 +490,52 @@ RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
     tar xz --strip-components 1 && \
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
 	cmake --build build && \
-	cmake --install build
-
-WORKDIR /go/src/app
-
-COPY --link frankenphp/go.mod frankenphp/go.sum ./
-RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
-    go mod download
-
-WORKDIR /go/src/app/caddy
-COPY frankenphp/caddy/go.mod frankenphp/caddy/go.sum ./
-RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
-    go mod download
-
-WORKDIR /go/src/app
-COPY --link ./frankenphp/ ./
-
-# See https://github.com/docker-library/php/blob/master/8.3/alpine3.20/zts/Dockerfile#L53-L55
-ENV CGO_CFLAGS="-DFRANKENPHP_VERSION=$FRANKENPHP_VERSION $PHP_CFLAGS"
-ENV CGO_CPPFLAGS=$PHP_CPPFLAGS
-ENV CGO_LDFLAGS="-lssl -lcrypto -lreadline -largon2 -lcurl -lonig -lz $PHP_LDFLAGS"
-
-WORKDIR /go/src/app/caddy/frankenphp
-RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
-  GOBIN=/usr/local/bin go install -tags 'nobadger,nomysql,nopgx' -ldflags "-w -s -extldflags '-Wl,-z,stack-size=0x80000' -X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP $FRANKENPHP_VERSION PHP $PHP_VERSION Caddy'" -buildvcs=true && \
+	cmake --install build \
+  && cd /go/src/app \
+  && go mod download \
+  && cd /go/src/app/caddy \
+  && go mod download \
+  && cd /go/src/app \
+  && export CGO_CFLAGS="-DFRANKENPHP_VERSION=$FRANKENPHP_VERSION $PHP_CFLAGS" \
+  && export CGO_CPPFLAGS=$PHP_CPPFLAGS \
+  && export CGO_LDFLAGS="-lssl -lcrypto -lreadline -largon2 -lcurl -lonig -lz $PHP_LDFLAGS" \
+  && cd /go/src/app/caddy/frankenphp \
+  && GOBIN=/usr/local/bin go install -tags 'nobadger,nomysql,nopgx' -ldflags "-w -s -extldflags '-Wl,-z,stack-size=0x80000' -X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP $FRANKENPHP_VERSION PHP $PHP_VERSION Caddy'" -buildvcs=true && \
 	setcap cap_net_bind_service=+ep /usr/local/bin/frankenphp && \
 	([ -z "${NO_COMPRESS}" ] && upx --best /usr/local/bin/frankenphp || true) && \
 	frankenphp version && \
-	frankenphp build-info
-
-WORKDIR /go/src/app
-
-
-FROM common AS runner
-
-ENV GODEBUG=cgocheck=0
-
-# copy watcher shared library (libgcc and libstdc++ are needed for the watcher)
-COPY --from=builder /usr/local/lib/libwatcher* /usr/local/lib/
-RUN apk add --no-cache libstdc++ && \
-	ldconfig /usr/local/lib
-
-COPY --from=builder /usr/local/bin/frankenphp /usr/local/bin/frankenphp
-RUN setcap cap_net_bind_service=+ep /usr/local/bin/frankenphp && \
+	frankenphp build-info \
+  # copy watcher shared library (libgcc and libstdc++ are needed for the watcher)
+  && cp -a /usr/local/lib/libwatcher* /usr/local/lib/ \
+  && apk add --no-cache libstdc++ && \
+	ldconfig /usr/local/lib \
+  && cp -a /usr/local/bin/frankenphp /usr/local/bin/frankenphp \
+  && rm -rf /go \
+  && rm -rf /usr/local/src/watcher \
+  && apk del --no-network .build-deps \
+  && setcap cap_net_bind_service=+ep /usr/local/bin/frankenphp && \
 	frankenphp version && \
 	frankenphp build-info
+
+CMD ["--config", "/etc/frankenphp/Caddyfile", "--adapter", "caddyfile"]
+HEALTHCHECK CMD curl -f http://localhost:2019/metrics || exit 1
+
+# See https://caddyserver.com/docs/conventions#file-locations for details
+ENV XDG_CONFIG_HOME=/config
+ENV XDG_DATA_HOME=/data
+
+EXPOSE 80
+EXPOSE 443
+EXPOSE 443/udp
+EXPOSE 2019
+
+# ARG FRANKENPHP_VERSION='dev'
+# ARG NO_COMPRESS=''
+
+# ENV PATH=/usr/local/go/bin:$PATH
+# ENV GOTOOLCHAIN=local
+
+# See https://github.com/docker-library/php/blob/master/8.3/alpine3.20/zts/Dockerfile#L53-L55
+# ENV CGO_CFLAGS="-DFRANKENPHP_VERSION=$FRANKENPHP_VERSION $PHP_CFLAGS"
+# ENV CGO_CPPFLAGS=$PHP_CPPFLAGS
+# ENV CGO_LDFLAGS="-lssl -lcrypto -lreadline -largon2 -lcurl -lonig -lz $PHP_LDFLAGS"
