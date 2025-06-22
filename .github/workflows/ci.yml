@@ -27,7 +27,8 @@ jobs:
         matrix:
           os:
           - ubuntu-latest
-          - macos-12
+          - macos-13
+          - ubuntu-latest-arm
     needs: skip
     runs-on: ${{ matrix.os }}
     defaults:
@@ -38,9 +39,14 @@ jobs:
       with:
         fetch-depth: 2
     - uses: docker-practice/actions-setup-docker@master
+      if: |
+        startsWith(matrix.os, 'ubuntu' )
       with:
         docker_channel: test
         docker_version: "20.10"
+    - uses: douglascamata/setup-docker-macos-action@v1.0.0
+      if: |
+        startsWith(matrix.os, 'macos' )
     - uses: azure/docker-login@v1
       if: |
         github.event_name == 'push'

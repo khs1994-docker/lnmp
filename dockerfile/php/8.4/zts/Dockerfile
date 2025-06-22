@@ -75,7 +75,8 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --enable-zts \
         --disable-zend-signals \
         --disable-cgi \
-        # --enable-embed=shared \
+        --enable-embed \
+        --enable-zend-max-execution-timers \
         --with-gettext=shared \
         --enable-gd=shared \
             --with-freetype \
