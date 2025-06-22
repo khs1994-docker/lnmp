@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:labs
+# syntax=docker/dockerfile-upstream:master
 ARG PHP_VERSION=8.4.8
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.22 as php

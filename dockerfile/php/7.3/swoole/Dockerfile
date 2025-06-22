@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:labs
+# syntax=docker/dockerfile-upstream:master
 ARG PHP_VERSION=7.3.33
 ARG USERNAME=khs1994
 ARG BASE=cli

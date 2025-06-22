@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:labs
+# syntax=docker/dockerfile-upstream:master
 
 FROM --platform=$TARGETPLATFORM alpine
 

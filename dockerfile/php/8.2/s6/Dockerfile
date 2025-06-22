@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:labs
+# syntax=docker/dockerfile-upstream:master
 
 ARG PHP_VERSION=8.2.26
 ARG USERNAME=khs1994

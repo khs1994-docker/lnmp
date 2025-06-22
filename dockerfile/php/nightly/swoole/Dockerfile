@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:labs
+# syntax=docker/dockerfile-upstream:master
 ARG USERNAME=khs1994
 ARG BASE=cli
 

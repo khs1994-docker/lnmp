@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:labs
+# syntax=docker/dockerfile-upstream:master
 FROM --platform=$TARGETPLATFORM alpine:3.22
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"

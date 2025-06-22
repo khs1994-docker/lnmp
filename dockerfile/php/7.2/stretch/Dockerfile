@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:labs
+# syntax=docker/dockerfile-upstream:master
 
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
