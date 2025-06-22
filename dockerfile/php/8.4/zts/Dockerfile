@@ -453,7 +453,7 @@ ENV GODEBUG=cgocheck=0
 ARG FRANKENPHP_VERSION='v1.7.0'
 
 RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
-    --mount=type=cache,target=/go/pkg,rw \
+    --mount=type=cache,target=/root/go,rw \
   set -x \
   && apk add --no-cache \
 	# ca-certificates \
@@ -521,6 +521,8 @@ RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
   # && cp -a /usr/local/bin/frankenphp /usr/local/bin/frankenphp \
   && rm -rf /go/src \
   && rm -rf /usr/local/src/watcher \
+  && rm -rf /root/.cache \
+  && rm -rf /root/.config \
   && apk del --no-network .build-deps \
   && setcap cap_net_bind_service=+ep /usr/local/bin/frankenphp && \
 	frankenphp version && \
