@@ -75,6 +75,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --enable-zts \
         --disable-zend-signals \
         --disable-cgi \
+        # --enable-embed=shared \
         --with-gettext=shared \
         --enable-gd=shared \
             --with-freetype \
@@ -159,14 +160,14 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
   && mkdir -p /usr/src \
   && cp /usr/local/src/* /usr/src/ \
   && export PATH=$PATH:/opt/bin \
-  ; mkdir -p $PHP_INI_DIR/conf.d \
+  && mkdir -p $PHP_INI_DIR/conf.d \
   && cp /opt/bin/docker-php-entrypoint /usr/local/bin \
   && mkdir -p \
 		/app/public \
 		/config/caddy \
 		/data/caddy \
 		/etc/caddy \
-		/etc/frankenphp; \
+		/etc/frankenphp \
 	&& sed -i 's/php/frankenphp run/g' /usr/local/bin/docker-php-entrypoint; \
 	&& echo '<?php phpinfo();' > /app/public/index.php \
   && apk add --no-cache --virtual .build-deps \
