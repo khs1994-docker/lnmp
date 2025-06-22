@@ -184,6 +184,8 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
           linux-headers \
           oniguruma-dev \
           openssl-dev \
+          patch \
+		      patchutils \
           readline-dev \
           sqlite-dev \
           cyrus-sasl-dev \
