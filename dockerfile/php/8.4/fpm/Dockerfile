@@ -182,6 +182,7 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
         && rm -rf /tmp/* \
         && rm -rf /root/.pie \
         && rm -rf /root/.composer \
+        && apk del --no-network .phpize-deps .php-fpm-build-deps \
 # 创建日志文件夹
         && mkdir -p /var/log/php-fpm \
         && ln -sf /dev/stdout /var/log/php-fpm/access.log \
