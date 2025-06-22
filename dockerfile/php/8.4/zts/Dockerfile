@@ -3,9 +3,9 @@ ARG PHP_VERSION=8.4.8
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
 
-FROM --platform=$TARGETPLATFORM alpine:3.22 as php_zts
-
 FROM --platform=$TARGETPLATFORM golang:1.24-alpine as go
+
+FROM --platform=$TARGETPLATFORM alpine:3.22
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -454,7 +454,7 @@ RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
 	$PHPIZE_DEPS \
 	argon2-dev \
 	# Needed for the custom Go build
-	bash \
+	# bash \
 	brotli-dev \
 	coreutils \
 	curl-dev \
