@@ -510,7 +510,7 @@ RUN curl -s https://api.github.com/repos/e-dant/watcher/releases/latest | \
 
 WORKDIR /go/src/app
 
-COPY --link frankenphp/go.mod go.sum ./
+COPY --link frankenphp/go.mod frankenphp/go.sum ./
 RUN go mod download
 
 WORKDIR /go/src/app/caddy
