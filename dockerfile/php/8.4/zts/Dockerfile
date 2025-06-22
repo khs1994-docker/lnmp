@@ -443,7 +443,7 @@ RUN apk add --no-cache \
 	libcap \
 	mailcap
 
-COPY --link caddy/frankenphp/Caddyfile /etc/caddy/Caddyfile
+COPY --link frankenphp/caddy/frankenphp/Caddyfile /etc/caddy/Caddyfile
 
 RUN ln /etc/caddy/Caddyfile /etc/frankenphp/Caddyfile
 
@@ -510,15 +510,15 @@ RUN curl -s https://api.github.com/repos/e-dant/watcher/releases/latest | \
 
 WORKDIR /go/src/app
 
-COPY --link go.mod go.sum ./
+COPY --link frankenphp/go.mod go.sum ./
 RUN go mod download
 
 WORKDIR /go/src/app/caddy
-COPY caddy/go.mod caddy/go.sum ./
+COPY frankenphp/caddy/go.mod frankenphp/caddy/go.sum ./
 RUN go mod download
 
 WORKDIR /go/src/app
-COPY --link . ./
+COPY --link ./frankenphp/ ./
 
 # See https://github.com/docker-library/php/blob/master/8.3/alpine3.20/zts/Dockerfile#L53-L55
 ENV CGO_CFLAGS="-DFRANKENPHP_VERSION=$FRANKENPHP_VERSION $PHP_CFLAGS"

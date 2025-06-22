@@ -343,6 +343,14 @@
     "dest": "library-mirror/php:8.3.12-fpm-alpine"
   },
   {
+    "source": "library/php:8.3.12-cli-alpine",
+    "dest": "library-mirror/php:8.3.12-cli-alpine"
+  },
+  {
+    "source": "library/php:8.3.12-zts-alpine",
+    "dest": "library-mirror/php:8.3.12-zts-alpine"
+  },
+  {
     "source": "calico/cni:v3.30.1",
     "dest": "library-mirror/calico-cni:v3.30.1"
   },

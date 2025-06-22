@@ -27,7 +27,7 @@ jobs:
       max-parallel: 1
       matrix:
         # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
-        TYPE: [CLI, FPM, COMPOSER, S6, UNIT, SWOOLE, ZTS]
+        TYPE: [ZTS, CLI, FPM, COMPOSER, S6, UNIT, SWOOLE]
         DIST: ["24.04-arm","24.04"]
     runs-on: ubuntu-${{ matrix.DIST }}
     steps:
@@ -112,6 +112,7 @@ jobs:
 
         if [ "$TYPE" = "ZTS" ];then
           echo ::group::Build $TYPE
+          git clone --depth=1 https://github.com/php/frankenphp ${FOLDER}/zts/frankenphp
           docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-frankenphp-alpine \
