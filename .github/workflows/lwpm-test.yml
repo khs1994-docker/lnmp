@@ -48,13 +48,13 @@ jobs:
       run: lnmp-windows-pm.ps1 init test
     - name: lwpm-add-openjdk
       shell: pwsh
-      run: lnmp-windows-pm.ps1 add openjdk
-    - name: lwpm-install-openjdk
-      shell: pwsh
+      run: lnmp-windows-pm.ps1 add khs1994-docker/lwpmpkg/openjdk
       env:
         LWPM_DOCKER_REGISTRY: docker.cnb.cool
+    - name: lwpm-install-openjdk
+      shell: pwsh
       run: |
-        lnmp-windows-pm.ps1 install khs1994-docker/lwpmpkg/openjdk
+        lnmp-windows-pm.ps1 install openjdk
         echo $env:PATH
     - name: lwpm-add-not-exists-pkg
       shell: pwsh

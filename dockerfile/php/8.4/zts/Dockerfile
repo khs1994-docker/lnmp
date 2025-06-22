@@ -472,8 +472,7 @@ ENV PATH=/usr/local/go/bin:$PATH
 ENV GOTOOLCHAIN=local
 
 # hadolint ignore=SC2086
-RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
-  apk add --no-cache --virtual .build-deps \
+RUN apk add --no-cache --virtual .build-deps \
 	$PHPIZE_DEPS \
 	argon2-dev \
 	# Needed for the custom Go build
@@ -498,7 +497,8 @@ RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
 
 # Install e-dant/watcher (necessary for file watching)
 WORKDIR /usr/local/src/watcher
-RUN curl -s https://api.github.com/repos/e-dant/watcher/releases/latest | \
+RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
+    curl -s https://api.github.com/repos/e-dant/watcher/releases/latest | \
 		grep tarball_url | \
 		awk '{ print $2 }' | \
 		sed 's/,$//' | \
@@ -512,11 +512,13 @@ RUN curl -s https://api.github.com/repos/e-dant/watcher/releases/latest | \
 WORKDIR /go/src/app
 
 COPY --link frankenphp/go.mod frankenphp/go.sum ./
-RUN go mod download
+RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
+    go mod download
 
 WORKDIR /go/src/app/caddy
 COPY frankenphp/caddy/go.mod frankenphp/caddy/go.sum ./
-RUN go mod download
+RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
+    go mod download
 
 WORKDIR /go/src/app
 COPY --link ./frankenphp/ ./
@@ -527,7 +529,8 @@ ENV CGO_CPPFLAGS=$PHP_CPPFLAGS
 ENV CGO_LDFLAGS="-lssl -lcrypto -lreadline -largon2 -lcurl -lonig -lz $PHP_LDFLAGS"
 
 WORKDIR /go/src/app/caddy/frankenphp
-RUN GOBIN=/usr/local/bin go install -tags 'nobadger,nomysql,nopgx' -ldflags "-w -s -extldflags '-Wl,-z,stack-size=0x80000' -X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP $FRANKENPHP_VERSION PHP $PHP_VERSION Caddy'" -buildvcs=true && \
+RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
+  GOBIN=/usr/local/bin go install -tags 'nobadger,nomysql,nopgx' -ldflags "-w -s -extldflags '-Wl,-z,stack-size=0x80000' -X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP $FRANKENPHP_VERSION PHP $PHP_VERSION Caddy'" -buildvcs=true && \
 	setcap cap_net_bind_service=+ep /usr/local/bin/frankenphp && \
 	([ -z "${NO_COMPRESS}" ] && upx --best /usr/local/bin/frankenphp || true) && \
 	frankenphp version && \
