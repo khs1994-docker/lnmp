@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:labs
 ARG PHP_VERSION=8.4.8
 
-FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine as upstream
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine AS upstream
 
-FROM --platform=$TARGETPLATFORM golang:1.24-alpine as go
+FROM --platform=$TARGETPLATFORM golang:1.24-alpine AS go
 
 FROM --platform=$TARGETPLATFORM alpine:3.22
 
@@ -506,7 +506,7 @@ RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
 	frankenphp version && \
 	frankenphp build-info \
   # copy watcher shared library (libgcc and libstdc++ are needed for the watcher)
-  && cp -a /usr/local/lib/libwatcher* /usr/local/lib/ \
+  # && cp -a /usr/local/lib/libwatcher* /usr/local/lib/ \
   && apk add --no-cache libstdc++ && \
 	ldconfig /usr/local/lib \
   && cp -a /usr/local/bin/frankenphp /usr/local/bin/frankenphp \
