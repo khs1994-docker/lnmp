@@ -168,7 +168,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
 		/data/caddy \
 		/etc/caddy \
 		/etc/frankenphp \
-	&& sed -i 's/php/frankenphp run/g' /usr/local/bin/docker-php-entrypoint; \
+	&& sed -i 's/php/frankenphp run/g' /usr/local/bin/docker-php-entrypoint \
 	&& echo '<?php phpinfo();' > /app/public/index.php \
   && apk add --no-cache --virtual .build-deps \
           $PHPIZE_DEPS \
