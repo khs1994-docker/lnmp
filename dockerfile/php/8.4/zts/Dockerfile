@@ -510,7 +510,7 @@ RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
   && apk add --no-cache libstdc++ && \
 	ldconfig /usr/local/lib \
   # && cp -a /usr/local/bin/frankenphp /usr/local/bin/frankenphp \
-  && rm -rf /go \
+  && rm -rf /go/src \
   && rm -rf /usr/local/src/watcher \
   && apk del --no-network .build-deps \
   && setcap cap_net_bind_service=+ep /usr/local/bin/frankenphp && \
