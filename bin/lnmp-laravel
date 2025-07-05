@@ -23,14 +23,14 @@ source $ScriptRoot/../config/composer/.env
 
 if [ "$debug" = 'true' ];then set -x; fi
 
-if ! [ -d "$2" ];then
+if [ ! -d "$2" -o "$2" = '.' ];then
 
 docker run -i ${tty} --rm \
   --mount src=lnmp_composer-cache-data,target=${COMPOSER_CACHE_DIR} \
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
   --network none \
-  bash \
+  ${LNMP_LIBRARY_NS:-library}/bash \
   bash -c \
   "set -x; \
    mkdir -p ${COMPOSER_CACHE_DIR}/repo; \
@@ -52,8 +52,8 @@ docker run -i ${tty} --rm \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
   --mount type=bind,src=$ScriptRoot/../config/php8/php-cli.ini,target=/usr/local/etc/php/php-cli.ini \
   --env-file $ScriptRoot/../config/composer/.env \
-  ${LNMP_PHP_IMAGE}:${LNMP_PHP_IMAGE_TAG} \
-  gosu ${LNMP_USER:-root:root} composer create-project --prefer-dist laravel/laravel=${3:-10.*} "$2"
+  ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.3.12}-composer-alpine \
+  gosu ${LNMP_USER:-root:root} composer create-project --prefer-dist laravel/laravel=${3:-12.*} "$2"
 
 else
   echo "Path $2 existing"

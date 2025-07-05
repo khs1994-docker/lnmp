@@ -437,7 +437,7 @@ Function satis() {
 
   docker run --rm -it `
     -v ${APP_ROOT}/satis:/build `
-    --mount -v lnmp_composer-cache-data:/composer composer/satis
+    -v lnmp_composer-cache-data:/composer composer/satis
 }
 
 Function Get-ComposeOptions($compose_files) {

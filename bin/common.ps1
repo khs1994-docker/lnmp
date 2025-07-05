@@ -25,3 +25,17 @@ if ($IsWindows -and $PWD.ProviderPath.StartsWith('\\wsl$\')) {
 if ($IsWindows -eq $False) {
   $LNMP_USER = "$(id -u):$(id -g)"
 }
+
+function Get-Env($ENV_NAME, $ENV_FILE, $ENV_DEFAULT) {
+  $ENV_CONTENT = (cat ${ENV_FILE} | select-string ^$ENV_NAME=)
+  if ($ENV_CONTENT) {
+    if ($ENV_CONTENT.Line.GetType().FullName -eq 'System.String') {
+      return $ENV_CONTENT.Line.split('=')[-1]
+    }
+    else {
+      return $ENV_CONTENT.Line[-1].split('=')[-1]
+    }
+  }
+
+  return $ENV_DEFAULT
+}

@@ -15,6 +15,9 @@ if ($?){
   $create=$true
 }
 
+$LNMP_DOCKER_IMAGE_PREFIX=GET-ENV LNMP_DOCKER_IMAGE_PREFIX "$PSScriptRoot/../.env" library
+$LNMP_PHP8_VERSION=GET-ENV LNMP_PHP8_VERSION "$PSScriptRoot/../.env" library
+
 if (! (Test-Path vendor\bin\phpunit)){
   echo "
 PHPUnit not found, You Must EXEC
@@ -31,13 +34,13 @@ exit 1
 }
 
 docker run -it --init --rm `
-    --mount type=bind,src=$($PWD.ProviderPath),target=/app `
-    --mount type=bind,src=$PSScriptRoot/../config/php8/php-cli.ini,target=/usr/local/etc/php/php-cli.ini `
-    --mount type=bind,src=$PSScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log `
+    -v ${PWD}:/app `
+    -v $PSScriptRoot/../config/php8/php-cli.ini:/usr/local/etc/php/php-cli.ini `
+    -v $PSScriptRoot/../log/php/cli_error.log:/var/log/php/php_errors.log `
     --network ${NETWORK} `
     --env-file $PSScriptRoot/../config/composer/.env `
     --entrypoint gosu `
     -e APP_ENV=testing `
     -e TZ=${TZ} `
-    ${LNMP_PHP_IMAGE} `
+    ${LNMP_DOCKER_IMAGE_PREFIX}/php:${LNMP_PHP8_VERSION}-composer-alpine `
     ${LNMP_USER} ./vendor/bin/phpunit -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log $args

@@ -19,12 +19,16 @@
 
   // [Optional] If you are using SSH keys w/Git, copy them and set correct permissions
   // "postCreateCommand": "mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*"
-  "extensions": [
-    "xdebug.php-debug",
-    "editorconfig.editorconfig"
-  ],
-  "settings": {
-    // If you are using an Alpine-based image, change this to /bin/ash
-    // "terminal.integrated.shell.linux": "/bin/bash"
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "xdebug.php-debug",
+        "editorconfig.editorconfig"
+      ],
+      "settings": {
+        // If you are using an Alpine-based image, change this to /bin/ash
+        // "terminal.integrated.shell.linux": "/bin/bash"
+      }
+    }
   }
 }

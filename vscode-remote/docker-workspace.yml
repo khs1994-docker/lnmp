@@ -88,6 +88,9 @@ volumes:
   composer-cache-data:
     external: true
     name: lnmp_composer-cache-data
+  composer-home-data:
+    external: true
+    name: lnmp_composer-home-data
   vscode-server:
   vscode-server-insiders:
   vscode-phpls-cache:

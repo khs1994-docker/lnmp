@@ -20,7 +20,7 @@ docker run -i ${tty} --rm \
   --mount type=volume,src=lnmp_npm-cache-data,target=/tmp/node/.npm \
   --mount type=volume,src=lnmp_npm-global-data,target=/tmp/node/npm \
   --network none \
-  bash \
+  ${LNMP_LIBRARY_NS:-library}/bash \
   bash -c \
   "set -x;chown -R ${LNMP_USER} /tmp/node/.npm; \
    chown -R ${LNMP_USER} /tmp/node/npm; \
@@ -41,5 +41,5 @@ exec docker run -i ${tty} --rm \
     --entrypoint npm \
     --user ${LNMP_USER:-root:root} \
     --network $network \
-    ${LNMP_NODE_IMAGE:-${ccr.ccs.tencentyun.com/library-mirror:-library}/node:alpine} \
+    ${LNMP_NODE_IMAGE:-'node:alpine'} \
     "$@"

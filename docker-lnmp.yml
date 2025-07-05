@@ -227,6 +227,9 @@ services:
       - type: volume
         source: composer-cache-data
         target: /tmp/composer/cache
+      - type: volume
+        source: composer-home-data
+        target: /tmp/composer
       - ./config/composer/config.json:/tmp/composer/config.json
       # - ./config/composer/auth.json:/tmp/composer/auth.json
 
@@ -304,6 +307,8 @@ volumes:
   phpmyadmin-data:
     << : *common-labels
   composer-cache-data:
+    << : *common-labels
+  composer-home-data:
     << : *common-labels
   php8-var-log:
     << : *common-labels

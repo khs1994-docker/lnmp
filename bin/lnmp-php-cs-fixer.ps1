@@ -7,8 +7,8 @@
 . "$PSScriptRoot/../config/composer/.env.ps1"
 
 docker run -it --rm `
-  --mount type=bind,src=$($PWD.ProviderPath),target=/app `
-  --mount type=bind,src=$PSScriptRoot/../config/php8/php-cli.ini,target=/usr/local/etc/php/php-cli.ini `
+  -v ${PWD}:/app `
+  -v $PSScriptRoot/../config/php8/php-cli.ini:/usr/local/etc/php/php-cli.ini `
   --entrypoint gosu `
   khs1994/php:php-cs-fixer `
   ${LNMP_USER} php-cs-fixer $args

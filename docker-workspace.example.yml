@@ -14,6 +14,8 @@ services:
     image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.3.12}-composer-alpine
     networks:
       - backend
+    envfile:
+      - ./config/composer/.env
     volumes:
       # https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
       - vscode-server:/root/.vscode-server
@@ -30,7 +32,10 @@ services:
       # composer
       - type: volume
         source: composer-cache-data
-        target: /tmp/composer/cache
+        target: ${COMPOSER_CACHE_DIR:-/tmp/composer/cache}
+      - type: volume
+        source: composer-home-data
+        target: ${COMPOSER_HOME:-/tmp/composer}
       - type: bind
         source: ./.devcontainer/composer.config.json
         target: /tmp/composer/config.json
@@ -87,6 +92,7 @@ networks:
 
 volumes:
   composer-cache-data:
+  composer-home-data:
   vscode-server:
   vscode-server-insiders:
   vscode-phpls-cache:

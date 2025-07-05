@@ -23,7 +23,7 @@ docker run -i ${tty} --rm \
   --mount type=volume,src=lnmp_yarn_cache-data,target=/tmp/node/.yarn \
   --mount type=volume,src=lnmp_yarn_global-data,target=/tmp/node/yarn \
   --network none \
-  bash \
+  ${LNMP_LIBRARY_NS:-library}/bash \
   bash -c \
   "set -x;chown -R ${LNMP_USER} /tmp/node/.yarn; \
    chown -R ${LNMP_USER} /tmp/node/yarn; \
@@ -44,5 +44,5 @@ exec docker run -i ${tty} --rm \
     --workdir /app \
     --entrypoint yarn \
     --user ${LNMP_USER:-root:root} \
-    ${LNMP_NODE_IMAGE:-node:alpine} \
+    ${LNMP_NODE_IMAGE:-'node:alpine'} \
     "$@"

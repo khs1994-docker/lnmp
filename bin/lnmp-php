@@ -59,7 +59,7 @@ if [ "$1" = '-S' ];then
     -e APP_ENV=${APP_ENV:-development} \
     -e TZ=${TZ} \
     -p $ADDR:$PORT:$PORT \
-    ${LNMP_PHP_IMAGE}:${LNMP_PHP_IMAGE_TAG} \
+    ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.3.12}-cli-alpine \
     gosu ${LNMP_USER:-root:root} php -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log -S 0.0.0.0:$PORT "$@"
 fi
 
@@ -74,7 +74,7 @@ docker run -i ${tty} --rm \
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
   --network none \
-  bash \
+  ${LNMP_LIBRARY_NS:-library}/bash \
   bash -c \
   "set -x; \
    mkdir -p ${COMPOSER_CACHE_DIR}/repo; \
@@ -95,5 +95,5 @@ exec docker run --init -i ${tty} --rm \
   --env-file $ScriptRoot/../config/composer/.env \
   -e TZ=${TZ} \
   -e APP_ENV=${APP_ENV:-development} \
-  ${LNMP_PHP_IMAGE}:${LNMP_PHP_IMAGE_TAG} \
+  ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.3.12}-cli-alpine \
   gosu ${LNMP_USER:-root:root} php -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log $COMMAND
