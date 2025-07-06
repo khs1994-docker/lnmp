@@ -47,7 +47,7 @@ exec docker run -i ${tty} --rm \
   --env-file $ScriptRoot/../config/composer/.env \
   --env PATH=${COMPOSER_HOME}/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
   --network $network \
-  ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.3.12}-composer-alpine \
+  ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.4.10}-composer-alpine \
   gosu ${LNMP_USER:-root:root} composer "$@"
 
 # --entrypoint /docker-entrypoint.composer \

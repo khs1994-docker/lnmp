@@ -5,7 +5,7 @@ on:
     tags:
     - '*'
     branches:
-    - "23.11"
+    - "24.11"
   workflow_dispatch:
 
 name: Sync Git

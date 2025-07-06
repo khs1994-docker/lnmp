@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - "23.11"
+      - "24.11"
     tags:
       - "*"
   pull_request:
@@ -176,8 +176,8 @@ jobs:
         git add .
         git commit -m "[Config] Update default config" || exit 0
         git remote add github https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp.git
-        git checkout -b 23.11-config
-        git push github 23.11-config -f
+        git checkout -b 24.11-config
+        git push github 24.11-config -f
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       if: |

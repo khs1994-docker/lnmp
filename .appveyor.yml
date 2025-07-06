@@ -6,7 +6,7 @@ branches:
   # - windows
   # - /^23.11$/
   - master
-  - "23.11"
+  - "24.11"
   # - /v*/
 
 # skip_non_tags: true

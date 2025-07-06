@@ -18,4 +18,4 @@ main:
         SOURCE_DOCKER_USERNAME:
         SOURCE_DOCKER_PASSWORD:
         SOURCE_DOCKER_REGISTRY:
-        CONFIG_URL: https://gitee.com/khs1994-docker/lnmp/raw/23.11/dockerfile/sync/docker-image-sync.json
+        CONFIG_URL: https://gitee.com/khs1994-docker/lnmp/raw/24.11/dockerfile/sync/docker-image-sync.json

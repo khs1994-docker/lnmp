@@ -7,8 +7,8 @@ ARG DEST_DOCKER_USERNAME=906210846@qq.com
 ARG DEST_DOCKER_PASSWORD=fix_me
 ARG DEST_NAMESPACE=khs1994
 # fix me 必须替换为自己的配置文件
-# ARG CONFIG_URL=https://gitee.com/khs1994-docker/lnmp/raw/23.11/dockerfile/sync/docker-image-sync-by-docker.json
-ARG CONFIG_URL=https://github.com/khs1994-docker/lnmp/raw/23.11/dockerfile/php/sync/docker-image-sync.json
+# ARG CONFIG_URL=https://gitee.com/khs1994-docker/lnmp/raw/24.11/dockerfile/sync/docker-image-sync-by-docker.json
+ARG CONFIG_URL=https://github.com/khs1994-docker/lnmp/raw/24.11/dockerfile/php/sync/docker-image-sync.json
 
 # ARG SOURCE_DOCKER_REGISTRY=registry-1.docker.io
 # ARG SOURCE_DOCKER_REGISTRY=hub-mirror.c.163.com

@@ -49,7 +49,7 @@ $env:COMPOSE_FILE = $null
 
 if ($args[0] -eq "install") {
   if (get-command git) {
-    git clone -b 23.11 --depth=1 https://github.com/khs1994-docker/lnmp.git $home\lnmp
+    git clone -b 24.11 --depth=1 https://github.com/khs1994-docker/lnmp.git $home\lnmp
 
     exit
   }
@@ -765,8 +765,8 @@ switch -regex ($command) {
   }
 
   checkout {
-    git fetch origin 23.11:23.11 --depth=1
-    git checkout 23.11
+    git fetch origin 24.11:24.11 --depth=1
+    git checkout 24.11
     _update
   }
 

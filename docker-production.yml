@@ -74,7 +74,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:8.3.12-fpm-alpine
+  image: khs1994/php:8.4.10-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
@@ -364,7 +364,7 @@ services:
       - *common
       - *default-labels
       - *default-php
-    # image: khs1994/php:8.3.12-s6-alpine
+    # image: khs1994/php:8.4.10-s6-alpine
     # entrypoint:
     #   - /s6-init
     build:
@@ -381,7 +381,7 @@ services:
       - backend
     environment:
       - APP_ENV=production
-      - LNMP_VERSION=v23.11 x86_64 Docker Swarm
+      - LNMP_VERSION=v24.11 x86_64 Docker Swarm
       - PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     # logging: *default-logging
     deploy:

@@ -1313,9 +1313,9 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   checkout )
-    git fetch origin 23.11:23.11 --depth=2
-    git checkout 23.11
-    BRANCH=23.11
+    git fetch origin 24.11:24.11 --depth=2
+    git checkout 24.11
+    BRANCH=24.11
     update
     ;;
 

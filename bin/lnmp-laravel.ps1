@@ -33,7 +33,7 @@ if (!$args[2]){
 }
 
 $LNMP_DOCKER_IMAGE_PREFIX=GET-ENV LNMP_DOCKER_IMAGE_PREFIX "$PSScriptRoot/../.env" khs1994
-$LNMP_PHP8_VERSION=GET-ENV LNMP_PHP8_VERSION "$PSScriptRoot/../.env" "8.3.12"
+$LNMP_PHP8_VERSION=GET-ENV LNMP_PHP8_VERSION "$PSScriptRoot/../.env" "8.4.10"
 $LNMP_LIBRARY_NS=GET-ENV LNMP_LIBRARY_NS "$PSScriptRoot/../.env" library
 
 if ((!(Test-Path ${LARAVEL_PATH})) -or ${LARAVEL_PATH} -eq '.'){
