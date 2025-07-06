@@ -32,8 +32,8 @@ jobs:
      GENERATE_CLI_HELP: ${{matrix.GENERATE_CLI_HELP}}
      IPV6: ${{matrix.IPV6}}
      DOWNLOAD_FROM_CODING: "false"
-     LNMP_K8S_STABLE_VERSION: "1.32.0"
-     LNMP_K8S_NEXT_VERSION: "1.33.0"
+     LNMP_K8S_STABLE_VERSION: "1.33.0"
+     LNMP_K8S_NEXT_VERSION: ${{matrix.LNMP_K8S_NEXT_VERSION}}
    strategy:
      max-parallel: 1
      matrix:
@@ -48,25 +48,26 @@ jobs:
       # next version
        - os: ubuntu
          dist: 22.04
-         CI_KUBERNETES_VERSION: 1.33.0
+         CI_KUBERNETES_VERSION: 1.34.0-alpha.2
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
+         LNMP_K8S_NEXT_VERSION: "true"
        - os: ubuntu
          dist: 22.04-arm
-         CI_KUBERNETES_VERSION: 1.33.0
+         CI_KUBERNETES_VERSION: 1.34.0-alpha.2
          LNMP_K8S_GET: --url
         #  GENERATE_CLI_HELP: "true"
 
        # current stable version
        - os: ubuntu
          dist: 22.04
-         CI_KUBERNETES_VERSION: 1.32.0
+         CI_KUBERNETES_VERSION: 1.33.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --crio
          K8S_IMAGE_NS: khs1994
          K8S_IMAGE_REGISTRY: useccr.ccs.tencentyun.com
        - os: ubuntu
          dist: 22.04
-         CI_KUBERNETES_VERSION: 1.32.0
+         CI_KUBERNETES_VERSION: 1.33.0
          LNMP_K8S_GET: --url
 
          GENERATE_CLI_HELP: "true"
@@ -78,7 +79,7 @@ jobs:
        #  IPV6: "true"
        - os: ubuntu
          dist: 22.04
-         CI_KUBERNETES_VERSION: 1.32.0
+         CI_KUBERNETES_VERSION: 1.33.0
          LNMP_K8S_GET: --url
          CNI_CALICO_EBPF: 'true'
       # v1.24.0+ not support docker
@@ -88,21 +89,21 @@ jobs:
       #    LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
        - os: ubuntu
          dist: 22.04
-         CI_KUBERNETES_VERSION: 1.32.0
+         CI_KUBERNETES_VERSION: 1.33.0
          LNMP_K8S_GET: --url
          K8S_ROOT: /opt/k8s-custom
        # old version
        - os: ubuntu
          dist: 22.04
-         CI_KUBERNETES_VERSION: 1.31.6
+         CI_KUBERNETES_VERSION: 1.32.6
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 22.04
-         CI_KUBERNETES_VERSION: 1.30.11
+         CI_KUBERNETES_VERSION: 1.31.10
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 22.04
-         CI_KUBERNETES_VERSION: 1.29.15
+         CI_KUBERNETES_VERSION: 1.30.14
          LNMP_K8S_GET: --url
      fail-fast: false
    steps:
@@ -547,7 +548,7 @@ jobs:
          BASE_BRANCH=v1.29.0-alpha.1-config
          BASE_BRANCH=master
          #  BASE_BRANCH=v1.28.0-config
-         if ! [ $CI_KUBERNETES_VERSION = ${LNMP_K8S_NEXT_VERSION} -a "$GENERATE_CLI_HELP" = "true" ];then
+         if ! [ $LNMP_K8S_NEXT_VERSION = "true" -a "$GENERATE_CLI_HELP" = "true" ];then
            exit 0
          fi
 

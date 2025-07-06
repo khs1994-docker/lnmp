@@ -23,7 +23,9 @@
 
 ## Supported tags and respective `Dockerfile` links
 
-* [`8.4.10-fpm-alpine` (8.2/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.4.10/8.2/fpm/Dockerfile)
+* [`8.4.10-fpm-alpine` (8.4/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.4.10/8.4/fpm/Dockerfile)
+
+* [`8.3.12-fpm-alpine` (8.3/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.4.10/8.3/fpm/Dockerfile)
 
 * [`8.2.26-fpm-alpine` (8.2/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/8.4.10/8.2/fpm/Dockerfile)
 
