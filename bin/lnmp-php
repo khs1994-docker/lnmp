@@ -95,5 +95,5 @@ exec docker run --init -i ${tty} --rm \
   --env-file $ScriptRoot/../config/composer/.env \
   -e TZ=${TZ} \
   -e APP_ENV=${APP_ENV:-development} \
-  ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.3.12}-cli-alpine \
+  ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.3.12}-composer-alpine \
   gosu ${LNMP_USER:-root:root} php -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log $COMMAND
