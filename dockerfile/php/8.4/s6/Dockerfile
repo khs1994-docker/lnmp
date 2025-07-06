@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile-upstream:master
 
-ARG PHP_VERSION=8.4.8
+ARG PHP_VERSION=8.4.10
 ARG USERNAME=khs1994
 ARG BASE=fpm
 
