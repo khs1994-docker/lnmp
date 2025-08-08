@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/powershell:preview-alpine-3.12
 # source 仓库的凭证，若为公开仓库则可以不设置
 # ENV SOURCE_DOCKER_USERNAME=
 # ENV SOURCE_DOCKER_PASSWORD=
-# ENV SOURCE_DOCKER_REGISTRY=hub-mirror.c.163.com
+# ENV SOURCE_DOCKER_REGISTRY=registry-1.docker.io
 
 # dest 仓库的凭证，必须设置
 # ENV DEST_DOCKER_USERNAME=

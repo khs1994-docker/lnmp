@@ -24,7 +24,7 @@ storage:
             "tlskey": "${K8S_ROOT}/etc/kubernetes/pki/docker/server-key.pem",
             "tlscacert": "${K8S_ROOT}/etc/kubernetes/pki/ca.pem",
             "registry-mirrors" : [
-              "https://hub-mirror.c.163.com",
+              "https://registry-1.docker.io",
               "https://mirror.baidubce.com"
             ],
             "debug" : true,

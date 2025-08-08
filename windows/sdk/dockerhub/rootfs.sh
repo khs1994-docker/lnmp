@@ -11,7 +11,7 @@ rootfs(){
   local dest=$5 # dest 下载到哪里
   local layersIndex=${6:-0}
 
-  registry="hub-mirror.c.163.com"
+  registry="registry-1.docker.io"
   registry="registry-1.docker.io"
   # registry="mirror.baidubce.com"
 

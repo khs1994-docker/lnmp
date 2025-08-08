@@ -14,7 +14,7 @@ server = "https://docker.io"
   skip_verify = false
   # [host."https://mirror.baidubce.com".header]
   #   x-custom-2 = ["value1", "value2"]
-[host."https://hub-mirror.c.163.com"]
+[host."https://registry-1.docker.io"]
   skip_verify = false
 [host."https://hub.baidubce.com"]
   skip_verify = false

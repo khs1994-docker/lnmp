@@ -11,7 +11,7 @@ ARG DEST_NAMESPACE=khs1994
 ARG CONFIG_URL=https://github.com/khs1994-docker/lnmp/raw/24.11/dockerfile/php/sync/docker-image-sync.json
 
 # ARG SOURCE_DOCKER_REGISTRY=registry-1.docker.io
-# ARG SOURCE_DOCKER_REGISTRY=hub-mirror.c.163.com
+# ARG SOURCE_DOCKER_REGISTRY=registry-1.docker.io
 ARG SOURCE_DOCKER_REGISTRY=registry.us-east-1.aliyuncs.com
 
 ENV DEST_DOCKER_REGISTRY=$DEST_DOCKER_REGISTRY

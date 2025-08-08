@@ -6,7 +6,7 @@ Function Get-Registry($registry=$null) {
     }
     else {
       if ($env:LNMP_CN_ENV -ne "false") {
-        $registry = "hub-mirror.c.163.com"
+        $registry = "registry-1.docker.io"
       }
       else {
         $registry = "registry.hub.docker.com"

@@ -94,7 +94,7 @@ steps:
       repo: khs1994/php
       tags: 8.4.10-pro-${DRONE_TAG}-alpine
       target: php
-      mirror: https://hub-mirror.c.163.com
+      mirror: https://registry-1.docker.io
       # build_args:
       #   - key=value
       # dockerfile: Dockerfile
@@ -121,7 +121,7 @@ steps:
       repo: khs1994/nginx
       tags: 1.17.0-pro-${DRONE_TAG}-alpine
       target: nginx
-      mirror: https://hub-mirror.c.163.com
+      mirror: https://registry-1.docker.io
       username:
         from_secret: docker_username
       password:
@@ -144,7 +144,7 @@ steps:
       repo: khs1994/php
       tags: 8.4.10-pro-${DRONE_TAG}-alpine
       target: php
-      mirror: https://hub-mirror.c.163.com
+      mirror: https://registry-1.docker.io
       username:
         from_secret: docker_username
       password:
@@ -164,7 +164,7 @@ steps:
       repo: khs1994/nginx
       tags: 1.17.0-pro-${DRONE_TAG}-alpine
       target: nginx
-      mirror: https://hub-mirror.c.163.com
+      mirror: https://registry-1.docker.io
       username:
         from_secret: docker_username
       password:

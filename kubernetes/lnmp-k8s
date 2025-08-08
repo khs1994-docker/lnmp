@@ -1546,8 +1546,8 @@ _local_cleanup(){
 
 if [ "${LNMP_CN_ENV}" = 'false' ];then
   print_info "CN mirror disabled, I will replace cn mirror ... "
-  $(_sudo) sed -i "s#hub-mirror.c.163.com#${LNMP_DOCKER_MIRROR:-mirror.gcr.io}#g" \
-               `grep hub-mirror.c.163.com -rl $PWD/systemd` || true
+  $(_sudo) sed -i "s#registry-1.docker.io#${LNMP_DOCKER_MIRROR:-mirror.gcr.io}#g" \
+               `grep registry-1.docker.io -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#mirror.baidubce.com#${LNMP_DOCKER_MIRROR:-mirror.gcr.io}#g" \
                `grep mirror.baidubce.com -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers/pause#registry.k8s.io/pause#g" \

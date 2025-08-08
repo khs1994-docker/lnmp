@@ -38,7 +38,7 @@ $ lnmp-wsl-install php ${PHP_LATEST_STABLE_VERSION} [${LNMP_PHP80_VERSION}] [${L
 
 $ REGISTRY_MIRROR=mirror.baidubce.com  lnmp-wsl-install php nightly
 
-$ REGISTRY_MIRROR=hub-mirror.c.163.com lnmp-wsl-install php nightly
+$ REGISTRY_MIRROR=registry-1.docker.io lnmp-wsl-install php nightly
 
 [ php56 只支持 ubuntu ]
 "

@@ -4,7 +4,7 @@
 
 # 12 - 4 = 8
 
-# $env:SOURCE_DOCKER_REGISTRY = "hub-mirror.c.163.com"
+# $env:SOURCE_DOCKER_REGISTRY = "registry-1.docker.io"
 # $env:DEST_DOCKER_REGISTRY = ""
 # e.g. default.dest.ccs.tencentyun.com
 
@@ -85,7 +85,7 @@ Function imageParser([string] $config, [boolean] $source = $true) {
 
   # default source registry
   if (!$registry -and $source) {
-    $registry = 'hub-mirror.c.163.com'
+    $registry = 'registry-1.docker.io'
     if ($env:LNMP_CN_ENV -eq $false) {
       $registry = 'registry.hub.docker.com'
     }

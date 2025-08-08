@@ -4,7 +4,7 @@
 
 > 有时部分镜像可能不可用，请尝试另一个即可。
 
-* `https://hub-mirror.c.163.com`
+* `https://registry-1.docker.io`
 * `https://mirror.baidubce.com`
 
 ## k8s.gcr.io

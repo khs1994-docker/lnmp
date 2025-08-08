@@ -3,5 +3,5 @@
 debug = true
 
 [registry."docker.io"]
-  mirrors = ["hub-mirror.c.163.com","registry-1.docker.io"]
+  mirrors = ["registry-1.docker.io","registry-1.docker.io"]
   http = false

@@ -378,7 +378,7 @@ Function getLwpmDockerRegistry() {
   }
 
   if ($env:LNMP_CN_ENV -ne "false") {
-    return "hub-mirror.c.163.com"
+    return "registry-1.docker.io"
   }
 
   return "registry.hub.docker.com"
