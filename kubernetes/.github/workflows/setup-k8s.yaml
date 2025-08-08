@@ -48,13 +48,13 @@ jobs:
       # next version
        - os: ubuntu
          dist: 22.04
-         CI_KUBERNETES_VERSION: 1.34.0-alpha.2
+         CI_KUBERNETES_VERSION: 1.34.0-rc.0
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
          LNMP_K8S_NEXT_VERSION: "true"
        - os: ubuntu
          dist: 22.04-arm
-         CI_KUBERNETES_VERSION: 1.34.0-alpha.2
+         CI_KUBERNETES_VERSION: 1.34.0-rc.0
          LNMP_K8S_GET: --url
         #  GENERATE_CLI_HELP: "true"
 
@@ -569,37 +569,6 @@ jobs:
          git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
          && git push origin $(git branch --show-current):v${CI_KUBERNETES_VERSION}-config -f \
          || true
-
-     - name: Update k8s next next cli help info
-       run:
-        |
-         export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.28.0-alpha.1
-         BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != 'x.y.z-alpha.1' ];then
-           exit 0
-         fi
-
-         set -x
-         cd /tmp
-         rm -rf lnmp-k8s
-         git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s \
-         || git clone -b master --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
-         cd lnmp-k8s
-
-         stty size || true
-         stty cols 200 || true
-
-         # sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
-         cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
-
-         git add .
-         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
-         && git push origin $(git branch --show-current):v${CI_KUBERNETES_VERSION}-config -f \
-         || true
-
-
-
 
     #  - name: Setup tmate session
     #    uses: mxschmitt/action-tmate@v3

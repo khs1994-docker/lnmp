@@ -23,6 +23,11 @@ jobs:
           login-server: ghcr.io
           username: khs1994
           password: ${{ secrets.GHCR_IO_TOKEN }}
+      - uses: azure/docker-login@v1
+        with:
+          login-server: docker.cnb.cool
+          username: cnb
+          password: ${{ secrets.CODING_DOCKER_PASSWORD }}
       - run: |
           export GITHUB_TAG=$(echo $GITHUB_REF | cut -d '/' -f 3)
 
@@ -35,6 +40,10 @@ jobs:
                            -t ${REGISTRY_MIRROR}/${DOCKER_IMAGE}:${GITHUB_TAG} \
                            -t ${DOCKER_IMAGE}:alpine \
                            -t ${REGISTRY_MIRROR}/${DOCKER_IMAGE}:alpine \
+                           -t docker.cnb.cool/khs1994-docker/lrew/acme:${GITHUB_TAG} \
+                           -t docker.cnb.cool/khs1994-docker/lrew/acme:alpine \
+                           -t docker.cnb.cool/khs1994-docker/khs1994/acme:${GITHUB_TAG} \
+                           -t docker.cnb.cool/khs1994-docker/khs1994/acme:alpine \
                           "
             DOCKER_PUSH="--push"
             DOCKER_LATEST_TAG="latest"
