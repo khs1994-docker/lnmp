@@ -317,7 +317,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            # tidy \
                            # xsl \
                            # opcache 已默认安装，需要自行载入
-                           opcache \
+                           # opcache \
                            ffi \
                            ctype \
                            dom \

@@ -302,7 +302,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            # tidy \
                            # xsl \
                            # opcache 已默认安装，需要自行载入
-                           opcache \
+                           # opcache \
                            zip \
                            ffi \
                            ${PHP_EXTENSION_EXTRA:-} \
