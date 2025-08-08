@@ -40,9 +40,6 @@ jobs:
           TENCENT_DOCKER_USERNAME: "906210846"
           TENCENT_DOCKER_REGISTRY: useccr.ccs.tencentyun.com
         run: |
-          echo $env:LNMP_CN_ENV
-          $env:LNMP_CN_ENV="false"
-
           echo $ErrorActionPreference
           $ErrorActionPreference = "Continue"
           . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
@@ -73,9 +70,6 @@ jobs:
           TENCENT_DOCKER_REGISTRY: useccr.ccs.tencentyun.com
         if: matrix.os == 'windows'
         run: |
-          echo $env:LNMP_CN_ENV
-          $env:LNMP_CN_ENV="false"
-
           echo $ErrorActionPreference
           $ErrorActionPreference = "Continue"
           . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
@@ -106,9 +100,6 @@ jobs:
           TENCENT_DOCKER_USERNAME: "906210846"
           TENCENT_DOCKER_REGISTRY: useccr.ccs.tencentyun.com
         run: |
-          echo $env:LNMP_CN_ENV
-          $env:LNMP_CN_ENV="false"
-
           echo $ErrorActionPreference
           . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
 
