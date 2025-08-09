@@ -396,7 +396,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && curl -fL https://patch-diff.githubusercontent.com/raw/igbinary/igbinary/pull/398.diff -o 398.diff \
       && apk add --no-cache patch \
       && patch -p1 < 398.diff \
-      && apk del --no-network patch \
       && docker-php-ext-configure igbinary \
       && docker-php-ext-install igbinary \
       && export PIE_CONFIG="--with-php-config=/usr/local/bin/php-config \
