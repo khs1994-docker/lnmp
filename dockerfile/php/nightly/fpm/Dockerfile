@@ -420,6 +420,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && curl -fL https://github.com/kjdev/php-ext-zstd/commit/96d5dcea944a188e9a388bf19ed81ee41f1a990c.diff -O \
       && patch -p1 < 96d5dcea944a188e9a388bf19ed81ee41f1a990c.diff \
       && apk del --no-network patch \
+      && mv /root/.pie/$(ls /root/.pie)/vendor/kjdev/zstd/zstd-0.14.0+pie /usr/src/php/ext/zstd \
+      && cd /usr/src/php/ext/zstd \
       && docker-php-ext-configure zstd \
       && docker-php-ext-install zstd \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
