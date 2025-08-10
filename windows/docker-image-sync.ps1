@@ -9,6 +9,7 @@ Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\utils\Get-SHA.psm1
 
 . $PSScriptRoot/sdk/dockerhub/DockerImageSpec/DockerImageSpec.ps1
+. $PSScriptRoot/sdk/dockerhub/OCIImageSpec/OCIImageSpec.ps1
 
 if ($env:SYNC_WINDOWS -eq 'true') {
   $EXCLUDE_OS = $('x')
@@ -265,6 +266,7 @@ Function _sync($source, $dest, $config) {
     $manifest_list_json = ConvertFrom-Json (Get-Content $manifest_list_json_path -raw)
   }
   else {
+    write-host "==> [Info] try get oci manifest list" -ForegroundColor Red
     $manifest_list_json = $null
 
     # try oci manifest list
@@ -295,6 +297,7 @@ Function _sync($source, $dest, $config) {
       -ForegroundColor Yellow
   }
   else {
+    write-host "==> [Info] manifest list exists" -ForegroundColor Blue
     $manifests_list_not_exists = $false
     $manifests = $manifest_list_json.manifests
 
@@ -316,6 +319,7 @@ Function _sync($source, $dest, $config) {
 
   foreach ($manifest in $manifests) {
     if (!$manifests_list_not_exists) {
+      # manifest list exists
       $manifest_digest = $manifest.digest
       $platform = $manifest.platform
 
