@@ -26,12 +26,16 @@ function Test-SHA256($filename) {
   return $true
 }
 
-function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$registry = "registry.hub.docker.com", $dist) {
+function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$header = '', [string]$registry = "registry.hub.docker.com", $dist) {
   Write-Host "==> Digest: $digest" -ForegroundColor Green
   $sha256 = $digest.split(':')[1]
   $prefix = $sha256.Substring(0, 2)
   New-Item -force -type Directory (Get-CachePath blobs/sha256/$prefix) | out-null
   $distTemp = Get-CachePath "blobs/sha256/$prefix/$sha256"
+
+  if (!$header) {
+    $header = [DockerImageSpec]::layer
+  }
 
   if (Test-Path $distTemp) {
     if (Test-SHA256 $distTemp) {
@@ -47,7 +51,7 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
     $response = Invoke-WebRequest `
       -Authentication OAuth `
       -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
-      -Headers @{"Accept" = [DockerImageSpec]::layer } `
+      -Headers @{"Accept" = $header } `
       "https://$registry/v2/$image/blobs/$digest" `
       -PassThru `
       -OutFile $distTemp `
@@ -59,6 +63,8 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
 
     $statusCode = $response.StatusCode
 
+    write-host $response
+
     if (!$statusCode) {
       Write-Host $_.Exception
 
@@ -67,7 +73,7 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
     elseif ($statusCode -lt 400 -and $statusCode -gt 200) {
       $url = $response.Headers.Location
 
-      # Write-Host "==> Redirect to $url" -ForegroundColor Magenta
+      Write-Host "==> Redirect to $url" -ForegroundColor Magenta
 
       try {
         Invoke-WebRequest `
@@ -78,6 +84,28 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
       }
       catch {
         Write-Host $_.Exception
+
+        return $false
+      }
+    }
+    elseif ($statusCode -eq 400) {
+      try {
+        $response = Invoke-WebRequest `
+          -Authentication OAuth `
+          -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
+          -Headers @{"Accept" = $header } `
+          "https://$registry/v2/$image/blobs/$digest" `
+          -PassThru `
+          -OutFile $distTemp `
+          -UserAgent "Docker-Client/20.10.16 (Windows)"
+      }
+      catch {
+        $response = $_.Exception.Response
+
+        write-host $response
+
+        $statusCode = $response.StatusCode
+        Write-Host "==> Get blob failed [ $statusCode ]" -ForegroundColor Red
 
         return $false
       }

@@ -60,10 +60,6 @@
     "dest": "docker-dockerfile-upstream:1.17.1"
   },
   {
-    "source": "quay.io/fluentd_elasticsearch/elasticsearch:v7.16.2",
-    "dest": "elasticsearch:v7.16.2"
-  },
-  {
     "source": "library/alpine:3.22",
     "dest": "alpine:3.22"
   },
@@ -94,9 +90,5 @@
   {
     "source": "library/golang:1.24-alpine",
     "dest": "golang:1.24-alpine"
-  },
-  {
-    "source": "ghcr.io/php/pie:bin",
-    "dest": "pie:bin"
   }
 ]

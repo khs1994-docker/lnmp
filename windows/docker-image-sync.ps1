@@ -78,7 +78,7 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
   $source_token, $source_image, $source_registry, $media_type
 ) {
   try {
-    $blob_exists = Test-Blob $dest_token $dest_image $digest $dest_registry
+    $blob_exists = Test-Blob $dest_token $dest_image $digest $header $dest_registry
   }
   catch {
     write-host "==> [error] check blob error, skip" -ForegroundColor Red
@@ -90,7 +90,7 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
   }
 
   if (!$blob_exists) {
-    $blob_dest = Get-Blob $source_token $source_image $digest $source_registry
+    $blob_dest = Get-Blob $source_token $source_image $digest $media_type $source_registry
     if (!$blob_dest) {
       write-host "==> [error] get blob error" -ForegroundColor Red
       if ($env:GITHUB_ACTIONS) {

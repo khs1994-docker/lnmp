@@ -407,7 +407,9 @@ Function _getlwpmConfig($image, $ref) {
 
   $config_digest = $result.config.digest
 
-  $dest = Get-Blob $token $image $config_digest $registry
+  $header = $result.config.mediaType
+
+  $dest = Get-Blob $token $image $config_digest $header $registry
 
   return Get-Content $dest
 }

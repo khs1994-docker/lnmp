@@ -157,9 +157,11 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
 
       if ($index -eq 'config') {
         $digest = $result.config.digest
+        $header = $result.config.mediaType
       }
       else {
         $digest = $result.layers[$index].digest
+        $header = $result.layers[$index].mediaType
       }
 
       if (!$digest) {
@@ -170,7 +172,7 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
         continue
       }
 
-      $dest = Get-Blob $token $image $digest $registry $dest
+      $dest = Get-Blob $token $image $digest $header $registry $dest
 
       if ($dest -eq $false) {
         write-host "==> Download failed" -ForegroundColor Red

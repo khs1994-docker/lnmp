@@ -9,6 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
+          docker pull moby/buildkit
+      - uses: azure/docker-login@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - run: |
+          docker pull moby/buildkit
+      - run: |
           docker manifest inspect moby/buildkit
       - run: |
           docker manifest inspect moby/buildkit@sha256:e39f6119f134b4811af19fd5c20f495a6a264a85c1b6920daf569b23009dd42c
@@ -30,3 +38,18 @@ jobs:
           DOCKER_PASSWORD: ${{secrets.GHCR_IO_TOKEN}}
           DOCKERIO_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         name: Sync docker image
+      - run: |
+          docker run -i --rm \
+            -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
+            -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
+            -e DEST_DOCKER_REGISTRY=ghcr.io \
+            -e DEST_NAMESPACE=dpsigs \
+            -e CI=true \
+            -e GITHUB_ACTIONS \
+            -e LNMP_CN_ENV=false \
+            -e CONFIG_URL=https://github.com/khs1994-docker/docker-image-sync/raw/master/docker-image-sync-ghcr-loginless.json \
+            ghcr.io/khs1994/docker-image-sync
+        env:
+          DOCKER_USERNAME: khs1994
+          DOCKER_PASSWORD: ${{secrets.GHCR_IO_TOKEN}}
+        name: Sync docker image loginless

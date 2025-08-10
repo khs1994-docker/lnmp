@@ -1,0 +1,10 @@
+[
+  {
+    "source": "ghcr.io/php/pie:bin",
+    "dest": "pie:bin"
+  },
+  {
+    "source": "quay.io/fluentd_elasticsearch/elasticsearch:v7.16.2",
+    "dest": "elasticsearch:v7.16.2"
+  }
+]
