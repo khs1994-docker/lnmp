@@ -10,16 +10,21 @@ jobs:
     steps:
       - run: |
           docker pull moby/buildkit
+        if: false
       - uses: azure/docker-login@v1
+        if: false
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - run: |
           docker pull moby/buildkit
+        if: false
       - run: |
           docker manifest inspect moby/buildkit
+        if: false
       - run: |
           docker manifest inspect moby/buildkit@sha256:e39f6119f134b4811af19fd5c20f495a6a264a85c1b6920daf569b23009dd42c
+        if: false
       - run: |
           docker run -i --rm \
             -e SOURCE_DOCKER_USERNAME=${DOCKER_USERNAME} \
@@ -53,3 +58,70 @@ jobs:
           DOCKER_USERNAME: khs1994
           DOCKER_PASSWORD: ${{secrets.GHCR_IO_TOKEN}}
         name: Sync docker image loginless
+      - run: |
+          docker run -i --rm \
+            -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
+            -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
+            -e DEST_DOCKER_REGISTRY=ghcr.io \
+            -e DEST_NAMESPACE=dpsigs \
+            -e CI=true \
+            -e GITHUB_ACTIONS \
+            -e LNMP_CN_ENV=false \
+            -e CONFIG_URL=https://github.com/khs1994-docker/docker-image-sync/raw/master/docker-image-sync-ghcr-library.json \
+            ghcr.io/khs1994/docker-image-sync
+        env:
+          DOCKER_USERNAME: khs1994
+          DOCKER_PASSWORD: ${{secrets.GHCR_IO_TOKEN}}
+        name: Sync docker image library
+      # other mirror
+      - run: |
+          docker run -i --rm \
+            -e SOURCE_DOCKER_USERNAME=${DOCKER_USERNAME} \
+            -e SOURCE_DOCKER_PASSWORD=${DOCKERIO_PASSWORD} \
+            -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
+            -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
+            -e DEST_DOCKER_REGISTRY=docker.cnb.cool \
+            -e DEST_NAMESPACE=khs1994-docker/khs1994 \
+            -e CI=true \
+            -e GITHUB_ACTIONS \
+            -e LNMP_CN_ENV=false \
+            -e CONFIG_URL=https://github.com/khs1994-docker/docker-image-sync/raw/master/docker-image-sync-ghcr.json \
+            ghcr.io/khs1994/docker-image-sync
+        env:
+          DOCKER_USERNAME: cnb
+          DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
+          DOCKERIO_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        name: Sync docker image cnb
+      - run: |
+          docker run -i --rm \
+            -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
+            -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
+            -e DEST_DOCKER_REGISTRY=docker.cnb.cool \
+            -e DEST_NAMESPACE=khs1994-docker/khs1994 \
+            -e CI=true \
+            -e GITHUB_ACTIONS \
+            -e LNMP_CN_ENV=false \
+            -e CONFIG_URL=https://github.com/khs1994-docker/docker-image-sync/raw/master/docker-image-sync-ghcr-loginless.json \
+            ghcr.io/khs1994/docker-image-sync
+        env:
+          DOCKER_USERNAME: cnb
+          DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
+        name: Sync docker image loginless cnb
+      - run: |
+          docker run -i --rm \
+            -e SOURCE_DOCKER_USERNAME=${DOCKER_USERNAME} \
+            -e SOURCE_DOCKER_PASSWORD=${DOCKERIO_PASSWORD} \
+            -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
+            -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
+            -e DEST_DOCKER_REGISTRY=docker.cnb.cool \
+            -e DEST_NAMESPACE=khs1994-docker/library \
+            -e CI=true \
+            -e GITHUB_ACTIONS \
+            -e LNMP_CN_ENV=false \
+            -e CONFIG_URL=https://github.com/khs1994-docker/docker-image-sync/raw/master/docker-image-sync-ghcr-library.json \
+            ghcr.io/khs1994/docker-image-sync
+        env:
+          DOCKER_USERNAME: cnb
+          DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
+          DOCKERIO_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        name: Sync docker image library cnb

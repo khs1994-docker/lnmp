@@ -58,37 +58,5 @@
   {
     "source": "docker/dockerfile-upstream:1.17.1",
     "dest": "docker-dockerfile-upstream:1.17.1"
-  },
-  {
-    "source": "library/alpine:3.22",
-    "dest": "alpine:3.22"
-  },
-  {
-    "source": "library/php:8.4.10-alpine",
-    "dest": "php:8.4.10-alpine"
-  },
-  {
-    "source": "library/php:8.3.12-alpine",
-    "dest": "php:8.3.12-alpine"
-  },
-  {
-    "source": "library/php:8.2.26-alpine",
-    "dest": "php:8.2.26-alpine"
-  },
-  {
-    "source": "library/php:8.1.31-alpine",
-    "dest": "php:8.1.31-alpine"
-  },
-  {
-    "source": "library/php:alpine",
-    "dest": "php:alpine"
-  },
-  {
-    "source": "library/composer:2.8.9",
-    "dest": "composer:2.8.9"
-  },
-  {
-    "source": "library/golang:1.24-alpine",
-    "dest": "golang:1.24-alpine"
   }
 ]

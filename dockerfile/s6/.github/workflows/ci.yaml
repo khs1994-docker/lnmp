@@ -39,7 +39,7 @@ jobs:
           .
       - run: docker run --rm ubuntu   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
       - run: docker run --rm centos:7 sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
-      - run: docker run --rm rockylinux   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
+      - run: docker run --rm rockylinux:9   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
       - run: docker run --rm fedora   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
       - run: docker run --rm alpine   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
       - run: docker run --rm debian   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
