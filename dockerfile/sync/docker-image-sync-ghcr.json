@@ -58,5 +58,9 @@
   {
     "source": "docker/dockerfile-upstream:1.17.1",
     "dest": "docker-dockerfile-upstream:1.17.1"
+  },
+  {
+    "source": "minio/minio:RELEASE.2022-10-24T18-35-07Z",
+    "dest": "minio:RELEASE.2022-10-24T18-35-07Z"
   }
 ]

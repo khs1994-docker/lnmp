@@ -12,10 +12,6 @@
     "dest": "library-mirror/node:20.5.1-alpine"
   },
   {
-    "source": "node:18.17.1-alpine",
-    "dest": "library-mirror/node:18.17.1-alpine"
-  },
-  {
     "source": "golang:1.24.4-alpine",
     "dest": "library-mirror/golang:1.24.4-alpine"
   },
@@ -38,22 +34,6 @@
   {
     "source": "docker:test-dind-rootless",
     "dest": "library-mirror/docker:test-dind-rootless"
-  },
-  {
-    "source": "library/alpine:3.21",
-    "dest": "library-mirror/alpine:3.19"
-  },
-  {
-    "source": "library/alpine:3.22",
-    "dest": "library-mirror/alpine:3.20"
-  },
-  {
-    "source": "library/alpine:edge",
-    "dest": "library-mirror/alpine:edge"
-  },
-  {
-    "source": "library/alpine:latest",
-    "dest": "library-mirror/alpine:latest"
   },
   {
     "source": "library/python:alpine",
@@ -152,18 +132,6 @@
     "dest": "library-mirror/memcached:1.6.15-alpine"
   },
   {
-    "source": "library/nginx:alpine",
-    "dest": "library-mirror/nginx:alpine"
-  },
-  {
-    "source": "library/nginx:1.24.0-alpine",
-    "dest": "library-mirror/nginx:1.24.0-alpine"
-  },
-  {
-    "source": "library/nginx:1.27.0-alpine",
-    "dest": "library-mirror/nginx:1.27.0-alpine"
-  },
-  {
     "source": "library/httpd:alpine",
     "dest": "library-mirror/httpd:alpine"
   },
@@ -210,10 +178,6 @@
   {
     "source": "library/phpmyadmin:5.2.0-fpm-alpine",
     "dest": "library-mirror/phpmyadmin:5.2.0-fpm-alpine"
-  },
-  {
-    "source": "minio/minio:RELEASE.2022-10-24T18-35-07Z",
-    "dest": "minio:RELEASE.2022-10-24T18-35-07Z"
   },
   {
     "source": "dockerpracticesig/docker_practice:vuepress",

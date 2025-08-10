@@ -26,6 +26,8 @@ ENV CONFIG_URL=https://github.com/khs1994-docker/lnmp/raw/24.11/dockerfile/sync/
 # ENV SOURCE_DOCKER_REGISTRY=$SOURCE_DOCKER_REGISTRY
 # 更多环境变量请查看 https://github.com/khs1994-docker/lnmp/blob/master/windows/docker-image-sync.Dockerfile
 
+VOLUME [ "/root/.khs1994-docker-lnmp" ]
+
 RUN ./docker-image-sync.ps1 \
   ; rm -rf /root/.khs1994-docker-lnmp
 
