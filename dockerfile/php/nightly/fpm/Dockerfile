@@ -415,7 +415,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            --with-phpize-path=/usr/local/bin/phpize \
                            --skip-enable-extension \
                            --force " \
-      && pie download kjdev/zstd \
+      && pie download kjdev/zstd:0.14.0+pie \
       && cd /root/.pie/$(ls /root/.pie)/vendor/kjdev/zstd/zstd-0.14.0+pie \
       && curl -fL https://github.com/kjdev/php-ext-zstd/commit/96d5dcea944a188e9a388bf19ed81ee41f1a990c.diff -O \
       && patch -p1 < 96d5dcea944a188e9a388bf19ed81ee41f1a990c.diff \
@@ -436,15 +436,15 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && pie -n install ${PIE_CONFIG} \
                      php-memcached/php-memcached:dev-master \
                      --enable-memcached-igbinary \
-      && pie -n install ${PIE_CONFIG} \
-                     xdebug/xdebug:dev-master \
+      # && pie -n install ${PIE_CONFIG} \
+      #                xdebug/xdebug:dev-master \
       && docker-php-ext-enable zstd \
                                redis \
                                memcached \
       && strip --strip-all $(php-config --extension-dir)/redis.so \
       && strip --strip-all $(php-config --extension-dir)/memcached.so \
       && strip --strip-all $(php-config --extension-dir)/zstd.so \
-      && strip --strip-all $(php-config --extension-dir)/xdebug.so \
+      # && strip --strip-all $(php-config --extension-dir)/xdebug.so \
       && apk del --no-network .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /root/.pie \
