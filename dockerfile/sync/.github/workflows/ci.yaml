@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
+          docker manifest inspect moby/buildkit
+      - run: |
+          docker manifest inspect moby/buildkit@sha256:e39f6119f134b4811af19fd5c20f495a6a264a85c1b6920daf569b23009dd42c
+      - run: |
           docker run -i --rm \
             -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \

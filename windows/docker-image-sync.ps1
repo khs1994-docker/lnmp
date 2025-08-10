@@ -257,6 +257,7 @@ Function _sync($source, $dest, $config) {
   }
 
   # get manifest list
+  $oci_manifest_list = $false
   $token = _getSourceToken $source_registry $source_image
   $manifest_list_json_path = Get-Manifest $token $source_image $source_ref -raw $false `
     -registry $source_registry
@@ -265,6 +266,15 @@ Function _sync($source, $dest, $config) {
   }
   else {
     $manifest_list_json = $null
+
+    # try oci manifest list
+    $manifest_list_json_path = Get-Manifest $token $source_image $source_ref -raw $false `
+    -registry $source_registry -header [OCIImageSpec]::manifest_list
+
+    if ($manifest_list_json_path) {
+      $oci_manifest_list = $true
+      $manifest_list_json = ConvertFrom-Json (Get-Content $manifest_list_json_path -raw)
+    }
   }
 
   $manifest_list_mediaType = $manifest_list_json.mediaType

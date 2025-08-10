@@ -8,6 +8,8 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
   $type = "manifest"
 
   if ($header -eq [DockerImageSpec]::manifest_list) { $type = "docker manifest list" }
+  if ($header -eq [OCIImageSpec]::manifest_list) { $type = "oci manifest list" }
+  if ($header -eq [OCIImageSpec]::manifest) { $type = "oci manifest" }
 
   Write-host "==> Get [ $image $ref ] $type ..." -ForegroundColor Blue
 
@@ -43,6 +45,8 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
       $type = "oci manifest"
     }
 
+    Write-Host "==> [Info] Try [ $image $ref ] $type ..." -ForegroundColor Blue
+
     try {
       $result = Invoke-WebRequest `
         -Authentication OAuth `
@@ -63,7 +67,7 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
   }
 
   if ($result.Headers.'Content-Type' -ne $header) {
-    Write-Host "==> [error] Get [ $image $ref ] $type error" -ForegroundColor Red
+    Write-Host "==> [error] Get [ $image $ref ] $type error, find [ $($result.Headers.'Content-Type') ]" -ForegroundColor Red
 
     return $false
   }
@@ -109,4 +113,31 @@ Export-ModuleMember -Function Get-Manifest
 #         }
 #      }
 #   ]
+# }
+
+
+# {
+#    "schemaVersion": 2,
+#    "mediaType": "application/vnd.oci.image.index.v1+json",
+#    "manifests": [
+#       {
+#          "mediaType": "application/vnd.oci.image.manifest.v1+json",
+#          "size": 1598,
+#          "digest": "sha256:e39f6119f134b4811af19fd5c20f495a6a264a85c1b6920daf569b23009dd42c",
+#          "platform": {
+#             "architecture": "amd64",
+#             "os": "linux"
+#          }
+#       },
+#       {
+#          "mediaType": "application/vnd.oci.image.manifest.v1+json",
+#          "size": 1598,
+#          "digest": "sha256:a090c17d367f2686633f2be8a10cb1670ed1c12bb47c6e47ea0dde84a8512765",
+#          "platform": {
+#             "architecture": "arm",
+#             "os": "linux",
+#             "variant": "v7"
+#          }
+#       }
+#    ]
 # }
