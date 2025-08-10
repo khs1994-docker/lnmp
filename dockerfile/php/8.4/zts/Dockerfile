@@ -481,6 +481,7 @@ RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
 	openssl-dev \
 	readline-dev \
 	sqlite-dev \
+  pcre2-dev \
 	upx \
   && git clone -b ${FRANKENPHP_VERSION} --depth=1 https://github.com/php/frankenphp /go/src/app \
   && cp /go/src/app/caddy/frankenphp/Caddyfile /etc/caddy/Caddyfile \
