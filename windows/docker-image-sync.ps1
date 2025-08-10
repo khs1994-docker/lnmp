@@ -271,7 +271,7 @@ Function _sync($source, $dest, $config) {
 
     # try oci manifest list
     $manifest_list_json_path = Get-Manifest $token $source_image $source_ref -raw $false `
-    -registry $source_registry -header [OCIImageSpec]::manifest_list
+      -registry $source_registry -header $([OCIImageSpec]::manifest_list)
 
     if ($manifest_list_json_path) {
       $oci_manifest_list = $true

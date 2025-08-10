@@ -450,10 +450,11 @@ LABEL org.opencontainers.image.revision=$VCS_REF \
 
 ENV GODEBUG=cgocheck=0
 
-ARG FRANKENPHP_VERSION='v1.7.0'
+ARG FRANKENPHP_VERSION='v1.9.0'
 
 RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
     --mount=type=cache,target=/root/go,rw \
+    --mount=type=secret,id=github-token \
   set -x \
   && apk add --no-cache \
 	# ca-certificates \
@@ -490,16 +491,20 @@ RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
   && export GOTOOLCHAIN=local \
   && mkdir -p /usr/local/src/watcher \
   && cd /usr/local/src/watcher \
-  && curl -s https://api.github.com/repos/e-dant/watcher/releases/latest | \
-		grep tarball_url | \
-		awk '{ print $2 }' | \
-		sed 's/,$//' | \
-		sed 's/"//g' | \
-		xargs curl -L | \
-    tar xz --strip-components 1 && \
-    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
-	cmake --build build && \
-	cmake --install build \
+  && if [ -f /run/secrets/github-token ] && [ -s /run/secrets/github-token ]; then \
+        curl -s -H "Authorization: Bearer $(cat /run/secrets/github-token)" https://api.github.com/repos/e-dant/watcher/releases/latest; \
+    else \
+        curl -s https://api.github.com/repos/e-dant/watcher/releases/latest; \
+    fi | \
+  grep tarball_url | \
+  awk '{ print $2 }' | \
+  sed 's/,$//' | \
+  sed 's/"//g' | \
+  xargs curl -L | \
+  tar xz --strip-components 1 && \
+  cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
+  cmake --build build && \
+  cmake --install build \
   && cd /go/src/app \
   && go mod download \
   && cd /go/src/app/caddy \
@@ -509,7 +514,8 @@ RUN --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go,rw \
   && export CGO_CPPFLAGS=$PHP_CPPFLAGS \
   && export CGO_LDFLAGS="-lssl -lcrypto -lreadline -largon2 -lcurl -lonig -lz $PHP_LDFLAGS" \
   && cd /go/src/app/caddy/frankenphp \
-  && GOBIN=/usr/local/bin go install -tags 'nobadger,nomysql,nopgx' -ldflags "-w -s -extldflags '-Wl,-z,stack-size=0x80000' -X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP $FRANKENPHP_VERSION PHP $PHP_VERSION Caddy'" -buildvcs=true && \
+  && GOBIN=/usr/local/bin \
+    ../../go.sh install -ldflags "-w -s -extldflags '-Wl,-z,stack-size=0x80000' -X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP $FRANKENPHP_VERSION PHP $PHP_VERSION Caddy'" -buildvcs=true && \
 	setcap cap_net_bind_service=+ep /usr/local/bin/frankenphp && \
 	([ -z "${NO_COMPRESS}" ] && upx --best /usr/local/bin/frankenphp || true) && \
 	frankenphp version && \

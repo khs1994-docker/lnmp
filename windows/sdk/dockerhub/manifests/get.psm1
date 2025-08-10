@@ -5,7 +5,7 @@ Import-Module $PSScriptRoot/../cache/cache.psm1
 function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry = "registry.hub.docker.com", $raw = $true, $return_digest_only = $false) {
   if (!$header) { $header = [DockerImageSpec]::manifest_list }
 
-  $type = "manifest"
+  $type = "docker manifest"
 
   if ($header -eq [DockerImageSpec]::manifest_list) { $type = "docker manifest list" }
   if ($header -eq [OCIImageSpec]::manifest_list) { $type = "oci manifest list" }
