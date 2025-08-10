@@ -75,6 +75,16 @@ jobs:
       run: sudo systemctl stop mysql
       if: |
         startsWith(matrix.os, 'ubuntu' )
+    - name: build and push [ docker-image-sync ] image
+      if: |
+        contains( github.event.head_commit.message, '[lwpm]' )
+        && github.event_name == 'push'
+        && startsWith(matrix.os, 'ubuntu' )
+      run: |
+        docker buildx build -t khs1994/docker-image-sync \
+                            -t ghcr.io/khs1994/docker-image-sync \
+                            -t docker.cnb.cool/khs1994-docker/khs1994/docker-image-sync \
+                            -f windows/docker-image-sync.Dockerfile --push windows
     - name: Test
       run: |
         QUITE=true ./lnmp-docker test development
@@ -133,16 +143,16 @@ jobs:
                             -t ghcr.io/khs1994/lwpm \
                             -t docker.cnb.cool/khs1994-docker/lwpm/lwpm \
                             -f windows/lwpm.Dockerfile --push windows
-    - name: build and push [ docker-image-sync ] image
-      if: |
-        contains( github.event.head_commit.message, '[lwpm]' )
-        && github.event_name == 'push'
-        && startsWith(matrix.os, 'ubuntu' )
-      run: |
-        docker buildx build -t khs1994/docker-image-sync \
-                            -t ghcr.io/khs1994/docker-image-sync \
-                            -t docker.cnb.cool/khs1994-docker/khs1994/docker-image-sync \
-                            -f windows/docker-image-sync.Dockerfile --push windows
+    # - name: build and push [ docker-image-sync ] image
+    #   if: |
+    #     contains( github.event.head_commit.message, '[lwpm]' )
+    #     && github.event_name == 'push'
+    #     && startsWith(matrix.os, 'ubuntu' )
+    #   run: |
+    #     docker buildx build -t khs1994/docker-image-sync \
+    #                         -t ghcr.io/khs1994/docker-image-sync \
+    #                         -t docker.cnb.cool/khs1994-docker/khs1994/docker-image-sync \
+    #                         -f windows/docker-image-sync.Dockerfile --push windows
     - name: build and push [ lrew ] image
       if: |
         contains( github.event.head_commit.message, '[lrew]' )
