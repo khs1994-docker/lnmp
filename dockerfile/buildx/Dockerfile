@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile-upstream:master-labs
+# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs-labs
 FROM alpine
 
 RUN --mount=type=secret,id=mysecret cat /run/secrets/mysecret

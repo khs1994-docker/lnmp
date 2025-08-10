@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile-upstream:master
+# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
 FROM alpine:3.16 as boringssl-builder
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org

@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile-upstream:master
+# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
 ARG PHP_VERSION=7.2.34
 ARG USERNAME=khs1994
 ARG BASE=fpm

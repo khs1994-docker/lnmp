@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile-upstream:master
+# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
 ARG PHP_VERSION=7.4.33
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.16 as php

@@ -14,6 +14,8 @@ jobs:
           docker manifest inspect moby/buildkit@sha256:e39f6119f134b4811af19fd5c20f495a6a264a85c1b6920daf569b23009dd42c
       - run: |
           docker run -i --rm \
+            -e SOURCE_DOCKER_USERNAME=${DOCKER_USERNAME} \
+            -e SOURCE_DOCKER_PASSWORD=${DOCKERIO_PASSWORD} \
             -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
             -e DEST_DOCKER_REGISTRY=ghcr.io \
@@ -26,4 +28,5 @@ jobs:
         env:
           DOCKER_USERNAME: khs1994
           DOCKER_PASSWORD: ${{secrets.GHCR_IO_TOKEN}}
+          DOCKERIO_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         name: Sync docker image

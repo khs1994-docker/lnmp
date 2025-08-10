@@ -1,8 +1,8 @@
-# syntax=docker/dockerfile-upstream:master
+# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
 ARG USERNAME=khs1994
 ARG BASE=cli
 
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:nightly-${BASE}-alpine
+FROM --platform=$TARGETPLATFORM ghcr.io/${USERNAME}/php:nightly-${BASE}-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -29,7 +29,7 @@ ENV PECL_EXTENSION \
 ENV SWOOLE_VERSION=master \
     BOX_REQUIREMENT_CHECKER=0
 
-RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=ghcr.io/dpsigs/php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     set -x \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     && apk add --no-cache --virtual .pecl_build_deps \

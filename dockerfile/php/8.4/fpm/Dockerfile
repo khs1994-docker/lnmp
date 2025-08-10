@@ -1,7 +1,7 @@
-# syntax=docker/dockerfile-upstream:master
+# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
 ARG PHP_VERSION=8.4.10
 
-FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.22 as php
+FROM --platform=$TARGETPLATFORM ghcr.io/dpsigs/php:${PHP_VERSION}-fpm-alpine3.22 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

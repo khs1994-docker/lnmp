@@ -1,10 +1,10 @@
-# syntax=docker/dockerfile-upstream:master
+# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
 
 ARG USERNAME=khs1994
 # ARG BASE=fpm
 ARG BASE=cli
 
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:nightly-${BASE}-alpine
+FROM --platform=$TARGETPLATFORM ghcr.io/${USERNAME}/php:nightly-${BASE}-alpine
 
 # install composer
 
@@ -30,7 +30,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 \
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:2.8.9,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=ghcr.io/dpsigs/composer:2.8.9,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .composer_deps $COMPOSER_DEP_APKS \
     && { echo "memory_limit=-1"; \

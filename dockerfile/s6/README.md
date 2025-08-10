@@ -3,7 +3,7 @@
 ## 示例
 
 ```docker
-# syntax=docker/dockerfile-upstream:master
+# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
 
 FROM --platform=$TARGETPLATFORM alpine
 

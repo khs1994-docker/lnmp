@@ -1,9 +1,9 @@
-# syntax=docker/dockerfile-upstream:master
+# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
 ARG PHP_VERSION=nightly
 ARG USERNAME=khs1994
 ARG BASE=cli
 
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
+FROM --platform=$TARGETPLATFORM ghcr.io/${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

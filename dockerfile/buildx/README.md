@@ -13,7 +13,7 @@ $ export DOCKER_BUILDKIT=1
 $env:DOCKER_BUILDKIT=1
 ```
 
-要使用以下参数必须在 `Dockerfile` 中加上 `# syntax=docker/dockerfile-upstream:master` 这样的指令，具体查看对应的示例 `Dockerfile`
+要使用以下参数必须在 `Dockerfile` 中加上 `# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs` 这样的指令，具体查看对应的示例 `Dockerfile`
 
 ### `--secret`
 

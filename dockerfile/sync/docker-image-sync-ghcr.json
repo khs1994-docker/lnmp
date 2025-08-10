@@ -40,8 +40,8 @@
     "dest": "docker-dockerfile"
   },
   {
-    "source": "docker/dockerfile-upstream:master",
-    "dest": "docker-dockerfile:labs"
+    "source": "docker/dockerfile-upstream:labs",
+    "dest": "docker-dockerfile-upstream:labs"
   },
   {
     "source": "docker/dockerfile-upstream:master",
@@ -52,7 +52,51 @@
     "dest": "docker-dockerfile-upstream:master-labs"
   },
   {
+    "source": "docker/dockerfile-upstream:1.17.1-labs",
+    "dest": "docker-dockerfile-upstream:1.17.1-labs"
+  },
+  {
+    "source": "docker/dockerfile-upstream:1.17.1",
+    "dest": "docker-dockerfile-upstream:1.17.1"
+  },
+  {
     "source": "quay.io/fluentd_elasticsearch/elasticsearch:v7.16.2",
     "dest": "elasticsearch:v7.16.2"
+  },
+  {
+    "source": "library/alpine:3.22",
+    "dest": "alpine:3.22"
+  },
+  {
+    "source": "library/php:8.4.10-alpine",
+    "dest": "php:8.4.10-alpine"
+  },
+  {
+    "source": "library/php:8.3.12-alpine",
+    "dest": "php:8.3.12-alpine"
+  },
+  {
+    "source": "library/php:8.2.26-alpine",
+    "dest": "php:8.2.26-alpine"
+  },
+  {
+    "source": "library/php:8.1.31-alpine",
+    "dest": "php:8.1.31-alpine"
+  },
+  {
+    "source": "library/php:alpine",
+    "dest": "php:alpine"
+  },
+  {
+    "source": "library/composer:2.8.9",
+    "dest": "composer:2.8.9"
+  },
+  {
+    "source": "library/golang:1.24-alpine",
+    "dest": "golang:1.24-alpine"
+  },
+  {
+    "source": "ghcr.io/php/pie:bin",
+    "dest": "pie:bin"
   }
 ]
