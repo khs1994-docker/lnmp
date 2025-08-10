@@ -5,7 +5,7 @@ ARG BASE=cli
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine AS upstream
 
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
+FROM --platform=$TARGETPLATFORM ghcr.io/${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

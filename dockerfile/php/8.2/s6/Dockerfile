@@ -4,9 +4,9 @@ ARG PHP_VERSION=8.2.26
 ARG USERNAME=khs1994
 ARG BASE=fpm
 
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
+FROM --platform=$TARGETPLATFORM ghcr.io/${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
-RUN --mount=type=bind,from=khs1994/s6:3.1.4.2,source=/,target=/tmp/s6 \
+RUN --mount=type=bind,from=ghcr.io/khs1994/s6:3.1.4.2,source=/,target=/tmp/s6 \
     --network=none \
     set -x \
     && tar -xvf /tmp/s6/s6-overlay-noarch.tar.xz -C / \

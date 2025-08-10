@@ -3,7 +3,9 @@ ARG PHP_VERSION=8.1.31
 ARG USERNAME=khs1994
 ARG BASE=cli
 
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-alpine AS upstream
+
+FROM --platform=$TARGETPLATFORM ghcr.io/${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -27,7 +29,7 @@ ENV SWOOLE_VERSION=v5.0.3
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN --mount=type=bind,from=php:8.1.31-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=upstream,source=/usr/local/bin,target=/opt/bin,rw \
     set -x \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     && apk add --no-cache --virtual .pecl_build_deps \
