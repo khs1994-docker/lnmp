@@ -20,6 +20,9 @@ jobs:
       CODING_DOCKER_REGISTRY: docker.cnb.cool
       CODING_DOCKER_USERNAME: cnb
       CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
+      GHCRIO_DOCKER_REGISTRY: ghcr.io
+      GHCRIO_DOCKER_USERNAME: khs1994
+      GHCRIO_DOCKER_PASSWORD: ${{secrets.GHCR_IO_TOKEN}}
     strategy:
       matrix:
         os: ["windows","ubuntu"]
@@ -50,6 +53,11 @@ jobs:
           $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/conmon@${env:VERSION}
+
+          $env:LWPM_DOCKER_USERNAME=$env:GHCRIO_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:GHCRIO_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:GHCRIO_DOCKER_REGISTRY
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/conmon@${env:VERSION}
       - name: handle-containerd
         shell: pwsh
         if: matrix.os == 'ubuntu' &&
@@ -68,6 +76,11 @@ jobs:
           $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
           $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/containerd@${env:VERSION}
+
+          $env:LWPM_DOCKER_USERNAME=$env:GHCRIO_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:GHCRIO_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:GHCRIO_DOCKER_REGISTRY
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/containerd@${env:VERSION}
       - name: handle-crictl
         shell: pwsh
@@ -88,6 +101,11 @@ jobs:
           $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/crictl@${env:VERSION}
+
+          $env:LWPM_DOCKER_USERNAME=$env:GHCRIO_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:GHCRIO_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:GHCRIO_DOCKER_REGISTRY
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/crictl@${env:VERSION}
       - name: handle-runc
         shell: pwsh
         if: matrix.os == 'windows' &&
@@ -107,12 +125,17 @@ jobs:
           $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/runc@${env:VERSION}
+
+          $env:LWPM_DOCKER_USERNAME=$env:GHCRIO_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:GHCRIO_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:GHCRIO_DOCKER_REGISTRY
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/runc@${env:VERSION}
       - name: handle-crun
         shell: pwsh
         if: matrix.os == 'windows' &&
             ( contains( github.event.head_commit.message, '[k8s]') || github.event_name == 'workflow_dispatch')
         env:
-          VERSION: 1.21
+          VERSION: 1.23.1
         run: |
           $env:LWPM_DOCKER_USERNAME=$env:LWPM_DOCKER_USERNAME_
           $env:LWPM_DOCKER_PASSWORD=$env:LWPM_DOCKER_PASSWORD_
@@ -125,6 +148,11 @@ jobs:
           $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
           $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/crun@${env:VERSION}
+
+          $env:LWPM_DOCKER_USERNAME=$env:GHCRIO_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:GHCRIO_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:GHCRIO_DOCKER_REGISTRY
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/crun@${env:VERSION}
       - name: handle-runsc
         shell: pwsh
@@ -145,6 +173,11 @@ jobs:
           $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/runsc@${env:VERSION}
+
+          $env:LWPM_DOCKER_USERNAME=$env:GHCRIO_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:GHCRIO_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:GHCRIO_DOCKER_REGISTRY
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/runsc@${env:VERSION}
       - name: handle-cni
         shell: pwsh
         if: matrix.os == 'windows' &&
@@ -162,6 +195,12 @@ jobs:
           $env:LWPM_DOCKER_USERNAME=$env:CODING_DOCKER_USERNAME
           $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
           $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
+          $NS="khs1994-docker/lwpm"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/cni@${env:VERSION}
+
+          $env:LWPM_DOCKER_USERNAME=$env:GHCRIO_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:GHCRIO_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:GHCRIO_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/cni@${env:VERSION}
       - name: handle-compose

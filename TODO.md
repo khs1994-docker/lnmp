@@ -2,3 +2,4 @@
 
 * `lnmp-docker` 代码控制在 `1300` 行以内
 * `lnmp-docker.ps1` 代码控制在 `1200` 行以内
+* 移除对 `docker hub` 的强依赖

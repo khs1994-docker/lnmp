@@ -83,7 +83,7 @@ Import-Module $PSScriptRoot/sdk/dockerhub/utils/Get-SHA.psm1
 [environment]::SetEnvironmentvariable("DOCKER_BUILDKIT", "1", "User")
 [environment]::SetEnvironmentvariable("APP_ENV", "$APP_ENV", "User")
 
-$env:GITHUB_MIRROR='download.fgit.ml'
+$env:GITHUB_MIRROR='github.com'
 
 if (!$Env:PSModulePathSystem) {
   $Env:PSModulePathSystem = $Env:PSModulePath

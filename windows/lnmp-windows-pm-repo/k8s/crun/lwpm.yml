@@ -1,5 +1,5 @@
 name: crun
-version: "1.21"
+version: "1.23.1"
 url: "https://github.com/containers/crun/releases/download/${VERSION}/crun-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}"
 scripts:
   platform-reqs: if(!$IsLinux){echo $False}
@@ -9,6 +9,11 @@ scripts:
     curl -L `
       $url `
       -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/crun-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}
+
+    curl -L `
+      $url `
+      -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/crun-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}-disable-systemd
+
 platform:
   - architecture: amd64
     os: linux
