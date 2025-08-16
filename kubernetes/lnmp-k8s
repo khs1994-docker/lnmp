@@ -24,7 +24,18 @@ if [ -n "$KUBERNETES_VERSION_SETED" ];then
 fi
 
 TMP_ROOT=$HOME/.khs1994-docker-lnmp/caches
-GITHUB_MIRROR=download.fgit.ml
+
+DOWNLOAD_FROM_REGISTRY_URL='docker.cnb.cool'
+
+if [ "${LNMP_CN_ENV}" = 'true' ];then
+  DOWNLOAD_FROM_REGISTRY='true'
+fi
+
+if [ -n "${GITHUB_ACTIONS}" ];then
+  DOWNLOAD_FROM_REGISTRY='true'
+
+  DOWNLOAD_FROM_REGISTRY_URL='ghcr.io'
+fi
 
 ################################################################################
 
@@ -73,9 +84,9 @@ Commands:
   nfs                    Up NFS server { down | logs }
 
 ENV:
-  DOWNLOAD_FROM_CODING=true
-  CODING_USERNAME
-  CODING_TOKEN
+  DOWNLOAD_FROM_REGISTRY=true
+  DOWNLOAD_FROM_REGISTRY_URL='ghcr.io'
+  DOWNLOAD_FROM_REGISTRY_URL='docker.cnb.cool'
 "
 }
 
@@ -337,19 +348,6 @@ _nginx_build(){
   $(_sudo) rm -rf ${TMP_ROOT}/kube-nginx
 }
 
-_use_cn_mirror(){
-if [ "${LNMP_CN_ENV}" = 'false' ];then
-  return 1;
-fi
-
-local httpCode=`curl -X GET -sI ${1} | head -1 | awk '{print $2}'`
-
-if [ "$httpCode" != 200 ];then
-  echo 'cn mirror http response code is not 200, not use'
-  return 1;
-fi
-}
-
 _etcd_install(){
   local url_official="https://github.com/etcd-io/etcd/releases/download"
   local url="https://repo.huaweicloud.com/etcd"
@@ -368,7 +366,12 @@ _etcd_install(){
     true
   else
     rm -rf ${TMP_ROOT}/${TAR_FILE}
-    _use_cn_mirror ${url}/v${ETCD_VERSION}/${TAR_FILE} || url=$url_official
+
+    if [ "$DOWNLOAD_FROM_REGISTRY" = 'true' ];then
+      url=$url
+    else
+      url=$url_official
+    fi
 
     $(_sudo) $(_curl) ${url}/v${ETCD_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   fi
@@ -396,7 +399,11 @@ _helm_install(){
   local url="https://repo.huaweicloud.com/helm/v${HELM_VERSION}"
   local TAR_FILE="helm-v${HELM_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
-    _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
+    if [ "$DOWNLOAD_FROM_REGISTRY" = 'true' ];then
+      url=$url
+    else
+      url=$url_official
+    fi
 
     $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
@@ -448,20 +455,32 @@ _gvisor_install(){
 
   print_info "install gvisor(runsc) ..."
   local url_official="https://github.com/docker-practice/gvisor-mirror/releases/download/nightly"
-  local url="https://${GITHUB_MIRROR}/docker-practice/gvisor-mirror/releases/download/nightly"
   local TAR_FILE="runsc-${GOOS}-${GOARCH}.tar.gz"
-
-  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
-    url=${CODING_URL}/${TAR_FILE}?version=nightly
-  else
-    _use_cn_mirror ${url}/${TAR_FILE} && url=${url}/${TAR_FILE} \
-                                      || url=${url_official}/${TAR_FILE}
-  fi
+  local RUNSC_VERSION='nightly'
 
   if [ "$1" = '-f' ];then $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}; fi
 
-  if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-    $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
+  $(_sudo) rm -rf ${TMP_ROOT}/runsc
+
+  if [ "$DOWNLOAD_FROM_REGISTRY" = "true" ];then
+    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+          khs1994-docker/lwpm/runsc \
+          ${RUNSC_VERSION} \
+          ${GOARCH} \
+          ${GOOS} \
+          "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
+    $(_sudo) mkdir -p ${TMP_ROOT}/runsc_dist
+    $(_sudo) tar -zxf $rootfs -C ${TMP_ROOT}/runsc_dist
+
+    $(_sudo) cp ${TMP_ROOT}/runsc_dist/runsc/dist/runsc ${TMP_ROOT}/runsc
+  else
+    url=${url_official}/${TAR_FILE}
+
+    if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
+      $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
+    fi
+
+    $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
   fi
 
   if [ "$1" = "--dry-run" ];then
@@ -469,7 +488,8 @@ _gvisor_install(){
     return
   fi
 
-  $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/local/bin
+  $(_sudo) chmod +x ${TMP_ROOT}/runsc
+  $(_sudo) cp ${TMP_ROOT}/runsc /usr/local/bin/runsc
 
   runsc --version
 }
@@ -489,22 +509,19 @@ _runc_install(){
 
   local file_name=runc.${GOARCH}
   local url_official=https://github.com/opencontainers/runc/releases/download/v${RUNC_VERSION}
-  local url=https://${GITHUB_MIRROR}/opencontainers/runc/releases/download/v${RUNC_VERSION}
 
-  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+  if [ "$DOWNLOAD_FROM_" != "false" ];then
     rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
       khs1994-docker/lwpm/runc \
       ${RUNC_VERSION} \
       ${GOARCH} \
       ${GOOS} \
-      "" 0 docker.cnb.cool)
+      "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
 
     $(_sudo) tar -zxvf $rootfs -C /tmp
     $(_sudo) install -m 755 /tmp/runc/dist/runc /usr/bin/runc
   else
-    _use_cn_mirror ${url}/${file_name} && url=${url}/${file_name} \
-                                       || url=${url_official}/${file_name}
-
+    url=${url_official}/${file_name}
 
     $(_sudo) $(_curl) ${url} -o /usr/bin/runc
 
@@ -545,32 +562,33 @@ _crun_install(){
   fi
 
   local file_name=crun-${CRUN_VERSION}-linux-${GOARCH}
-  local url=https://${GITHUB_MIRROR}/containers/crun/releases/download/${CRUN_VERSION}
   local url_official=https://github.com/containers/crun/releases/download/${CRUN_VERSION}
 
-  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
-    url=${CODING_URL}/${file_name}?version=${CRUN_VERSION}
+  if [ "$DOWNLOAD_FROM_REGISTRY" = "true" ];then
+    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+          khs1994-docker/lwpm/crun \
+          ${CRUN_VERSION} \
+          ${GOARCH} \
+          ${GOOS} \
+          "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
+    $(_sudo) tar -zxvf $rootfs -C ${TMP_ROOT}
+
+    $(_sudo) cp ${TMP_ROOT}/crun/dist/crun-${CRUN_VERSION}-${GOOS}-${GOARCH} /usr/bin/crun
+    $(_sudo) cp ${TMP_ROOT}/crun/dist/crun-${CRUN_VERSION}-${GOOS}-${GOARCH}-disable-systemd /usr/bin/crun-disable-systemd
   else
-    _use_cn_mirror ${url}/${file_name} && url=${url}/${file_name} \
-                                       || url=${url_official}/${file_name}
+    url=${url_official}/${file_name}
+
+    $(_sudo) $(_curl) ${url} -o /usr/bin/crun
+
+    file_name=crun-${CRUN_VERSION}-linux-${GOARCH}-disable-systemd
+    url_official=https://github.com/containers/crun/releases/download/${CRUN_VERSION}
+
+    url=${url_official}/${file_name}
+
+    $(_sudo) $(_curl) ${url} -o /usr/bin/crun-disable-systemd
   fi
 
-  $(_sudo) $(_curl) ${url} -o /usr/bin/crun
-
-  file_name=crun-${CRUN_VERSION}-linux-${GOARCH}-disable-systemd
-  url=https://${GITHUB_MIRROR}/containers/crun/releases/download/${CRUN_VERSION}
-  url_official=https://github.com/containers/crun/releases/download/${CRUN_VERSION}
-
-  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
-    url=${CODING_URL}/${file_name}?version=${CRUN_VERSION}
-  else
-    _use_cn_mirror ${url}/${file_name} && url=${url}/${file_name} \
-                                       || url=${url_official}/${file_name}
-  fi
-
-  $(_sudo) $(_curl) ${url} \
-    -o /usr/bin/crun-disable-systemd
-
+  $(_sudo) chmod +x /usr/bin/crun /usr/bin/crun
   $(_sudo) chmod +x /usr/bin/crun /usr/bin/crun-disable-systemd
 
   crun --version
@@ -597,22 +615,20 @@ _containerd_install(){
   print_info "install containerd 2.0 ..."
 
   local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
-  local url="https://${GITHUB_MIRROR}/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
 
   # local TAR_FILE="cri-containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   local TAR_FILE="containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
 
-  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+  if [ "$DOWNLOAD_FROM_REGISTRY" = "true" ];then
     rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
       khs1994-docker/lwpm/containerd \
       ${CONTAINERD_VERSION} \
       ${GOARCH} \
       ${GOOS} \
-      "" 0 docker.cnb.cool)
+      "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
     $(_sudo) cp ${rootfs} ${TMP_ROOT}/${TAR_FILE}
   else
-    _use_cn_mirror ${url}/${TAR_FILE} && url=${url}/${TAR_FILE} \
-                                      || url=${url_official}/${TAR_FILE}
+    url=${url_official}/${TAR_FILE}
 
     local sha256sum_url=${url}.sha256sum
 
@@ -652,8 +668,7 @@ _cni_install(){
     return
   fi
 
-  local url="https://mirror.azure.cn/kubernetes/containernetworking-plugins"
-  local url_official="https://github.com/containernetworking/plugins/releases/download/v${CNI_VERSION}"
+  local url="https://github.com/containernetworking/plugins/releases/download/v${CNI_VERSION}"
   local TAR_FILE="cni-plugins-${GOOS}-${GOARCH}-v${CNI_VERSION}.tgz"
 
   # wsl2 with cni 0.8.2 error:
@@ -661,16 +676,14 @@ _cni_install(){
   # down to 0.7.6
   # 0.8.3 fixed
 
-  _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
-
   __download(){
-    if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+    if [ "$DOWNLOAD_FROM_REGISTRY" = "true" ];then
       rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
         khs1994-docker/lwpm/cni \
         ${CNI_VERSION} \
         ${GOARCH} \
         ${GOOS} \
-        "" 0 docker.cnb.cool)
+        "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
 
       $(_sudo) cp $rootfs  ${TMP_ROOT}/${TAR_FILE}
     else
@@ -734,21 +747,19 @@ _crictl_install(){
   fi
 
   local url_official="https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
-  local url="https://${GITHUB_MIRROR}/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
   local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-${GOARCH}.tar.gz"
 
-  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+  if [ "$DOWNLOAD_FROM_REGISTRY" = "true" ];then
     rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
       khs1994-docker/lwpm/crictl \
       ${CRICTL_VERSION} \
       ${GOARCH} \
       ${GOOS} \
-      "" 0 docker.cnb.cool)
+      "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
 
     $(_sudo) cp ${rootfs} ${TMP_ROOT}/${TAR_FILE}
   else
-    _use_cn_mirror ${url}/${TAR_FILE} && url=${url}/${TAR_FILE} \
-                                      || url=${url_official}/${TAR_FILE}
+    url=${url_official}/${TAR_FILE}
 
   print_info "install crictl ..."
 
@@ -847,21 +858,30 @@ _conmon_install(){
   fi
 
   local url_official=https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
-  local url=https://${GITHUB_MIRROR}/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
 
-  if [ $DOWNLOAD_FROM_CODING != "false" ];then
-    url=$CODING_URL/conmon.$GOARCH?version=${CONMON_VERSION}
+  if [ $DOWNLOAD_FROM_REGISTRY = "true" ];then
+    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+          khs1994-docker/lwpm/conmon \
+          ${CONMON_VERSION} \
+          ${GOARCH} \
+          ${GOOS} \
+          "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
+    $(_sudo) tar -zxvf $rootfs -C ${TMP_ROOT}
+
+    $(_sudo) cp ${TMP_ROOT}/conmon/dist/conmon ${K8S_ROOT}/usr/local/bin/conmon
+
+    $(_sudo) chmod +x ${K8S_ROOT}/usr/local/bin/conmon
   else
-    _use_cn_mirror $url || url=$url_official
-  fi
+    url=$url_official
 
-  if [ $OS = "Linux" ];then
-    if [ $GOARCH = "amd64" -o $GOARCH = "arm64" ];then
-      $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon $url
+    if [ $OS = "Linux" ];then
+      if [ $GOARCH = "amd64" -o $GOARCH = "arm64" ];then
+        $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon $url
 
-      $(_sudo) chmod +x ${K8S_ROOT}/usr/local/bin/conmon
+        $(_sudo) chmod +x ${K8S_ROOT}/usr/local/bin/conmon
 
-      return
+        return
+      fi
     fi
   fi
 
