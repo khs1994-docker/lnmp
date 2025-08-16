@@ -1061,11 +1061,11 @@ _containerd_cri_config(){
     | $(_sudo) tee $CONTAINERD_CONF_ROOT/config.toml
 
   if ! [ "${LNMP_CN_ENV}" = 'false' ];then
-  $(_sudo) cp -r systemd/etc/cri-containerd/2.0/certs.d $CONTAINERD_CONF_ROOT
+    $(_sudo) cp -r systemd/etc/cri-containerd/2.0/certs.d $CONTAINERD_CONF_ROOT
   fi
 
   if [ -n "$GITHUB_ACTIONS" ];then
-    $(_sudo) mkdir $CONTAINERD_CONF_ROOT/certs.d/docker.io
+    $(_sudo) mkdir -p $CONTAINERD_CONF_ROOT/certs.d/docker.io
 
     cat <<EOF | $(_sudo) tee $CONTAINERD_CONF_ROOT/certs.d/docker.io/hosts.toml
 server = "https://docker.io"

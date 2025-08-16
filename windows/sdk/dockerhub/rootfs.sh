@@ -12,7 +12,6 @@ rootfs(){
   local layersIndex=${6:-0}
 
   registry="registry-1.docker.io"
-  registry="registry-1.docker.io"
   # registry="mirror.baidubce.com"
 
   if [ "$LNMP_CN_ENV" = 'false' ];then registry=registry.hub.docker.com; fi
