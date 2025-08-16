@@ -185,6 +185,11 @@ _get_kubernetes_server_by_docker_image(){
     fi
   fi
 
+  if [ -n "$GITHUB_ACTIONS" ];then
+    K8S_IMAGE_REGISTRY="ghcr.io"
+    K8S_IMAGE_NS="khs1994"
+  fi
+
   # docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE_NS}/kubernetes-${TYPE}:${KUBERNETES_VERSION}
   # docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   # docker container create --name khs1994-kubernetes-${TYPE} \
@@ -1066,8 +1071,6 @@ _containerd_cri_config(){
 server = "https://docker.io"
 [host."https://mirror.gcr.io"]
   capabilities = ["pull", "resolve"]
-#[host."https://dockerhub.azk8s.cn"]
-#  capabilities = ["pull", "resolve"]
 [host."https://registry-1.docker.io"]
   capabilities = ["pull", "resolve"]
 EOF
