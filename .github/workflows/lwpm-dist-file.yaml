@@ -63,7 +63,7 @@ jobs:
         if: matrix.os == 'ubuntu' &&
             ( contains( github.event.head_commit.message, '[k8s]') || github.event_name == 'workflow_dispatch')
         env:
-          VERSION: 2.0.0
+          VERSION: 2.1.4
         run: |
           $env:LWPM_DOCKER_USERNAME=$env:LWPM_DOCKER_USERNAME_
           $env:LWPM_DOCKER_PASSWORD=$env:LWPM_DOCKER_PASSWORD_

@@ -37,6 +37,8 @@ if [ -n "${GITHUB_ACTIONS}" ];then
   DOWNLOAD_FROM_REGISTRY_URL='ghcr.io'
 fi
 
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
+
 ################################################################################
 
 if ! [ -f lnmp-k8s ];then if [ -n "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes > /dev/null; else exit; fi; fi
@@ -198,8 +200,6 @@ _get_kubernetes_server_by_docker_image(){
   # docker container rm khs1994-kubernetes-${TYPE}
 
   set -x
-
-  local ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
   dist=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
   ${K8S_IMAGE_NS}/kubernetes-${TYPE} \
@@ -468,7 +468,7 @@ _gvisor_install(){
   $(_sudo) rm -rf ${TMP_ROOT}/runsc
 
   if [ "$DOWNLOAD_FROM_REGISTRY" = "true" ];then
-    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+    rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
           khs1994-docker/lwpm/runsc \
           ${RUNSC_VERSION} \
           ${GOARCH} \
@@ -516,7 +516,7 @@ _runc_install(){
   local url_official=https://github.com/opencontainers/runc/releases/download/v${RUNC_VERSION}
 
   if [ "$DOWNLOAD_FROM_" != "false" ];then
-    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+    rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
       khs1994-docker/lwpm/runc \
       ${RUNC_VERSION} \
       ${GOARCH} \
@@ -570,7 +570,7 @@ _crun_install(){
   local url_official=https://github.com/containers/crun/releases/download/${CRUN_VERSION}
 
   if [ "$DOWNLOAD_FROM_REGISTRY" = "true" ];then
-    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+    rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
           khs1994-docker/lwpm/crun \
           ${CRUN_VERSION} \
           ${GOARCH} \
@@ -614,10 +614,10 @@ _containerd_install(){
   fi
 
   if [ -f ${K8S_ROOT}/bin/cri-containerd -a ! "$1" = "--dry-run" ];then \
-    print_info "containerd 2.0 already install"; \
+    print_info "containerd 2.1 already install"; \
     ${K8S_ROOT}/bin/cri-containerd --version;return; fi
 
-  print_info "install containerd 2.0 ..."
+  print_info "install containerd 2.1 ..."
 
   local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
 
@@ -625,7 +625,7 @@ _containerd_install(){
   local TAR_FILE="containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
 
   if [ "$DOWNLOAD_FROM_REGISTRY" = "true" ];then
-    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+    rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
       khs1994-docker/lwpm/containerd \
       ${CONTAINERD_VERSION} \
       ${GOARCH} \
@@ -683,7 +683,7 @@ _cni_install(){
 
   __download(){
     if [ "$DOWNLOAD_FROM_REGISTRY" = "true" ];then
-      rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+      rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
         khs1994-docker/lwpm/cni \
         ${CNI_VERSION} \
         ${GOARCH} \
@@ -755,7 +755,7 @@ _crictl_install(){
   local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-${GOARCH}.tar.gz"
 
   if [ "$DOWNLOAD_FROM_REGISTRY" = "true" ];then
-    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+    rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
       khs1994-docker/lwpm/crictl \
       ${CRICTL_VERSION} \
       ${GOARCH} \
@@ -865,7 +865,7 @@ _conmon_install(){
   local url_official=https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
 
   if [ $DOWNLOAD_FROM_REGISTRY = "true" ];then
-    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+    rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
           khs1994-docker/lwpm/conmon \
           ${CONMON_VERSION} \
           ${GOARCH} \
@@ -1030,6 +1030,8 @@ _crio_install(){
   #   && $(_sudo) apt-get update -qq \
   #   && $(_sudo) apt-get install cri-o-$CRIO_VERSION)
   set +x
+
+  cd $ScriptRoot
 }
 
 _crio_config(){
@@ -1054,14 +1056,14 @@ _crio_config(){
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
   print_info "config containerd ..."
-  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/2.0
+  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/2.1
   $(_sudo) mkdir -p $CONTAINERD_CONF_ROOT/certs.d
   # containerd config default > ${K8S_ROOT}/etc/cri-containerd/config.toml
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/2.0/config.toml \
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/2.1/config.toml \
     | $(_sudo) tee $CONTAINERD_CONF_ROOT/config.toml
 
   if ! [ "${LNMP_CN_ENV}" = 'false' ];then
-    $(_sudo) cp -r systemd/etc/cri-containerd/2.0/certs.d $CONTAINERD_CONF_ROOT
+    $(_sudo) cp -r systemd/etc/cri-containerd/2.1/certs.d $CONTAINERD_CONF_ROOT
   fi
 
   if [ -n "$GITHUB_ACTIONS" ];then
@@ -1301,7 +1303,7 @@ _k8s_install_systemd(){
     _enable_wsl_k8s_systemd_target kube-apiserver.service
     _enable_wsl_k8s_systemd_target kube-controller-manager.service
     _enable_wsl_k8s_systemd_target kube-scheduler.service
-    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@2.0.service
+    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@2.1.service
     _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
     _enable_wsl_k8s_systemd_target etcd.service
 
@@ -1539,7 +1541,7 @@ $ $(_sudo) systemctl start kubelet@cri-containerd
 $ $(_sudo) systemctl start kubelet@crio
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
-$ $(_sudo) systemctl start cri-containerd@2.0 (Containerd runtime only)
+$ $(_sudo) systemctl start cri-containerd@2.1 (Containerd runtime only)
 $ $(_sudo) systemctl start cri-o (CRI-O runtime only)
 "
 }
@@ -1548,7 +1550,7 @@ _local_cleanup(){
   $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
-    docker cri-containerd@2.0 crio || true
+    docker cri-containerd@2.1 crio || true
 
   set +e
   $(_sudo) rm -rf ${K8S_ROOT}
