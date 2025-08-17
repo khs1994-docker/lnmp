@@ -203,6 +203,30 @@ jobs:
           $env:LWPM_DOCKER_REGISTRY=$env:GHCRIO_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/cni@${env:VERSION}
+      - name: handle-cri-o
+        shell: pwsh
+        if: matrix.os == 'windows' &&
+            ( contains( github.event.head_commit.message, '[k8s]') || github.event_name == 'workflow_dispatch')
+        env:
+          VERSION: 1.33.0
+        run: |
+          $env:LWPM_DOCKER_USERNAME=$env:LWPM_DOCKER_USERNAME_
+          $env:LWPM_DOCKER_PASSWORD=$env:LWPM_DOCKER_PASSWORD_
+          $env:LWPM_DOCKER_REGISTRY=$env:LWPM_DOCKER_REGISTRY_
+
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist cri-o@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push cri-o@${env:VERSION}
+
+          $env:LWPM_DOCKER_USERNAME=$env:CODING_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
+          $NS="khs1994-docker/lwpm"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/cri-o@${env:VERSION}
+
+          $env:LWPM_DOCKER_USERNAME=$env:GHCRIO_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:GHCRIO_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:GHCRIO_DOCKER_REGISTRY
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/cri-o@${env:VERSION}
       - name: handle-compose
         shell: pwsh
         if: matrix.os == 'windows' &&

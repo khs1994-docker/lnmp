@@ -62,5 +62,9 @@
   {
     "source": "minio/minio:RELEASE.2022-10-24T18-35-07Z",
     "dest": "minio:RELEASE.2022-10-24T18-35-07Z"
+  },
+  {
+    "source": "ubuntu/squid:5.2-22.04_beta",
+    "dest": "ubuntu-squid:5.2-22.04_beta"
   }
 ]

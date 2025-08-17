@@ -1,0 +1,6 @@
+# Windows 中 ~/.wslconfig
+[wsl2]
+networkingMode=nat
+swap=0
+[experimental]
+sparseVhd=true

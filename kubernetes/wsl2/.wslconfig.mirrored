@@ -1,0 +1,7 @@
+# Windows 中 ~/.wslconfig
+[wsl2]
+networkingMode=mirrored
+swap=0
+[experimental]
+sparseVhd=true
+hostAddressLoopback=true

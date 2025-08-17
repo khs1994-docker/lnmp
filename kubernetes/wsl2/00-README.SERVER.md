@@ -21,12 +21,10 @@
 ```bash
 # Windows 中 ~/.wslconfig
 [wsl2]
-# networkingMode=mirrored
 networkingMode=nat
 swap=0
 [experimental]
 sparseVhd=true
-hostAddressLoopback=true
 ```
 
 ## 初始化
@@ -81,6 +79,7 @@ $ wsl --shutdown
 ```powershell
 $ wsl -d wsl-k8s -- KUBERNETES_VERSION=1.33.0 ./lnmp-k8s kubernetes-server --url
 # 如果上面的命令出现错误，可以执行这个命令
+# $ rm -r -force kubernetes-release\release\kubernetes-server-linux-amd64-1.33.0.tar.gz
 # $ wsl -d wsl-k8s -- KUBERNETES_VERSION=1.33.0 ./lnmp-k8s kubernetes-server
 
 # 其他架构

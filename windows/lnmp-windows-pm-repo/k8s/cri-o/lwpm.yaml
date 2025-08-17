@@ -1,0 +1,19 @@
+name: cri-o
+version: 1.33.0
+pre-version: 1.33.0
+url: "https://storage.googleapis.com/cri-o/artifacts/cri-o.${env:lwpm_architecture}.v${VERSION}.tar.gz"
+scripts:
+  platform-reqs: if($IsMacOs){echo $False}
+  dist: |
+    _mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}
+
+    curl -L `
+      $url `
+      -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename
+platform:
+  - architecture: amd64
+    os: linux
+  - architecture: arm64
+    os: linux
+hash-url:
+  sha256: https://storage.googleapis.com/cri-o/artifacts/cri-o.${env:lwpm_architecture}.v${VERSION}.tar.gz.sha256sum

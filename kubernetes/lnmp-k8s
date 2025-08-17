@@ -179,7 +179,8 @@ _get_kubernetes_server_by_docker_image(){
   if [ -z "${K8S_IMAGE_REGISTRY}" ];then
     if [ "${LNMP_CN_ENV}" != 'false' ];then
       # 国内
-      K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
+      K8S_IMAGE_REGISTRY="docker.cnb.cool"
+      K8S_IMAGE_NS="khs1994-docker/lwpm"
     # else
       # 国外
       # K8S_IMAGE_REGISTRY="useccr.ccs.tencentyun.com"
@@ -1062,9 +1063,9 @@ _containerd_cri_config(){
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/2.1/config.toml \
     | $(_sudo) tee $CONTAINERD_CONF_ROOT/config.toml
 
-  if ! [ "${LNMP_CN_ENV}" = 'false' ];then
-    $(_sudo) cp -r systemd/etc/cri-containerd/2.1/certs.d $CONTAINERD_CONF_ROOT
-  fi
+  # if ! [ "${LNMP_CN_ENV}" = 'false' ];then
+  #   $(_sudo) cp -r systemd/etc/cri-containerd/2.1/certs.d $CONTAINERD_CONF_ROOT
+  # fi
 
   if [ -n "$GITHUB_ACTIONS" ];then
     $(_sudo) mkdir -p $CONTAINERD_CONF_ROOT/certs.d/docker.io
