@@ -46,7 +46,8 @@ $ wsl --import wsl-k8s `
     $env:WSL_K8S_WSL2_InstallLocation `
     $(rootfs library-mirror/debian sid-slim -registry ccr.ccs.tencentyun.com) `
     --version 2
-
+$ wsl.exe --shutdown
+$ wsl.exe --manage wsl-k8s --set-sparse true --allow-unsafe
 $ wsl -d wsl-k8s -- uname -a
 ```
 

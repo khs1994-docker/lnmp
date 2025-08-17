@@ -4,28 +4,39 @@ NAME:
 USAGE:
    OCI-based implementation of Kubernetes Container Runtime Interface Daemon
 
-crio is meant to provide an integration path between OCI conformant runtimes
-and the kubelet. Specifically, it implements the Kubelet Container Runtime
-Interface (CRI) using OCI conformant runtimes. The scope of crio is tied to the
-scope of the CRI.
+   crio is meant to provide an integration path between OCI conformant runtimes
+   and the kubelet. Specifically, it implements the Kubelet Container Runtime
+   Interface (CRI) using OCI conformant runtimes. The scope of crio is tied to the
+   scope of the CRI.
 
-1. Support multiple image formats including the existing Docker and OCI image formats.
-2. Support for multiple means to download images including trust & image verification.
-3. Container image management (managing image layers, overlay filesystems, etc).
-4. Container process lifecycle management.
-5. Monitoring and logging required to satisfy the CRI.
-6. Resource isolation as required by the CRI.
+   1. Support multiple image formats including the existing Docker and OCI image formats.
+   2. Support for multiple means to download images including trust & image verification.
+   3. Container image management (managing image layers, overlay filesystems, etc).
+   4. Container process lifecycle management.
+   5. Monitoring and logging required to satisfy the CRI.
+   6. Resource isolation as required by the CRI.
 
 VERSION:
-   1.21.0
-Version:       1.21.0
-GitCommit:     f497d5004e8f2d903fa47e6d2e177c7237d861ff
-GitTreeState:  dirty
-BuildDate:     2021-05-25T14:52:05Z
-GoVersion:     go1.13.8
-Compiler:      gc
-Platform:      linux/amd64
-Linkmode:      dynamic
+   1.33.0
+   GitCommit:      9d143f94054fc5c8338673f35f7c0164490363b3
+   GitCommitDate:  2025-05-15T18:26:05Z
+   GitTreeState:   dirty
+   BuildDate:      1970-01-01T00:00:00Z
+   GoVersion:      go1.24.2
+   Compiler:       gc
+   Platform:       linux/amd64
+   Linkmode:       static
+   BuildTags:
+     static
+     netgo
+     osusergo
+     exclude_graphdriver_btrfs
+     seccomp
+     apparmor
+     selinux
+   LDFlags:          unknown
+   SeccompEnabled:   true
+   AppArmorEnabled:  false
 
 DESCRIPTION:
    OCI-based implementation of Kubernetes Container Runtime Interface
@@ -34,139 +45,198 @@ AUTHOR:
    The CRI-O Maintainers
 
 COMMANDS:
+   check                 Check CRI-O storage directory for errors.
+
+                         This command can also repair damaged containers, images and layers.
+
+                         By default, the data integrity of the storage directory is verified,
+                         which can be an I/O and CPU-intensive operation. The --quick option
+                         can be used to reduce the number of checks run.
+
+                         When using the --repair option, especially with the --force option,
+                         CRI-O and any currently running containers should be stopped if
+                         possible to ensure no concurrent access to the storage directory
+                         occurs.
+
+                         The --wipe option can be used to automatically attempt to remove
+                         containers and images on a repair failure. This option, combined
+                         with the --force option, can be used to entirely remove the storage
+                         directory content in case of irrecoverable errors. This should be
+                         used as a last resort, and similarly to the --repair option, it's
+                         best if CRI-O and any currently running containers are stopped.
    complete, completion  Generate bash, fish or zsh completions.
+   config                Outputs a commented version of the configuration file that could be used
+                         by CRI-O. This allows you to save you current configuration setup and then load
+                         it later with **--config**. Global options will modify the output.
    man                   Generate the man page documentation.
    markdown, md          Generate the markdown documentation.
-   config                Outputs a commented version of the configuration file that could be used
-by CRI-O. This allows you to save you current configuration setup and then load
-it later with **--config**. Global options will modify the output.
-   version  display detailed version information
-   wipe     wipe CRI-O's container and image storage
-   help, h  Shows a list of commands or help for one command
+   status                Display status information
+   version               display detailed version information
+   wipe                  wipe CRI-O's container and image storage
+   help, h               Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --absent-mount-sources-to-reject value  A list of paths that, when absent from the host, will cause a container creation to fail (as opposed to the current behavior of creating a directory). [$CONTAINER_ABSENT_MOUNT_SOURCES_TO_REJECT]
-   --additional-devices value              Devices to add to the containers [$CONTAINER_ADDITIONAL_DEVICES]
-   --apparmor-profile value                Name of the apparmor profile to be used as the runtime's default. This only takes effect if the user does not specify a profile via the Kubernetes Pod's metadata annotation. (default: "crio-default") [$CONTAINER_APPARMOR_PROFILE]
-   --big-files-temporary-dir value         Path to the temporary directory to use for storing big files, used to store image blobs and data streams related to containers image management. [$CONTAINER_BIG_FILES_TEMPORARY_DIR]
-   --bind-mount-prefix /                   A prefix to use for the source of the bind mounts. This option would be useful if you were running CRI-O in a container. And had / mounted on `/host` in your container. Then if you ran CRI-O with the `--bind-mount-prefix=/host` option, CRI-O would add /host to any bind mounts it is handed over CRI. If Kubernetes asked to have `/var/lib/foobar` bind mounted into the container, then CRI-O would bind mount `/host/var/lib/foobar`. Since CRI-O itself is running in a container with `/` or the host mounted on `/host`, the container would end up with `/var/lib/foobar` from the host mounted in the container rather then `/var/lib/foobar` from the CRI-O container. (default: "") [$CONTAINER_BIND_MOUNT_PREFIX]
-   --cgroup-manager value                  cgroup manager (cgroupfs or systemd) (default: "systemd") [$CONTAINER_CGROUP_MANAGER]
-   --clean-shutdown-file value             Location for CRI-O to lay down the clean shutdown file. It indicates whether we've had time to sync changes to disk before shutting down. If not found, crio wipe will clear the storage directory (default: "/var/lib/crio/clean.shutdown") [$CONTAINER_CLEAN_SHUTDOWN_FILE]
-   --cni-config-dir value                  CNI configuration files directory (default: "/etc/cni/net.d/") [$CONTAINER_CNI_CONFIG_DIR]
-   --cni-default-network value             Name of the default CNI network to select. If not set or "", then CRI-O will pick-up the first one found in --cni-config-dir. [$CONTAINER_CNI_DEFAULT_NETWORK]
-   --cni-plugin-dir value                  CNI plugin binaries directory [$CONTAINER_CNI_PLUGIN_DIR]
-   --config value, -c value                Path to configuration file (default: "/etc/crio/crio.conf") [$CONTAINER_CONFIG]
-   --config-dir value, -d value            Path to the configuration drop-in directory.
-    This directory will be recursively iterated and each file gets applied
-    to the configuration in their processing order. This means that a
-    configuration file named '00-default' has a lower priority than a file
-    named '01-my-overwrite'.
-    The global config file, provided via '--config,-c' or per default in
-    /etc/crio/crio.conf, always has a lower priority than the files in the directory specified
-    by '--config-dir,-d'.
-    Besides that, provided command line parameters have a higher priority
-    than any configuration file. (default: "/etc/crio/crio.conf.d") [$CONTAINER_CONFIG_DIR]
-   --conmon value                       Path to the conmon binary, used for monitoring the OCI runtime. Will be searched for using $PATH if empty. (default: "") [$CONTAINER_CONMON]
-   --conmon-cgroup value                cgroup to be used for conmon process (default: "system.slice") [$CONTAINER_CONMON_CGROUP]
-   --conmon-env value                   Environment variable list for the conmon process, used for passing necessary environment variables to conmon or the runtime (default: "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin") [$CONTAINER_CONMON_ENV]
-   --container-attach-socket-dir value  Path to directory for container attach sockets (default: "/var/run/crio") [$CONTAINER_ATTACH_SOCKET_DIR]
-   --container-exits-dir value          Path to directory in which container exit files are written to by conmon (default: "/var/run/crio/exits") [$CONTAINER_EXITS_DIR]
-   --ctr-stop-timeout value             The minimal amount of time in seconds to wait before issuing a timeout regarding the proper termination of the container. The lowest possible value is 30s, whereas lower values are not considered by CRI-O (default: 30) [$CONTAINER_STOP_TIMEOUT]
-   --decryption-keys-path value         Path to load keys for image decryption. (default: "/etc/crio/keys/")
-   --default-capabilities value         Capabilities to add to the containers (default: "CHOWN", "DAC_OVERRIDE", "FSETID", "FOWNER", "SETGID", "SETUID", "SETPCAP", "NET_BIND_SERVICE", "KILL") [$CONTAINER_DEFAULT_CAPABILITIES]
-   --default-env value                  Additional environment variables to set for all containers [$CONTAINER_DEFAULT_ENV]
-   --default-mounts-file value          Path to default mounts file (default: "") [$CONTAINER_DEFAULT_MOUNTS_FILE]
-   --default-runtime value              Default OCI runtime from the runtimes config (default: "runc") [$CONTAINER_DEFAULT_RUNTIME]
-   --default-sysctls value              Sysctls to add to the containers [$CONTAINER_DEFAULT_SYSCTLS]
-   --default-transport value            A prefix to prepend to image names that cannot be pulled as-is (default: "docker://") [$CONTAINER_DEFAULT_TRANSPORT]
-   --default-ulimits value              Ulimits to apply to containers by default (name=soft:hard) (default: []) [$CONTAINER_DEFAULT_ULIMITS]
-   --drop-infra-ctr                     Determines whether pods are created without an infra container, when the pod is not using a pod level PID namespace (default: false) (default: false) [$CONTAINER_DROP_INFRA_CTR]
-   --enable-metrics                     Enable metrics endpoint for the server on localhost:9090 (default: false) [$CONTAINER_ENABLE_METRICS]
-   --enable-profile-unix-socket         Enable pprof profiler on crio unix domain socket (default: false) [$ENABLE_PROFILE_UNIX_SOCKET]
-   --gid-mappings value                 Specify the GID mappings to use for the user namespace (default: "") [$CONTAINER_GID_MAPPINGS]
-   --global-auth-file value             Path to a file like /var/lib/kubelet/config.json holding credentials necessary for pulling images from secure registries (default: "") [$CONTAINER_GLOBAL_AUTH_FILE]
-   --grpc-max-recv-msg-size value       Maximum grpc receive message size in bytes (default: 16777216) [$CONTAINER_GRPC_MAX_RECV_MSG_SIZE]
-   --grpc-max-send-msg-size value       Maximum grpc receive message size (default: 16777216) [$CONTAINER_GRPC_MAX_SEND_MSG_SIZE]
-   --hooks-dir value                    Set the OCI hooks directory path (may be set multiple times)
-    If one of the directories does not exist, then CRI-O will automatically
-    skip them.
-    Each '\*.json' file in the path configures a hook for CRI-O
-    containers. For more details on the syntax of the JSON files and
-    the semantics of hook injection, see 'oci-hooks(5)'. CRI-O
-    currently support both the 1.0.0 and 0.1.0 hook schemas, although
-    the 0.1.0 schema is deprecated.
-    This option may be set multiple times; paths from later options
-    have higher precedence ('oci-hooks(5)' discusses directory
-    precedence).
-    For the annotation conditions, CRI-O uses the Kubernetes
-    annotations, which are a subset of the annotations passed to the
-    OCI runtime. For example, 'io.kubernetes.cri-o.Volumes' is part of
-    the OCI runtime configuration annotations, but it is not part of
-    the Kubernetes annotations being matched for hooks.
-    For the bind-mount conditions, only mounts explicitly requested by
-    Kubernetes configuration are considered. Bind mounts that CRI-O
-    inserts by default (e.g. '/dev/shm') are not considered. (default: "/usr/share/containers/oci/hooks.d") [$CONTAINER_HOOKS_DIR]
-   --image-volumes value  Image volume handling ('mkdir', 'bind', or 'ignore')
-    1. mkdir: A directory is created inside the container root filesystem for
-       the volumes.
-    2. bind: A directory is created inside container state directory and bind
-       mounted into the container for the volumes.
-                              3. ignore: All volumes are just ignored and no action is taken. (default: "mkdir") [$CONTAINER_IMAGE_VOLUMES]
-   --infra-ctr-cpuset value   CPU set to run infra containers, if not specified CRI-O will use all online CPUs to run infra containers (default: ''). [$CONTAINER_INFRA_CTR_CPUSET]
-   --insecure-registry value  Enable insecure registry communication, i.e., enable un-encrypted and/or untrusted communication.
-    1. List of insecure registries can contain an element with CIDR notation to
-       specify a whole subnet.
-    2. Insecure registries accept HTTP or accept HTTPS with certificates from
-       unknown CAs.
-    3. Enabling '--insecure-registry' is useful when running a local registry.
-       However, because its use creates security vulnerabilities, **it should ONLY
-       be enabled for testing purposes**. For increased security, users should add
-       their CA to their system's list of trusted CAs instead of using
-       '--insecure-registry'. [$CONTAINER_INSECURE_REGISTRY]
-   --internal-wipe crio wipe               Whether CRI-O should wipe containers after a reboot and images after an upgrade when the server starts. If set to false, one must run crio wipe to wipe the containers and images in these situations. (default: false) [$CONTAINER_INTERNAL_WIPE]
-   --irqbalance-config-file value          The irqbalance service config file which is used by CRI-O. (default: "/etc/sysconfig/irqbalance")
-   --listen value                          Path to the CRI-O socket (default: "/var/run/crio/crio.sock") [$CONTAINER_LISTEN]
-   --log value                             Set the log file path where internal debug information is written [$CONTAINER_LOG]
-   --log-dir value                         Default log directory where all logs will go unless directly specified by the kubelet (default: "/var/log/crio/pods") [$CONTAINER_LOG_DIR]
-   --log-filter value                      Filter the log messages by the provided regular expression. For example 'request.\*' filters all gRPC requests. [$CONTAINER_LOG_FILTER]
-   --log-format value                      Set the format used by logs: 'text' or 'json' (default: "text") [$CONTAINER_LOG_FORMAT]
-   --log-journald                          Log to systemd journal (journald) in addition to kubernetes log file (default: false) (default: false) [$CONTAINER_LOG_JOURNALD]
-   --log-level value, -l value             Log messages above specified level: trace, debug, info, warn, error, fatal or panic (default: "info") [$CONTAINER_LOG_LEVEL]
-   --log-size-max value                    Maximum log size in bytes for a container. If it is positive, it must be >= 8192 to match/exceed conmon read buffer (default: -1) [$CONTAINER_LOG_SIZE_MAX]
-   --metrics-cert value                    Certificate for the secure metrics endpoint [$CONTAINER_METRICS_CERT]
-   --metrics-key value                     Certificate key for the secure metrics endpoint [$CONTAINER_METRICS_KEY]
-   --metrics-port value                    Port for the metrics endpoint (default: 9090) [$CONTAINER_METRICS_PORT]
-   --metrics-socket value                  Socket for the metrics endpoint [$CONTAINER_METRICS_SOCKET]
-   --namespaces-dir value                  The directory where the state of the managed namespaces gets tracked. Only used when manage-ns-lifecycle is true (default: "/var/run") [$CONTAINER_NAMESPACES_DIR]
-   --no-pivot pivot_root                   If true, the runtime will not use pivot_root, but instead use `MS_MOVE` (default: false) (default: false) [$CONTAINER_NO_PIVOT]
-   --pause-command value                   Path to the pause executable in the pause image (default: "/pause") [$CONTAINER_PAUSE_COMMAND]
-   --pause-image value                     Image which contains the pause executable (default: "k8s.gcr.io/pause:3.5") [$CONTAINER_PAUSE_IMAGE]
-   --pause-image-auth-file value           Path to a config file containing credentials for --pause-image (default: "") [$CONTAINER_PAUSE_IMAGE_AUTH_FILE]
-   --pids-limit value                      Maximum number of processes allowed in a container (default: 1024) [$CONTAINER_PIDS_LIMIT]
-   --pinns-path value                      The path to find the pinns binary, which is needed to manage namespace lifecycle. Will be searched for in $PATH if empty (default: "") [$CONTAINER_PINNS_PATH]
-   --profile                               Enable pprof remote profiler on localhost:6060 (default: false) [$CONTAINER_PROFILE]
-   --profile-port value                    Port for the pprof profiler (default: 6060) [$CONTAINER_PROFILE_PORT]
-   --read-only /run                        Setup all unprivileged containers to run as read-only. Automatically mounts tmpfs on /run, `/tmp` and `/var/tmp`. (default: false) (default: false) [$CONTAINER_READ_ONLY]
-   --registry value                        Registry to be prepended when pulling unqualified images, can be specified multiple times [$CONTAINER_REGISTRY]
-   --root value, -r value                  The CRI-O root directory (default: "/var/lib/containers/storage") [$CONTAINER_ROOT]
-   --runroot value                         The CRI-O state directory (default: "/run/containers/storage") [$CONTAINER_RUNROOT]
-   --runtimes value                        OCI runtimes, format is runtime_name:runtime_path:runtime_root:runtime_type [$CONTAINER_RUNTIMES]
-   --seccomp-profile value                 Path to the seccomp.json profile to be used as the runtime's default. If not specified, then the internal default seccomp profile will be used. (default: "") [$CONTAINER_SECCOMP_PROFILE]
-   --seccomp-use-default-when-empty value  Use the default seccomp profile when an empty one is specified (default: false) [$CONTAINER_SECCOMP_USE_DEFAULT_WHEN_EMPTY]
-   --selinux                               Enable selinux support (default: false) (default: false) [$CONTAINER_SELINUX]
-   --separate-pull-cgroup value            [EXPERIMENTAL] Pull in new cgroup (default: "") [$PULL_IN_A_CGROUP]
-   --signature-policy value                Path to signature policy JSON file. (default: "", to use the system-wide default) [$CONTAINER_SIGNATURE_POLICY]
-   --storage-driver value, -s value        OCI storage driver (default: "") [$CONTAINER_STORAGE_DRIVER]
-   --storage-opt value                     OCI storage driver option [$CONTAINER_STORAGE_OPT]
-   --stream-address value                  Bind address for streaming socket (default: "127.0.0.1") [$CONTAINER_STREAM_ADDRESS]
-   --stream-enable-tls                     Enable encrypted TLS transport of the stream server (default: false) (default: false) [$CONTAINER_ENABLE_TLS]
-   --stream-idle-timeout value             Length of time until open streams terminate due to lack of activity [$STREAM_IDLE_TIMEOUT]
-   --stream-port value                     Bind port for streaming socket. If the port is set to '0', then CRI-O will allocate a random free port number. (default: "0") [$CONTAINER_STREAM_PORT]
-   --stream-tls-ca value                   Path to the x509 CA(s) file used to verify and authenticate client communication with the encrypted stream. This file can change and CRI-O will automatically pick up the changes within 5 minutes (default: "") [$CONTAINER_TLS_CA]
-   --stream-tls-cert value                 Path to the x509 certificate file used to serve the encrypted stream. This file can change and CRI-O will automatically pick up the changes within 5 minutes (default: "") [$CONTAINER_TLS_CERT]
-   --stream-tls-key value                  Path to the key file used to serve the encrypted stream. This file can change and CRI-O will automatically pick up the changes within 5 minutes (default: "") [$CONTAINER_TLS_KEY]
-   --uid-mappings value                    Specify the UID mappings to use for the user namespace (default: "") [$CONTAINER_UID_MAPPINGS]
-   --version-file value                    Location for CRI-O to lay down the temporary version file. It is used to check if crio wipe should wipe containers, which should always happen on a node reboot (default: "/var/run/crio/version") [$CONTAINER_VERSION_FILE]
-   --version-file-persist value            Location for CRI-O to lay down the persistent version file. It is used to check if crio wipe should wipe images, which should only happen when CRI-O has been upgraded (default: "/var/run/crio/version") [$CONTAINER_VERSION_FILE_PERSIST]
-   --help, -h                              show help (default: false)
-   --version, -v                           print the version (default: false)
+   --absent-mount-sources-to-reject value [ --absent-mount-sources-to-reject value ]  A list of paths that, when absent from the host, will cause a container creation to fail (as opposed to the current behavior of creating a directory). [$CONTAINER_ABSENT_MOUNT_SOURCES_TO_REJECT]
+   --add-inheritable-capabilities                                                     Add capabilities to the inheritable set, as well as the default group of permitted, bounding and effective. (default: false) [$CONTAINER_ADD_INHERITABLE_CAPABILITIES]
+   --additional-devices value [ --additional-devices value ]                          Devices to add to the containers. [$CONTAINER_ADDITIONAL_DEVICES]
+   --allowed-devices value [ --allowed-devices value ]                                Devices a user is allowed to specify with the "io.kubernetes.cri-o.Devices" allowed annotation. (default: "/dev/fuse", "/dev/net/tun") [$CONTAINER_ALLOWED_DEVICES]
+   --apparmor-profile value                                                           Name of the apparmor profile to be used as the runtime's default. This only takes effect if the user does not specify a profile via the Kubernetes Pod's metadata annotation. (default: "crio-default") [$CONTAINER_APPARMOR_PROFILE]
+   --auto-reload-registries                                                           If true, CRI-O will automatically reload the mirror registry when there is an update to the 'registries.conf.d' directory. Default value is set to 'false'. (default: false) [$AUTO_RELOAD_REGISTRIES]
+   --big-files-temporary-dir value                                                    Path to the temporary directory to use for storing big files, used to store image blobs and data streams related to containers image management. [$CONTAINER_BIG_FILES_TEMPORARY_DIR]
+   --bind-mount-prefix value                                                          A prefix to use for the source of the bind mounts. This option would be useful if you were running CRI-O in a container. And had '/' mounted on '/host' in your container. Then if you ran CRI-O with the '--bind-mount-prefix=/host' option, CRI-O would add /host to any bind mounts it is handed over CRI. If Kubernetes asked to have '/var/lib/foobar' bind mounted into the container, then CRI-O would bind mount '/host/var/lib/foobar'. Since CRI-O itself is running in a container with '/' or the host mounted on '/host', the container would end up with '/var/lib/foobar' from the host mounted in the container rather then '/var/lib/foobar' from the CRI-O container. [$CONTAINER_BIND_MOUNT_PREFIX]
+   --blockio-config-file value                                                        Path to the blockio class configuration file for configuring the cgroup blockio controller.
+   --blockio-reload                                                                   Reload blockio-config-file and rescan blockio devices in the system before applying blockio parameters. (default: false)
+   --cdi-spec-dirs value [ --cdi-spec-dirs value ]                                    Directories to scan for CDI Spec files. (default: "/etc/cdi", "/var/run/cdi") [$CONTAINER_CDI_SPEC_DIRS]
+   --cgroup-manager value                                                             cgroup manager (cgroupfs or systemd). (default: "systemd") [$CONTAINER_CGROUP_MANAGER]
+   --clean-shutdown-file value                                                        Location for CRI-O to lay down the clean shutdown file. It indicates whether we've had time to sync changes to disk before shutting down. If not found, crio wipe will clear the storage directory. (default: "/var/lib/crio/clean.shutdown") [$CONTAINER_CLEAN_SHUTDOWN_FILE]
+   --cni-config-dir value                                                             CNI configuration files directory. (default: "/etc/cni/net.d/") [$CONTAINER_CNI_CONFIG_DIR]
+   --cni-default-network value                                                        Name of the default CNI network to select. If not set or "", then CRI-O will pick-up the first one found in --cni-config-dir. [$CONTAINER_CNI_DEFAULT_NETWORK]
+   --cni-plugin-dir value [ --cni-plugin-dir value ]                                  CNI plugin binaries directory. [$CONTAINER_CNI_PLUGIN_DIR]
+   --collection-period value                                                          The number of seconds between collecting pod/container stats and pod sandbox metrics. If set to 0, the metrics/stats are collected on-demand instead. (default: 0) [$COLLECTION_PERIOD]
+   --config value, -c value                                                           Path to configuration file (default: "/etc/crio/crio.conf") [$CONTAINER_CONFIG]
+   --config-dir value, -d value                                                       Path to the configuration drop-in directory.
+          This directory will be recursively iterated and each file gets applied
+          to the configuration in their processing order. This means that a
+          configuration file named '00-default' has a lower priority than a file
+          named '01-my-overwrite'.
+          The global config file, provided via '--config,-c' or per default in
+          /etc/crio/crio.conf, always has a lower priority than the files in the directory specified
+          by '--config-dir,-d'.
+          Besides that, provided command line parameters have a higher priority
+          than any configuration file. (default: "/etc/crio/crio.conf.d") [$CONTAINER_CONFIG_DIR]
+   --conmon value                                                 Path to the conmon binary, used for monitoring the OCI runtime. Will be searched for using $PATH if empty. This option is deprecated, and will be removed in the future. [$CONTAINER_CONMON]
+   --conmon-cgroup value                                          cgroup to be used for conmon process. This option is deprecated and will be removed in the future. [$CONTAINER_CONMON_CGROUP]
+   --conmon-env value [ --conmon-env value ]                      Environment variable list for the conmon process, used for passing necessary environment variables to conmon or the runtime. This option is deprecated and will be removed in the future. [$CONTAINER_CONMON_ENV]
+   --container-attach-socket-dir value                            Path to directory for container attach sockets. (default: "/var/run/crio") [$CONTAINER_ATTACH_SOCKET_DIR]
+   --container-exits-dir value                                    Path to directory in which container exit files are written to by conmon. (default: "/var/run/crio/exits") [$CONTAINER_EXITS_DIR]
+   --ctr-stop-timeout value                                       The minimal amount of time in seconds to wait before issuing a timeout regarding the proper termination of the container. The lowest possible value is 30s, whereas lower values are not considered by CRI-O. (default: 30) [$CONTAINER_STOP_TIMEOUT]
+   --decryption-keys-path value                                   Path to load keys for image decryption. (default: "/etc/crio/keys/")
+   --default-capabilities value [ --default-capabilities value ]  Capabilities to add to the containers. (default: "CHOWN", "DAC_OVERRIDE", "FSETID", "FOWNER", "SETGID", "SETUID", "SETPCAP", "NET_BIND_SERVICE", "KILL") [$CONTAINER_DEFAULT_CAPABILITIES]
+   --default-env value [ --default-env value ]                    Additional environment variables to set for all containers. [$CONTAINER_DEFAULT_ENV]
+   --default-mounts-file value                                    Path to default mounts file. [$CONTAINER_DEFAULT_MOUNTS_FILE]
+   --default-runtime value                                        Default OCI runtime from the runtimes config. (default: "crun") [$CONTAINER_DEFAULT_RUNTIME]
+   --default-sysctls value [ --default-sysctls value ]            Sysctls to add to the containers. [$CONTAINER_DEFAULT_SYSCTLS]
+   --default-transport value                                      A prefix to prepend to image names that cannot be pulled as-is. (default: "docker://") [$CONTAINER_DEFAULT_TRANSPORT]
+   --default-ulimits value [ --default-ulimits value ]            Ulimits to apply to containers by default (name=soft:hard). [$CONTAINER_DEFAULT_ULIMITS]
+   --device-ownership-from-security-context                       Set devices' uid/gid ownership from runAsUser/runAsGroup. (default: false)
+   --disable-hostport-mapping                                     If true, CRI-O would disable the hostport mapping. (default: false) [$DISABLE_HOSTPORT_MAPPING]
+   --drop-infra-ctr                                               Determines whether pods are created without an infra container, when the pod is not using a pod level PID namespace. (default: true) [$CONTAINER_DROP_INFRA_CTR]
+   --enable-criu-support                                          Enable CRIU integration, requires that the criu binary is available in $PATH. (default: false) [$CONTAINER_ENABLE_CRIU_SUPPORT]
+   --enable-metrics                                               Enable metrics endpoint for the server. (default: false) [$CONTAINER_ENABLE_METRICS]
+   --enable-nri                                                   Enable NRI (Node Resource Interface) support. (default: true)
+   --enable-pod-events                                            If true, CRI-O starts sending the container events to the kubelet (default: false) [$ENABLE_POD_EVENTS]
+   --enable-profile-unix-socket                                   Enable pprof profiler on crio unix domain socket. (default: false) [$ENABLE_PROFILE_UNIX_SOCKET]
+   --enable-tracing                                               Enable OpenTelemetry trace data exporting. (default: false) [$CONTAINER_ENABLE_TRACING]
+   --gid-mappings value                                           Specify the GID mappings to use for the user namespace. This option is deprecated, and will be replaced with Kubernetes user namespace (KEP-127) support in the future. [$CONTAINER_GID_MAPPINGS]
+   --global-auth-file value                                       Path to a file like /var/lib/kubelet/config.json holding credentials necessary for pulling images from secure registries. [$CONTAINER_GLOBAL_AUTH_FILE]
+   --grpc-max-recv-msg-size value                                 Maximum grpc receive message size in bytes. (default: 83886080) [$CONTAINER_GRPC_MAX_RECV_MSG_SIZE]
+   --grpc-max-send-msg-size value                                 Maximum grpc receive message size. (default: 83886080) [$CONTAINER_GRPC_MAX_SEND_MSG_SIZE]
+   --hooks-dir value [ --hooks-dir value ]                        Set the OCI hooks directory path (may be set multiple times)
+          If one of the directories does not exist, then CRI-O will automatically
+          skip them.
+          Each '\*.json' file in the path configures a hook for CRI-O
+          containers. For more details on the syntax of the JSON files and
+          the semantics of hook injection, see 'oci-hooks(5)'. CRI-O
+          currently support both the 1.0.0 and 0.1.0 hook schemas, although
+          the 0.1.0 schema is deprecated.
+          This option may be set multiple times; paths from later options
+          have higher precedence ('oci-hooks(5)' discusses directory
+          precedence).
+          For the annotation conditions, CRI-O uses the Kubernetes
+          annotations, which are a subset of the annotations passed to the
+          OCI runtime. For example, 'io.kubernetes.cri-o.Volumes' is part of
+          the OCI runtime configuration annotations, but it is not part of
+          the Kubernetes annotations being matched for hooks.
+          For the bind-mount conditions, only mounts explicitly requested by
+          Kubernetes configuration are considered. Bind mounts that CRI-O
+          inserts by default (e.g. '/dev/shm') are not considered. (default: "/usr/share/containers/oci/hooks.d") [$CONTAINER_HOOKS_DIR]
+   --hostnetwork-disable-selinux  Determines whether SELinux should be disabled within a pod when it is running in the host network namespace. (default: true) [$CONTAINER_HOSTNETWORK_DISABLE_SELINUX]
+   --image-volumes value          Image volume handling ('mkdir', 'bind', or 'ignore')
+          1. mkdir: A directory is created inside the container root filesystem for
+             the volumes.
+          2. bind: A directory is created inside container state directory and bind
+             mounted into the container for the volumes.
+                                                                  3. ignore: All volumes are just ignored and no action is taken. (default: "mkdir") [$CONTAINER_IMAGE_VOLUMES]
+   --imagestore value                                             Store newly pulled images in the specified path, rather than the path provided by --root. [$CONTAINER_IMAGESTORE]
+   --included-pod-metrics value [ --included-pod-metrics value ]  A list of pod metrics to include. Specify the names of the metrics to include in this list. [$CONTAINER_INCLUDED_POD_METRCIS]
+   --infra-ctr-cpuset value                                       CPU set to run infra containers, if not specified CRI-O will use all online CPUs to run infra containers. [$CONTAINER_INFRA_CTR_CPUSET]
+   --insecure-registry value [ --insecure-registry value ]        Enable insecure registry communication, i.e., enable un-encrypted and/or untrusted communication.
+          1. List of insecure registries can contain an element with CIDR notation to
+             specify a whole subnet.
+          2. Insecure registries accept HTTP or accept HTTPS with certificates from
+             unknown CAs.
+          3. Enabling '--insecure-registry' is useful when running a local registry.
+             However, because its use creates security vulnerabilities, **it should ONLY
+             be enabled for testing purposes**. For increased security, users should add
+             their CA to their system's list of trusted CAs instead of using
+             '--insecure-registry'. [$CONTAINER_INSECURE_REGISTRY]
+   --internal-repair                                          If true, CRI-O will check if the container and image storage was corrupted after a sudden restart, and attempt to repair the storage if it was. (default: true) [$CONTAINER_INTERNAL_REPAIR]
+   --internal-wipe                                            Whether CRI-O should wipe containers after a reboot and images after an upgrade when the server starts. If set to false, one must run 'crio wipe' to wipe the containers and images in these situations. This option is deprecated, and will be removed in the future. (default: true) [$CONTAINER_INTERNAL_WIPE]
+   --irqbalance-config-file value                             The irqbalance service config file which is used by CRI-O. (default: "/etc/sysconfig/irqbalance")
+   --irqbalance-config-restore-file value                     Determines if CRI-O should attempt to restore the irqbalance config at startup with the mask in this file. Use the 'disable' value to disable the restore flow entirely. (default: "/etc/sysconfig/orig_irq_banned_cpus")
+   --listen value                                             Path to the CRI-O socket. (default: "/var/run/crio/crio.sock") [$CONTAINER_LISTEN]
+   --log value                                                Set the log file path where internal debug information is written. [$CONTAINER_LOG]
+   --log-dir value                                            Default log directory where all logs will go unless directly specified by the kubelet. (default: "/var/log/crio/pods") [$CONTAINER_LOG_DIR]
+   --log-filter value                                         Filter the log messages by the provided regular expression. For example 'request.\*' filters all gRPC requests. [$CONTAINER_LOG_FILTER]
+   --log-format value                                         Set the format used by logs: 'text' or 'json'. (default: "text") [$CONTAINER_LOG_FORMAT]
+   --log-journald                                             Log to systemd journal (journald) in addition to kubernetes log file. (default: false) [$CONTAINER_LOG_JOURNALD]
+   --log-level value, -l value                                Log messages above specified level: trace, debug, info, warn, error, fatal or panic. (default: "info") [$CONTAINER_LOG_LEVEL]
+   --log-size-max value                                       Maximum log size in bytes for a container. If it is positive, it must be >= 8192 to match/exceed conmon read buffer. This option is deprecated. The Kubelet flag '--container-log-max-size' should be used instead. (default: -1) [$CONTAINER_LOG_SIZE_MAX]
+   --metrics-cert value                                       Certificate for the secure metrics endpoint. [$CONTAINER_METRICS_CERT]
+   --metrics-collectors value [ --metrics-collectors value ]  Enabled metrics collectors. (default: "image_pulls_layer_size", "containers_events_dropped_total", "containers_oom_total", "processes_defunct", "operations_total", "operations_latency_seconds", "operations_latency_seconds_total", "operations_errors_total", "image_pulls_bytes_total", "image_pulls_skipped_bytes_total", "image_pulls_failure_total", "image_pulls_success_total", "image_layer_reuse_total", "containers_oom_count_total", "containers_seccomp_notifier_count_total", "resources_stalled_at_stage") [$CONTAINER_METRICS_COLLECTORS]
+   --metrics-host value                                       Host for the metrics endpoint. (default: "127.0.0.1") [$CONTAINER_METRICS_HOST]
+   --metrics-key value                                        Certificate key for the secure metrics endpoint. [$CONTAINER_METRICS_KEY]
+   --metrics-port value                                       Port for the metrics endpoint. (default: 9090) [$CONTAINER_METRICS_PORT]
+   --metrics-socket value                                     Socket for the metrics endpoint. [$CONTAINER_METRICS_SOCKET]
+   --minimum-mappable-gid value                               Specify the lowest host GID which can be specified in mappings for a pod that will be run as a UID other than 0. This option is deprecated, and will be replaced with Kubernetes user namespace support (KEP-127) in the future. (default: -1) [$CONTAINER_MINIMUM_MAPPABLE_GID]
+   --minimum-mappable-uid value                               Specify the lowest host UID which can be specified in mappings for a pod that will be run as a UID other than 0. This option is deprecated, and will be replaced with Kubernetes user namespace support (KEP-127) in the future. (default: -1) [$CONTAINER_MINIMUM_MAPPABLE_UID]
+   --namespaces-dir value                                     The directory where the state of the managed namespaces gets tracked. Only used when manage-ns-lifecycle is true. (default: "/var/run") [$CONTAINER_NAMESPACES_DIR]
+   --no-pivot                                                 If true, the runtime will not use 'pivot_root', but instead use 'MS_MOVE'. (default: false) [$CONTAINER_NO_PIVOT]
+   --nri-disable-connections                                  Disable connections from externally started NRI plugins. (default: false)
+   --nri-listen value                                         Socket to listen on for externally started NRI plugins to connect to. (default: "/var/run/nri/nri.sock")
+   --nri-plugin-config-dir value                              Directory to scan for configuration of pre-installed NRI plugins. (default: "/etc/nri/conf.d")
+   --nri-plugin-dir value                                     Directory to scan for pre-installed NRI plugins to start automatically. (default: "/opt/nri/plugins")
+   --nri-plugin-registration-timeout value                    Timeout for a plugin to register itself with NRI. (default: 5s)
+   --nri-plugin-request-timeout value                         Timeout for a plugin to handle an NRI request. (default: 2s)
+   --oci-artifact-mount-support                               If true, CRI-O can mount OCI artifacts as volumes. (default: true) [$CONTAINER_OCI_ARTIFACT_SUPPORT]
+   --pause-command value                                      Path to the pause executable in the pause image. (default: "/pause") [$CONTAINER_PAUSE_COMMAND]
+   --pause-image value                                        Image which contains the pause executable. (default: "registry.k8s.io/pause:3.10") [$CONTAINER_PAUSE_IMAGE]
+   --pause-image-auth-file value                              Path to a config file containing credentials for --pause-image. [$CONTAINER_PAUSE_IMAGE_AUTH_FILE]
+   --pids-limit value                                         Maximum number of processes allowed in a container. This option is deprecated. The Kubelet flag '--pod-pids-limit' should be used instead. (default: -1) [$CONTAINER_PIDS_LIMIT]
+   --pinned-images value [ --pinned-images value ]            A list of images that will be excluded from the kubelet's garbage collection. [$CONTAINER_PINNED_IMAGES]
+   --pinns-path value                                         The path to find the pinns binary, which is needed to manage namespace lifecycle. Will be searched for in $PATH if empty. [$CONTAINER_PINNS_PATH]
+   --privileged-seccomp-profile value                         Enable a seccomp profile for privileged containers from the local path. [$CONTAINER_PRIVILEGED_SECCOMP_PROFILE]
+   --profile                                                  Enable pprof remote profiler on 127.0.0.1:6060. (default: false) [$CONTAINER_PROFILE]
+   --profile-cpu value                                        Write a pprof CPU profile to the provided path. [$CONTAINER_PROFILE_CPU]
+   --profile-mem value                                        Write a pprof memory profile to the provided path. [$CONTAINER_PROFILE_MEM]
+   --profile-port value                                       Port for the pprof profiler. (default: 6060) [$CONTAINER_PROFILE_PORT]
+   --pull-progress-timeout value                              The timeout for an image pull to make progress until the pull operation gets canceled. This value will be also used for calculating the pull progress interval to --pull-progress-timeout / 10. Can be set to 0 to disable the timeout as well as the progress output. (default: 0s) [$CONTAINER_PULL_PROGRESS_TIMEOUT]
+   --rdt-config-file value                                    Path to the RDT configuration file for configuring the resctrl pseudo-filesystem.
+   --read-only                                                Setup all unprivileged containers to run as read-only. Automatically mounts the containers' tmpfs on '/run', '/tmp' and '/var/tmp'. (default: false) [$CONTAINER_READ_ONLY]
+   --root value, -r value                                     The CRI-O root directory. (default: "/var/lib/containers/storage") [$CONTAINER_ROOT]
+   --runroot value                                            The CRI-O state directory. (default: "/run/containers/storage") [$CONTAINER_RUNROOT]
+   --runtimes value [ --runtimes value ]                      OCI runtimes, format is 'runtime_name:runtime_path:runtime_root:runtime_type:privileged_without_host_devices:runtime_config_path:container_min_memory'. [$CONTAINER_RUNTIMES]
+   --seccomp-profile value                                    Path to the seccomp.json profile to be used as the runtime's default. If not specified, then the internal default seccomp profile will be used. [$CONTAINER_SECCOMP_PROFILE]
+   --selinux                                                  Enable selinux support. This option is deprecated, and be interpreted from whether SELinux is enabled on the host in the future. (default: false) [$CONTAINER_SELINUX]
+   --separate-pull-cgroup value                               [EXPERIMENTAL] Pull in new cgroup. [$PULL_IN_A_CGROUP]
+   --shared-cpuset value                                      CPUs set that will be used for guaranteed containers that want access to shared cpus [$CONTAINER_SHARED_CPUSET]
+   --signature-policy value                                   Path to signature policy JSON file. [$CONTAINER_SIGNATURE_POLICY]
+   --signature-policy-dir value                               Path to the root directory for namespaced signature policies. Must be an absolute path. (default: "/etc/crio/policies") [$CONTAINER_SIGNATURE_POLICY_DIR]
+   --stats-collection-period value                            The number of seconds between collecting pod and container stats. If set to 0, the stats are collected on-demand instead. DEPRECATED: This option will be removed in the future. (default: 0) [$CONTAINER_STATS_COLLECTION_PERIOD]
+   --storage-driver value, -s value                           OCI storage driver. [$CONTAINER_STORAGE_DRIVER]
+   --storage-opt value [ --storage-opt value ]                OCI storage driver option. (default: "overlay.mountopt=nodev") [$CONTAINER_STORAGE_OPT]
+   --stream-address value                                     Bind address for streaming socket. (default: "127.0.0.1") [$CONTAINER_STREAM_ADDRESS]
+   --stream-enable-tls                                        Enable encrypted TLS transport of the stream server. (default: false) [$CONTAINER_ENABLE_TLS]
+   --stream-idle-timeout value                                Length of time until open streams terminate due to lack of activity. [$STREAM_IDLE_TIMEOUT]
+   --stream-port value                                        Bind port for streaming socket. If the port is set to '0', then CRI-O will allocate a random free port number. (default: "0") [$CONTAINER_STREAM_PORT]
+   --stream-tls-ca value                                      Path to the x509 CA(s) file used to verify and authenticate client communication with the encrypted stream. This file can change and CRI-O will automatically pick up the changes. [$CONTAINER_TLS_CA]
+   --stream-tls-cert value                                    Path to the x509 certificate file used to serve the encrypted stream. This file can change and CRI-O will automatically pick up the changes. [$CONTAINER_TLS_CERT]
+   --stream-tls-key value                                     Path to the key file used to serve the encrypted stream. This file can change and CRI-O will automatically pick up the changes. [$CONTAINER_TLS_KEY]
+   --timezone value, --tz value                               To set the timezone for a container in CRI-O. If an empty string is provided, CRI-O retains its default behavior. Use 'Local' to match the timezone of the host machine. [$CONTAINER_TIME_ZONE]
+   --tracing-endpoint value                                   Address on which the gRPC tracing collector will listen. (default: "127.0.0.1:4317") [$CONTAINER_TRACING_ENDPOINT]
+   --tracing-sampling-rate-per-million value                  Number of samples to collect per million OpenTelemetry spans. Set to 1000000 to always sample. (default: 0) [$CONTAINER_TRACING_SAMPLING_RATE_PER_MILLION]
+   --uid-mappings value                                       Specify the UID mappings to use for the user namespace. This option is deprecated, and will be replaced with Kubernetes user namespace support (KEP-127) in the future. [$CONTAINER_UID_MAPPINGS]
+   --version-file value                                       Location for CRI-O to lay down the temporary version file. It is used to check if crio wipe should wipe containers, which should always happen on a node reboot. (default: "/var/run/crio/version") [$CONTAINER_VERSION_FILE]
+   --version-file-persist value                               Location for CRI-O to lay down the persistent version file. It is used to check if crio wipe should wipe images, which should only happen when CRI-O has been upgraded. [$CONTAINER_VERSION_FILE_PERSIST]
+   --help, -h                                                 show help
+   --version, -v                                              print the version

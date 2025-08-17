@@ -57,6 +57,8 @@ $ foreach($item in $items){cp \\wsl$\wsl-k8s\wsl\wsl-k8s-data\k8s\etc\kubernetes
 
 ```powershell
 $ wsl -d wsl-k8s -- sh -xc 'debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin'
+
+# $ wsl -d wsl-k8s -- sh -xc 'debug=1 ./lnmp-k8s join 127.0.0.1 --crio --skip-cp-k8s-bin'
 ```
 
 ## 启动 K8S
