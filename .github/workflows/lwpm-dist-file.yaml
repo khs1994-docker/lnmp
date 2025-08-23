@@ -239,19 +239,19 @@ jobs:
           $env:LWPM_DOCKER_PASSWORD=$env:LWPM_DOCKER_PASSWORD_
           $env:LWPM_DOCKER_REGISTRY=$env:LWPM_DOCKER_REGISTRY_
 
-          ./lnmp/windows/lnmp-windows-pm.ps1 dist ${PKG_NAME}@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push ${PKG_NAME}@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist ${ENV:PKG_NAME}@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push ${ENV:PKG_NAME}@${env:VERSION}
 
           $env:LWPM_DOCKER_USERNAME=$env:CODING_DOCKER_USERNAME
           $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
           $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
-          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/${PKG_NAME}@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/${ENV:PKG_NAME}@${env:VERSION}
 
           $env:LWPM_DOCKER_USERNAME=$env:GHCRIO_DOCKER_USERNAME
           $env:LWPM_DOCKER_PASSWORD=$env:GHCRIO_DOCKER_PASSWORD
           $env:LWPM_DOCKER_REGISTRY=$env:GHCRIO_DOCKER_REGISTRY
-          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/${PKG_NAME}@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/${ENV:PKG_NAME}@${env:VERSION}
       - name: handle-compose
         shell: pwsh
         if: matrix.os == 'windows' &&
