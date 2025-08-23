@@ -1,5 +1,5 @@
 resources:
   - ../base
 images:
-  - name: mariadb
+  - name: ghcr.io/khs1994-docker/library/mariadb
     newName: docker.cnb.cool/khs1994-docker/library/mariadb

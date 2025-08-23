@@ -2,4 +2,4 @@ resources:
   - ../base
 images:
   - name: nginx
-    newTag: docker.cnb.cool/khs1994-docker/library/nginx
+    newName: docker.cnb.cool/khs1994-docker/library/nginx

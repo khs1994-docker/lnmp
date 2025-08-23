@@ -36,7 +36,7 @@ $ kubectl create ns lnmp
 $ kubectl apply -k storage/pvc/hostpath -n lnmp
 
 # nfs pvc
-# $ kubectl apply -k storage/pvc/nfs
+# $ kubectl apply -k storage/pvc/nfs -n lnmp
 
 # production
 # $ kubectl apply -k storage-production/pvc/hostpath -n lnmp-production
@@ -90,7 +90,7 @@ $ kubectl apply -k nginx/overlays/nodePort -n lnmp
 > 例如，Laravel 调度器 Schedule
 
 ```bash
-$ kubectl apply -f cronJob/deploy.yaml
+$ kubectl apply -k cronJob
 ```
 
 ## 测试

@@ -2,4 +2,4 @@ resources:
   - ../base
 images:
   - name: mysql
-    newTag: docker.cnb.cool/khs1994-docker/library/mysql
+    newName: docker.cnb.cool/khs1994-docker/library/mysql

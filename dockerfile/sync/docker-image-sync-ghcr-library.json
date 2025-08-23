@@ -1,5 +1,9 @@
 [
   {
+    "source": "library/busybox",
+    "dest": "busybox"
+  },
+  {
     "source": "library/alpine:3.22",
     "dest": "alpine:3.22"
   },

@@ -105,7 +105,7 @@ jobs:
       #    dist: 22.04
       #    CI_KUBERNETES_VERSION: 1.30.14
       #    LNMP_K8S_GET: --url
-     fail-fast: false
+     fail-fast: true
    steps:
      - uses: actions/checkout@v3
        with:
@@ -337,14 +337,14 @@ jobs:
          kubectl certificate approve $CSR_NAME
          kubectl get csr
 
-         sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/custom.patch.json
+         sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/base/custom.patch.json
 
          if [ "${IPV6}" = 'true' ];then
            sed -i -e "s#_IP6#IP6#g" \
              -e "s#_FELIX_IPV6SUPPORT#FELIX_IPV6SUPPORT#g" \
-             addons/cni/calico-custom/custom.patch.json
+             addons/cni/calico-custom/base/custom.patch.json
            sed -i 's#assign_ipv6": "false#assign_ipv6": "true#g' \
-             addons/cni/calico/calico.yaml
+             addons/cni/calico/base/calico.yaml
          fi
 
          git diff
@@ -410,12 +410,12 @@ jobs:
          # test dns
          kubectl describe pod coredns -n kube-system
          kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-         kubectl run nginx --image ghcr.io/dpsigs/nginx:1.27.0-alpine
+         kubectl run nginx --image ghcr.io/khs1994-docker/library/nginx:1.27.0-alpine
          sleep 20
          kubectl get all
          kubectl get pod -o wide
          NGINX_POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
-         sudo crictl pull ghcr.io/dpsigs/nginx:1.27.0-alpine || true
+         sudo crictl pull ghcr.io/khs1994-docker/library/nginx:1.27.0-alpine || true
          # sudo journalctl -u cri-o || true
          kubectl exec ${NGINX_POD_NAME} -- cat /etc/resolv.conf
          kubectl exec ${NGINX_POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${NGINX_POD_NAME} -- nslookup kubernetes || true

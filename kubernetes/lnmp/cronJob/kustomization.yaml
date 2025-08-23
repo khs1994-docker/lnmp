@@ -1,5 +1,2 @@
 resources:
   - base
-images:
-  - name: khs1994/php:8.4.10-cli-alpine
-    newName: ghcr.io/khs1994/php

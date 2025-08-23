@@ -22,4 +22,4 @@ generatorOptions:
   disableNameSuffixHash: true
 images:
 - name: mysql
-  newName: ghcr.io/dpsigs/mysql
+  newName: ghcr.io/khs1994-docker/library/mysql

@@ -1,5 +1,5 @@
 resources:
   - ../base
 images:
-  - name: khs1994/php
-    newTag: docker.cnb.cool/khs1994-docker/khs1994/php
+  - name: ghcr.io/khs1994/php
+    newName: docker.cnb.cool/khs1994-docker/khs1994/php

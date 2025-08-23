@@ -9,3 +9,5 @@ generatorOptions:
 images:
   - name: klutchell/nfs-server
     newName: ghcr.io/dpsigs/klutchell-nfs-server
+  - name: busybox
+    newName: ghcr.io/khs1994-docker/library/busybox

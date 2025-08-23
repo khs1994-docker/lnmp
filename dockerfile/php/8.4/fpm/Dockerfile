@@ -144,6 +144,8 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
                                         --with-xpm \
                                         --with-avif \
         && docker-php-ext-install gd \
+        && docker-php-ext-install $PHP_EXTENSION \
+        && docker-php-ext-enable $PHP_EXTENSION \
         && docker-php-source delete \
         && docker-php-ext-enable opcache \
         && export PATH=$PATH:/opt/bin2 \
@@ -182,6 +184,7 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
         && rm -rf /tmp/* \
         && rm -rf /root/.pie \
         && rm -rf /root/.composer \
+        && rm -rf /usr/src/php \
         && apk del --no-network .phpize-deps .php-fpm-build-deps \
 # 创建日志文件夹
         && mkdir -p /var/log/php-fpm \

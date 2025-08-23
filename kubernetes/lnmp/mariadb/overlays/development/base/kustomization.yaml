@@ -11,4 +11,4 @@ patchesStrategicMerge:
   - config.yaml
 images:
   - name: mariadb
-    newName: ghcr.io/dpsigs/mariadb
+    newName: ghcr.io/khs1994-docker/library/mariadb
