@@ -1,0 +1,21 @@
+name: istio
+description: Connect, secure, control, and observe services.
+version: 1.27.0
+pre-version: 1.27.0
+github: istio/istio
+url: https://github.com/istio/istio/releases/download/${VERSION}/istioctl-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz
+scripts:
+  dist:
+    _mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}
+
+    curl -L `
+      $url `
+      -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename
+path:
+- C:\bin
+platform:
+  - architecture: amd64
+    os: linux
+  - architecture: arm64
+    os: linux
+hash-url: https://github.com/istio/istio/releases/download/${VERSION}/istioctl-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz.sha256

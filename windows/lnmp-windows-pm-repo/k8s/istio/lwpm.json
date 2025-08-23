@@ -1,0 +1,25 @@
+{
+  "description": "Connect, secure, control, and observe services.",
+  "github": "istio/istio",
+  "hash-url": "https://github.com/istio/istio/releases/download/${VERSION}/istioctl-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz.sha256",
+  "name": "istio",
+  "path": [
+    "C:\\bin"
+  ],
+  "platform": [
+    {
+      "architecture": "amd64",
+      "os": "linux"
+    },
+    {
+      "architecture": "arm64",
+      "os": "linux"
+    }
+  ],
+  "pre-version": "1.27.0",
+  "scripts": {
+    "dist": "_mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}\ncurl -L ` $url ` -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename"
+  },
+  "url": "https://github.com/istio/istio/releases/download/${VERSION}/istioctl-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz",
+  "version": "1.27.0"
+}
