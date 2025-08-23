@@ -1,4 +1,4 @@
-apiVersion: node.k8s.io/v1beta1  # RuntimeClass is defined in the node.k8s.io API group
+apiVersion: node.k8s.io/v1 # RuntimeClass is defined in the node.k8s.io API group
 # RuntimeClass is a non-namespaced resource
 kind: RuntimeClass
 metadata:
@@ -8,7 +8,7 @@ handler: runc # 值与 CRI 配置文件对应
 
 ---
 
-apiVersion: node.k8s.io/v1beta1
+apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
   name: runcv1
@@ -16,7 +16,7 @@ handler: runcv1
 
 ---
 
-apiVersion: node.k8s.io/v1beta1
+apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
   name: runclinux
@@ -24,7 +24,7 @@ handler: runclinux
 
 ---
 
-apiVersion: node.k8s.io/v1beta1
+apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
   name: crun
@@ -32,7 +32,7 @@ handler: crun
 
 ---
 
-apiVersion: node.k8s.io/v1beta1
+apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
   name: crun-disable-systemd
@@ -40,7 +40,7 @@ handler: crun-disable-systemd
 
 ---
 
-apiVersion: node.k8s.io/v1beta1
+apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
   name: runsc
@@ -48,7 +48,7 @@ handler: runsc
 
 ---
 
-apiVersion: node.k8s.io/v1beta1
+apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
   name: runsc-kvm
@@ -56,7 +56,7 @@ handler: runsc-kvm
 
 ---
 
-apiVersion: node.k8s.io/v1beta1
+apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
   name: kata
@@ -64,7 +64,7 @@ handler: kata
 
 ---
 
-apiVersion: node.k8s.io/v1beta1
+apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
   name: kata-qemu
@@ -72,7 +72,7 @@ handler: kata-qemu
 
 ---
 
-apiVersion: node.k8s.io/v1beta1
+apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
   name: kata-fc

@@ -572,7 +572,7 @@ _crun_install(){
 _containerd_install(){
   $(_sudo) mkdir -p ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d
 
-  cp systemd/etc/kubernetes/kubelet.conf.d/* ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d/
+  $(_sudo) cp systemd/etc/kubernetes/kubelet.conf.d/* ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d/
 
   if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/cri-containerd;fi
 
@@ -876,7 +876,7 @@ _conmon_install(){
 _crio_install(){
   $(_sudo) mkdir -p ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d
 
-  cp systemd/etc/kubernetes/kubelet.conf.d/* ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d/
+  $(_sudo) cp systemd/etc/kubernetes/kubelet.conf.d/* ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d/
 
   if [ $DOWNLOAD_FROM_REGISTRY = "true" ];then
     rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
@@ -1351,7 +1351,7 @@ _k8s_install_systemd(){
   $(for item in $(cd mount && ls);do echo /etc/systemd/system/$item;done)
 
   $(_sudo) sed -i \
-  's!__opt/k8s__!/opt/k8s!g' \
+  "s!__opt/k8s__!${K8S_ROOT}!g" \
   /etc/systemd/system/kubelet@.service
 
   cd - > /dev/null

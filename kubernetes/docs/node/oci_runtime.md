@@ -60,7 +60,7 @@ $ sudo systemctl restart containerd
 新建 `runtimeclass`
 
 ```yaml
-apiVersion: node.k8s.io/v1beta1  # RuntimeClass is defined in the node.k8s.io API group
+apiVersion: node.k8s.io/v1  # RuntimeClass is defined in the node.k8s.io API group
 kind: RuntimeClass
 metadata:
   name: myclass  # The name the RuntimeClass will be referenced by
