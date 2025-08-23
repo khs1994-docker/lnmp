@@ -132,10 +132,11 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
 # 安装内置扩展
         && docker-php-source extract \
+        && curl -fsSL -o /tmp/igbinary.tar.gz https://github.com/igbinary/igbinary/archive/master.tar.gz \
+        && tar -zxvf /tmp/igbinary.tar.gz -C /usr/src/php/ext/ \
+        && mv /usr/src/php/ext/igbinary-master /usr/src/php/ext/igbinary \
         && docker-php-ext-configure zip \
                                     --with-zip \
-        && docker-php-ext-install zip \
-        && strip --strip-all $(php-config --extension-dir)/zip.so \
         && docker-php-ext-configure gd \
                                         --disable-gd-jis-conv \
                                         --with-freetype \
@@ -143,20 +144,11 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
                                         --with-webp \
                                         --with-xpm \
                                         --with-avif \
-        && docker-php-ext-install gd \
-        && docker-php-ext-install $PHP_EXTENSION \
-        && docker-php-ext-enable $PHP_EXTENSION \
+        && docker-php-ext-configure igbinary \
+        && docker-php-ext-install $PHP_EXTENSION gd zip igbinary \
         && docker-php-source delete \
         && docker-php-ext-enable opcache \
-        && export PATH=$PATH:/opt/bin2 \
         && export PATH=$PATH:/opt/bin:/opt/bin2 \
-        && curl -fsSL -o /tmp/igbinary.tar.gz https://github.com/igbinary/igbinary/archive/master.tar.gz \
-        && tar -zxvf /tmp/igbinary.tar.gz -C /tmp \
-        && mkdir -p /usr/src/php/ext \
-        && touch /usr/src/php/.docker-extracted \
-        && mv /tmp/igbinary-master /usr/src/php/ext/igbinary \
-        && docker-php-ext-configure igbinary \
-        && docker-php-ext-install igbinary \
         && export PIE_CONFIG="--with-php-config=/usr/local/bin/php-config \
                             --with-php-path=/usr/local/bin/php \
                             --with-phpize-path=/usr/local/bin/phpize \
