@@ -105,6 +105,8 @@ ExecStartPre=/usr/bin/env mountpoint /var/lib/kubelet
 ExecStartPre=-/usr/bin/env mountpoint __opt/k8s__/opt/cni/bin
 ExecStartPre=-/usr/bin/env mountpoint __opt/k8s__/etc/cni/net.d
 ExecStartPre=/usr/bin/env mountpoint /usr/libexec/kubernetes
+ExecStartPre=-/usr/bin/env mkdir -p __opt/k8s__/etc/kubernetes/kubelet.conf.d
+ExecStartPre=-/usr/bin/env cp __opt/k8s__/etc/kubernetes/kubelet.conf.d/99-%i.config __opt/k8s__/etc/kubernetes/kubelet.conf.d/99-cri.conf
 
 ExecStart=/opt/k8s/bin/kubelet \
 --bootstrap-kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig \
@@ -112,11 +114,9 @@ ExecStart=/opt/k8s/bin/kubelet \
 --root-dir=/opt/k8s/var/lib/kubelet \
 --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
 --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
+--config-dir=${K8S_ROOT}/etc/kubernetes/kubelet.conf.d \
 --hostname-override=${NODE_NAME} \
---volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
---v=2 \
---logging-format=json \
---container-runtime-endpoint=unix:///run/%i/%i.sock
+--v=2
 
 ; kubelet@cri-containerd
 ; kubelet@crio

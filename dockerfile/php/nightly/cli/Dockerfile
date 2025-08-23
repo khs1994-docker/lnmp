@@ -403,29 +403,30 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            --with-phpize-path=/usr/local/bin/phpize \
                            --skip-enable-extension \
                            --force" \
-      && pie download kjdev/zstd:0.14.0+pie \
-      && cd /root/.pie/$(ls /root/.pie)/vendor/kjdev/zstd/zstd-0.14.0+pie \
-      && curl -fL https://github.com/kjdev/php-ext-zstd/commit/96d5dcea944a188e9a388bf19ed81ee41f1a990c.diff -O \
-      && patch -p1 < 96d5dcea944a188e9a388bf19ed81ee41f1a990c.diff \
+      # && pie download kjdev/zstd:0.14.0+pie \
+      # && cd /root/.pie/$(ls /root/.pie)/vendor/kjdev/zstd/zstd-0.14.0+pie \
+      # && curl -fL https://github.com/kjdev/php-ext-zstd/commit/96d5dcea944a188e9a388bf19ed81ee41f1a990c.diff -O \
+      # && patch -p1 < 96d5dcea944a188e9a388bf19ed81ee41f1a990c.diff \
       && apk del --no-network patch \
-      && mv /root/.pie/$(ls /root/.pie)/vendor/kjdev/zstd/zstd-0.14.0+pie /usr/src/php/ext/zstd \
-      && cd /usr/src/php/ext/zstd \
-      && docker-php-ext-configure zstd \
-      && docker-php-ext-install zstd \
+      # && mv /root/.pie/$(ls /root/.pie)/vendor/kjdev/zstd/zstd-0.14.0+pie /usr/src/php/ext/zstd \
+      # && cd /usr/src/php/ext/zstd \
+      # && docker-php-ext-configure zstd \
+      # && docker-php-ext-install zstd \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      # && pie -n install ${PIE_CONFIG} \
-      #                kjdev/zstd \
+      && pie -n install ${PIE_CONFIG} \
+                     kjdev/zstd \
       # && pie -n install ${PIE_CONFIG} \
       #                igbinary/igbinary:dev-main \
       && pie -n install ${PIE_CONFIG} \
                      phpredis/phpredis:dev-develop \
-                     --enable-redis-igbinary --enable-redis-zstd \
+                     --enable-redis-igbinary \
+                     --enable-redis-zstd \
       && pie -n install ${PIE_CONFIG} \
                      php-memcached/php-memcached:dev-master \
                      --enable-memcached-igbinary \
-      # && pie -n install ${PIE_CONFIG} \
-      #                xdebug/xdebug:dev-master \
+      && pie -n install ${PIE_CONFIG} \
+                     xdebug/xdebug:dev-master \
       && docker-php-ext-enable zstd \
       && echo "extension=redis" > $PHP_INI_DIR/conf.d/docker-php-ext-z-redis.ini \
       && echo "extension=memcached" > $PHP_INI_DIR/conf.d/docker-php-ext-z-memcached.ini \

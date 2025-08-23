@@ -20,3 +20,6 @@ generatorOptions:
     app: lnmp
     tier: mysql
   disableNameSuffixHash: true
+images:
+- name: mysql
+  newName: ghcr.io/dpsigs/mysql

@@ -40,6 +40,10 @@ var-log-pods.mount
 # ConditionVirtualization=wsl
 ; ConditionPathIsMountPoint=/wsl/wsl-k8s-data
 ; RequiresMountsFor=/wsl/wsl-k8s-data
+
+# https://github.com/cri-o/cri-o/pull/3545
+# After=crio-wipe.service
+# Requires=crio-wipe.service
 [Service]
 Type=notify
 EnvironmentFile=-/opt/k8s/etc/sysconfig/crio

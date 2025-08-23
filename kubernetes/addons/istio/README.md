@@ -14,7 +14,7 @@ $ istioctl manifest generate --set profile=default > istio.yaml
 
 $ istioctl manifest generate --set profile=demo > istio.yaml
 
-# https://istio.io/latest/zh/docs/reference/config/installation-options/
+# https://istio.io/latest/docs/setup/additional-setup/customize-installation/
 $ istioctl manifest generate --set profile=demo \
   # istio-cni
   --set components.cni.enabled=true \

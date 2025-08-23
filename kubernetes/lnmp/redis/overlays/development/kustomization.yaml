@@ -12,3 +12,6 @@ generatorOptions:
     app: lnmp
     tier: redis
   disableNameSuffixHash: true
+images:
+- name: redis
+  newName: ghcr.io/dpsigs/redis

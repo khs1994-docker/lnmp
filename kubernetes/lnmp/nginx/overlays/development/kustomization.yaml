@@ -15,3 +15,6 @@ generatorOptions:
   labels:
     app: lnmp
     tier: nginx
+images:
+- name: nginx
+  newName: ghcr.io/dpsigs/nginx

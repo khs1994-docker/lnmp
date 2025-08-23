@@ -28,7 +28,7 @@ imports = []
   uid = 0
   gid = 0
   level = ''
-  format = ''
+  format = 'json'
 
 [metrics]
   address = '127.0.0.1:1338'

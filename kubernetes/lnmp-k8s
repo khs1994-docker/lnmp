@@ -570,6 +570,10 @@ _crun_install(){
 }
 
 _containerd_install(){
+  $(_sudo) mkdir -p ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d
+
+  cp systemd/etc/kubernetes/kubelet.conf.d/* ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d/
+
   if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/cri-containerd;fi
 
   if [ "$GOOS" = 'darwin' ];then
@@ -870,6 +874,10 @@ _conmon_install(){
 
 # https://github.com/cri-o/cri-o/blob/main/install.md#build-and-install-cri-o-from-source
 _crio_install(){
+  $(_sudo) mkdir -p ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d
+
+  cp systemd/etc/kubernetes/kubelet.conf.d/* ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d/
+
   if [ $DOWNLOAD_FROM_REGISTRY = "true" ];then
     rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
           khs1994-docker/lwpm/cri-o \
@@ -1070,6 +1078,8 @@ _containerd_cri_config(){
 
     cat <<EOF | $(_sudo) tee $CONTAINERD_CONF_ROOT/certs.d/docker.io/hosts.toml
 server = "https://docker.io"
+[host."https://ghcr.io"]
+  capabilities = ["pull", "resolve"]
 [host."https://mirror.gcr.io"]
   capabilities = ["pull", "resolve"]
 [host."https://registry-1.docker.io"]
