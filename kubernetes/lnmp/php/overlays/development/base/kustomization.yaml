@@ -23,3 +23,6 @@ generatorOptions:
   labels:
     app: lnmp
     tier: php
+images:
+  - name: khs1994/php
+    newTag: ghcr.io/khs1994/php

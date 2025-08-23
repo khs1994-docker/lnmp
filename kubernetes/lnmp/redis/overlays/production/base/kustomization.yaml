@@ -13,3 +13,6 @@ generatorOptions:
   labels:
     app: lnmp
     tier: redis
+images:
+- name: redis
+  newName: ghcr.io/dpsigs/redis

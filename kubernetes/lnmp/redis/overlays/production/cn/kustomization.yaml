@@ -1,2 +1,5 @@
 resources:
   - ../base
+images:
+  - name: redis
+    newTag: docker.cnb.cool/khs1994-docker/library/redis

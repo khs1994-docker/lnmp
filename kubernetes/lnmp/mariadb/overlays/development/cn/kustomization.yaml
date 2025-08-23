@@ -1,2 +1,5 @@
 resources:
   - ../base
+images:
+  - name: mariadb
+    newName: docker.cnb.cool/khs1994-docker/library/mariadb

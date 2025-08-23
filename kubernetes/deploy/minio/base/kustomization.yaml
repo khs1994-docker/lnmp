@@ -7,3 +7,6 @@ secretGenerator:
     - minio-root-password=minioadmin
 generatorOptions:
   disableNameSuffixHash: true
+images:
+  - name: minio/minio:RELEASE.2022-10-24T18-35-07Z
+    newName: ghcr.io/dpsigs/minio

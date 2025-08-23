@@ -1,2 +1,5 @@
 resources:
   - ../base
+images:
+  - name: klutchell/nfs-server
+    newName: docker.cnb.cool/khs1994-docker/khs1994/klutchell-nfs-server

@@ -32,3 +32,6 @@ services:
 
   php-fpm-exporter:
     image: bakins/php-fpm-exporter:v0.6.1
+
+  istio:
+    image: docker.io/istio/pilot:1.27.0

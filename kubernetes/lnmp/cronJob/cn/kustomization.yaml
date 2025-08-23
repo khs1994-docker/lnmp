@@ -1,0 +1,5 @@
+resources:
+  - ../base
+images:
+  - name: khs1994/php:8.4.10-cli-alpine
+    newName: docker.cnb.cool/khs1994-docker/khs1994/php

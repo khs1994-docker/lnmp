@@ -74,5 +74,9 @@
   {
     "source": "istio/proxyv2:1.27.0",
     "dest": "istio-proxyv2:1.27.0"
+  },
+  {
+    "source": "klutchell/nfs-server",
+    "dest": "klutchell-nfs-server"
   }
 ]
