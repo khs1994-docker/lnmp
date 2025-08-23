@@ -64,12 +64,16 @@
     "dest": "minio:RELEASE.2022-10-24T18-35-07Z"
   },
   {
+    "source": "minio/minio:RELEASE.2022-10-24T18-35-07Z",
+    "dest": "minio-minio:RELEASE.2022-10-24T18-35-07Z"
+  },
+  {
     "source": "ubuntu/squid:5.2-22.04_beta",
     "dest": "ubuntu-squid:5.2-22.04_beta"
   },
   {
     "source": "istio/pilot:1.27.0",
-    "dest": "istio-pilot:5.2-22.04"
+    "dest": "istio-pilot:1.27.0"
   },
   {
     "source": "istio/proxyv2:1.27.0",

@@ -1,0 +1,7 @@
+resources:
+  - istio.yaml
+images:
+  - name: docker.io/istio/pilot
+    newName: ghcr.io/dpsigs/istio-pilot
+  - name: docker.io/istio/proxyv2
+    newName: ghcr.io/dpsigs/istio-proxyv2

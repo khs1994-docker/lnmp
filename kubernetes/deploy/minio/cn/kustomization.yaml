@@ -2,4 +2,4 @@ resources:
 - ../base
 images:
   - name: minio/minio:RELEASE.2022-10-24T18-35-07Z
-    newName: docker.cnb.cool/khs1994-docker/khs1994/minio
+    newName: docker.cnb.cool/khs1994-docker/khs1994/minio-minio
