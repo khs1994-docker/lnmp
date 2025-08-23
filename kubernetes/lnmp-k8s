@@ -436,6 +436,23 @@ _helm_install(){
   $(_sudo) rm -rf ${TMP_ROOT}/${GOOS}-${GOARCH}
 }
 
+_istio_install(){
+if [ "$DOWNLOAD_FROM_REGISTRY" = "true" ];then
+    rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
+          khs1994-docker/lwpm/istio \
+          ${ISTIO_VERSION} \
+          ${GOARCH} \
+          ${GOOS} \
+          "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
+
+    # $(_sudo) rm -rf ${TMP_ROOT}/istio_dist
+    # $(_sudo) mkdir -p ${TMP_ROOT}/istio_dist
+    $(_sudo) tar -zxf $rootfs -C ${K8S_ROOT}/bin
+
+    istioctl version || true
+ fi
+}
+
 _gvisor_install(){
   if ! [ "$GOOS" = 'linux' -a "$GOARCH" = 'amd64' ];then
     print_info "$GOOS $GOARCH not support gvisor"
@@ -1408,6 +1425,8 @@ _k8s_install(){
 
   # kubectl
   _k8s_install_kubectl_conf
+
+  _istio_install
 }
 
 # k8s join

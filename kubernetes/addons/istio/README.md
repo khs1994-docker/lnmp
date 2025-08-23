@@ -10,20 +10,25 @@
 # https://istio.io/latest/docs/setup/additional-setup/config-profiles/
 $ istioctl profile list
 
-$ istioctl manifest generate --set profile=default > istio.yaml
+$ cd kubernetes/addons/istio
 
-$ istioctl manifest generate --set profile=demo > istio.yaml
+$ istioctl manifest generate --set profile=default > base/istio.yaml
+
+$ istioctl manifest generate --set profile=demo > base/istio.yaml
 
 # https://istio.io/latest/docs/setup/additional-setup/customize-installation/
+$ export K8S_ROOT=/opt/k8s
+$ export K8S_CIDR="10.254.0.0/16"
+
 $ istioctl manifest generate --set profile=demo \
   # istio-cni
   --set components.cni.enabled=true \
-  --set values.cni.cniBinDir=/opt/k8s/opt/cni/bin \
-  --set values.cni.cniConfDir=/opt/k8s/etc/cni/net.d \
+  --set values.cni.cniBinDir=${K8S_ROOT}/opt/cni/bin \
+  --set values.cni.cniConfDir=${K8S_ROOT}/etc/cni/net.d \
 
   --set values.meshConfig.outboundTrafficPolicy.mode=REGISTRY_ONLY \
   # pod 可以访问集群内部服务 值为 kube-apiserver --service-cluster-ip-range 参数的值
-  --set values.global.proxy.includeIPRanges="10.254.0.0/16" \
+  --set values.global.proxy.includeIPRanges="${K8S_CIDR}" \
   # 若集群支持 LoadBalancer ,则无需使用该 set
   --set values.gateways.istio-ingressgateway.type=NodePort \
 
@@ -39,7 +44,7 @@ $ ./manifest.ps1
 
 $ kubectl create ns istio-system
 
-$ kubectl apply -k istio.yaml
+$ kubectl apply -k .
 ```
 
 ## 测试

@@ -1,0 +1,24 @@
+resources:
+  - ../base
+# images:
+# - name: docker.io/calico/cni
+#   newName: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/calico/cni
+# - name: docker.io/calico/node
+#   newName: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/calico/node
+# - name: docker.io/calico/kube-controllers
+#   newName: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/calico/kube-controllers
+# - name: calico/csi
+#   newName: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/calico/csi
+# - name: calico/node-driver-registrar
+#   newName: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/calico/node-driver-registrar
+images:
+- name: docker.io/calico/cni
+  newName: ccr.ccs.tencentyun.com/library-mirror/calico-cni
+- name: docker.io/calico/node
+  newName: ccr.ccs.tencentyun.com/library-mirror/calico-node
+- name: docker.io/calico/kube-controllers
+  newName: ccr.ccs.tencentyun.com/library-mirror/calico-kube-controllers
+- name: calico/csi
+  newName: ccr.ccs.tencentyun.com/library-mirror/calico-csi
+- name: calico/node-driver-registrar
+  newName: ccr.ccs.tencentyun.com/library-mirror/calico-node-driver-registrar

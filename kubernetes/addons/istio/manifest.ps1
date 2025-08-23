@@ -6,4 +6,4 @@ istioctl manifest generate --set profile=demo `
   --set values.global.proxy.includeIPRanges="10.254.0.0/16" `
   --set values.gateways.istio-ingressgateway.type=NodePort `
   --set values.gateways.istio-ingressgateway.autoscaleMax=1 `
-  > istio.yaml
+  > base/istio.yaml

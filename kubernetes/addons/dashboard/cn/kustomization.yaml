@@ -1,0 +1,7 @@
+resources:
+- ../base
+images:
+- name: kubernetesui/dashboard
+  newName: kubernetesui-dashboard
+- name: kubernetesui/metrics-scraper
+  newName: kubernetesui-metrics-scraper

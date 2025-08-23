@@ -3,3 +3,5 @@
 !base
 !custom
 !overlays
+!cn
+!kustomization.yaml

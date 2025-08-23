@@ -1,9 +1,2 @@
 resources:
-  - "../base"
-patches:
-  - path: nodeport.patch.json
-    target:
-      group: ""
-      kind: Service
-      name: kubernetes-dashboard
-      version: v1
+ - "./base"

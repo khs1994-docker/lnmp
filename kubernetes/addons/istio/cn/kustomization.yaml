@@ -1,0 +1,7 @@
+resources:
+  - "../base"
+images:
+  - name: docker.io/istio/pilot
+    newName: docker.cnb.cool/khs1994-docker/khs1994/istio-pilot
+  - name: docker.io/istio/proxyv2
+    newName: docker.cnb.cool/khs1994-docker/khs1994/istio-proxyv2

@@ -66,5 +66,13 @@
   {
     "source": "ubuntu/squid:5.2-22.04_beta",
     "dest": "ubuntu-squid:5.2-22.04_beta"
+  },
+  {
+    "source": "istio/pilot:1.27.0",
+    "dest": "istio-pilot:5.2-22.04"
+  },
+  {
+    "source": "istio/proxyv2:1.27.0",
+    "dest": "istio-proxyv2:1.27.0"
   }
 ]

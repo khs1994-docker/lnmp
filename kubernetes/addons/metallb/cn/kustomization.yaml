@@ -1,0 +1,7 @@
+resources:
+  - ../base
+images:
+  - name: quay.io/metallb/speaker
+    newName: docker.cnb.cool/khs1994-docker/khs1994/metallb-speaker
+  - name: quay.io/metallb/controller
+    newName: docker.cnb.cool/khs1994-docker/khs1994/metallb-controller

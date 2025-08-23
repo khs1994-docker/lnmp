@@ -1,10 +1,2 @@
 resources:
-  - ../calico-custom
-patches:
-  - target:
-      group: apps
-      version: v1
-      kind: DaemonSet
-      name: calico-node
-      namespace: kube-system
-    path: coreos.patch.json
+  - ./base

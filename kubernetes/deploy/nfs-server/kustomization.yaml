@@ -1,8 +1,2 @@
 resources:
-  - deploy.yaml
-configMapGenerator:
-  - name: nfs-exports
-    files:
-      - exports
-generatorOptions:
-  disableNameSuffixHash: true
+  - base
