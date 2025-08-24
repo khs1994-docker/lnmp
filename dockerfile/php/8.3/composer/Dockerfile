@@ -1,5 +1,5 @@
 # syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
-ARG PHP_VERSION=8.3.12
+ARG PHP_VERSION=8.3.24
 ARG USERNAME=khs1994
 # ARG BASE=fpm
 ARG BASE=cli
@@ -24,7 +24,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 \
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=ghcr.io/dpsigs/composer:2.8.9,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=ghcr.io/khs1994-docker/library/composer:2.8.9,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .composer_deps $COMPOSER_DEP_APKS \
     && { echo "memory_limit=-1"; \

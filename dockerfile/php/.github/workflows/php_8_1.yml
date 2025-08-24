@@ -9,7 +9,7 @@ on:
       PHP_VERSION:
         description: php version
         required: true
-        default: "8.1.31"
+        default: "8.1.33"
 
 name: PHP_8.1
 
@@ -202,7 +202,7 @@ jobs:
         PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v7
         PHP_VERSION: 8_1_X
         FOLDER: "8.1"
-        PHP_TAG_VERSION: "8.1.31"
+        PHP_TAG_VERSION: "8.1.33"
         TYPE: ${{ matrix.TYPE }}
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php docker.cnb.cool/khs1994-docker/khs1994/php ghcr.io/khs1994/php
         add_mirror2: ghcr.io/lrew/php docker.cnb.cool/khs1994-docker/lrew/php

@@ -29,7 +29,7 @@ ENV PECL_EXTENSION \
 ENV SWOOLE_VERSION=master \
     BOX_REQUIREMENT_CHECKER=0
 
-RUN --mount=type=bind,from=ghcr.io/dpsigs/php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=ghcr.io/khs1994-docker/library/php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     set -x \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     && apk add --no-cache --virtual .pecl_build_deps \

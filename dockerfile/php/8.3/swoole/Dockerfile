@@ -1,5 +1,5 @@
 # syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
-ARG PHP_VERSION=8.3.12
+ARG PHP_VERSION=8.3.24
 ARG USERNAME=khs1994
 ARG BASE=cli
 

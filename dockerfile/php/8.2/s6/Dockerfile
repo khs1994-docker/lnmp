@@ -1,6 +1,6 @@
 # syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
 
-ARG PHP_VERSION=8.2.26
+ARG PHP_VERSION=8.2.29
 ARG USERNAME=khs1994
 ARG BASE=fpm
 

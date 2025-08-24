@@ -34,7 +34,7 @@ steps:
   # install dep
   - name: install
     # image: composer:2.8.9
-    image: khs1994/php:8.4.10-composer-alpine
+    image: khs1994/php:8.4.11-composer-alpine
     commands:
       - pwd
       - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
@@ -46,7 +46,7 @@ steps:
 
   # test script
   - name: script
-    image: khs1994/php:8.4.10-fpm-alpine
+    image: khs1994/php:8.4.11-fpm-alpine
     # pull: always | never | if-not-exists
     # detach: true
     # privileged: true
@@ -92,7 +92,7 @@ steps:
     settings:
       # registry: docker.khs1994.com
       repo: khs1994/php
-      tags: 8.4.10-pro-${DRONE_TAG}-alpine
+      tags: 8.4.11-pro-${DRONE_TAG}-alpine
       target: php
       mirror: https://registry-1.docker.io
       # build_args:
@@ -142,7 +142,7 @@ steps:
     image: plugins/docker
     settings:
       repo: khs1994/php
-      tags: 8.4.10-pro-${DRONE_TAG}-alpine
+      tags: 8.4.11-pro-${DRONE_TAG}-alpine
       target: php
       mirror: https://registry-1.docker.io
       username:
@@ -179,7 +179,7 @@ steps:
       event: [ tag ]
 
   - name: after_success
-    image: khs1994/php:8.4.10-composer-alpine
+    image: khs1994/php:8.4.11-composer-alpine
     when:
       status: success
     commands:
@@ -228,8 +228,8 @@ volumes:
 #   COMPOSER_VERSION:
 #     - 2.8.9
 #   PHP_VERSION:
-#     - 8.4.10
-#     - 8.1.31
+#     - 8.4.11
+#     - 8.1.33
 #     - 8.0.30
 #     # - 7.4.33
 #     # - 7.3.33

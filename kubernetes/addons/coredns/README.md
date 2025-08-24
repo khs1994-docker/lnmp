@@ -12,13 +12,13 @@ $ kubectl apply -k addons/coredns/cn
 ## Test
 
 ```bash
-$ kubectl run nginx --image=ccr.ccs.tencentyun.com/library-mirror/nginx:alpine
+$ kubectl run nginx --image=docker.cnb.cool/khs1994-docker/library/nginx:alpine
 
 $ kubectl get pod
 
 $ kubectl expose pod nginx-6b4b85b77b-sxskl --port 80
 
-$ kubectl run nginx2 --image=ccr.ccs.tencentyun.com/library-mirror/nginx:alpine
+$ kubectl run nginx2 --image=docker.cnb.cool/khs1994-docker/library/nginx:alpine
 
 $ kubectl get pod
 
