@@ -156,6 +156,8 @@ jobs:
       uses: docker://pcit/pages
       if: |
         contains( github.event.head_commit.message, '[syncer]')
+        ||
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
