@@ -235,30 +235,6 @@
     "dest": "library-mirror/caddy:alpine"
   },
   {
-    "source": "library/debian:bullseye",
-    "dest": "library-mirror/debian:bullseye"
-  },
-  {
-    "source": "library/debian:bullseye-slim",
-    "dest": "library-mirror/debian:bullseye-slim"
-  },
-  {
-    "source": "library/debian:bookworm",
-    "dest": "library-mirror/debian:bookworm"
-  },
-  {
-    "source": "library/debian:bookworm-slim",
-    "dest": "library-mirror/debian:bookworm-slim"
-  },
-  {
-    "source": "library/debian:sid",
-    "dest": "library-mirror/debian:sid"
-  },
-  {
-    "source": "library/debian:sid-slim",
-    "dest": "library-mirror/debian:sid-slim"
-  },
-  {
     "source": "library/ubuntu:18.04",
     "dest": "library-mirror/ubuntu:18.04"
   },
