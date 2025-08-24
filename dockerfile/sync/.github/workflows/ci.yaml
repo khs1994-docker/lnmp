@@ -34,7 +34,7 @@ jobs:
             -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
             -e DEST_DOCKER_REGISTRY=ghcr.io \
-            -e DEST_NAMESPACE=khs1994-docker \
+            -e DEST_NAMESPACE=khs1994-docker/docker.io \
             -e CI=true \
             -e GITHUB_ACTIONS \
             -e LNMP_CN_ENV=false \
@@ -67,7 +67,7 @@ jobs:
             -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
             -e DEST_DOCKER_REGISTRY=ghcr.io \
-            -e DEST_NAMESPACE=khs1994-docker/library \
+            -e DEST_NAMESPACE=khs1994-docker/docker.io/library \
             -e CI=true \
             -e GITHUB_ACTIONS \
             -e LNMP_CN_ENV=false \
@@ -86,7 +86,7 @@ jobs:
             -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
             -e DEST_DOCKER_REGISTRY=docker.cnb.cool \
-            -e DEST_NAMESPACE=khs1994-docker \
+            -e DEST_NAMESPACE=khs1994-docker/docker.io \
             -e CI=true \
             -e GITHUB_ACTIONS \
             -e LNMP_CN_ENV=false \
@@ -121,7 +121,7 @@ jobs:
             -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
             -e DEST_DOCKER_REGISTRY=docker.cnb.cool \
-            -e DEST_NAMESPACE=khs1994-docker/library \
+            -e DEST_NAMESPACE=khs1994-docker/docker.io/library \
             -e CI=true \
             -e GITHUB_ACTIONS \
             -e LNMP_CN_ENV=false \

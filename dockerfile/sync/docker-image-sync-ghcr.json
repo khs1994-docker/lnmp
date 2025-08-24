@@ -1,132 +1,132 @@
 [
   {
     "source": "andyzhangx/samba:win-fix",
-    "dest": "docker.io/andyzhangx/samba:win-fix",
+    "dest": "andyzhangx/samba:win-fix",
     "append": true
   },
   {
     "source": "calico/cni:v3.30.1",
-    "dest": "docker.io/calico/cni:v3.30.1",
+    "dest": "calico/cni:v3.30.1",
     "append": true
   },
   {
     "source": "calico/node:v3.30.1",
-    "dest": "docker.io/calico/node:v3.30.1",
+    "dest": "calico/node:v3.30.1",
     "append": true
   },
   {
     "source": "calico/kube-controllers:v3.30.1",
-    "dest": "docker.io/calico/kube-controllers:v3.30.1",
+    "dest": "calico/kube-controllers:v3.30.1",
     "append": true
   },
   {
     "source": "calico/csi:v3.30.1",
-    "dest": "docker.io/calico/csi:v3.30.1",
+    "dest": "calico/csi:v3.30.1",
     "append": true
   },
   {
     "source": "calico/node-driver-registrar:v3.30.1",
-    "dest": "docker.io/calico/node-driver-registrar:v3.30.1",
+    "dest": "calico/node-driver-registrar:v3.30.1",
     "append": true
   },
   {
     "source": "moby/buildkit",
-    "dest": "docker.io/moby/buildkit",
+    "dest": "moby/buildkit",
     "append": true
   },
   {
     "source": "moby/buildkit:nightly",
-    "dest": "docker.io/moby/buildkit:nightly",
+    "dest": "moby/buildkit:nightly",
     "append": true
   },
   {
     "source": "moby/buildkit:nightly-rootless",
-    "dest": "docker.io/moby/buildkit:nightly-rootless",
+    "dest": "moby/buildkit:nightly-rootless",
     "append": true
   },
   {
     "source": "moby/buildkit:buildx-stable-1",
-    "dest": "docker.io/moby/buildkit:buildx-stable-1",
+    "dest": "moby/buildkit:buildx-stable-1",
     "append": true
   },
   {
     "source": "moby/buildkit:buildx-stable-1-rootless",
-    "dest": "docker.io/moby/buildkit:buildx-stable-1-rootless",
+    "dest": "moby/buildkit:buildx-stable-1-rootless",
     "append": true
   },
   {
     "source": "moby/buildkit:master",
-    "dest": "docker.io/moby/buildkit:master",
+    "dest": "moby/buildkit:master",
     "append": true
   },
   {
     "source": "moby/buildkit:master-rootless",
-    "dest": "docker.io/moby/buildkit:master-rootless",
+    "dest": "moby/buildkit:master-rootless",
     "append": true
   },
   {
     "source": "moby/buildkit:rootless",
-    "dest": "docker.io/moby/buildkit:rootless",
+    "dest": "moby/buildkit:rootless",
     "append": true
   },
   {
     "source": "tonistiigi/binfmt:latest",
-    "dest": "docker.io/tonistiigi/binfmt:latest",
+    "dest": "tonistiigi/binfmt:latest",
     "append": true
   },
   {
     "source": "docker/dockerfile",
-    "dest": "docker.io/docker/dockerfile",
+    "dest": "docker/dockerfile",
     "append": true
   },
   {
     "source": "docker/dockerfile-upstream:labs",
-    "dest": "docker.io/docker/dockerfile-upstream:labs",
+    "dest": "docker/dockerfile-upstream:labs",
     "append": true
   },
   {
     "source": "docker/dockerfile-upstream:master",
-    "dest": "docker.io/docker/dockerfile-upstream:master",
+    "dest": "docker/dockerfile-upstream:master",
     "append": true
   },
   {
     "source": "docker/dockerfile-upstream:master-labs",
-    "dest": "docker.io/docker/dockerfile-upstream:master-labs",
+    "dest": "docker/dockerfile-upstream:master-labs",
     "append": true
   },
   {
     "source": "docker/dockerfile-upstream:1.17.1-labs",
-    "dest": "docker.io/docker/dockerfile-upstream:1.17.1-labs",
+    "dest": "docker/dockerfile-upstream:1.17.1-labs",
     "append": true
   },
   {
     "source": "docker/dockerfile-upstream:1.17.1",
-    "dest": "docker.io/docker/dockerfile-upstream:1.17.1",
+    "dest": "docker/dockerfile-upstream:1.17.1",
     "append": true
   },
   {
     "source": "minio/minio:RELEASE.2022-10-24T18-35-07Z",
-    "dest": "docker.io/minio/minio:RELEASE.2022-10-24T18-35-07Z",
+    "dest": "minio/minio:RELEASE.2022-10-24T18-35-07Z",
     "append": true
   },
   {
     "source": "ubuntu/squid:5.2-22.04_beta",
-    "dest": "docker.io/ubuntu/squid:5.2-22.04_beta",
+    "dest": "ubuntu/squid:5.2-22.04_beta",
     "append": true
   },
   {
     "source": "istio/pilot:1.27.0",
-    "dest": "docker.io/istio/pilot:1.27.0",
+    "dest": "istio/pilot:1.27.0",
     "append": true
   },
   {
     "source": "istio/proxyv2:1.27.0",
-    "dest": "docker.io/istio/proxyv2:1.27.0",
+    "dest": "istio/proxyv2:1.27.0",
     "append": true
   },
   {
     "source": "klutchell/nfs-server",
-    "dest": "docker.io/klutchell/nfs-server",
+    "dest": "klutchell/nfs-server",
     "append": true
   }
 ]
