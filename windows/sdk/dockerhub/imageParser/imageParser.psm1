@@ -10,8 +10,13 @@
 
 # $env:SOURCE_NAMESPACE = "library"
 # $env:DEST_NAMESPACE = "library"
+# $env:DEST_REPLACE = ''
 
 Function imageParser([string] $config, [boolean] $source = $true, [boolean] $append = $false) {
+  if ($env:DEST_REPLACE -and !$source) {
+    $config = $config.Replace('/', '-')
+  }
+
   $config, $digest = $config.split('@')
 
   # host:port/ns/image:ref
