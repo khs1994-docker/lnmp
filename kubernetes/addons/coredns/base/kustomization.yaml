@@ -1,2 +1,5 @@
 resources:
 - coredns.yaml
+images:
+- name: registry.k8s.io/coredns/coredns:v1.12.1
+  newName: ghcr.io/khs1994-docker/registry.k8s.io/coredns/coredns:v1.12.1

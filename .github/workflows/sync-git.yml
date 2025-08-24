@@ -16,6 +16,7 @@ jobs:
     if: |
       contains( github.ref, 'refs/tags/' )
       || contains( github.event.head_commit.message, '[sync git]')
+      || contains( github.event.head_commit.message, '[syncer]')
       || github.event_name == 'workflow_dispatch'
     steps:
       - run: echo "sync continue !"
@@ -36,6 +37,8 @@ jobs:
         fetch-depth: 2
     - name: sync-acme.sh
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -47,6 +50,8 @@ jobs:
         PCIT_USERNAME: khs1994
     - name: sync-ci
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -58,6 +63,8 @@ jobs:
         PCIT_USERNAME: khs1994
     - name: sync-kubernetes
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -69,6 +76,8 @@ jobs:
         PCIT_USERNAME: khs1994
     - name: sync-node-demo
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -80,6 +89,8 @@ jobs:
         PCIT_USERNAME: khs1994
     - name: sync-php-demo
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -91,6 +102,8 @@ jobs:
         PCIT_USERNAME: khs1994
     - name: sync-buildx
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -102,6 +115,8 @@ jobs:
         PCIT_USERNAME: khs1994
     - name: sync-laravel-demo
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -113,6 +128,8 @@ jobs:
         PCIT_USERNAME: khs1994
     - name: sync-kube-nginx
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -124,6 +141,8 @@ jobs:
         PCIT_USERNAME: khs1994
     - name: sync-k8s-ci-demo
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -135,6 +154,8 @@ jobs:
         PCIT_USERNAME: khs1994
     - name: sync-docker-image-sync
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[syncer]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -146,6 +167,8 @@ jobs:
         PCIT_USERNAME: khs1994
     - name: sync-nginx
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -157,6 +180,8 @@ jobs:
         PCIT_USERNAME: khs1994
     - name: sync-docker-proxy
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         # PCIT_EMAIL: khs1994@khs1994.com
         # PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -168,6 +193,8 @@ jobs:
         # PCIT_USERNAME: khs1994
     - name: sync-s6
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         # PCIT_EMAIL: khs1994@khs1994.com
         # PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
@@ -179,6 +206,8 @@ jobs:
         # PCIT_USERNAME: khs1994
     - name: sync-wsl2-kernel
       uses: docker://pcit/pages
+      if: |
+        contains( github.event.head_commit.message, '[sync git]')
       env:
         # PCIT_EMAIL: khs1994@khs1994.com
         # PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}

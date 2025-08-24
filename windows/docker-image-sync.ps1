@@ -228,7 +228,7 @@ Function _sync($source, $dest, $config) {
     return
   }
 
-  $dest_registry, $dest_image, $dest_ref, $dest_image_with_digest = imageParser $dest $false
+  $dest_registry, $dest_image, $dest_ref, $dest_image_with_digest = imageParser $dest $false $config.append
 
   if ($source_image_with_digest) { $source_ref = $source_image_with_digest }
 

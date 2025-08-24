@@ -12,7 +12,7 @@ spec:
   ports:
   - name: php-fpm
     port: 9000
-  # clusterIP: None
+  clusterIP: None
 ---
 kind: Deployment
 apiVersion: apps/v1

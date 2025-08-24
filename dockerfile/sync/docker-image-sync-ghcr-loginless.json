@@ -1,10 +1,22 @@
 [
   {
     "source": "ghcr.io/php/pie:bin",
-    "dest": "pie:bin"
+    "append": true
   },
   {
     "source": "quay.io/fluentd_elasticsearch/elasticsearch:v7.16.2",
-    "dest": "elasticsearch:v7.16.2"
+    "append": true
+  },
+  {
+    "source": "registry.k8s.io/coredns/coredns:v1.12.1",
+    "append": true
+  },
+  {
+    "source": "registry.k8s.io/metrics-server/metrics-server:v0.8.0",
+    "append": true
+  },
+  {
+    "source": "gcr.io/k8s-staging-metrics-server/metrics-server:master",
+    "append": true
   }
 ]

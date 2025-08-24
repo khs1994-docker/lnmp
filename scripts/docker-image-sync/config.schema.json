@@ -33,6 +33,10 @@
         "description": "source digest",
         "type": "string"
       },
+      "append": {
+        "type": "boolean",
+        "default": false
+      },
       "platforms": {
         "type": "array",
         "description": "all in one",

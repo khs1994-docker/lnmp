@@ -11,7 +11,7 @@
 # $env:SOURCE_NAMESPACE = "library"
 # $env:DEST_NAMESPACE = "library"
 
-Function imageParser([string] $config, [boolean] $source = $true) {
+Function imageParser([string] $config, [boolean] $source = $true, [boolean] $append = $false) {
   $config, $digest = $config.split('@')
 
   # host:port/ns/image:ref
@@ -97,6 +97,12 @@ Function imageParser([string] $config, [boolean] $source = $true) {
     write-host `
       "==> [error] [ $config ] parse error, `$env:DEST_DOCKER_REGISTRY NOT set" `
       -ForegroundColor DarkRed # DarkGray # Magenta # Cyan
+  }
+
+  if($append){
+    $image = "$namespace/$registry/$image"
+
+    $registry = $env:DEST_DOCKER_REGISTRY
   }
 
   if ($registry -eq 'docker.io') {
