@@ -65,7 +65,11 @@ Function imageParser([string] $config, [boolean] $source = $true, [boolean] $app
       if ($source) {
         $registry = $env:SOURCE_DOCKER_REGISTRY
       }
-      else { $registry = $env:DEST_DOCKER_REGISTRY }
+      else {
+        if (!$append) {
+          $registry = $env:DEST_DOCKER_REGISTRY
+        }
+      }
     }
   }
 
@@ -78,9 +82,12 @@ Function imageParser([string] $config, [boolean] $source = $true, [boolean] $app
 
   if (!$namespace) { $namespace = "library" }
 
+  $NS_INCLUDED = $false
+
   # image 必须包含命名空间 ns/image ns/ns2/ns3/image
   if (!$image.contains('/')) {
     $image = "$namespace/$image"
+    $NS_INCLUDED = $true
   }
 
   # default source registry
@@ -93,14 +100,21 @@ Function imageParser([string] $config, [boolean] $source = $true, [boolean] $app
 
   if (!$ref) { $ref = "latest" }
 
-  if (!$registry) {
+  if (!$registry -and !$append) {
     write-host `
       "==> [error] [ $config ] parse error, `$env:DEST_DOCKER_REGISTRY NOT set" `
       -ForegroundColor DarkRed # DarkGray # Magenta # Cyan
   }
 
-  if($append){
-    $image = "$namespace/$registry/$image"
+  if ($append -and !$source) {
+    if ($registry) {
+      $image = "$namespace/$registry/$image"
+    }
+    else {
+      if (!$NS_INCLUDED) {
+        $image = "$namespace/$image"
+      }
+    }
 
     $registry = $env:DEST_DOCKER_REGISTRY
   }
