@@ -86,8 +86,9 @@ jobs:
             -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
             -e DEST_DOCKER_REGISTRY=docker.cnb.cool \
-            -e DEST_NAMESPACE=khs1994-docker/docker.io \
+            -e DEST_NAMESPACE=khs1994-docker/khs1994 \
             -e CI=true \
+            -e DEST_REPLACE=true \
             -e GITHUB_ACTIONS \
             -e LNMP_CN_ENV=false \
             -e CONFIG_URL=https://github.com/khs1994-docker/docker-image-sync/raw/master/docker-image-sync-ghcr.json \
@@ -103,8 +104,9 @@ jobs:
             -e DEST_DOCKER_USERNAME=khs1994 \
             -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
             -e DEST_DOCKER_REGISTRY=docker.cnb.cool \
-            -e DEST_NAMESPACE=khs1994-docker \
+            -e DEST_NAMESPACE=khs1994-docker/khs1994 \
             -e CI=true \
+            -e DEST_REPLACE=true \
             -e GITHUB_ACTIONS \
             -e LNMP_CN_ENV=false \
             -e CONFIG_URL=https://github.com/khs1994-docker/docker-image-sync/raw/master/docker-image-sync-ghcr-loginless.json \
@@ -121,7 +123,7 @@ jobs:
             -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
             -e DEST_DOCKER_REGISTRY=docker.cnb.cool \
-            -e DEST_NAMESPACE=khs1994-docker/docker.io/library \
+            -e DEST_NAMESPACE=khs1994-docker/library \
             -e CI=true \
             -e GITHUB_ACTIONS \
             -e LNMP_CN_ENV=false \
