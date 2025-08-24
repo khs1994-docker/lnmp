@@ -7,14 +7,24 @@ lnmp-docker ssl-self t.khs1994.com \
                 developer.t.khs1994.com \
                 *.developer.t.khs1994.com \
                 *.dev \
+                khs1994.dev \
+                *.khs1994.dev \
                 *.local \
+                khs1994.local \
+                *.khs1994.local \
                 *.test \
+                khs1994.test \
+                *.khs1994.test \
+                *.io \
                 khs1994.io \
                 *.khs1994.io \
                 *.khs1994 \
-                khs1994.dev \
-                *.khs1994.dev \
-                khs1994.test \
-                *.khs1994.test \
-                khs1994.local \
-                *.khs1994.local
+                *.wsl \
+                khs1994.wsl \
+                *.khs1994.wsl \
+                *.wsllocal \
+                khs1994.wsllocal \
+                *.khs1994.wsllocal \
+                *.wsl2 \
+                khs1994.wsl2 \
+                *.khs1994.wsl2

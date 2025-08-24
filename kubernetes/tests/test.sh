@@ -69,7 +69,7 @@ ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
 sleep 120
 kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com
-test $(curl -sk https://laravel.t.khs1994.com:38759) = 'ok<br/>ok' || exit 1
+test $(curl -sk https://laravel2.t.khs1994.com) = 'ok<br/>ok' || exit 1
 sudo ps aux || true
 kubectl delete ns lnmp
 kubectl delete pv -l app=lnmp

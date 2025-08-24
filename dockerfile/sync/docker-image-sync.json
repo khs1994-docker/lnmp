@@ -301,25 +301,5 @@
   {
     "source": "tonistiigi/binfmt",
     "dest": "khs1994/binfmt"
-  },
-  {
-    "source": "calico/cni:v3.30.1",
-    "dest": "library-mirror/calico-cni:v3.30.1"
-  },
-  {
-    "source": "calico/node:v3.30.1",
-    "dest": "library-mirror/calico-node:v3.30.1"
-  },
-  {
-    "source": "calico/kube-controllers:v3.30.1",
-    "dest": "library-mirror/calico-kube-controllers:v3.30.1"
-  },
-  {
-    "source": "calico/csi:v3.30.1",
-    "dest": "library-mirror/calico-csi:v3.30.1"
-  },
-  {
-    "source": "calico/node-driver-registrar:v3.30.1",
-    "dest": "library-mirror/calico-node-driver-registrar:v3.30.1"
   }
 ]
