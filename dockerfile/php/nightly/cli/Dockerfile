@@ -149,7 +149,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
 ARG PHP_GIT=https://github.com/php/php-src.git
-# ARG PHP_GIT=https://github.com.cnpmjs.org/php/php-src
+# ARG PHP_GIT=https://mirror/php/php-src
 
 RUN --mount=type=bind,from=ghcr.io/khs1994-docker/library/php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
