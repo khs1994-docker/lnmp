@@ -28,7 +28,7 @@ jobs:
           os:
           - ubuntu-latest
           - macos-13
-          - ubuntu-latest-arm
+          - ubuntu-22.04-arm
     needs: skip
     runs-on: ${{ matrix.os }}
     defaults:

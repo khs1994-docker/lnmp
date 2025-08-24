@@ -21,5 +21,6 @@
       "mikestead.dotenv",
       "be5invis.toml",
       "MS-vsliveshare.vsliveshare",
+      "github.vscode-github-actions",
   ]
 }
