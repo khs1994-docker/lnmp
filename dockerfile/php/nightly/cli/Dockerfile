@@ -103,7 +103,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --enable-fileinfo=shared \
         --with-ldap=shared \
             --with-ldap-sasl \
-        # --with-pspell=shared \ # 8.4 removed # https://github.com/php/php-src/commit/b035cb6c8e31bea351f169b3e9f34fdc562e77e1
         --enable-shmop=shared \
         # --with-snmp=shared \
         --with-mysqli=shared \
@@ -305,7 +304,6 @@ RUN --mount=type=bind,from=ghcr.io/khs1994-docker/library/php:alpine,source=/usr
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
-                           # pspell \ # 8.4 removed # https://github.com/php/php-src/commit/b035cb6c8e31bea351f169b3e9f34fdc562e77e1
                            shmop \
                            # snmp \
                            # soap \
@@ -316,8 +314,6 @@ RUN --mount=type=bind,from=ghcr.io/khs1994-docker/library/php:alpine,source=/usr
                            sysvshm \
                            # tidy \
                            # xsl \
-                           # opcache 已默认安装，需要自行载入
-                           # opcache \
                            ffi \
                            ctype \
                            dom \

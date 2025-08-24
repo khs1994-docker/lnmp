@@ -290,7 +290,6 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
-                           # pspell \ # 8.4 removed # https://github.com/php/php-src/commit/b035cb6c8e31bea351f169b3e9f34fdc562e77e1
                            shmop \
                            # snmp \
                            # soap \
@@ -301,8 +300,6 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            sysvshm \
                            # tidy \
                            # xsl \
-                           # opcache 已默认安装，需要自行载入
-                           # opcache \
                            zip \
                            ffi \
                            ${PHP_EXTENSION_EXTRA:-} \
