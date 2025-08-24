@@ -1,2 +1,5 @@
 resources:
 - registry.yaml
+images:
+- name: registry
+  newName: ghcr.io/khs1994-docker/library/registry

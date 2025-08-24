@@ -7,3 +7,6 @@ secretGenerator:
       - password=password
 generatorOptions:
   disableNameSuffixHash: true
+images:
+  - name: andyzhangx/samba:win-fix
+    newName: ghcr.io/dpsigs/andyzhangx-samba

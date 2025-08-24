@@ -1,5 +1,9 @@
 [
   {
+    "source": "andyzhangx/samba:win-fix",
+    "dest": "candyzhangx-samba:win-fix"
+  },
+  {
     "source": "calico/cni:v3.30.1",
     "dest": "calico-cni:v3.30.1"
   },

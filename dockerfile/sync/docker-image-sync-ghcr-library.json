@@ -92,8 +92,8 @@
     "dest": "php:alpine"
   },
   {
-    "source": "library/composer:2.8.9",
-    "dest": "composer:2.8.9"
+    "source": "library/composer:2.8.11",
+    "dest": "composer:2.8.11"
   },
   {
     "source": "library/golang:1.24-alpine",

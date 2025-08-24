@@ -49,7 +49,7 @@ if [ "${LNMP_CN_ENV}" != 'false' ];then
   PHP_GIT=https://github.com.cnpmjs.org/php/php-src
 fi
 
-export COMPOSER_VERSION=2.8.9
+export COMPOSER_VERSION=2.8.11
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
@@ -684,7 +684,7 @@ _install_pecl_ext_by_pickle(){
       https://github.com/igbinary/igbinary/archive/master.tar.gz \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       https://github.com/xdebug/xdebug/archive/master.tar.gz \
-      https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
+      https://github.com/longxinH/xhprof/archive/refs/heads/master.tar.gz \
       https://github.com/swoole/swoole-src/archive/master.tar.gz \
       mongodb \
       memcached

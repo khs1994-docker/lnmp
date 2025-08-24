@@ -122,27 +122,3 @@ jobs:
           $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubernetes-node@${env:LWPM_K8S_VERSION}
-  trigger-coding-net-ci:
-    needs: lwpm-dist-k8s-file
-    name: trigger-coding-net-ci
-    runs-on: ubuntu-latest
-    steps:
-      - name: trigger-coding.net-ci
-        env:
-          CODING_PASSWORD: ${{secrets.CODING_CI_PCIT_PASSWORD}}
-        run: |
-          set -x
-          curl -u pto8bv6hoj8e:${CODING_PASSWORD} \
-          -v -X POST  'https://pcit.coding.net/api/cci/job/234348/trigger' \
-          -H 'Content-Type: application/json' \
-          -d "
-          {
-            \"ref\": \"master\",
-            \"envs\": [
-              {
-                \"name\": \"LWPM_K8S_VERSION\",
-                \"value\": \"${LWPM_K8S_VERSION}\",
-                \"sensitive\": 0
-              }
-            ]
-          }"
