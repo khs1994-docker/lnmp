@@ -209,7 +209,7 @@ Function _all_in_one($config) {
   $([DockerImageSpec]::manifest_list) $dest_registry
 }
 
-Function _sync($source, $dest, $config) {
+Function _sync($source, $dest, $config, [bool] $append = $false) {
   if ($config.registry) {
     write-host "==> skip parse source image, read from config"
 
@@ -228,7 +228,7 @@ Function _sync($source, $dest, $config) {
     return
   }
 
-  $dest_registry, $dest_image, $dest_ref, $dest_image_with_digest = imageParser $dest $false $config.append
+  $dest_registry, $dest_image, $dest_ref, $dest_image_with_digest = imageParser $dest $false $append
 
   if ($source_image_with_digest) { $source_ref = $source_image_with_digest }
 
@@ -512,14 +512,14 @@ foreach ($item in $sync_config) {
   }
 
   if ($item.append) {
-    $item.append = $true
+    $append = $true
   }
   else {
-    $item.append = $false
+    $append = $false
   }
 
   if ($env:GITHUB_ACTIONS) { Write-Host "::group::Sync [ $source ] to [ $dest ]" }
   write-host "==> [sync start] Sync [ $source ] to [ $dest ]" -ForegroundColor Blue
 
-  _sync $source $dest $item
+  _sync $source $dest $item $append
 }
