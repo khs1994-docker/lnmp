@@ -3,7 +3,7 @@
 Import-Module $PSScriptRoot/tags/list.psm1
 Import-Module $PSScriptRoot/manifests/get.psm1
 Import-Module $PSScriptRoot/blobs/get.psm1 -Force
-Import-Module $PSScriptRoot/auth/auth.psm1
+Import-Module $PSScriptRoot/auth/auth.psm1 -Force
 Import-Module $PSScriptRoot/registry/registry.psm1
 
 . $PSScriptRoot/DockerImageSpec/DockerImageSpec.ps1
@@ -47,7 +47,8 @@ function rootfs([string]$image = "alpine",
   [string]$dest,
   $layersIndex = 0,
   [string]$registry = $null,
-  [string]$phase = $null) {
+  [string]$phase = $null,
+  [bool]$prefix_library = $true) {
   # $dest 下载到哪里
 
   # $layersIndex = 0
@@ -67,7 +68,7 @@ function rootfs([string]$image = "alpine",
     $env:DOCKER_ROOTFS_PHASE = "manifest list"
   }
 
-  if(!$phase){
+  if (!$phase) {
     $env:DOCKER_ROOTFS_PHASE = $null
   }
 
@@ -79,7 +80,7 @@ function rootfs([string]$image = "alpine",
 
   $FormatEnumerationLimit = -1
 
-  if (!($image | select-string '/')) {
+  if (!($image | select-string '/') -and $prefix_library) {
     $image = "library/$image"
   }
 
@@ -242,7 +243,7 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
           continue
         }
 
-        $dest = Get-Blob $token $image $digest $registry $dest
+        $dest = Get-Blob $token $image $digest $layers[$index].mediaType $registry $dest
 
         if ($dest -eq $false) {
           write-host "==> Download failed" -ForegroundColor Red

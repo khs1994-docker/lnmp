@@ -89,7 +89,7 @@ function Get-DockerRegistryToken([string]$image,
   $tokenServer, $tokenService = Get-TokenServerAndService $registry
 
   if (!($tokenServer)) {
-    # write-host "==> tokenServer and tokenService not set, this registry maybe not need token" -ForegroundColor Yellow
+    write-host "==> tokenServer and tokenService not set, this registry maybe not need token" -ForegroundColor Yellow
 
     return 'token'
   }

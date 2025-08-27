@@ -48,15 +48,26 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$head
   }
 
   try {
-    $response = Invoke-WebRequest `
-      -Authentication OAuth `
-      -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
-      -Headers @{"Accept" = $header } `
-      "https://$registry/v2/$image/blobs/$digest" `
-      -PassThru `
-      -OutFile $distTemp `
-      -PreserveAuthorizationOnRedirect `
-      -UserAgent "Docker-Client/20.10.16 (Windows)"
+    if ($token -eq 'token') {
+      $response = Invoke-WebRequest `
+        -Headers @{"Accept" = $header } `
+        "https://$registry/v2/$image/blobs/$digest" `
+        -PassThru `
+        -OutFile $distTemp `
+        -PreserveAuthorizationOnRedirect `
+        -UserAgent "Docker-Client/20.10.16 (Windows)"
+    }
+    else {
+      $response = Invoke-WebRequest `
+        -Authentication OAuth `
+        -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
+        -Headers @{"Accept" = $header } `
+        "https://$registry/v2/$image/blobs/$digest" `
+        -PassThru `
+        -OutFile $distTemp `
+        -PreserveAuthorizationOnRedirect `
+        -UserAgent "Docker-Client/20.10.16 (Windows)"
+    }
   }
   catch {
     $response = $_.Exception.Response

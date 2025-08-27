@@ -21,14 +21,24 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
   $cache_file = Get-CachePath "manifests/$($ref.replace('sha256:','')).json"
 
   try {
-    $result = Invoke-WebRequest `
-      -Authentication OAuth `
-      -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
-      -Headers @{"Accept" = $header } `
-      "https://$registry/v2/$image/manifests/$ref" `
-      -PassThru `
-      -OutFile $cache_file `
-      -UserAgent "Docker-Client/20.10.16 (Windows)"
+    if ($token -eq 'token') {
+      $result = Invoke-WebRequest `
+        -Headers @{"Accept" = $header } `
+        "https://$registry/v2/$image/manifests/$ref" `
+        -PassThru `
+        -OutFile $cache_file `
+        -UserAgent "Docker-Client/20.10.16 (Windows)"
+    }
+    else {
+      $result = Invoke-WebRequest `
+        -Authentication OAuth `
+        -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
+        -Headers @{"Accept" = $header } `
+        "https://$registry/v2/$image/manifests/$ref" `
+        -PassThru `
+        -OutFile $cache_file `
+        -UserAgent "Docker-Client/20.10.16 (Windows)"
+    }
   }
   catch {
     $result = $_.Exception.Response

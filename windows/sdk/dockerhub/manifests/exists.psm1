@@ -1,12 +1,21 @@
 Function Test-Manifest([string]$token, [string]$image, [string]$digest, [string]$contentType = "application/vnd.docker.distribution.manifest.v2+json", [string]$registry = "registry.hub.docker.com") {
   try {
-    Invoke-WebRequest `
-      -Authentication OAuth `
-      -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
-      -Headers @{"Accept" = "$contentType" } `
-      "https://$registry/v2/$image/manifests/$digest" `
-      -Method Head `
-      -UserAgent "Docker-Client/20.10.16 (Windows)"
+    if ($token -eq 'token') {
+      Invoke-WebRequest `
+        -Headers @{"Accept" = "$contentType" } `
+        "https://$registry/v2/$image/manifests/$digest" `
+        -Method Head `
+        -UserAgent "Docker-Client/20.10.16 (Windows)"
+    }
+    else {
+      Invoke-WebRequest `
+        -Authentication OAuth `
+        -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
+        -Headers @{"Accept" = "$contentType" } `
+        "https://$registry/v2/$image/manifests/$digest" `
+        -Method Head `
+        -UserAgent "Docker-Client/20.10.16 (Windows)"
+    }
   }
   catch {
     write-host "==> check manifest exists error [ $($_.Exception.Response.StatusCode) ]" `
