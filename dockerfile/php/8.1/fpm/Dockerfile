@@ -164,7 +164,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && pickle install \
              xdebug \
              # https://github.com/xdebug/xdebug/archive/master.tar.gz \
-             https://github.com/longxinH/xhprof/archive/refs/heads/master.tar.gz \
+             # https://github.com/longxinH/xhprof/archive/refs/heads/master.tar.gz \
              -n --defaults --strip --cleanup --no-write \
         && pickle install opcache \
         # && docker-php-ext-enable opcache \

@@ -400,7 +400,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/local/bin,target=/opt/bin,rw \
       && pickle install \
          xdebug \
          # https://github.com/xdebug/xdebug/archive/master.tar.gz \
-         https://github.com/longxinH/xhprof/archive/refs/heads/master.tar.gz \
+         # https://github.com/longxinH/xhprof/archive/refs/heads/master.tar.gz \
          -n --defaults --no-write --strip --cleanup \
       && apk del --no-network .pecl_build_deps \
       && rm -rf /tmp/* \
