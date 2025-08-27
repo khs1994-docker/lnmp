@@ -101,23 +101,6 @@ jobs:
         name: Sync docker image cnb
       - run: |
           docker run -i --rm \
-            -e DEST_DOCKER_USERNAME=khs1994 \
-            -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
-            -e DEST_DOCKER_REGISTRY=docker.cnb.cool \
-            -e DEST_NAMESPACE=khs1994-docker/khs1994 \
-            -e CI=true \
-            -e DEST_REPLACE=true \
-            -e GITHUB_ACTIONS \
-            -e LNMP_CN_ENV=false \
-            -e CONFIG_URL=https://github.com/khs1994-docker/docker-image-sync/raw/master/docker-image-sync-ghcr-loginless.json \
-            -v cache:/root/.khs1994-docker-lnmp \
-            ghcr.io/khs1994/docker-image-sync
-        env:
-          DOCKER_USERNAME: cnb
-          DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
-        name: Sync docker image loginless cnb
-      - run: |
-          docker run -i --rm \
             -e SOURCE_DOCKER_USERNAME=khs1994 \
             -e SOURCE_DOCKER_PASSWORD=${DOCKERIO_PASSWORD} \
             -e DEST_DOCKER_USERNAME=${DOCKER_USERNAME} \
@@ -135,3 +118,51 @@ jobs:
           DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
           DOCKERIO_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         name: Sync docker image library cnb
+  ci2:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - registry: gcr.io
+          - registry: ghcr.io
+          - registry: quay.io
+          - registry: registry.k8s.io
+          - registry: mcr.microsoft.com
+    steps:
+      - run: |
+          docker run -i --rm \
+            -e DEST_DOCKER_USERNAME=cnb \
+            -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
+            -e DEST_DOCKER_REGISTRY=docker.cnb.cool \
+            -e DEST_NAMESPACE=khs1994-docker/${SOURCE_DOCKER_REGISTRY} \
+            -e SOURCE_DOCKER_REGISTRY \
+            -e CI=true \
+            -e DEST_REPLACE=true \
+            -e GITHUB_ACTIONS \
+            -e LNMP_CN_ENV=false \
+            -e CONFIG_URL=https://github.com/khs1994-docker/docker-image-sync/raw/master/docker-image-sync-ghcr-${SOURCE_DOCKER_REGISTRY}.json \
+            -v cache:/root/.khs1994-docker-lnmp \
+            ghcr.io/khs1994/docker-image-sync
+        env:
+          DOCKER_USERNAME: cnb
+          DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
+          SOURCE_DOCKER_REGISTRY: ${{ matrix.registry }}
+        name: Sync docker image ${{ matrix.registry }} to cnb
+      - run: |
+          docker run -i --rm \
+            -e DEST_DOCKER_USERNAME=khs1994 \
+            -e DEST_DOCKER_PASSWORD=${DOCKER_PASSWORD} \
+            -e DEST_DOCKER_REGISTRY=ghcr.io \
+            -e DEST_NAMESPACE=khs1994-docker/${SOURCE_DOCKER_REGISTRY} \
+            -e SOURCE_DOCKER_REGISTRY \
+            -e CI=true \
+            -e GITHUB_ACTIONS \
+            -e LNMP_CN_ENV=false \
+            -e CONFIG_URL=https://github.com/khs1994-docker/docker-image-sync/raw/master/docker-image-sync-ghcr-${SOURCE_DOCKER_REGISTRY}.json \
+            -v cache:/root/.khs1994-docker-lnmp \
+            ghcr.io/khs1994/docker-image-sync
+        env:
+          DOCKER_USERNAME: khs1994
+          DOCKER_PASSWORD: ${{ secrets.GHCR_IO_TOKEN }}
+          SOURCE_DOCKER_REGISTRY: ${{ matrix.registry }}
+        name: Sync docker image ${{ matrix.registry }} to ghcr.io

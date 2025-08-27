@@ -1,0 +1,6 @@
+[
+  {
+    "source": "php/pie:bin",
+    "append": true
+  }
+]

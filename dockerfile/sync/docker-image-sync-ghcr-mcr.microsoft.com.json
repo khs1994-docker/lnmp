@@ -1,0 +1,11 @@
+[
+  {
+    "source": "powershell:preview-7.4-alpine-3.17",
+    "dest": "powershell:preview-7.4-alpine-3.17",
+    "registry": "mcr.microsoft.com",
+    "image": "powershell",
+    "ref": "preview-7.4-alpine-3.17",
+    "$comment": "https://hub.docker.com/_/microsoft-powershell",
+    "append": true
+  }
+]

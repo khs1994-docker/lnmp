@@ -1,0 +1,10 @@
+[
+  {
+    "source": "coredns/coredns:v1.12.1",
+    "append": true
+  },
+  {
+    "source": "metrics-server/metrics-server:v0.8.0",
+    "append": true
+  }
+]

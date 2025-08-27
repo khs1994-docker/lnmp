@@ -1,0 +1,6 @@
+[
+  {
+    "source": "fluentd_elasticsearch/elasticsearch:v7.16.2",
+    "append": true
+  }
+]

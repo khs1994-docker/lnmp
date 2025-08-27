@@ -1,0 +1,6 @@
+[
+  {
+    "source": "k8s-staging-metrics-server/metrics-server:master",
+    "append": true
+  }
+]
