@@ -2,6 +2,6 @@ resources:
   - base
 images:
   - name: docker.io/istio/pilot
-    newName: ghcr.io/dpsigs/istio-pilot
+    newName: ghcr.io/khs1994-docker/docker.io/istio/pilot
   - name: docker.io/istio/proxyv2
-    newName: ghcr.io/dpsigs/istio-proxyv2
+    newName: ghcr.io/khs1994-docker/docker.io/istio/proxyv2

@@ -1,11 +1,11 @@
-# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
+# syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
 ARG PHP_VERSION=8.4.11
 
-FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/library/php:${PHP_VERSION}-alpine AS upstream
+FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/php:${PHP_VERSION}-alpine AS upstream
 
-FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/library/golang:1.24-alpine AS go
+FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/golang:1.24-alpine AS go
 
-FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/library/alpine:3.22
+FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/alpine:3.22
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

@@ -1,4 +1,4 @@
-# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
+# syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
 ARG PHP_VERSION=7.3.18
 ARG USERNAME=khs1994
 

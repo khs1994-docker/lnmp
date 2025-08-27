@@ -1,5 +1,5 @@
 resources:
   - ../base
 images:
-  - name: ghcr.io/khs1994-docker/library/nginx
+  - name: ghcr.io/khs1994-docker/docker.io/library/nginx
     newName: docker.cnb.cool/khs1994-docker/library/nginx

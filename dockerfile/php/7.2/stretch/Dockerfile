@@ -1,4 +1,4 @@
-# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
+# syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
 
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 

@@ -17,4 +17,4 @@ generatorOptions:
     tier: nginx
 images:
 - name: nginx
-  newName: ghcr.io/khs1994-docker/library/nginx
+  newName: ghcr.io/khs1994-docker/docker.io/library/nginx

@@ -1,5 +1,5 @@
 resources:
   - ../base
 images:
-  - name: ghcr.io/khs1994-docker/library/mysql
+  - name: ghcr.io/khs1994-docker/docker.io/library/mysql
     newName: docker.cnb.cool/khs1994-docker/library/mysql

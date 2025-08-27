@@ -1,5 +1,5 @@
-# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
-FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/library/alpine:3.22 as php
+# syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
+FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/alpine:3.22 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -390,7 +390,7 @@ ENV PECL_RUN_DEPS \
       zlib \
       zstd-libs
 
-RUN --mount=type=bind,from=ghcr.io/khs1994-docker/library/php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=ghcr.io/khs1994-docker/docker.io/library/php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     --mount=type=cache,target=/usr/local/lib/php/test \
     --mount=type=cache,target=/usr/local/lib/php/doc \
     --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \

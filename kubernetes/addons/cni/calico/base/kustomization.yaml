@@ -27,12 +27,12 @@ patches:
     path: basic.patch.json
 images:
 - name: docker.io/calico/cni
-  newName: ghcr.io/dpsigs/calico-cni
+  newName: ghcr.io/khs1994-docker/docker.io/calico/cni
 - name: docker.io/calico/node
-  newName: ghcr.io/dpsigs/calico-node
+  newName: ghcr.io/khs1994-docker/docker.io/calico/node
 - name: docker.io/calico/kube-controllers
-  newName: ghcr.io/dpsigs/calico-kube-controllers
+  newName: ghcr.io/khs1994-docker/docker.io/calico/kube-controllers
 - name: calico/csi
-  newName: ghcr.io/dpsigs/calico-csi
+  newName: ghcr.io/khs1994-docker/docker.io/calico/csi
 - name: calico/node-driver-registrar
-  newName: ghcr.io/dpsigs/calico-node-driver-registrar
+  newName: ghcr.io/khs1994-docker/docker.io/calico/node-driver-registrar

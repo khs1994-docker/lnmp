@@ -1,4 +1,4 @@
-# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
+# syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
 FROM --platform=$TARGETPLATFORM alpine:3.22
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
@@ -151,7 +151,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 ARG PHP_GIT=https://github.com/php/php-src.git
 # ARG PHP_GIT=https://mirror/php/php-src
 
-RUN --mount=type=bind,from=ghcr.io/khs1994-docker/library/php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=ghcr.io/khs1994-docker/docker.io/library/php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   \
   && export PATH=$PATH:/opt/bin \

@@ -8,6 +8,6 @@ generatorOptions:
   disableNameSuffixHash: true
 images:
   - name: klutchell/nfs-server
-    newName: ghcr.io/dpsigs/klutchell-nfs-server
+    newName: ghcr.io/khs1994-docker/docker.io/klutchell/nfs-server
   - name: busybox
-    newName: ghcr.io/khs1994-docker/library/busybox
+    newName: ghcr.io/khs1994-docker/docker.io/library/busybox

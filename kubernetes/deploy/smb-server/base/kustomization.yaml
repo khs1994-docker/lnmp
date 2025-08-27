@@ -9,4 +9,4 @@ generatorOptions:
   disableNameSuffixHash: true
 images:
   - name: andyzhangx/samba:win-fix
-    newName: ghcr.io/dpsigs/andyzhangx-samba
+    newName: ghcr.io/khs1994-docker/docker.io/andyzhangx/samba

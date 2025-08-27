@@ -34,7 +34,7 @@ $ docker buildx create --use --name=mybuilder --driver docker-container
 ## Dockerfile ARG
 
 ```docker
-# syntax=ghcr.io/dpsigs/docker-dockerfile-upstream:master-labs
+# syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
 ARG TARGETPLATFORM - platform of the build result. Eg linux/amd64, linux/arm/v7, windows/amd64.
 ARG TARGETOS - OS component of TARGETPLATFORM
 ARG TARGETARCH - architecture component of TARGETPLATFORM

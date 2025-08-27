@@ -2,4 +2,4 @@ resources:
 - registry.yaml
 images:
 - name: registry
-  newName: ghcr.io/khs1994-docker/library/registry
+  newName: ghcr.io/khs1994-docker/docker.io/library/registry

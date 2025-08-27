@@ -15,4 +15,4 @@ generatorOptions:
     tier: redis
 images:
 - name: redis
-  newName: ghcr.io/khs1994-docker/library/redis
+  newName: ghcr.io/khs1994-docker/docker.io/library/redis
