@@ -1,6 +1,6 @@
 # https://hub.docker.com/_/microsoft-powershell?tab=description
 
-FROM mcr.microsoft.com/powershell:preview-alpine-3.12
+FROM mcr.microsoft.com/powershell:preview-7.6-alpine-3.20
 
 # source 仓库的凭证，若为公开仓库则可以不设置
 # ENV SOURCE_DOCKER_USERNAME=

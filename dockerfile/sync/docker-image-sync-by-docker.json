@@ -64,11 +64,11 @@
     "dest": "tektoncd-triggers-eventlistenersink:v0.9.0@sha256:3d9cd3788c03ea6f9c85980d3b70ded295766f222e5d30fc1790249e88a10880"
   },
   {
-    "source": "mcr.microsoft.com/powershell:preview-7.4-alpine-3.17",
-    "dest": "powershell:preview-7.4-alpine-3.17",
+    "source": "mcr.microsoft.com/powershell:preview-7.6-alpine-3.20",
+    "dest": "powershell:preview-7.6-alpine-3.20",
     "registry": "mcr.microsoft.com",
     "image": "powershell",
-    "ref": "preview-7.4-alpine-3.17",
+    "ref": "preview-7.6-alpine-3.20",
     "$comment": "https://hub.docker.com/_/microsoft-powershell"
   },
   {

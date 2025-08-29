@@ -1,10 +1,19 @@
 [
   {
-    "source": "powershell:preview-7.4-alpine-3.17",
-    "dest": "powershell:preview-7.4-alpine-3.17",
+    "source": "powershell:preview-7.6-alpine-3.20",
+    "dest": "powershell:preview-7.6-alpine-3.20",
     "registry": "mcr.microsoft.com",
     "image": "powershell",
-    "ref": "preview-7.4-alpine-3.17",
+    "ref": "preview-7.6-alpine-3.20",
+    "$comment": "https://hub.docker.com/_/microsoft-powershell",
+    "append": true
+  },
+  {
+    "source": "powershell:7.5-alpine-3.20",
+    "dest": "powershell:7.5-alpine-3.20",
+    "registry": "mcr.microsoft.com",
+    "image": "powershell",
+    "ref": "7.5-alpine-3.20",
     "$comment": "https://hub.docker.com/_/microsoft-powershell",
     "append": true
   }
