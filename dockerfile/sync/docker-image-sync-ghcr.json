@@ -128,5 +128,10 @@
     "source": "klutchell/nfs-server",
     "dest": "klutchell/nfs-server",
     "append": true
+  },
+  {
+    "source": "snyk/snyk:docker",
+    "dest": "snyk/snyk:docker",
+    "append": true
   }
 ]

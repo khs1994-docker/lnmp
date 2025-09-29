@@ -160,10 +160,10 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:nightly-bin,source=/,target=/opt/bin2
         # && pie -n install ${PIE_CONFIG} \
         #                igbinary/igbinary:dev-main \
         && pie -n install ${PIE_CONFIG} \
-                      phpredis/phpredis \
+                      phpredis/phpredis:dev-develop \
                       --enable-redis-igbinary --enable-redis-zstd \
         && pie -n install ${PIE_CONFIG} \
-                      php-memcached/php-memcached \
+                      php-memcached/php-memcached:dev-master \
                       --enable-memcached-igbinary \
         && pie -n install ${PIE_CONFIG} \
                       xdebug/xdebug \

@@ -384,10 +384,10 @@ RUN --mount=type=bind,from=upstream,source=/usr/local/bin,target=/opt/bin,rw \
       # && pie -n install ${PIE_CONFIG} \
       #                igbinary/igbinary:dev-main \
       && pie -n install ${PIE_CONFIG} \
-                     phpredis/phpredis \
+                     phpredis/phpredis:dev-develop \
                      --enable-redis-igbinary --enable-redis-zstd \
       && pie -n install ${PIE_CONFIG} \
-                     php-memcached/php-memcached \
+                     php-memcached/php-memcached:dev-master \
                      --enable-memcached-igbinary \
       && pie -n install ${PIE_CONFIG} \
                      xdebug/xdebug \

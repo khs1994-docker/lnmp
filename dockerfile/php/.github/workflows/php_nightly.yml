@@ -220,38 +220,38 @@ jobs:
       name: 'Build Image'
       id: build
       continue-on-error: ${{ matrix.TYPE == 'swoole' }}
-    - run: docker pull snyk/snyk:docker
-      if: false
-    - name: Run Snyk to check Docker image for vulnerabilities
-      # Snyk can be used to break the build when it detects vulnerabilities.
-      # In this case we want to upload the issues to GitHub Code Scanning
-      continue-on-error: true
-      if: false
-      uses: snyk/actions/docker@master
-      env:
-        # In order to use the Snyk Action you will need to have a Snyk API token.
-        # More details in https://github.com/snyk/actions#getting-your-snyk-token
-        # or you can signup for free at https://snyk.io/login
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with:
-        image: ${{ steps.build.outputs.image }}
-        args: --file=nightly/${{ steps.build.outputs.type }}/Dockerfile
-      # Replace any "undefined" security severity values with 0. The undefined value is used in the case
-      # of license-related findings, which do not do not indicate a security vulnerability.
-      # See  https://github.com/Erikvl87/docker-languagetool/issues/90 and https://github.com/github/codeql-action/issues/2187 for more context.
-    - name: Post-process sarif output for security severities set to "undefined"
-      continue-on-error: true
-      run: |
-        sed -i 's/"security-severity": "undefined"/"security-severity": "0"/g' snyk.sarif
-      # Replace any "null" security severity values with 0. The undefined value is used in the case
-      # the NVD CVSS Score is not available.
-      # See  https://github.com/Erikvl87/docker-languagetool/issues/90 and https://github.com/github/codeql-action/issues/2187 for more context.
-    - name: Post-process sarif output for security severities set to "null"
-      continue-on-error: true
-      run: |
-        sed -i 's/"security-severity": "null"/"security-severity": "0"/g' snyk.sarif
-    - name: Upload result to GitHub Code Scanning
-      uses: github/codeql-action/upload-sarif@v3
-      continue-on-error: true
-      with:
-        sarif_file: snyk.sarif
+    # - run: docker pull snyk/snyk:docker
+    #   if: false
+    # - name: Run Snyk to check Docker image for vulnerabilities
+    #   # Snyk can be used to break the build when it detects vulnerabilities.
+    #   # In this case we want to upload the issues to GitHub Code Scanning
+    #   continue-on-error: true
+    #   if: false
+    #   uses: snyk/actions/docker@master
+    #   env:
+    #     # In order to use the Snyk Action you will need to have a Snyk API token.
+    #     # More details in https://github.com/snyk/actions#getting-your-snyk-token
+    #     # or you can signup for free at https://snyk.io/login
+    #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    #   with:
+    #     image: ${{ steps.build.outputs.image }}
+    #     args: --file=nightly/${{ steps.build.outputs.type }}/Dockerfile
+    #   # Replace any "undefined" security severity values with 0. The undefined value is used in the case
+    #   # of license-related findings, which do not do not indicate a security vulnerability.
+    #   # See  https://github.com/Erikvl87/docker-languagetool/issues/90 and https://github.com/github/codeql-action/issues/2187 for more context.
+    # - name: Post-process sarif output for security severities set to "undefined"
+    #   continue-on-error: true
+    #   run: |
+    #     sed -i 's/"security-severity": "undefined"/"security-severity": "0"/g' snyk.sarif
+    #   # Replace any "null" security severity values with 0. The undefined value is used in the case
+    #   # the NVD CVSS Score is not available.
+    #   # See  https://github.com/Erikvl87/docker-languagetool/issues/90 and https://github.com/github/codeql-action/issues/2187 for more context.
+    # - name: Post-process sarif output for security severities set to "null"
+    #   continue-on-error: true
+    #   run: |
+    #     sed -i 's/"security-severity": "null"/"security-severity": "0"/g' snyk.sarif
+    # - name: Upload result to GitHub Code Scanning
+    #   uses: github/codeql-action/upload-sarif@v3
+    #   continue-on-error: true
+    #   with:
+    #     sarif_file: snyk.sarif
