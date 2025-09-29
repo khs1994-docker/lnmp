@@ -1,7 +1,9 @@
 # syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
 ARG PHP_VERSION=8.5.0
 
-FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/php:${PHP_VERSION}-alpine AS upstream
+ARG REGISTRY_PREFIX=ghcr.io/khs1994-docker/docker.io
+
+FROM --platform=$TARGETPLATFORM ${REGISTRY_PREFIX}/library/php:${PHP_VERSION}-alpine AS upstream
 
 FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/alpine:3.22
 

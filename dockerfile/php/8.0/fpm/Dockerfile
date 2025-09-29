@@ -163,7 +163,10 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && pickle install \
              xdebug \
              # https://github.com/xdebug/xdebug/archive/master.tar.gz \
-             https://github.com/longxinH/xhprof/archive/refs/heads/master.tar.gz \
+             # https://github.com/longxinH/xhprof/archive/refs/heads/master.tar.gz \
+             https://github.com/khs1994/xhprof/archive/refs/heads/patch-1.tar.gz \
+# https://github.com/tideways/php-xhprof-extension.git
+             # https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
              -n --defaults --strip --cleanup --no-write \
         && pickle install opcache \
         # && docker-php-ext-enable opcache \
