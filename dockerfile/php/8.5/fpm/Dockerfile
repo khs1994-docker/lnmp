@@ -59,7 +59,7 @@ ENV PECL_EXTENSION \
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
+RUN --mount=type=bind,from=ghcr.io/php/pie:nightly-bin,source=/,target=/opt/bin2,rw \
     sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
       \

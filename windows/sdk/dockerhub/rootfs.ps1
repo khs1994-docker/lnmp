@@ -3,7 +3,7 @@
 Import-Module $PSScriptRoot/tags/list.psm1
 Import-Module $PSScriptRoot/manifests/get.psm1
 Import-Module $PSScriptRoot/blobs/get.psm1 -Force
-Import-Module $PSScriptRoot/auth/auth.psm1
+Import-Module $PSScriptRoot/auth/auth.psm1 -Force
 Import-Module $PSScriptRoot/registry/registry.psm1
 
 . $PSScriptRoot/DockerImageSpec/DockerImageSpec.ps1
