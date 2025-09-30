@@ -421,8 +421,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && pie -n install ${PIE_CONFIG} \
                      php-memcached/php-memcached:dev-master \
                      --enable-memcached-igbinary \
-      && pie -n install ${PIE_CONFIG} \
-                     xdebug/xdebug:dev-master \
+      # && pie -n install ${PIE_CONFIG} \
+      #                xdebug/xdebug:dev-master \
       && docker-php-ext-enable zstd \
       && echo "extension=redis" > $PHP_INI_DIR/conf.d/docker-php-ext-z-redis.ini \
       && echo "extension=memcached" > $PHP_INI_DIR/conf.d/docker-php-ext-z-memcached.ini \

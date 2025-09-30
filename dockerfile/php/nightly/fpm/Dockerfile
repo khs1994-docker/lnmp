@@ -434,8 +434,8 @@ RUN --mount=type=bind,from=ghcr.io/khs1994-docker/docker.io/library/php:alpine,s
       && pie -n install ${PIE_CONFIG} \
                      php-memcached/php-memcached:dev-master \
                      --enable-memcached-igbinary \
-      && pie -n install ${PIE_CONFIG} \
-                     xdebug/xdebug:dev-master \
+      # && pie -n install ${PIE_CONFIG} \
+      #                xdebug/xdebug:dev-master \
       && docker-php-ext-enable zstd \
                                redis \
                                memcached \
