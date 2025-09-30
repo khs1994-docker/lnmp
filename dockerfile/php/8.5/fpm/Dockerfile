@@ -166,7 +166,7 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:nightly-bin,source=/,target=/opt/bin2
                       php-memcached/php-memcached:dev-master \
                       --enable-memcached-igbinary \
         && pie -n install ${PIE_CONFIG} \
-                      xdebug/xdebug \
+                      xdebug/xdebug:dev-master \
         && docker-php-ext-enable zstd \
                                 redis \
                                 memcached \
