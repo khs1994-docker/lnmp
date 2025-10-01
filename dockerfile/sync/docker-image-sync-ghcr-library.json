@@ -144,8 +144,8 @@
     "dest": "nginx:alpine"
   },
   {
-    "source": "library/nginx:1.27.0-alpine",
-    "dest": "nginx:1.27.0-alpine"
+    "source": "library/nginx:1.29.1-alpine",
+    "dest": "nginx:1.29.1-alpine"
   },
   {
     "source": "library/phpmyadmin:fpm-alpine",

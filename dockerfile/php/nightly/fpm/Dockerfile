@@ -421,8 +421,8 @@ RUN --mount=type=bind,from=ghcr.io/khs1994-docker/docker.io/library/php:alpine,s
       # && cd /usr/src/php/ext/zstd \
       # && docker-php-ext-configure zstd \
       # && docker-php-ext-install zstd \
-      # && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
-      # && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
+      && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
+      && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
       && pie -n install ${PIE_CONFIG} \
                      kjdev/zstd \
       # && pie -n install ${PIE_CONFIG} \

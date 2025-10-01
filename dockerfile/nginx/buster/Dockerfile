@@ -1,6 +1,6 @@
 FROM debian:buster-slim
 
-ARG NGINX_VERSION=1.27.0
+ARG NGINX_VERSION=1.29.1
 
 ARG DEB_URL=deb.debian.org
 
