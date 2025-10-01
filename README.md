@@ -206,7 +206,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:3.1.0`           | **3.1.0**           |`alpine:3.20`    |
 |[NGINX](https://github.com/docker-library/docs/tree/master/nginx)         |`nginx:1.27.0-alpine`           | **1.27.0**          |`alpine:3.19`    |
-|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.4.11-unit-alpine`| **1.33.0**          |`alpine:3.22`    |
+|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.4.11-unit-alpine`| **1.35.0**          |`alpine:3.22`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.53-alpine`           | **2.4.53**          |`alpine:3.16`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.33`                  | **8.0.33**          |`oraclelinux:8-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.11.5`                | **10.11.5**          |`ubuntu:jammy`  |
