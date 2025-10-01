@@ -13,11 +13,11 @@
       "os": "linux"
     }
   ],
-  "pre-version": "1.33.0",
+  "pre-version": "1.34.0",
   "scripts": {
     "dist": "_mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename\n",
     "platform-reqs": "if($IsMacOs){echo $False}"
   },
   "url": "https://storage.googleapis.com/cri-o/artifacts/cri-o.${env:lwpm_architecture}.v${VERSION}.tar.gz",
-  "version": "1.33.0"
+  "version": "1.34.0"
 }
