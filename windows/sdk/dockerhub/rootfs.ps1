@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 
 Import-Module $PSScriptRoot/tags/list.psm1
-Import-Module $PSScriptRoot/manifests/get.psm1
+Import-Module $PSScriptRoot/manifests/get.psm1 -Force
 Import-Module $PSScriptRoot/blobs/get.psm1 -Force
 Import-Module $PSScriptRoot/auth/auth.psm1 -Force
 Import-Module $PSScriptRoot/registry/registry.psm1
@@ -67,7 +67,7 @@ function rootfs([string]$image = "alpine",
     $env:DOCKER_ROOTFS_PHASE = "manifest list"
   }
 
-  if(!$phase){
+  if (!$phase) {
     $env:DOCKER_ROOTFS_PHASE = $null
   }
 
@@ -80,7 +80,12 @@ function rootfs([string]$image = "alpine",
   $FormatEnumerationLimit = -1
 
   if (!($image | select-string '/')) {
-    $image = "library/$image"
+    if ($env:DOCKER_NAMESPACE_LESS) {
+      $image = "$image"
+    }
+    else {
+      $image = "library/$image"
+    }
   }
 
   if (!$arch) { $arch = "amd64" }

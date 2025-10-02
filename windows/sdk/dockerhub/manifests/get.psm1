@@ -72,8 +72,10 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
     return $false
   }
 
-  write-host $result.Headers.'RateLimit-Limit'
-  write-host $result.Headers.'RateLimit-Remaining'
+  if ($result.Headers.'RateLimit-Limit') {
+    write-host $result.Headers.'RateLimit-Limit'
+    write-host $result.Headers.'RateLimit-Remaining'
+  }
 
   write-host "==> Digest: $($result.Headers.'Docker-Content-Digest')" -ForegroundColor Green
 

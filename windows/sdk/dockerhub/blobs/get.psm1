@@ -70,24 +70,6 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$head
 
       return $false
     }
-    elseif ($statusCode -lt 400 -and $statusCode -gt 200) {
-      $url = $response.Headers.Location
-
-      Write-Host "==> Redirect to $url" -ForegroundColor Magenta
-
-      try {
-        Invoke-WebRequest `
-          "$url" `
-          -PassThru `
-          -OutFile $distTemp `
-          -UserAgent "Docker-Client/20.10.16 (Windows)" > $null 2>&1
-      }
-      catch {
-        Write-Host $_.Exception
-
-        return $false
-      }
-    }
     elseif ($statusCode -eq 400) {
       try {
         $response = Invoke-WebRequest `
@@ -106,6 +88,29 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$head
 
         $statusCode = $response.StatusCode
         Write-Host "==> Get blob failed [ $statusCode ]" -ForegroundColor Red
+
+        return $false
+      }
+    }
+    elseif (($statusCode -lt 400 -and $statusCode -gt 200) -or ($statusCode -eq 403)) {
+      if ($response.Headers.Location) {
+        $url = $response.Headers.Location
+      }
+      else {
+        $url = "https://$registry/v2/$image/blobs/$digest"
+      }
+
+      Write-Host "==> Redirect to $url" -ForegroundColor Magenta
+
+      try {
+        Invoke-WebRequest `
+          "$url" `
+          -PassThru `
+          -OutFile $distTemp `
+          -UserAgent "Docker-Client/20.10.16 (Windows)" > $null 2>&1
+      }
+      catch {
+        Write-Host $_.Exception
 
         return $false
       }
