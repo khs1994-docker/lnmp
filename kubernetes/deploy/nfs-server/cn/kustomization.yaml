@@ -2,6 +2,6 @@ resources:
   - ../base
 images:
   - name: ghcr.io/khs1994-docker/docker.io/klutchell/nfs-server
-    newName: docker.cnb.cool/khs1994-docker/khs1994/klutchell-nfs-server
+    newName: docker.cnb.cool/khs1994-docker/docker.io/klutchell-nfs-server
   - name: ghcr.io/khs1994-docker/docker.io/library/busybox
     newName: docker.cnb.cool/khs1994-docker/library/busybox

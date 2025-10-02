@@ -2,4 +2,4 @@ resources:
 - ../base
 images:
   - name: ghcr.io/khs1994-docker/docker.io/andyzhangx/samba
-    newName: docker.cnb.cool/khs1994-docker/khs1994/andyzhangx-samba
+    newName: docker.cnb.cool/khs1994-docker/docker.io/andyzhangx-samba

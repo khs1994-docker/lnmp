@@ -64,22 +64,6 @@
     "dest": "tektoncd-triggers-eventlistenersink:v0.9.0@sha256:3d9cd3788c03ea6f9c85980d3b70ded295766f222e5d30fc1790249e88a10880"
   },
   {
-    "source": "mcr.microsoft.com/powershell:preview-7.4-alpine-3.17",
-    "dest": "powershell:preview-7.4-alpine-3.17",
-    "registry": "mcr.microsoft.com",
-    "image": "powershell",
-    "ref": "preview-7.4-alpine-3.17",
-    "$comment": "https://hub.docker.com/_/microsoft-powershell"
-  },
-  {
-    "source": "mcr.microsoft.com/powershell:preview-alpine-3.17",
-    "dest": "powershell:preview-alpine-3.17",
-    "registry": "mcr.microsoft.com",
-    "image": "powershell",
-    "ref": "preview-alpine-3.17",
-    "$comment": "https://hub.docker.com/_/microsoft-powershell"
-  },
-  {
     "source": "registry.k8s.io/ingress-nginx/controller:v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7",
     "dest": "nginx-ingress-controller:v1.7.0@sha256:7612338342a1e7b8090bef78f2a04fffcadd548ccaabe8a47bf7758ff549a5f7"
   },
@@ -90,10 +74,6 @@
   {
     "source": "gcr.io/google_containers/git-sync:v3.1.6",
     "dest": "gcr-mirror/git-sync:v3.1.6"
-  },
-  {
-    "source": "quay.io/coreos/etcd:v3.6.1",
-    "dest": "quay-mirror/etcd:v3.6.1"
   },
   {
     "source": "quay.io/coreos/flannel:v0.12.0-amd64",
@@ -120,55 +100,5 @@
         "ref": "v0.12.0-arm"
       }
     ]
-  },
-  {
-    "source": "registry.k8s.io/kube-proxy:v1.27.0",
-    "dest": "gcr-mirror/kube-proxy:v1.27.0",
-    "registry": "registry.k8s.io",
-    "image": "kube-proxy",
-    "ref": "v1.27.0"
-  },
-  {
-    "source": "registry.k8s.io/kube-controller-manager:v1.27.0",
-    "dest": "gcr-mirror/kube-controller-manager:v1.27.0",
-    "registry": "registry.k8s.io",
-    "image": "kube-controller-manager",
-    "ref": "v1.27.0"
-  },
-  {
-    "source": "registry.k8s.io/kube-apiserver:v1.27.0",
-    "dest": "gcr-mirror/kube-apiserver:v1.27.0",
-    "registry": "registry.k8s.io",
-    "image": "kube-apiserver",
-    "ref": "v1.27.0"
-  },
-  {
-    "source": "registry.k8s.io/kube-scheduler:v1.27.0",
-    "dest": "gcr-mirror/kube-scheduler:v1.27.0",
-    "registry": "registry.k8s.io",
-    "image": "kube-scheduler",
-    "ref": "v1.27.0"
-  },
-  {
-    "source": "registry.k8s.io/etcd:3.4.16-0",
-    "dest": "gcr-mirror/etcd:3.4.16-0",
-    "registry": "registry.k8s.io",
-    "image": "etcd",
-    "ref": "3.4.16-0"
-  },
-  {
-    "source": "registry.k8s.io/pause:3.8",
-    "dest": "gcr-mirror/pause:3.8",
-    "registry": "registry.k8s.io",
-    "image": "pause",
-    "ref": "3.8"
-  },
-  {
-    "source": "registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.3.0",
-    "dest": "gcr-mirror/kube-state-metrics:v2.3.0"
-  },
-  {
-    "source": "registry.k8s.io/prometheus-adapter/prometheus-adapter:v0.9.1",
-    "dest": "gcr-mirror/prometheus-adapter:v0.9.1"
   }
 ]

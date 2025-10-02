@@ -6,5 +6,55 @@
   {
     "source": "metrics-server/metrics-server:v0.8.0",
     "append": true
+  },
+  {
+    "source": "kube-proxy:v1.34.0",
+    "registry": "registry.k8s.io",
+    "image": "kube-proxy",
+    "ref": "v1.34.0",
+    "append": true
+  },
+  {
+    "source": "kube-controller-manager:v1.34.0",
+    "registry": "registry.k8s.io",
+    "image": "kube-controller-manager",
+    "ref": "v1.34.0",
+    "append": true
+  },
+  {
+    "source": "kube-apiserver:v1.34.0",
+    "registry": "registry.k8s.io",
+    "image": "kube-apiserver",
+    "ref": "v1.34.0",
+    "append": true
+  },
+  {
+    "source": "kube-scheduler:v1.34.0",
+    "registry": "registry.k8s.io",
+    "image": "kube-scheduler",
+    "ref": "v1.34.0",
+    "append": true
+  },
+  {
+    "source": "etcd:3.4.16-0",
+    "registry": "registry.k8s.io",
+    "image": "etcd",
+    "ref": "3.4.16-0",
+    "append": true
+  },
+  {
+    "source": "pause:3.8",
+    "registry": "registry.k8s.io",
+    "image": "pause",
+    "ref": "3.8",
+    "append": true
+  },
+  {
+    "source": "kube-state-metrics/kube-state-metrics:v2.3.0",
+    "append": true
+  },
+  {
+    "source": "prometheus-adapter/prometheus-adapter:v0.9.1",
+    "append": true
   }
 ]

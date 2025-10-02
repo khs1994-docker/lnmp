@@ -2,5 +2,9 @@
   {
     "source": "fluentd_elasticsearch/elasticsearch:v7.16.2",
     "append": true
+  },
+  {
+    "source": "coreos/etcd:v3.6.1",
+    "append": true
   }
 ]

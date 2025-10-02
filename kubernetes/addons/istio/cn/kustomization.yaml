@@ -2,6 +2,6 @@ resources:
   - "../base"
 images:
   - name: ghcr.io/khs1994-docker/docker.io/istio/pilot
-    newName: docker.cnb.cool/khs1994-docker/khs1994/istio-pilot
+    newName: docker.cnb.cool/khs1994-docker/docker.io/istio-pilot
   - name: ghcr.io/khs1994-docker/docker.io/istio/proxyv2
-    newName: docker.cnb.cool/khs1994-docker/khs1994/istio-proxyv2
+    newName: docker.cnb.cool/khs1994-docker/docker.io/istio-proxyv2

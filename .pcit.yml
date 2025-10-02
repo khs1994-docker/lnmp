@@ -12,8 +12,8 @@ steps:
 
   # https://hub.docker.com/_/microsoft-powershell?tab=description
   powershell:
-    # image: mcr.microsoft.com/powershell:preview-alpine-3.12
-    image: ccr.ccs.tencentyun.com/khs1994/powershell:preview-alpine-3.12
+    # image: mcr.microsoft.com/powershell:preview-7.6-alpine-3.20
+    image: ccr.ccs.tencentyun.com/khs1994/powershell:preview-7.6-alpine-3.20
     run:
       - pwsh ./lnmp-docker.ps1
 

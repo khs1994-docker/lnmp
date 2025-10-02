@@ -13,12 +13,12 @@ resources:
 #   newName: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/calico/node-driver-registrar
 images:
 - name: ghcr.io/khs1994-docker/docker.io/calico/cni
-  newName: docker.cnb.cool/khs1994-docker/khs1994/calico-cni
+  newName: docker.cnb.cool/khs1994-docker/docker.io/calico-cni
 - name: ghcr.io/khs1994-docker/docker.io/calico/node
-  newName: docker.cnb.cool/khs1994-docker/khs1994/calico-node
+  newName: docker.cnb.cool/khs1994-docker/docker.io/calico-node
 - name: ghcr.io/khs1994-docker/docker.io/calico/kube-controllers
-  newName: docker.cnb.cool/khs1994-docker/khs1994/calico-kube-controllers
+  newName: docker.cnb.cool/khs1994-docker/docker.io/calico-kube-controllers
 - name: ghcr.io/khs1994-docker/docker.io/calico/csi
-  newName: docker.cnb.cool/khs1994-docker/khs1994/calico-csi
+  newName: docker.cnb.cool/khs1994-docker/docker.io/calico-csi
 - name: ghcr.io/khs1994-docker/docker.io/calico/node-driver-registrar
-  newName: docker.cnb.cool/khs1994-docker/khs1994/calico-node-driver-registrar
+  newName: docker.cnb.cool/khs1994-docker/docker.io/calico-node-driver-registrar

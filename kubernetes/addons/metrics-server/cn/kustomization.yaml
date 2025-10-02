@@ -5,4 +5,4 @@ images:
     # newName: ccr.ccs.tencentyun.com/gcr-mirror/metrics-server
     # newName: registry.cn-hangzhou.aliyuncs.com/google_containers/metrics-server
     # newTag: v0.6.3
-    newName: docker.cnb.cool/khs1994-docker/khs1994/registry.k8s.io-metrics-server-metrics-server:v0.8.0
+    newName: docker.cnb.cool/khs1994-docker/registry.k8s.io/metrics-server-metrics-server:v0.8.0

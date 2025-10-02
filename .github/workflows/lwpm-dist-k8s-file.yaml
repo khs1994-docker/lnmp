@@ -23,9 +23,18 @@ jobs:
       LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       LWPM_DOCKER_REGISTRY: registry-1.docker.io
       LNMP_CN_ENV: "false"
+      GHCR_DOCKER_USERNAME: khs1994
+      GHCR_DOCKER_PASSWORD: ${{secrets.GHCR_IO_TOKEN}}
+      GHCR_DOCKER_REGISTRY: ghcr.io
     strategy:
       matrix:
-        os: ["windows","ubuntu"]
+        include:
+          - os: "windows"
+            pkg: "kubectl"
+          - os: "windows"
+            pkg: "kubernetes-node"
+          - os: "ubuntu"
+            pkg: "kubernetes-server"
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
@@ -33,92 +42,39 @@ jobs:
           repository: khs1994-docker/lnmp
           fetch-depth: 1
           path: lnmp
-      - name: handle-kubectl
+      - name: handle-${{ matrix.pkg }}
         shell: pwsh
-        if: matrix.os == 'windows'
         env:
           TENCENT_DOCKER_USERNAME: "906210846"
           TENCENT_DOCKER_REGISTRY: useccr.ccs.tencentyun.com
+          PKG: ${{ matrix.pkg }}
         run: |
           echo $ErrorActionPreference
           $ErrorActionPreference = "Continue"
           . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
 
-          ./lnmp/windows/lnmp-windows-pm.ps1 dist kubectl@${env:LWPM_K8S_VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push kubectl@${env:LWPM_K8S_VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist $PKG@${env:LWPM_K8S_VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $PKG@${env:LWPM_K8S_VERSION}
 
           $env:DOCKER_USERNAME="khs1994"
-          rootfs lwpm/kubectl ${env:LWPM_K8S_VERSION} -phase "manifest list"
+          rootfs lwpm/$PKG ${env:LWPM_K8S_VERSION} -phase "manifest list"
 
           $env:LWPM_DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
           $env:LWPM_DOCKER_REGISTRY=$env:TENCENT_DOCKER_REGISTRY
           $NS="khs1994"
-          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubectl@${env:LWPM_K8S_VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/$PKG@${env:LWPM_K8S_VERSION}
 
           $env:DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
-          rootfs $NS/kubectl ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
+          rootfs $NS/$PKG ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
 
           $env:LWPM_DOCKER_USERNAME=$env:CODING_DOCKER_USERNAME
           $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
           $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
           $NS="khs1994-docker/lwpm"
-          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubectl@${env:LWPM_K8S_VERSION}
-      - name: handle-kubernetes-server
-        shell: pwsh
-        env:
-          TENCENT_DOCKER_USERNAME: "906210846"
-          TENCENT_DOCKER_REGISTRY: useccr.ccs.tencentyun.com
-        if: matrix.os == 'windows'
-        run: |
-          echo $ErrorActionPreference
-          $ErrorActionPreference = "Continue"
-          . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/$PKG@${env:LWPM_K8S_VERSION}
 
-          ./lnmp/windows/lnmp-windows-pm.ps1 dist kubernetes-server@${env:LWPM_K8S_VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push kubernetes-server@${env:LWPM_K8S_VERSION}
-
-          $env:DOCKER_USERNAME="khs1994"
-          rootfs lwpm/kubernetes-server ${env:LWPM_K8S_VERSION} -phase "manifest list"
-
-          $env:LWPM_DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
-          $env:LWPM_DOCKER_REGISTRY=$env:TENCENT_DOCKER_REGISTRY
-          $NS="khs1994"
-          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubernetes-server@${env:LWPM_K8S_VERSION}
-
-          $env:DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
-          rootfs $NS/kubernetes-server ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
-
-          $env:LWPM_DOCKER_USERNAME=$env:CODING_DOCKER_USERNAME
-          $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
-          $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
-          $NS="khs1994-docker/lwpm"
-          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubernetes-server@${env:LWPM_K8S_VERSION}
-      - name: handle-kubernetes-node
-        shell: pwsh
-        if: matrix.os == 'ubuntu'
-        env:
-          TENCENT_DOCKER_USERNAME: "906210846"
-          TENCENT_DOCKER_REGISTRY: useccr.ccs.tencentyun.com
-        run: |
-          echo $ErrorActionPreference
-          . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
-
-          ./lnmp/windows/lnmp-windows-pm.ps1 dist kubernetes-node@${env:LWPM_K8S_VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push kubernetes-node@${env:LWPM_K8S_VERSION}
-
-          $env:DOCKER_USERNAME="khs1994"
-          rootfs lwpm/kubernetes-node ${env:LWPM_K8S_VERSION} -phase "manifest list"
-
-          $env:LWPM_DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
-          $env:LWPM_DOCKER_REGISTRY=$env:TENCENT_DOCKER_REGISTRY
-          $NS="khs1994"
-          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubernetes-node@${env:LWPM_K8S_VERSION}
-
-          $env:DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
-          rootfs $NS/kubernetes-node ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
-
-          $env:LWPM_DOCKER_USERNAME=$env:CODING_DOCKER_USERNAME
-          $env:LWPM_DOCKER_PASSWORD=$env:CODING_DOCKER_PASSWORD
-          $env:LWPM_DOCKER_REGISTRY=$env:CODING_DOCKER_REGISTRY
-          $NS="khs1994-docker/lwpm"
-          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubernetes-node@${env:LWPM_K8S_VERSION}
+          $env:LWPM_DOCKER_USERNAME=$env:GHCR_DOCKER_USERNAME
+          $env:LWPM_DOCKER_PASSWORD=$env:GHCR_DOCKER_PASSWORD
+          $env:LWPM_DOCKER_REGISTRY=$env:GHCR_DOCKER_REGISTRY
+          $NS="khs1994/lwpm"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/$PKG@${env:LWPM_K8S_VERSION}

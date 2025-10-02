@@ -4,4 +4,4 @@ images:
 - name: ghcr.io/khs1994-docker/registry.k8s.io/coredns/coredns:v1.12.1
   # newName: gcr.mirror/google-containers/coredns
   # newName: ccr.ccs.tencentyun.com/gcr-mirror/coredns
-  newName: docker.cnb.cool/khs1994-docker/khs1994/registry.k8s.io-coredns-coredns:v1.12.1
+  newName: docker.cnb.cool/khs1994-docker/registry.k8s.io/coredns-coredns:v1.12.1
