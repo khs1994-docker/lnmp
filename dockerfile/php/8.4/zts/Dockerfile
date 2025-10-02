@@ -393,10 +393,9 @@ RUN --mount=type=bind,from=upstream,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && export PATH=$PATH:/opt/bin:/opt/bin2 \
       && curl -fsSL -o /tmp/igbinary.tar.gz https://github.com/igbinary/igbinary/archive/master.tar.gz \
-      && tar -zxvf /tmp/igbinary.tar.gz -C /tmp \
-      && mkdir -p /usr/src/php/ext \
+      && mkdir -p /usr/src/php/ext/igbinary \
       && touch /usr/src/php/.docker-extracted \
-      && mv /tmp/igbinary-master /usr/src/php/ext/igbinary \
+      && tar -zxvf /tmp/igbinary.tar.gz -C /usr/src/php/ext/igbinary --strip 1 \
       && docker-php-ext-configure igbinary \
       && docker-php-ext-install igbinary \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \

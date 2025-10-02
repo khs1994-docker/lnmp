@@ -384,10 +384,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && export PATH=$PATH:/opt/bin:/opt/bin2 \
       && curl -fsSL -o /tmp/igbinary.tar.gz https://github.com/igbinary/igbinary/archive/master.tar.gz \
-      && tar -zxvf /tmp/igbinary.tar.gz -C /tmp \
-      && mkdir -p /usr/src/php/ext \
+      && mkdir -p /usr/src/php/ext/igbinary \
       && touch /usr/src/php/.docker-extracted \
-      && mv /tmp/igbinary-master /usr/src/php/ext/igbinary \
+      && tar -zxvf /tmp/igbinary.tar.gz -C /usr/src/php/ext/igbinary --strip 1 \
       && cd /usr/src/php/ext/igbinary \
       && curl -fL https://patch-diff.githubusercontent.com/raw/igbinary/igbinary/pull/398.diff -o 398.diff \
       && apk add --no-cache patch \

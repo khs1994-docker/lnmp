@@ -38,10 +38,9 @@ RUN --mount=type=bind,from=ghcr.io/khs1994-docker/docker.io/library/php:alpine,s
                                     pcre2-dev \
     && export PATH=$PATH:/opt/bin \
     && curl -fsSL -o /tmp/swoole.tar.gz https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz \
-    && tar -zxvf /tmp/swoole.tar.gz -C /tmp \
-    && mkdir -p /usr/src/php/ext \
+    && mkdir -p /usr/src/php/ext/swoole \
     && touch /usr/src/php/.docker-extracted \
-    && mv /tmp/swoole-src-master /usr/src/php/ext/swoole \
+    && tar -zxvf /tmp/swoole.tar.gz -C /usr/src/php/ext/swoole --strip 1 \
     && docker-php-ext-configure swoole --enable-openssl \
     && docker-php-ext-install swoole \
     && apk del --no-network .pecl_build_deps \

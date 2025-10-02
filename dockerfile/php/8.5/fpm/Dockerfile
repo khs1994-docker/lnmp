@@ -135,8 +135,8 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:nightly-bin,source=/,target=/opt/bin2
 # 安装内置扩展
         && docker-php-source extract \
         && curl -fsSL -o /tmp/igbinary.tar.gz https://github.com/igbinary/igbinary/archive/master.tar.gz \
-        && tar -zxvf /tmp/igbinary.tar.gz -C /usr/src/php/ext/ \
-        && mv /usr/src/php/ext/igbinary-master /usr/src/php/ext/igbinary \
+        && mkdir -p /usr/src/php/ext/igbinary \
+        && tar -zxvf /tmp/igbinary.tar.gz -C /usr/src/php/ext/igbinary --strip 1 \
         && docker-php-ext-configure zip \
                                     --with-zip \
         && docker-php-ext-configure gd \
