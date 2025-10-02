@@ -76,5 +76,5 @@ jobs:
           $env:LWPM_DOCKER_USERNAME=$env:GHCR_DOCKER_USERNAME
           $env:LWPM_DOCKER_PASSWORD=$env:GHCR_DOCKER_PASSWORD
           $env:LWPM_DOCKER_REGISTRY=$env:GHCR_DOCKER_REGISTRY
-          $NS="khs1994/lwpm"
+          $NS="khs1994"
           ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/${ENV:PKG}@${env:LWPM_K8S_VERSION}
