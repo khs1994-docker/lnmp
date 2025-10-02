@@ -1,4 +1,4 @@
-FROM nginx:1.29.1-alpine
+FROM ghcr.io/khs1994-docker/docker.io/library/nginx:1.29.1-alpine
 
 LABEL maintainer="khs1994@khs1994.com"
 

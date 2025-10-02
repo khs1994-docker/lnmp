@@ -1,4 +1,4 @@
-FROM --platform=${TARGETPLATFORM} alpine:edge as tool
+FROM --platform=${TARGETPLATFORM} ghcr.io/docker.io/library/alpine:edge as tool
 
 ENV KUBECTL_VERSION=v1.34.0
 

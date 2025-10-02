@@ -43,10 +43,10 @@
     "append": true
   },
   {
-    "source": "pause:3.8",
+    "source": "pause:3.10",
     "registry": "registry.k8s.io",
     "image": "pause",
-    "ref": "3.8",
+    "ref": "3.10",
     "append": true
   },
   {

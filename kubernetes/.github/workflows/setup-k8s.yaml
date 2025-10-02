@@ -35,7 +35,7 @@ jobs:
      LNMP_K8S_STABLE_VERSION: "1.34.0"
      LNMP_K8S_NEXT_VERSION: ${{matrix.LNMP_K8S_NEXT_VERSION}}
    strategy:
-     max-parallel: 1
+     max-parallel: 7
      matrix:
        include:
       # next next version
@@ -82,11 +82,6 @@ jobs:
          CI_KUBERNETES_VERSION: 1.34.0
          LNMP_K8S_GET: --url
          CNI_CALICO_EBPF: 'true'
-      # v1.24.0+ not support docker
-      #  - os: ubuntu
-      #    dist: 22.04
-      #    CI_KUBERNETES_VERSION: 1.24.0
-      #    LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
        - os: ubuntu
          dist: 22.04
          CI_KUBERNETES_VERSION: 1.33.5
@@ -101,10 +96,6 @@ jobs:
          dist: 22.04
          CI_KUBERNETES_VERSION: 1.31.13
          LNMP_K8S_GET: --url
-      #  - os: ubuntu
-      #    dist: 22.04
-      #    CI_KUBERNETES_VERSION: 1.30.14
-      #    LNMP_K8S_GET: --url
      fail-fast: true
    steps:
      - uses: actions/checkout@v3

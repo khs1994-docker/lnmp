@@ -1,25 +1,5 @@
 [
   {
-    "source": "not-exists:latest",
-    "dest": "not-exists:latest"
-  },
-  {
-    "source": "node:alpine",
-    "dest": "library-mirror/node:alpine"
-  },
-  {
-    "source": "node:20.5.1-alpine",
-    "dest": "library-mirror/node:20.5.1-alpine"
-  },
-  {
-    "source": "golang:1.24.4-alpine",
-    "dest": "library-mirror/golang:1.24.4-alpine"
-  },
-  {
-    "source": "golang:alpine",
-    "dest": "library-mirror/golang:alpine"
-  },
-  {
     "source": "docker:dind",
     "dest": "library-mirror/docker:dind"
   },
@@ -42,46 +22,6 @@
   {
     "source": "library/python:3.13.0-alpine",
     "dest": "library-mirror/python:3.13.0-alpine"
-  },
-  {
-    "source": "library/mysql:latest",
-    "dest": "library-mirror/mysql:latest"
-  },
-  {
-    "source": "library/mysql:5.7.33",
-    "dest": "library-mirror/mysql:5.7.33"
-  },
-  {
-    "source": "library/mysql:8.0.33",
-    "dest": "library-mirror/mysql:8.0.33"
-  },
-  {
-    "source": "library/mysql:8.1.0",
-    "dest": "library-mirror/mysql:8.1.0"
-  },
-  {
-    "source": "library/mariadb:latest",
-    "dest": "library-mirror/mariadb:latest"
-  },
-  {
-    "source": "library/mariadb:10.10.6",
-    "dest": "library-mirror/mariadb:10.10.6"
-  },
-  {
-    "source": "library/mariadb:10.11.5",
-    "dest": "library-mirror/mariadb:10.11.5"
-  },
-  {
-    "source": "library/mariadb:11.0.3",
-    "dest": "library-mirror/mariadb:11.0.3"
-  },
-  {
-    "source": "library/registry:latest",
-    "dest": "library-mirror/registry:latest"
-  },
-  {
-    "source": "library/registry:3.0.0",
-    "dest": "library-mirror/registry:3.0.0"
   },
   {
     "source": "library/mongo:latest",
