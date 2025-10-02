@@ -8,11 +8,11 @@ Subcommands:
 	events           display container events such as OOM notifications, cpu, memory, and IO usage statistics
 	exec             execute new process inside the container
 	flags            describe all known top-level flags
-	gofer            launch a gofer process that serves files over 9P protocol (internal use only)
 	help             Print help documentation.
 	kill             sends a signal to the container
 	list             list containers started by runsc with the given root
 	pause            pause suspends all processes in a container
+	port-forward     port forward to a secure container
 	ps               ps displays the processes running inside a container
 	restore          restore a saved state of container (experimental)
 	resume           Resume unpauses a paused container
@@ -20,18 +20,34 @@ Subcommands:
 	spec             create a new OCI bundle specification file
 	start            start a secure container
 	state            get the state of a container
-	symbolize        Convert synthetic instruction pointers from kcov into positions in the runsc source code. Only used when Go coverage is enabled.
+	tar              creates tar archives from container filesystems
 	wait             wait on a process inside a container
 
+Subcommands for debug:
+	debug            shows a variety of debug information
+	read-control     read a cgroups control value inside the container
+	state            shows information about a statefile
+	symbolize        Convert synthetic instruction pointers from kcov into positions in the runsc source code. Only used when Go coverage is enabled.
+	usage            Usage shows application memory usage across various categories in bytes.
+	write-control    write a cgroups control value inside the container
+
 Subcommands for helpers:
+	cpu-features     list CPU features supported on current machine
 	install          adds a runtime to docker daemon configuration
+	mitigate         mitigate mitigates the underlying system against side channel attacks
+	nvproxy          shows information about nvproxy support
+	trace            manages trace sessions for a given sandbox
 	uninstall        removes a runtime from docker daemon configuration
 
 Subcommands for internal use only:
-	boot             launch a sandbox process (internal use only)
-	debug            shows a variety of debug information
-	gofer            launch a gofer process that serves files over 9P protocol (internal use only)
-	state            shows information about a statefile
+	boot             launch a sandbox process
+	gofer            launch a gofer process that proxies access to container files
+	umount           umount the specified directory lazily when one byte is read from sync-fd
+
+Subcommands for metrics:
+	export-metrics   export metric data for the sandbox
+	metric-metadata  export metric metadata of metrics registered in this build, in text proto format
+	metric-server    implements Prometheus metrics HTTP endpoint
 
 
 Use "runsc flags" for a list of top-level flags
