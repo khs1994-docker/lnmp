@@ -1,0 +1,40 @@
+x-common: &common
+  env_file:
+    - ./scripts/cli/timezone.env
+  networks:
+    - backend
+  read_only: false
+  # dns:
+  #   - 114.114.114.114
+
+x-deploy: &default-deploy
+  restart_policy:
+    condition: any
+    delay: 25s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
+x-labels: &default-labels
+  labels:
+    - lnmp.khs1994.com=true
+    - lnmp.khs1994.com.app.env=${APP_ENV:-swarm}
+
+x-build: &default-build
+  # Dockerfile: my.Dockerfile
+  args:
+    ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
+
+x-build-debian: &default-build-debian
+  # Dockerfile: my.Dockerfile
+  args:
+    DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
+    DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
+
+services:
+  example:
+    env_file:
+      - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env.development

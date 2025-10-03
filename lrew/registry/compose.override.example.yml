@@ -1,0 +1,4 @@
+services:
+  registry:
+    volumes:
+      - ./config/registry/${LNMP_REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro

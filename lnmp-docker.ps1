@@ -176,20 +176,22 @@ Function New-InitFile() {
   }
 
   if (!(Test-Path config/redis/redis.conf)) {
-    New-Item -ItemType File config/redis/redis.conf
+    New-Item -ItemType File config/redis/redis.conf | Out-Null
   }
 
   if (!(Test-Path config/mysql/conf.d/my.cnf)) {
-    New-Item -ItemType File config/mysql/conf.d/my.cnf
+    New-Item -ItemType File config/mysql/conf.d/my.cnf | Out-Null
   }
 
   if (!(Test-Path config/mariadb/conf.d/my.cnf)) {
-    New-Item -ItemType File config/mariadb/conf.d/my.cnf
+    New-Item -ItemType File config/mariadb/conf.d/my.cnf | Out-Null
   }
 
-  _cp_only_not_exists docker-lnmp.override.example.yml docker-lnmp.override.yml
+  if (!(Test-Path docker-lnmp.override.yml)) {
+    New-Item -ItemType File docker-lnmp.override.yml | Out-Null
+  }
 
-  _cp_only_not_exists docker-workspace.example.yml docker-workspace.yml
+  _cp_only_not_exists docker-lnmp.swarm.example.yml docker-lnmp.swarm.yml
 
   _cp_only_not_exists config/php/docker-php.example.ini config/php/docker-php.ini
   _cp_only_not_exists config/php/php.development.ini config/php/php.ini
@@ -445,6 +447,10 @@ Function Get-ComposeOptions($compose_file_base, $compose_files) {
   $COMPOSE_ENV_FILES_ARRAY = @()
 
   Foreach ($item in $LREW_INCLUDE) {
+    if (!$item) {
+      continue
+    }
+
     $KEY = "LREW_$($item -Replace ('-','_'))_VENDOR".ToUpper();
     $content = $(cat $LNMP_ENV_FILE | Where-Object { $_ -like "${KEY}=lrew-dev" })
 
@@ -479,12 +485,21 @@ Function Get-ComposeOptions($compose_file_base, $compose_files) {
 
     $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
 
-    if (Test-Path "$LREW_INCLUDE_ROOT/docker-compose.override.yml") {
-      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.override.yml"
+    if ((Test-Path env:LNMP_ENV) -and (Test-Path "$LREW_INCLUDE_ROOT/compose.${env:LNMP_ENV}.example.yml") -and !(Test-Path "$LREW_INCLUDE_ROOT/compose.${env:LNMP_ENV}.yml")) {
+      Copy-Item "$LREW_INCLUDE_ROOT/compose.${env:LNMP_ENV}.example.yml" "$LREW_INCLUDE_ROOT/compose.${env:LNMP_ENV}.yml"
     }
 
-    if (Test-Path "$LREW_INCLUDE_ROOT/docker-compose.${env:LNMP_ENV}.yml") {
-      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.${env:LNMP_ENV}.yml"
+    if ((Test-Path "$LREW_INCLUDE_ROOT/compose.override.example.yml") -and !(Test-Path "$LREW_INCLUDE_ROOT/compose.override.yml")) {
+      Copy-Item "$LREW_INCLUDE_ROOT/compose.override.example.yml" "$LREW_INCLUDE_ROOT/compose.override.yml"
+    }
+
+    if ((Test-Path env:LNMP_ENV) -and (Test-Path "$LREW_INCLUDE_ROOT/compose.${env:LNMP_ENV}.yml")) {
+      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/compose.${env:LNMP_ENV}.yml"
+    }
+    else {
+      if (Test-Path "$LREW_INCLUDE_ROOT/compose.override.yml") {
+        $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/compose.override.yml"
+      }
     }
 
     if (Test-Path $LREW_INCLUDE_ROOT/.env.compose.default) {
@@ -503,7 +518,7 @@ Function Get-ComposeOptions($compose_file_base, $compose_files) {
       Copy-Item "$LREW_INCLUDE_ROOT/.env.compose.default" "$LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV}"
     }
 
-    if (Test-Path $LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV}) {
+    if ((Test-Path env:LNMP_ENV) -and (Test-Path $LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV})) {
       $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV}"
     }
 
@@ -513,12 +528,6 @@ Function Get-ComposeOptions($compose_file_base, $compose_files) {
 
     if ((Test-Path env:LNMP_ENV) -and (Test-Path $LREW_INCLUDE_ROOT/.env.example) -and !(Test-PATH $LREW_INCLUDE_ROOT/.env.${env:LNMP_ENV})) {
       Copy-Item $LREW_INCLUDE_ROOT/.env.example $LREW_INCLUDE_ROOT/.env.${env:LNMP_ENV}
-    }
-  }
-
-  Foreach ($compose_file in $compose_files) {
-    if (Test-Path $compose_file) {
-      $COMPOSE_FILE_ARRAY += $compose_file
     }
   }
 
@@ -532,7 +541,18 @@ Function Get-ComposeOptions($compose_file_base, $compose_files) {
 
   $env:COMPOSE_ENV_FILES = $COMPOSE_ENV_FILES_ARRAY -join ','
 
-  $COMPOSE_FILE_ARRAY += "docker-workspace.yml"
+  if (Test-Path "docker-lnmp.${env:LNMP_ENV}.yml") {
+    $COMPOSE_FILE_ARRAY += "docker-lnmp.${env:LNMP_ENV}.yml"
+  }
+  else {
+    if (Test-Path "docker-lnmp.override.example.yml") {
+      $COMPOSE_FILE_ARRAY += "docker-lnmp.override.example.yml"
+    }
+
+    if (Test-Path "docker-lnmp.override.yml") {
+      $COMPOSE_FILE_ARRAY += "docker-lnmp.override.yml"
+    }
+  }
 
   $env:COMPOSE_PATH_SEPARATOR = ';'
   $env:COMPOSE_FILE = $COMPOSE_FILE_ARRAY -join ';'
@@ -698,7 +718,7 @@ if ($LREW_INCLUDE_CONTENT) {
   $LREW_INCLUDE = $LREW_INCLUDE_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
 }
 else {
-  $LREW_INCLUDE = 'pcit'
+  $LREW_INCLUDE = ''
 }
 
 printInfo "Load lnmp service [ $LNMP_SERVICES ] from [ default $LREW_INCLUDE ]"
@@ -903,15 +923,24 @@ switch -regex ($command) {
   }
 
   swarm-config {
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml config
+    $env:LNMP_ENV = 'swarm'
+    Get-ComposeOptions "docker-lnmp.yml" ""
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} config > docker-lnmp.swarm.deploy.yml
+    Remove-Item env:LNMP_ENV
   }
 
   swarm-build {
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml build $other
+    $env:LNMP_ENV = 'swarm'
+    Get-ComposeOptions "docker-lnmp.yml" ""
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} build $other
+    Remove-Item env:LNMP_ENV
   }
 
   swarm-push {
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml push $other
+    $env:LNMP_ENV = 'swarm'
+    Get-ComposeOptions "docker-lnmp.yml" ""
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} push $other
+    Remove-Item env:LNMP_ENV
   }
 
   restart {

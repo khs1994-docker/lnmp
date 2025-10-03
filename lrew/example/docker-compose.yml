@@ -14,7 +14,7 @@ x-common-label:
   &common-label
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
-    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-development}
 
 services:
   example:

@@ -13,7 +13,7 @@ x-common-label:
   &common-label
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
-    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-development}
 
 services:
   registry:
@@ -27,7 +27,7 @@ services:
     # ports:
     #   - "5000:5000"
     volumes:
-      - ./config/registry/${LNMP_REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro
+      # - ./config/registry/${LNMP_REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro
       - type: volume
         source: registry-data
         target: /var/lib/registry

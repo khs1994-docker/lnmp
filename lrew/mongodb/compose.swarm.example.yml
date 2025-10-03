@@ -1,0 +1,49 @@
+x-deploy: &default-deploy
+  restart_policy:
+    condition: any
+    delay: 25s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
+x-labels: &default-labels
+  labels:
+    - lnmp.khs1994.com=true
+    - lnmp.khs1994.com.app.env=${APP_ENV:-swarm}
+
+x-build: &default-build
+  # Dockerfile: my.Dockerfile
+  args:
+    ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
+
+x-build-debian: &default-build-debian
+  # Dockerfile: my.Dockerfile
+  args:
+    DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
+    DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
+
+services:
+  mongodb:
+    <<: [*default-labels]
+    build:
+      <<: *default-build-debian
+      context: ./dockerfile/mongodb/
+      dockerfile: Dockerfile
+    deploy:
+      <<: [*default-deploy, *default-labels]
+      placement:
+        constraints: [node.role == manager]
+    # logging: *default-logging
+    # ports:
+    #    - "127.0.0.1:27017:27017"
+    command: ["mongod", "--config", "/etc/mongod.conf"]
+    configs:
+      - source: mongod_conf
+        target: /etc/mongod.conf
+configs:
+  mongod_conf:
+    file: ./config/mongodb/mongod.production.conf
+    << : *default-labels

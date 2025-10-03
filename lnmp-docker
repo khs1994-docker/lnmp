@@ -73,8 +73,10 @@ if [ -f docker-lnmp.include.yml ];then
   rm -rf docker-lnmp.include.yml
 fi
 
-_cp_only_not_exists docker-lnmp.override.example.yml docker-lnmp.override.yml
-_cp_only_not_exists docker-workspace.example.yml docker-workspace.yml
+if ! [ -f docker-lnmp.override.yml ];then
+  echo '' > docker-lnmp.override.yml
+fi
+
 _cp_only_not_exists lnmp-docker-custom-script.example lnmp-docker-custom-script
 
 print_info "Exec custom scripts"
@@ -178,7 +180,7 @@ Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
   swarm-config         Validate and view the Swarm mode Compose file
   swarm-deploy         Deploy LNMP stack IN Swarm mode
-  swarm-rm           Remove LNMP stack IN Swarm mode
+  swarm-rm             Remove LNMP stack IN Swarm mode
   swarm-ps             List the LNMP tasks
   swarm-pull           Pull LNMP Docker Images IN Swarm mode
   swarm-push           Push Swarm mode LNMP images (nginx php7)
@@ -241,12 +243,20 @@ _get_compose_options(){
 
     options+=" -f $LREW_INCLUDE_ROOT/docker-compose.yml "
 
-    if [ -f "$LREW_INCLUDE_ROOT/docker-compose.override.yml" ];then
-      options+=" -f $LREW_INCLUDE_ROOT/docker-compose.override.yml "
+    if [ -n "$LNMP_ENV" ] && [ -f "$LREW_INCLUDE_ROOT/compose.${LNMP_ENV}.example.yml" ] && [ ! -f "$LREW_INCLUDE_ROOT/compose.${LNMP_ENV}.yml" ];then
+      cp "$LREW_INCLUDE_ROOT/compose.${LNMP_ENV}.example.yml" "$LREW_INCLUDE_ROOT/compose.${LNMP_ENV}.yml"
     fi
 
-    if [ -f "$LREW_INCLUDE_ROOT/docker-compose.${LNMP_ENV}.yml" ];then
-      options+=" -f $LREW_INCLUDE_ROOT/docker-compose.${LNMP_ENV}.yml "
+    if [ -f "$LREW_INCLUDE_ROOT/compose.override.example.yml" ] && [ ! -f "$LREW_INCLUDE_ROOT/compose.override.yml" ];then
+      cp "$LREW_INCLUDE_ROOT/compose.override.example.yml" "$LREW_INCLUDE_ROOT/compose.override.yml"
+    fi
+
+    if [ -n "$LNMP_ENV" ] && [ -f "$LREW_INCLUDE_ROOT/compose.${LNMP_ENV}.yml" ];then
+      options+=" -f $LREW_INCLUDE_ROOT/compose.${LNMP_ENV}.yml "
+    else
+      if [ -f "$LREW_INCLUDE_ROOT/compose.override.yml" ];then
+        options+=" -f $LREW_INCLUDE_ROOT/compose.override.yml "
+      fi
     fi
 
     if [ -f "$LREW_INCLUDE_ROOT/.env.compose.default" ];then
@@ -265,7 +275,7 @@ _get_compose_options(){
       cp "$LREW_INCLUDE_ROOT/.env.compose.default" "$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV}"
     fi
 
-    if [ -f "$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV}" ];then
+    if [ -n "$LNMP_ENV" ] && [ -f "$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV}" ];then
       COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV},"
     fi
 
@@ -278,10 +288,22 @@ _get_compose_options(){
     fi
   done
 
-  for compose_file in "$@"
-  do
-    options+=" -f $compose_file "
-  done
+  # for compose_file in "$@"
+  # do
+  #   options+=" -f $compose_file "
+  # done
+
+  if [ -n "$LNMP_ENV" ] && [ -f "docker-lnmp.${LNMP_ENV}.yml" ];then
+    options+=" -f docker-lnmp.${LNMP_ENV}.yml "
+  else
+    if [ -f "docker-lnmp.override.example.yml" ];then
+      options+=" -f docker-lnmp.override.example.yml "
+    fi
+
+    if [ -f "docker-lnmp.override.yml" ];then
+      options+=" -f docker-lnmp.override.yml "
+    fi
+  fi
 
   COMPOSE_ENV_FILES+=".env.example,"
 
@@ -994,37 +1016,52 @@ main() {
   ;;
 
   swarm-config )
-    init; exec docker compose -f ${PRODUCTION_COMPOSE_FILE} config
+    init
+    export LNMP_ENV=swarm
+    _get_compose_options docker-lnmp.yml
+    docker compose $options config > $PRODUCTION_COMPOSE_FILE
+    unset LNMP_ENV
     ;;
 
   swarm-pull )
     _docker_is_run
     # 仅允许运行在 Linux x86_64
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
-      init; sleep 2; exec docker compose -f ${PRODUCTION_COMPOSE_FILE} pull "$@"
+      init; sleep 2
+      export LNMP_ENV=swarm
+      _get_compose_options docker-lnmp.yml
+      exec docker compose $options pull "$@"
+      unset LNMP_ENV
     else
       print_error "Production NOT Support ${OS} ${ARCH}"
     fi
     ;;
 
   swarm-build )
-    docker compose -f ${PRODUCTION_COMPOSE_FILE} build "$@"
+    export LNMP_ENV=swarm
+    _get_compose_options docker-lnmp.yml
+    docker compose $options build "$@"
+    unset LNMP_ENV
     ;;
 
   swarm-push )
-    docker compose -f ${PRODUCTION_COMPOSE_FILE} push "$@"
+    export LNMP_ENV=swarm
+    _get_compose_options docker-lnmp.yml
+    docker compose $options push "$@"
+    unset LNMP_ENV
     ;;
 
   swarm-deploy )
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       _docker_is_run
 
-      if [ "$PRODUCTION_COMPOSE_FILE" = 'docker-production.yml' ];then
-        rm -rf app/.pcit
-        pcit_init
-      fi
+      export LNMP_ENV=swarm
+      _get_compose_options docker-lnmp.yml
+      docker compose $options config > $PRODUCTION_COMPOSE_FILE
 
-      docker stack deploy -c ${PRODUCTION_COMPOSE_FILE} lnmp
+      docker stack deploy -c $PRODUCTION_COMPOSE_FILE lnmp
+
+      unset LNMP_ENV
 
       sleep 2; docker stack ps lnmp
 
@@ -1453,8 +1490,6 @@ print_info $(docker compose version)
 if [ $# = 0 ];then help; exit 0; fi
 
 # 生产环境 compose 文件
-PRODUCTION_COMPOSE_FILE='docker-production.yml'
-
-ls docker-production.*.yml > /dev/null 2>&1 && PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml` || true
+PRODUCTION_COMPOSE_FILE='docker-lnmp.swarm.deploy.yml'
 
 main "$@"

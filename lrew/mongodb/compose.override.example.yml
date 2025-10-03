@@ -1,0 +1,5 @@
+services:
+  mongodb:
+    volumes:
+      - ./config/mongodb/${LNMP_MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro
+      - ./log/mongodb/mongo.log:/var/log/mongodb/mongo.log

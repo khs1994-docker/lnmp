@@ -1,4 +1,4 @@
-version: "3.9"
+
 
 #
 # khs1994.com Docker Swarm mode
@@ -39,7 +39,6 @@ x-common:
   read_only: false
   # dns:
   #   - 114.114.114.114
-  tmpfs: /run:exec
 
 x-deploy:
   &default-deploy
@@ -56,8 +55,8 @@ x-deploy:
 x-labels:
   &default-labels
   labels:
-    - com.khs1994.lnmp=true
-    - com.khs1994.lnmp.app.env=production_swarm_mode
+    - lnmp.khs1994.com=true
+    - lnmp.khs1994.com.app.env=production_swarm_mode
 
 x-build:
   &default-build
@@ -111,14 +110,10 @@ x-php-common:
 services:
 
   mysql:
-    << : [*common,*default-labels]
     build:
       << : *default-build-debian
       context: ./dockerfile/mysql/
       dockerfile: Dockerfile
-    image: mysql:8.0.33
-    # image: khs1994/lnmp-mysql:8.0.33
-    # image: username/lnmp-mysql:tag
     environment:
       # MYSQL_ROOT_PASSWORD: mytest
       MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
@@ -151,10 +146,8 @@ services:
         mode: 0644
         uid: "0"
         gid: "0"
-    tmpfs: /var/run/mysqld
 
   # mariadb:
-  #   << : [*common,*default-labels]
   #   build:
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
@@ -189,15 +182,11 @@ services:
   #       target: /etc/mysql/conf.d/docker.cnf
 
   redis:
-    << : [*common,*default-labels]
     build:
       << : *default-build
       # << : *default-build-debian
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    image: redis:7.0.0-alpine
-    # image: username/lnmp-redis:tag
-    # image: khs1994/lnmp-redis:7.0.0
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
@@ -224,9 +213,6 @@ services:
         target: /redis.conf
 
   # memcached:
-  #   << :
-  #     - *common
-  #     - *default-labels
   #   build:
   #     << : *default-build
   #     # << : *default-build-debian
@@ -247,8 +233,6 @@ services:
   #   # logging: *default-logging
 
   # rabbitmq:
-  #   << : *common
-  #   << : *default-labels
   #   build:
   #     << : *default-build
   #     # << : *default-build-debian
@@ -271,8 +255,6 @@ services:
   #   # logging: *default-logging
 
   # postgresql:
-  #   << : *common
-  #   << : *default-labels
   #   build:
   #     << : *default-build
   #     # << : *default-build-debian
@@ -299,36 +281,8 @@ services:
   #     # default is mysql password
   #     - db_root_password
 
-  # mongodb:
-  #   << : *common
-  #   << : *default-labels
-  #   build:
-  #     << : *default-build-debian
-  #     context: ./dockerfile/mongodb/
-  #     dockerfile: Dockerfile
-  #   image: mongo:5.0.3
-  #   # image: username/lnmp-mongodb:tag
-  #   # image: khs1994/lnmp-mongodb:5.0.3
-  #   volumes:
-  #     # - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
-  #     - mongodb-data:/data/db
-  #   deploy:
-  #     << : *default-deploy
-  #     << : *default-labels
-  #     placement:
-  #       constraints: [node.role == manager]
-  #   # logging: *default-logging
-  #   # ports:
-  #   #    - "127.0.0.1:27017:27017"
-  #   command: ["mongod","--config","/etc/mongod.conf"]
-  #   configs:
-  #     - source: mongod_conf
-  #       target: /etc/mongod.conf
-
   pcit:
     << :
-      - *common
-      - *default-labels
       - *default-php
     image: pcit/pcit:unit
     volumes:
@@ -361,8 +315,6 @@ services:
 
   php7:
     << :
-      - *common
-      - *default-labels
       - *default-php
     # image: khs1994/php:8.4.11-s6-alpine
     # entrypoint:
@@ -410,17 +362,12 @@ services:
   #       constraints: [node.role == manager]
 
   nginx:
-    << :
-      - *common
-      - *default-labels
     build:
       << : *default-build
       # << : *default-build-debian
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.29.1-alpine
-    # image: khs1994/nginx:1.29.1-alpine
     ports:
       - "443:443/tcp"
       - "443:443/udp"
@@ -509,9 +456,6 @@ services:
     #   start_period: 40s
 
   # httpd:
-  #   << :
-  #     - *common
-  #     - *default-labels
   #   build:
   #     << : *default-build
   #     # << : *default-build-debian
@@ -568,9 +512,6 @@ services:
   #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.key
 
   # registry:
-  #   << :
-  #     - *common
-  #     - *default-labels
   #   build:
   #     << : *default-build
   #     # << : *default-build-debian
@@ -598,30 +539,6 @@ services:
   #     - source: registy_yml
   #       target: /etc/docker/registry/config.yml
 
-  minio:
-    << :
-      - *common
-      - *default-labels
-    image: minio/minio:RELEASE.2022-10-24T18-35-07Z
-    command:
-      - server
-      - /data
-      - --console-address
-      - ':9090'
-    environment:
-      MINIO_ROOT_USER_FILE: minio-root-user
-      MINIO_ROOT_PASSWORD_FILE: minio-root-password
-      MINIO_REGION_NAME: ${MINIO_REGION_NAME:-us-east-1}
-      MINIO_BROWSER: ${MINIO_BROWSER:-on}
-      MINIO_DOMAIN: ${MINIO_DOMAIN:-''}
-    networks:
-      - backend
-      - frontend
-    volumes:
-      - minio-data:/data
-    secrets:
-      - minio-root-user
-      - minio-root-password
 
 networks:
   frontend:
@@ -644,8 +561,6 @@ volumes:
   # postgresql-data:
   #   << : *default-labels
   #
-  # mongodb-data:
-  #   << : *default-labels
   zoneinfo-data:
     << : *default-labels
   # registry-data:
@@ -722,12 +637,6 @@ secrets:
   ssh_config:
     file: ./secrets/ssh_config
     << : *default-labels
-  minio-root-user:
-    file: ./secrets/minio/root-user.txt
-    << : *default-labels
-  minio-root-password:
-    file: ./secrets/minio/root-password.txt
-    << : *default-labels
 
 configs:
   mysql_conf_d_docker_cnf:
@@ -788,9 +697,6 @@ configs:
   redis_conf:
     file: ./config/redis/redis.production.conf
     << : *default-labels
-  # mongod_conf:
-  #   file: ./config/mongodb/mongod.production.conf
-  #   << : *default-labels
   #
   # registy_yml:
   #   file: ./config/registry/config.production.yml

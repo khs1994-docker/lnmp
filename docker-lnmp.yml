@@ -11,7 +11,7 @@ x-common-labels:
   &common-labels
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
-    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-development}
 
 x-common:
   &common
@@ -103,75 +103,12 @@ services:
       retries: 3
       timeout: 5s
 
-  memcached:
-    << : [*common,*common-labels]
-    image: ${LNMP_LIBRARY_NS:-library}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.15}-alpine
-    ports:
-      - "${LNMP_MEMCACHED_PORT:-127.0.0.1:11211}:11211"
-    volumes:
-      - type: volume
-        source: zoneinfo-data
-        target: /usr/share/zoneinfo
-        volume:
-          nocopy: true
-      - << : *tmpfs
-
-  php7:
-    &php7
-    << : [*common,*common-labels]
-    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.33}-fpm-alpine"
-    volumes:
-      - &bind_app ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
-      # fpm config
-      - ./config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
-      # php.ini
-      - ./config/php/php.ini:/usr/local/etc/php/php.ini:ro
-      # php.ini override
-      - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
-      # log,etc
-      - ./log/php:/var/log/php
-      # supervisord
-      - ./log/supervisord.log:/var/log/supervisord.log
-      - ./log/supervisord:/var/log/supervisord
-      # s6
-      - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
-      - ./config/s6/s6-overlay/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
-      - ./config/crontabs/root:/etc/crontabs/root.s6
-      - php7-var-log:/var/log
-      - type: volume
-        source: zoneinfo-data
-        target: /usr/share/zoneinfo
-        volume:
-          nocopy: false
-    networks:
-      - frontend
-      - backend
-      # frontend:
-      #   aliases:
-      #   - php
-      # backend:
-      #   aliases:
-      #   - php
-    tmpfs: /run:exec
-    expose:
-      - "9000"
-    # command: php-fpm -R -F
-    # command: php-fpm -F
-    environment:
-      - &lnmp_version LNMP_VERSION=${LNMP_VERSION:-v24.11} x86_64 With Pull Docker Image
-      - APP_ENV=${APP_ENV:-development}
-      - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
-      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
-      - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
-      - PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      # - PHP_INI_SCAN_DIR=:/usr/local/etc/php/conf.d
-
   php8:
     &php8
     << : [*common,*common-labels]
     image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.4.11}-fpm-alpine"
     volumes:
-      - *bind_app
+      - &bind_app ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       # fpm config
       - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
@@ -209,7 +146,7 @@ services:
     # command: php-fpm -R -F
     # command: php-fpm -F
     environment:
-      - *lnmp_version
+      - &lnmp_version LNMP_VERSION=${LNMP_VERSION:-v24.11} x86_64 With Pull Docker Image
       - APP_ENV=${APP_ENV:-development}
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
@@ -232,20 +169,6 @@ services:
         target: /tmp/composer
       - ./config/composer/config.json:/tmp/composer/config.json
       # - ./config/composer/auth.json:/tmp/composer/auth.json
-
-  # https://docs.docker.com/config/containers/multi-service_container/
-  # http://supervisord.org/running.html
-  supervisord:
-    << : *php7
-    networks:
-      - backend
-    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.33}-supervisord-alpine"
-    secrets:
-      - source: supervisord_ini
-        target: /etc/supervisor.d/supervisord.ini
-    command: ["/usr/bin/supervisord","-n"]
-    expose:
-      - "9003"
 
   phpmyadmin:
     << : [*common,*common-labels]
@@ -312,16 +235,11 @@ volumes:
     << : *common-labels
   php8-var-log:
     << : *common-labels
-  php7-var-log:
-    << : *common-labels
 
 secrets:
   db_root_password:
     << : *common-labels
     file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
-  supervisord_ini:
-    << : *common-labels
-    file: ./config/supervisord/supervisord.ini
   # mysql_conf:
   #   << : *common-labels
   #   file: ./config/mysql/conf.d/my.cnf

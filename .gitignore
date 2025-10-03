@@ -92,3 +92,6 @@ lwpm.lock.json
 .patch
 
 *.msi
+
+docker-lnmp.*.yml
+!docker-lnmp.swarm.example.yml
