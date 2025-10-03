@@ -2,3 +2,4 @@
 .env.compose
 .env.compose.*
 !.env.compose.default
+docker-compose.*.yml

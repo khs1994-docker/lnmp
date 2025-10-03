@@ -21,7 +21,7 @@
 !.dockerignore
 !deno
 docker-compose.override.yml
-docker-compose.override.yaml
+docker-compose.*.yml
 .env.compose
 .env.compose.*
 !.env.compose.default

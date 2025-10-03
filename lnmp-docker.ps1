@@ -483,16 +483,36 @@ Function Get-ComposeOptions($compose_file_base, $compose_files) {
       $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.override.yml"
     }
 
+    if (Test-Path "$LREW_INCLUDE_ROOT/docker-compose.${env:LNMP_ENV}.yml") {
+      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.${env:LNMP_ENV}.yml"
+    }
+
     if (Test-Path $LREW_INCLUDE_ROOT/.env.compose.default) {
       $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.compose.default"
+    }
+
+    if ((Test-Path $LREW_INCLUDE_ROOT/.env.compose.default) -and !(Test-Path $LREW_INCLUDE_ROOT/.env.compose)) {
+      Copy-Item "$LREW_INCLUDE_ROOT/.env.compose.default" "$LREW_INCLUDE_ROOT/.env.compose"
     }
 
     if (Test-Path $LREW_INCLUDE_ROOT/.env.compose) {
       $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.compose"
     }
 
+    if ((Test-Path env:LNMP_ENV) -and (Test-Path $LREW_INCLUDE_ROOT/.env.compose.default) -and !(Test-Path $LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV})) {
+      Copy-Item "$LREW_INCLUDE_ROOT/.env.compose.default" "$LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV}"
+    }
+
     if (Test-Path $LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV}) {
       $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV}"
+    }
+
+    if ((Test-Path $LREW_INCLUDE_ROOT/.env.example) -and !(Test-PATH $LREW_INCLUDE_ROOT/.env)) {
+      cp $LREW_INCLUDE_ROOT/.env.example $LREW_INCLUDE_ROOT/.env
+    }
+
+    if ((Test-Path env:LNMP_ENV) -and (Test-Path $LREW_INCLUDE_ROOT/.env.example) -and !(Test-PATH $LREW_INCLUDE_ROOT/.env.${env:LNMP_ENV})) {
+      Copy-Item $LREW_INCLUDE_ROOT/.env.example $LREW_INCLUDE_ROOT/.env.${env:LNMP_ENV}
     }
   }
 
@@ -503,6 +523,11 @@ Function Get-ComposeOptions($compose_file_base, $compose_files) {
   }
 
   $COMPOSE_ENV_FILES_ARRAY += '.env.example'
+
+  if (($LNMP_ENV_FILE -ne '.env') -and (Test-Path .env)) {
+    $COMPOSE_ENV_FILES_ARRAY += '.env'
+  }
+
   $COMPOSE_ENV_FILES_ARRAY += $LNMP_ENV_FILE
 
   $env:COMPOSE_ENV_FILES = $COMPOSE_ENV_FILES_ARRAY -join ','
@@ -512,7 +537,7 @@ Function Get-ComposeOptions($compose_file_base, $compose_files) {
   $env:COMPOSE_PATH_SEPARATOR = ';'
   $env:COMPOSE_FILE = $COMPOSE_FILE_ARRAY -join ';'
 
-  mkdir -force $PSScriptRoot/.debug
+  mkdir -force $PSScriptRoot/.debug | Out-Null
 
   Write-Output $env:COMPOSE_FILE > $PSScriptRoot/.debug/COMPOSE_FILE
   Write-Output $env:COMPOSE_ENV_FILES > $PSScriptRoot/.debug/COMPOSE_ENV_FILES
@@ -651,7 +676,11 @@ else {
 $env:APP_ROOT = $APP_ROOT
 
 # LNMP_SERVICES
-$LNMP_SERVICES_CONTENT = (cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^LNMP_SERVICES=)
+$LNMP_SERVICES_CONTENT = (cat $PSScriptRoot/.env | select-string ^LNMP_SERVICES=)
+$LNMP_SERVICES_CONTENT_LNMP_ENV = (cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^LNMP_SERVICES=)
+if ($LNMP_SERVICES_CONTENT_LNMP_ENV) {
+  $LNMP_SERVICES_CONTENT = $LNMP_SERVICES_CONTENT_LNMP_ENV
+}
 if ($LNMP_SERVICES_CONTENT) {
   $LNMP_SERVICES = $LNMP_SERVICES_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
 }
@@ -660,7 +689,11 @@ else {
 }
 
 # LREW_INCLUDE
-$LREW_INCLUDE_CONTENT = (cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^LREW_INCLUDE=)
+$LREW_INCLUDE_CONTENT = (cat $PSScriptRoot/.env | select-string ^LREW_INCLUDE=)
+$LREW_INCLUDE_CONTENT_LNMP_ENV = (cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^LREW_INCLUDE=)
+if ($LREW_INCLUDE_CONTENT_LNMP_ENV) {
+  $LREW_INCLUDE_CONTENT = $LREW_INCLUDE_CONTENT_LNMP_ENV
+}
 if ($LREW_INCLUDE_CONTENT) {
   $LREW_INCLUDE = $LREW_INCLUDE_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
 }

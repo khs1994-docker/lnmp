@@ -1,0 +1,4 @@
+services:
+  example:
+    env_file:
+      - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env.development

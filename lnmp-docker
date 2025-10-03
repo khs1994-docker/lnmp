@@ -245,16 +245,36 @@ _get_compose_options(){
       options+=" -f $LREW_INCLUDE_ROOT/docker-compose.override.yml "
     fi
 
+    if [ -f "$LREW_INCLUDE_ROOT/docker-compose.${LNMP_ENV}.yml" ];then
+      options+=" -f $LREW_INCLUDE_ROOT/docker-compose.${LNMP_ENV}.yml "
+    fi
+
     if [ -f "$LREW_INCLUDE_ROOT/.env.compose.default" ];then
       COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.compose.default,"
+    fi
+
+    if [ -f "$LREW_INCLUDE_ROOT/.env.compose.default" ] && [ ! -f "$LREW_INCLUDE_ROOT/.env.compose" ];then
+      cp "$LREW_INCLUDE_ROOT/.env.compose.default" "$LREW_INCLUDE_ROOT/.env.compose"
     fi
 
     if [ -f "$LREW_INCLUDE_ROOT/.env.compose" ];then
       COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.compose,"
     fi
 
+    if [ -n "$LNMP_ENV" ] && [ -f "$LREW_INCLUDE_ROOT/.env.compose.default" ] && [ ! -f "$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV}" ];then
+      cp "$LREW_INCLUDE_ROOT/.env.compose.default" "$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV}"
+    fi
+
     if [ -f "$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV}" ];then
       COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV},"
+    fi
+
+    if [ -f "$LREW_INCLUDE_ROOT/.env.example" ] && [ ! -f "$LREW_INCLUDE_ROOT/.env" ];then
+      cp "$LREW_INCLUDE_ROOT/.env.example" "$LREW_INCLUDE_ROOT/.env"
+    fi
+
+    if [ -n "$LNMP_ENV" ] && [ -f "$LREW_INCLUDE_ROOT/.env.example" ] && [ ! -f "$LREW_INCLUDE_ROOT/.env.${LNMP_ENV}" ];then
+      cp "$LREW_INCLUDE_ROOT/.env.example" "$LREW_INCLUDE_ROOT/.env.${LNMP_ENV}"
     fi
   done
 
@@ -263,7 +283,13 @@ _get_compose_options(){
     options+=" -f $compose_file "
   done
 
-  COMPOSE_ENV_FILES+=".env.example,$LNMP_ENV_FILE"
+  COMPOSE_ENV_FILES+=".env.example,"
+
+  if [ $LNMP_ENV_FILE != ".env" -a -f .env ];then
+    COMPOSE_ENV_FILES+=".env,"
+  fi
+
+  COMPOSE_ENV_FILES+="$LNMP_ENV_FILE"
 
   mkdir -p ${ScriptRoot}/.debug
 
