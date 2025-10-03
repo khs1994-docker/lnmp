@@ -1,6 +1,6 @@
 . "$PSScriptRoot/../.env.example.ps1"
 
-$_, $LNMP_ENV_FILE_PS1 = $(& $PSScriptRoot/../lnmp-docker.ps1 env-file)
+$LNMP_ENV_FILE, $LNMP_ENV_FILE_PS1 = $(& $PSScriptRoot/../lnmp-docker.ps1 env-file)
 
 if (Test-Path "$PSScriptRoot/../$LNMP_ENV_FILE_PS1") {
   . "$PSScriptRoot/../$LNMP_ENV_FILE_PS1"
@@ -27,7 +27,18 @@ if ($IsWindows -eq $False) {
 }
 
 function Get-Env($ENV_NAME, $ENV_FILE, $ENV_DEFAULT) {
+  $LNMP_ENV_FILE, $LNMP_ENV_FILE_PS1 = $(& $PSScriptRoot/../lnmp-docker.ps1 env-file)
+
   $ENV_CONTENT = (cat ${ENV_FILE} | select-string ^$ENV_NAME=)
+
+  if (TEST-PATH "$PSScriptRoot/../$LNMP_ENV_FILE") {
+    $ENV_CONTENT_APP_ENV = (cat "$PSScriptRoot/../$LNMP_ENV_FILE" | select-string ^$ENV_NAME=)
+  }
+
+  if ($ENV_CONTENT_APP_ENV) {
+    $ENV_CONTENT = $ENV_CONTENT_APP_ENV
+  }
+
   if ($ENV_CONTENT) {
     if ($ENV_CONTENT.Line.GetType().FullName -eq 'System.String') {
       return $ENV_CONTENT.Line.split('=')[-1]

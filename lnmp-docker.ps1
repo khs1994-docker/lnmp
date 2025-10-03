@@ -1319,6 +1319,6 @@ Example: ./lnmp-docker composer /app/demo install
 
 cd $EXEC_CMD_DIR
 
-Remove-Item env:COMPOSE_FILE
-Remove-Item env:COMPOSE_ENV_FILES
-Remove-Item env:COMPOSE_PATH_SEPARATOR
+if (Test-Path env:COMPOSE_FILE) { Remove-Item env:COMPOSE_FILE }
+if (Test-Path env:COMPOSE_ENV_FILES) { Remove-Item env:COMPOSE_ENV_FILES }
+if (Test-Path env:COMPOSE_PATH_SEPARATOR) { Remove-Item env:COMPOSE_PATH_SEPARATOR }

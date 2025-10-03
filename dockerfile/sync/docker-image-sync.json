@@ -167,10 +167,6 @@
     "dest": "lwpm/lwpm:latest"
   },
   {
-    "source": "library/bash:latest",
-    "dest": "library-mirror/bash:latest"
-  },
-  {
     "source": "library/caddy:alpine",
     "dest": "library-mirror/caddy:alpine"
   },

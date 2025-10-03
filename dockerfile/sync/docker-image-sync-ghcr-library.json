@@ -1,5 +1,9 @@
 [
   {
+    "source": "library/bash:latest",
+    "dest": "bash:latest"
+  },
+  {
     "source": "library/debian:bullseye",
     "dest": "debian:bullseye"
   },
