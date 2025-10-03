@@ -440,26 +440,24 @@ Function satis() {
     -v lnmp_composer-cache-data:/composer composer/satis
 }
 
-Function Get-ComposeOptions($compose_files) {
-  $COMPOSE_FILE_ARRAY = @()
+Function Get-ComposeOptions($compose_file_base, $compose_files) {
+  $COMPOSE_FILE_ARRAY = @($compose_file_base)
+  $COMPOSE_ENV_FILES_ARRAY = @()
 
-  Foreach ($compose_file in $compose_files) {
-    $COMPOSE_FILE_ARRAY += $compose_file
-  }
   Foreach ($item in $LREW_INCLUDE) {
     $KEY = "LREW_$($item -Replace ('-','_'))_VENDOR".ToUpper();
     $content = $(cat $LNMP_ENV_FILE | Where-Object { $_ -like "${KEY}=lrew-dev" })
 
     # dev
     if (Test-Path $PSScriptRoot/vendor/lrew-dev/$item) {
-      $LREW_INCLUDE_ROOT = "$PSScriptRoot/vendor/lrew-dev/$item"
+      $LREW_INCLUDE_ROOT = "vendor/lrew-dev/$item"
       # set env
       if (!($content)) {
         "${KEY}=lrew-dev" >> $LNMP_ENV_FILE
       }
     }
     elseif (Test-Path $PSScriptRoot/vendor/lrew/$item) {
-      $LREW_INCLUDE_ROOT = "$PSScriptRoot/vendor/lrew/$item"
+      $LREW_INCLUDE_ROOT = "vendor/lrew/$item"
       # unset env
       if ($content) {
         @(Get-Content $LNMP_ENV_FILE) -replace `
@@ -467,7 +465,7 @@ Function Get-ComposeOptions($compose_files) {
       }
     }
     elseif (Test-Path $PSScriptRoot/lrew/$item) {
-      $LREW_INCLUDE_ROOT = "$PSScriptRoot/lrew/$item"
+      $LREW_INCLUDE_ROOT = "lrew/$item"
     }
     else {
       continue
@@ -484,17 +482,45 @@ Function Get-ComposeOptions($compose_files) {
     if (Test-Path "$LREW_INCLUDE_ROOT/docker-compose.override.yml") {
       $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.override.yml"
     }
+
+    if (Test-Path $LREW_INCLUDE_ROOT/.env.compose.default) {
+      $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.compose.default"
+    }
+
+    if (Test-Path $LREW_INCLUDE_ROOT/.env.compose) {
+      $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.compose"
+    }
+
+    if (Test-Path $LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV}) {
+      $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV}"
+    }
   }
 
-  $options += "--env-file $LNMP_ENV_FILE"
+  Foreach ($compose_file in $compose_files) {
+    if (Test-Path $compose_file) {
+      $COMPOSE_FILE_ARRAY += $compose_file
+    }
+  }
+
+  $COMPOSE_ENV_FILES_ARRAY += '.env.example'
+  $COMPOSE_ENV_FILES_ARRAY += $LNMP_ENV_FILE
+
+  $env:COMPOSE_ENV_FILES = $COMPOSE_ENV_FILES_ARRAY -join ','
 
   $COMPOSE_FILE_ARRAY += "docker-workspace.yml"
 
+  $env:COMPOSE_PATH_SEPARATOR = ';'
   $env:COMPOSE_FILE = $COMPOSE_FILE_ARRAY -join ';'
 
-  # write-host $env:COMPOSE_FILE
+  mkdir -force $PSScriptRoot/.debug
 
-  return $options.split(' ')
+  Write-Output $env:COMPOSE_FILE > $PSScriptRoot/.debug/COMPOSE_FILE
+  Write-Output $env:COMPOSE_ENV_FILES > $PSScriptRoot/.debug/COMPOSE_ENV_FILES
+  Write-Output $env:COMPOSE_PATH_SEPARATOR > $PSScriptRoot/.debug/COMPOSE_PATH_SEPARATOR
+
+  printInfo 'Load compose files:' $env:COMPOSE_FILE
+  printInfo 'Load env files:' $env:COMPOSE_ENV_FILES
+  printInfo 'COMPOSE_PATH_SEPARATOR value is:' $env:COMPOSE_PATH_SEPARATOR
 }
 
 Function Test-WSL() {
@@ -725,12 +751,11 @@ switch -regex ($command) {
       $services = ${LNMP_SERVICES}
     }
 
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml"
+    Get-ComposeOptions "docker-lnmp.yml" "docker-lnmp.override.yml"
 
     Write-Host "Build this service image: $services" -ForegroundColor Green
     sleep 3
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $service
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} build $service
   }
 
   push {
@@ -741,12 +766,11 @@ switch -regex ($command) {
       $services = ${LNMP_SERVICES}
     }
 
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml"
+    Get-ComposeOptions "docker-lnmp.yml" "docker-lnmp.override.yml"
 
     Write-Host "Push this service image: $services" -ForegroundColor Green
     sleep 3
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $service
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} push $service
   }
 
   cleanup {
@@ -758,10 +782,9 @@ switch -regex ($command) {
   "^config$" {
     New-LogFile
 
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml"
+    Get-ComposeOptions "docker-lnmp.yml" "docker-lnmp.override.yml"
 
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options config $other
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} config $other
   }
 
   checkout {
@@ -784,14 +807,13 @@ switch -regex ($command) {
       $services = ${LNMP_SERVICES}
     }
 
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml"
+    Get-ComposeOptions "docker-lnmp.yml" "docker-lnmp.override.yml"
 
     #@custom
     __lnmp_custom_pre_up $services
 
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options config > compose-up.yaml
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up --no-build -d $services
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} config > compose-up.yaml
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} up --no-build -d $services
 
     #@custom
     __lnmp_custom_post_up $services
@@ -808,18 +830,16 @@ switch -regex ($command) {
       }
     }
 
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml"
+    Get-ComposeOptions "docker-lnmp.yml" "docker-lnmp.override.yml"
 
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} pull $services
 
     #@custom
     __lnmp_custom_post_pull
   }
 
   "^down$" {
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml"
+    Get-ComposeOptions "docker-lnmp.yml" "docker-lnmp.override.yml"
 
     docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} down --remove-orphans
 
@@ -862,10 +882,9 @@ switch -regex ($command) {
   }
 
   restart {
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml"
+    Get-ComposeOptions "docker-lnmp.yml" "docker-lnmp.override.yml"
 
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options restart $other
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} restart $other
     #@custom
     __lnmp_custom_restart $other
   }
@@ -1028,10 +1047,9 @@ XXX
     cp lrew/pcit/conf/pcit.conf config/nginx/pcit.conf
 
     # 启动
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml"
+    Get-ComposeOptions "docker-lnmp.yml" "docker-lnmp.override.yml"
 
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d ${LNMP_SERVICES} pcit
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} up -d ${LNMP_SERVICES} pcit
   }
 
   daemon-socket {
@@ -1076,10 +1094,9 @@ Example: ./lnmp-docker composer /app/demo install
       exit 1
     }
 
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml"
+    Get-ComposeOptions "docker-lnmp.yml" "docker-lnmp.override.yml"
 
-    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options run -w $WORKING_DIR --rm composer $COMPOSER_COMMAND
+    docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} run -w $WORKING_DIR --rm composer $COMPOSER_COMMAND
   }
 
   hosts {
@@ -1178,7 +1195,7 @@ Example: ./lnmp-docker composer /app/demo install
     wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p ${wsl2_mount_physicaldiskdevice_path}${WSL2_DIST_PATH}"
     wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind ${wsl2_mount_physicaldiskdevice_path}${WSL2_DIST_PATH} $WSL2_DIST_PATH"
     wsl -d $WSL2_DIST -u root -- sh -cx "chown 1000:1000 $WSL2_DIST_PATH"
-    $WSL2_DIST_USER=$(wsl -d ubuntu-22.04 -- sh -c 'echo $USER')
+    $WSL2_DIST_USER = $(wsl -d ubuntu-22.04 -- sh -c 'echo $USER')
 
     wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p /home/$WSL2_DIST_USER/.cache/JetBrains"
     wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p ${wsl2_mount_physicaldiskdevice_path}/home/$WSL2_DIST_USER/.cache/JetBrains"
@@ -1293,12 +1310,15 @@ Example: ./lnmp-docker composer /app/demo install
     __lnmp_custom_command $args
     printInfo `
       "maybe you input command is notdefined, I will try exec $ docker compose CMD"
-    $options = Get-ComposeOptions "docker-lnmp.yml", `
-      "docker-lnmp.override.yml"
+    Get-ComposeOptions "docker-lnmp.yml" "docker-lnmp.override.yml"
 
     $command, $other = $args
-    docker compose $options $command $other
+    docker compose $command $other
   }
 }
 
 cd $EXEC_CMD_DIR
+
+Remove-Item env:COMPOSE_FILE
+Remove-Item env:COMPOSE_ENV_FILES
+Remove-Item env:COMPOSE_PATH_SEPARATOR

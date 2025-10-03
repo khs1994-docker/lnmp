@@ -66,6 +66,7 @@ __pycache__
 # debug info
 
 /debug.md
+.debug
 /bug.md
 
 *.sum

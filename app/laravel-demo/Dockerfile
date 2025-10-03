@@ -16,7 +16,7 @@
 ARG NODE_VERSION=20.5.1
 ARG PHP_VERSION=8.4.11
 ARG NGINX_VERSION=1.29.1-alpine
-ARG DOCKER_HUB_USERNAME=khs1994
+ARG DOCKER_HUB_USERNAME=ghcr.io/khs1994
 
 # 2.安装 composer 依赖
 FROM ${DOCKER_HUB_USERNAME}/php:8.4.11-composer-alpine as composer
@@ -40,7 +40,7 @@ RUN set -x ; cd /app \
              --optimize-autoloader
 
 # 1.前端构建
-FROM node:${NODE_VERSION:-20.5.1}-alpine as frontend
+FROM ghcr.io/khs1994-docker/docker.io/library/node:${NODE_VERSION:-20.5.1}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
@@ -115,7 +115,7 @@ ENTRYPOINT [ "sh", "/app/laravel-docker/.docker-rootless/docker-entrypoint.sh" ]
 # Nginx 配置文件统一通过 configs 管理，严禁将配置文件打入镜像
 # $ docker build -t khs1994/laravel:TAG-nginx .
 
-FROM nginx:${NGINX_VERSION} as nginx
+FROM ghcr.io/khs1994-docker/docker.io/library/nginx:${NGINX_VERSION} as nginx
 
 COPY --from=laravel /app/laravel-docker/public /app/laravel-docker/public
 

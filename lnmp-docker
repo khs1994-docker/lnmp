@@ -215,10 +215,9 @@ _satis(){
 }
 
 _get_compose_options(){
-  for compose_file in "$@"
-  do
-    options+=" -f $compose_file "
-  done
+  options+=" -f $1 "
+
+  shift
 
   for compose_file in $LREW_INCLUDE
   do
@@ -245,9 +244,31 @@ _get_compose_options(){
     if [ -f "$LREW_INCLUDE_ROOT/docker-compose.override.yml" ];then
       options+=" -f $LREW_INCLUDE_ROOT/docker-compose.override.yml "
     fi
+
+    if [ -f "$LREW_INCLUDE_ROOT/.env.compose.default" ];then
+      COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.compose.default,"
+    fi
+
+    if [ -f "$LREW_INCLUDE_ROOT/.env.compose" ];then
+      COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.compose,"
+    fi
+
+    if [ -f "$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV}" ];then
+      COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV},"
+    fi
   done
 
-  options+=" --env-file $LNMP_ENV_FILE "
+  for compose_file in "$@"
+  do
+    options+=" -f $compose_file "
+  done
+
+  COMPOSE_ENV_FILES+=".env.example,$LNMP_ENV_FILE"
+
+  mkdir -p ${ScriptRoot}/.debug
+
+  echo "$COMPOSE_ENV_FILES" > ${ScriptRoot}/.debug/COMPOSE_ENV_FILES
+  echo "$options" > ${ScriptRoot}/.debug/COMPOSE_OPTIONS
 }
 
 env_status(){

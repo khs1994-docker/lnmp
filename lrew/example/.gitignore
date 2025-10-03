@@ -1,2 +1,4 @@
 .env
-!.env.compose
+.env.compose
+.env.compose.*
+!.env.compose.default

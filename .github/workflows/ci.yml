@@ -34,6 +34,8 @@ jobs:
     defaults:
       run:
         shell: bash --noprofile --norc -exo pipefail {0}
+    env:
+      LNMP_ENV: GITHUB_ACTIONS
     steps:
     - uses: actions/checkout@main
       with:
@@ -44,6 +46,9 @@ jobs:
       with:
         docker_channel: test
         docker_version: "20.10"
+    - run: |
+        echo 'LNMP_DOCKER_IMAGE_PREFIX=ghcr.io/khs1994' > .env.GITHUB_ACTIONS
+        echo 'LNMP_LIBRARY_NS=ghcr.io/khs1994-docker/docker.io/library' >> .env.GITHUB_ACTIONS
     - uses: douglascamata/setup-docker-macos-action@v1.0.0
       if: |
         startsWith(matrix.os, 'macos' )
