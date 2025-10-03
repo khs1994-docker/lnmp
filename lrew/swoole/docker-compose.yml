@@ -1,0 +1,22 @@
+x-common:
+  &common
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-development}
+
+services:
+  swoole:
+    << : *common
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.4.11}-swoole-alpine
+    # command 指令只需传入文件名即可
+    command:
+      - /app/swoole/index.php
+    ports:
+      - 10001:10001
+    networks:
+      - backend
+    volumes:
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
+      - ./log/php:/var/log/php

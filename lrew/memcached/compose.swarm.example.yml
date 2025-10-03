@@ -1,16 +1,14 @@
 services:
-  rabbitmq:
+  memcached:
     build:
       << : *default-build
       # << : *default-build-debian
-      context: ./dockerfile/rabbitmq/
+      context: ./dockerfile/memcached/
       dockerfile: Dockerfile
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
-      - zoneinfo-data:/usr/share/zoneinfo
     # ports:
-    #   - "127.0.0.1:15672:15672"
-    #   - "127.0.0.1:5672:5672"
+    #   - "127.0.0.1:11211:11211"
+    volumes:
+      - zoneinfo-data:/usr/share/zoneinfo
     deploy:
       << : *default-deploy
       << : *default-labels

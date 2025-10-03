@@ -11,16 +11,16 @@ x-deploy: &default-deploy
 
 x-labels: &default-labels
   labels:
-    - lnmp.khs1994.com=true
-    - lnmp.khs1994.com.app.env=${APP_ENV:-swarm}
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-swarm}
 
 x-build: &default-build
-  # Dockerfile: my.Dockerfile
+  Dockerfile: my.Dockerfile
   args:
     ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
 
 x-build-debian: &default-build-debian
-  # Dockerfile: my.Dockerfile
+  Dockerfile: my.Dockerfile
   args:
     DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
     DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
@@ -31,6 +31,10 @@ services:
       # https://github.com/minio/minio/blob/master/docs/config/README.md
       MINIO_ROOT_USER_FILE: minio-root-user
       MINIO_ROOT_PASSWORD_FILE: minio-root-password
+    secrets:
+      - minio-root-user
+      - minio-root-password
+
 secrets:
   minio-root-user:
     file: ./secrets/minio/root-user.txt

@@ -1,14 +1,12 @@
-
-
 #
 # khs1994.com Docker Swarm mode
 # @link https://docs.docker.com/engine/swarm/
 #
+# $ ./lnmp-docker swarm-config
+# $ docker compose -f docker-lnmp.swarm.deploy.yml build
+# $ docker compose -f docker-lnmp.swarm.deploy.yml push
 #
-# $ docker compose -f docker-production.yml build
-# $ docker compose -f docker-production.yml push
-#
-# $ docker stack deploy -c docker-production.yml lnmp
+# $ docker stack deploy -c docker-lnmp.swarm.deploy.yml lnmp
 # $ docker stack ps lnmp
 #
 # 1. less `volumes`
@@ -20,25 +18,18 @@
 # 1. `docker stack deploy` not support env
 #
 #
-# Don't edit this file
+# Don't edit this file,please edit `docker-lnmp.swarm.yml`
 #
-# $ cp docker-production.yml docker-production.khs1994.yml
-#
-# Then Edit `docker-production.*.yml`
 
 x-logging:
   &default-logging
   driver: journald
 
-x-common:
-  &common
-  env_file:
-    - ./scripts/cli/timezone.env
-  networks:
-    - backend
-  read_only: false
-  # dns:
-  #   - 114.114.114.114
+x-labels:
+  &default-labels
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-swarm}
 
 x-deploy:
   &default-deploy
@@ -51,12 +42,6 @@ x-deploy:
     parallelism: 2
     delay: 10s
     order: stop-first
-
-x-labels:
-  &default-labels
-  labels:
-    - lnmp.khs1994.com=true
-    - lnmp.khs1994.com.app.env=production_swarm_mode
 
 x-build:
   &default-build
@@ -71,42 +56,6 @@ x-build-debian:
     DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
     DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
 
-x-php-common:
-  &default-php
-  image: khs1994/php:8.4.11-fpm-alpine
-  volumes:
-    - ./app:/app
-    - type: volume
-      source: zoneinfo-data
-      target: /usr/share/zoneinfo
-      volume:
-        nocopy: false
-    # s6
-    - ./config/s6/s6-overlay/s6-rc.d:/etc/s6-overlay/s6-rc.d
-    - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
-    - ./config/crontabs/root:/etc/crontabs/root.s6
-    - php-var-log:/var/log
-  environment:
-    - APP_ENV=production
-  configs:
-    - source: php_ini
-      target: /usr/local/etc/php/php.ini
-    - source: php_ini_include
-      target: /usr/local/etc/php/conf.d/zz-docker-php.ini
-    - source: php_fpm_conf_d_zz_docker_conf
-      target: /usr/local/etc/php-fpm.d/zz-docker.conf
-  secrets:
-    - source: ssh_id_rsa
-      target: /root/.ssh/id_rsa
-      mode: 0600
-    - source: ssh_config
-      target: /root/.ssh/config
-  depends_on:
-    - mysql
-    - redis
-  networks:
-    - backend
-
 services:
 
   mysql:
@@ -115,7 +64,6 @@ services:
       context: ./dockerfile/mysql/
       dockerfile: Dockerfile
     environment:
-      # MYSQL_ROOT_PASSWORD: mytest
       MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
       MYSQL_DATABASE: test
     # ports:
@@ -123,7 +71,7 @@ services:
     volumes:
       - ./scripts/backup/init.production:/docker-entrypoint-initdb.d:ro
       - ./scripts/backup/mysql:/backup
-      - mysql-data:/var/lib/mysql
+      - var-log-mysql:/var/log/mysql
     command: ["mysqld","--character-set-server=utf8mb4","--default-authentication-plugin=mysql_native_password"]
     # logging: *default-logging
     deploy:
@@ -147,40 +95,6 @@ services:
         uid: "0"
         gid: "0"
 
-  # mariadb:
-  #   build:
-  #     << : *default-build-debian
-  #     context: ./dockerfile/mariadb/
-  #     dockerfile: Dockerfile
-  #   image: "mariadb:10.11.5"
-  #   # image: username/lnmp-mariadb:tag
-  #   # image: khs1994/lnmp-mariadb:10.11.5
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-  #     MYSQL_DATABASE: test
-  #     # MYSQL_USER:
-  #     # MYSQL_PASSWORD:
-  #   # ports:
-  #   #   - "127.0.0.1:3306:3306"
-  #   volumes:
-  #     # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
-  #     - ./scripts/backup/init.production:/docker-entrypoint-initdb.d:ro
-  #     - mariadb-data:/var/lib/mysql
-  #     - ./scripts/backup/mariadb:/backup
-  #   command:
-  #     - mysqld
-  #     - --character-set-server=utf8mb4
-  #   deploy:
-  #     << : [*default-deploy,*default-labels]
-  #     placement:
-  #       constraints: [node.role == manager]
-  #   # logging: *default-logging
-  #   secrets:
-  #     - db_root_password
-  #   configs:
-  #     - source: mariadb_conf_d_docker_cnf
-  #       target: /etc/mysql/conf.d/docker.cnf
-
   redis:
     build:
       << : *default-build
@@ -190,7 +104,7 @@ services:
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
-      - redis-data:/data
+      - var-log-redis:/var/log/redis
     command: [
       "redis-server",
       "/redis.conf",
@@ -212,92 +126,31 @@ services:
       - source: redis_conf
         target: /redis.conf
 
-  # memcached:
-  #   build:
-  #     << : *default-build
-  #     # << : *default-build-debian
-  #     context: ./dockerfile/memcached/
-  #     dockerfile: Dockerfile
-  #   image: memcached:1.5.7-alpine
-  #   # image: username/lnmp-memcached:tag
-  #   # image: khs1994/lnmp-memcached:1.5.7
-  #   # ports:
-  #   #   - "127.0.0.1:11211:11211"
-  #   volumes:
-  #     - zoneinfo-data:/usr/share/zoneinfo
-  #   deploy:
-  #     << : *default-deploy
-  #     << : *default-labels
-  #     placement:
-  #       constraints: [node.role == manager]
-  #   # logging: *default-logging
-
-  # rabbitmq:
-  #   build:
-  #     << : *default-build
-  #     # << : *default-build-debian
-  #     context: ./dockerfile/rabbitmq/
-  #     dockerfile: Dockerfile
-  #   image: rabbitmq:3.7.3-management-alpine
-  #   # image: username/lnmp-rabbitmq:tag
-  #   # image: khs1994/lnmp-rabbitmq:3.7.3
-  #   volumes:
-  #     - rabbitmq-data:/var/lib/rabbitmq
-  #     - zoneinfo-data:/usr/share/zoneinfo
-  #   # ports:
-  #   #   - "127.0.0.1:15672:15672"
-  #   #   - "127.0.0.1:5672:5672"
-  #   deploy:
-  #     << : *default-deploy
-  #     << : *default-labels
-  #     placement:
-  #       constraints: [node.role == manager]
-  #   # logging: *default-logging
-
-  # postgresql:
-  #   build:
-  #     << : *default-build
-  #     # << : *default-build-debian
-  #     context: ./dockerfile/postgresql/
-  #     dockerfile: Dockerfile
-  #   image: postgres:12.0-alpine
-  #   # image: username/lnmp-postgresql:tag
-  #   # image: khs1994/lnmp-postgresql:12.0
-  #   environment:
-  #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
-  #     - POSTGRES_DB=test
-  #   volumes:
-  #     - zoneinfo-data:/usr/share/zoneinfo
-  #     - postgresql-data:/var/lib/postgresql/data
-  #   # ports:
-  #   #   - "127.0.0.1:5432:5432"
-  #   deploy:
-  #     << : *default-deploy
-  #     << : *default-labels
-  #     placement:
-  #       constraints: [node.role == manager]
-  #   # logging: *default-logging
-  #   secrets:
-  #     # default is mysql password
-  #     - db_root_password
-
-  pcit:
-    << :
-      - *default-php
-    image: pcit/pcit:unit
+  php8:
     volumes:
-      - ./pcit/.env.production:/app/pcit/.env.production
-      - ./pcit/key:/app/pcit/framework/storage/private_key
-      - pcit-tmp:/tmp
-    working_dir: /app/pcit
-    command:
-      - up
-    # logging: *default-logging
-    networks:
-      - backend
-      - frontend
-    extra_hosts:
-      - "api.github.com:140.82.114.6"
+    # s6
+    # - ./config/s6/s6-overlay/s6-rc.d:/etc/s6-overlay/s6-rc.d
+    # - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
+    # - ./config/crontabs/root:/etc/crontabs/root.s6
+    - var-log-php:/var/log
+    configs:
+    - source: php_ini
+      target: /usr/local/etc/php/php.ini
+    - source: php_ini_include
+      target: /usr/local/etc/php/conf.d/zz-docker-php.ini
+    - source: php_fpm_conf_d_zz_docker_conf
+      target: /usr/local/etc/php-fpm.d/zz-docker.conf
+    secrets:
+    - source: ssh_id_rsa
+      target: /root/.ssh/id_rsa
+      mode: 0600
+    - source: ssh_config
+      target: /root/.ssh/config
+    depends_on:
+    - mysql
+    - redis
+    # networks:
+    # - backend
     deploy:
       << :
         - *default-deploy
@@ -313,54 +166,6 @@ services:
           cpus: '0.25'
           memory: 128M
 
-  php7:
-    << :
-      - *default-php
-    # image: khs1994/php:8.4.11-s6-alpine
-    # entrypoint:
-    #   - /s6-init
-    build:
-      << : *default-build
-      # << : *default-build-debian
-      # context: ./dockerfile/php/
-      context: ./app/demo/
-      dockerfile: Dockerfile
-      # args:
-      #   foo: bar
-    # command: php-fpm -R -F
-    networks:
-      - frontend
-      - backend
-    environment:
-      - APP_ENV=production
-      - LNMP_VERSION=v24.11 x86_64 Docker Swarm
-      - PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-    # logging: *default-logging
-    deploy:
-      << :
-        - *default-deploy
-        - *default-labels
-      # replicas: 2
-      placement:
-        constraints: [node.role == manager]
-
-  # php7-laravel-queue:
-  #   << : *common
-  #   << : *default-labels
-  #   << : *default-php
-  #   command:
-  #     - php
-  #     - /app/laravel/artisan
-  #     - queue:work
-  #     - --tries=3
-  #   # logging: *default-logging
-  #   deploy:
-  #     << : *default-deploy
-  #     << : *default-labels
-  #     replicas: 1
-  #     placement:
-  #       constraints: [node.role == manager]
-
   nginx:
     build:
       << : *default-build
@@ -368,20 +173,21 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    ports:
-      - "443:443/tcp"
-      - "443:443/udp"
-      - "80:80"
+    # ports:
+    #   - "443:443/tcp"
+    #   - "443:443/udp"
+    #   - "80:80"
     volumes:
-      - ./app:/app
+      # - ./app:/app
       # - ./config/nginx:/etc/nginx/conf.d:ro
-    networks:
-      - frontend
-    depends_on:
-      - php7
-        # condition: service_completed_successfully
-          # service_started service_healthy service_completed_successfully
-      - minio
+      - var-log-nginx:/var/log/nginx
+    # networks:
+    #   - frontend
+    # depends_on:
+    #   - php7
+    #     # condition: service_completed_successfully
+    #       # service_started service_healthy service_completed_successfully
+    #   - minio
     # logging: *default-logging
     deploy:
       << :
@@ -405,11 +211,6 @@ services:
         target: /etc/nginx/conf.d/ssl.config
       - source: nginx_khs1994_com_conf
         target: /etc/nginx/conf.d/khs1994.com.conf
-      #
-      # Example Don't Edit
-      #
-      # - source: nginx_domain_com_conf
-      #   target: /etc/nginx/conf.d/domain.com.conf
     secrets:
       #
       # ECC + RSA
@@ -432,113 +233,14 @@ services:
       #   target: /etc/nginx/conf.d/ssl/developer.khs1994.com.rsa.crt
       # - source: developer_khs1994_com_ssl_rsa_key
       #   target: /etc/nginx/conf.d/ssl/developer.khs1994.com.rsa.key
-      #
       # - source: auth_htpasswd
       #   target: /etc/nginx/conf.d/auth/nginx.htpasswd
-      #
-      # Example Don't Edit
-      #
-      #  ECC + RSA
-      #
-      # - source: domain_com_ssl_crt
-      #   target: /etc/nginx/conf.d/ssl/domain.com.crt
-      # - source: domain_com_ssl_key
-      #   target: /etc/nginx/conf.d/ssl/domain.com.key
-      # - source: domain_com_ssl_rsa_crt
-      #   target: /etc/nginx/conf.d/ssl/domain.com.rsa.crt
-      # - source: domain_com_ssl_rsa.key
-      #   target: /etc/nginx/conf.d/ssl/domain.com.rsa.key
     # healthcheck:
     #   test: ["CMD", "curl", "-f", "http://localhost"]
     #   interval: 1m30s
     #   timeout: 10s
     #   retries: 3
     #   start_period: 40s
-
-  # httpd:
-  #   build:
-  #     << : *default-build
-  #     # << : *default-build-debian
-  #     context: ./config/httpd
-  #     dockerfile: Dockerfile
-  #   image: "httpd:2.4.53-alpine"
-  #   # image: username/lnmp-httpd:tag
-  #   # image: khs1994/lnmp-httpd:2.4.53
-  #   ports:
-  #     - "443:443"
-  #     - "80:80"
-  #   volumes:
-  #     - ./app:/app
-  #     # - ./config/etc/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
-  #     # - ./config/httpd:/usr/local/apache2/conf.d
-  #     - zoneinfo-data:/usr/share/zoneinfo
-  #   working_dir: /app
-  #   networks:
-  #     - frontend
-  #   depends_on:
-  #     - php7
-  #   # logging: *default-logging
-    # deploy:
-    #   << :
-    #     - *default-deploy
-    #     - *default-labels
-  #     placement:
-  #       constraints: [node.role == manager]
-  #   configs:
-  #     - source: httpd_conf
-  #       target: /usr/local/apache2/conf/httpd.conf
-  #     - source: vhost_khs1994_com_conf
-  #       target: /usr/local/apache2/conf.d/vhost.khs1994.com.conf
-  #     #
-  #     # Example Don't Edit
-  #     #
-  #     # - source: vhost_domain_com_conf
-  #     #   target: /usr/local/apache2/conf.d/vhost.domain.com.conf
-  #   secrets:
-  #     - source: khs1994_com_ssl_crt
-  #       target: /usr/local/apache2/conf.d/ssl/khs1994.com.crt
-  #     - source: khs1994_com_ssl_key
-  #       target: /usr/local/apache2/conf.d/ssl/khs1994.com.key
-  #     - source: developer_khs1994_com_ssl_crt
-  #       target: /usr/local/apache2/conf.d/ssl/developer.khs1994.com.crt
-  #     - source: developer_khs1994_com_ssl_key
-  #       target: /usr/local/apache2/conf.d/ssl/developer.khs1994.com.key
-  #     #
-  #     # Example Don’t Edit
-  #     #
-  #     # - source: domain_com_ssl_crt
-  #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.crt
-  #     # - source: domain_com_ssl_key
-  #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.key
-
-  # registry:
-  #   build:
-  #     << : *default-build
-  #     # << : *default-build-debian
-  #     context: ./config/registry
-  #     dockerfile: Dockerfile
-  #   image: registry:latest
-  #   # image: username/lnmp-registry:tag
-  #   # image: khs1994/lnmp-registry:latest
-  #   networks:
-  #     - frontend
-  #     - backend
-  #   # ports:
-  #   #   - "127.0.0.1:5000:5000"
-  #   volumes:
-  #     # - ./config/registry:/etc/docker/registry
-  #     - registry-data:/var/lib/registry
-    # deploy:
-    #   << :
-    #     - *default-deploy
-    #     - *default-labels
-  #     placement:
-  #       constraints: [node.role == manager]
-  #   # logging: *default-logging
-  #   configs:
-  #     - source: registy_yml
-  #       target: /etc/docker/registry/config.yml
-
 
 networks:
   frontend:
@@ -551,25 +253,19 @@ networks:
 volumes:
   mysql-data:
     << : *default-labels
-  # mariadb-data:
-  #   << : *default-labels
   redis-data:
     << : *default-labels
-  # rabbitmq-data:
-  #   << : *default-labels
-  #
-  # postgresql-data:
-  #   << : *default-labels
-  #
   zoneinfo-data:
-    << : *default-labels
-  # registry-data:
-  #   << : *default-labels
-  pcit-tmp:
     << : *default-labels
   minio-data:
     << : *default-labels
-  php-var-log:
+  var-log-php:
+    << : *default-labels
+  var-log-nginx:
+    << : *default-labels
+  var-log-redis:
+    << : *default-labels
+  var-log-mysql:
     << : *default-labels
 
 secrets:
@@ -609,26 +305,6 @@ secrets:
   # auth_htpasswd:
   #   file: ./config/nginx/auth/nginx.htpasswd
   #   << : *default-labels
-  #
-  # Example Don't Edit
-  #
-  # domain_com_ssl_key:
-  #   file: ./config/nginx/ssl/domain.com.key
-  #   << : *default-labels
-  #
-  # domain_com_ssl_crt:
-  #   file: ./config/nginx/ssl/domain.com.crt
-  #   << : *default-labels
-  #
-  # domain_com_ssl_key:
-  #   file: ./config/nginx/ssl/domain.com.key
-  #   << : *default-labels
-  #
-  # domain_com_ssl_crt:
-  #   file: ./config/nginx/ssl/domain.com.crt
-  #   << : *default-labels
-  #
-
   # SSH use in  CI/CD
   ssh_id_rsa:
     file: /root/.ssh/id_rsa
@@ -642,9 +318,6 @@ configs:
   mysql_conf_d_docker_cnf:
     file: ./config/mysql/docker.production.cnf
     << : *default-labels
-  # mariadb_conf_d_docker_cnf:
-  #   file: ./config/mariadb/docker.production.cnf
-  #   << : *default-labels
   nginx_conf:
     file: ./config/etc/nginx/nginx.production.conf
     << : *default-labels
@@ -660,34 +333,12 @@ configs:
   nginx_khs1994_com_conf:
     file: ./config/nginx/khs1994.com.conf
     << : *default-labels
-  #
-  # NGINX Example Don't Edit
-  #
-  # nginx_domain_com_conf:
-  #   file ./config/nginx/domain.com.conf
-  #   << : *default-labels
-  #
-  # httpd_conf:
-  #   file: ./config/etc/httpd/httpd.production.conf
-  #   << : *default-labels
-  #
-  # vhost_khs1994_com_conf:
-  #   file: ./config/httpd/khs1994.com.conf
-  #   << : *default-labels
-  #
-  # Apache Example Don't Edit
-  #
-  # vhost_domain_com_conf:
-  #   file: ./config/httpd/domain.com.conf
-  #   << : *default-labels
-
   php_ini:
     file: ./config/php8/php.production.ini
     << : *default-labels
   php_development_ini:
     file: ./config/php8/php.development.ini
     << : *default-labels
-  # 重写 php.ini
   php_ini_include:
     file: ./config/php8/docker-php.ini
     << : *default-labels
@@ -697,7 +348,3 @@ configs:
   redis_conf:
     file: ./config/redis/redis.production.conf
     << : *default-labels
-  #
-  # registy_yml:
-  #   file: ./config/registry/config.production.yml
-  #   << : *default-labels

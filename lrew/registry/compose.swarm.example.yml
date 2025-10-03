@@ -1,0 +1,50 @@
+x-deploy: &default-deploy
+  restart_policy:
+    condition: any
+    delay: 25s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
+x-labels: &default-labels
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-swarm}
+
+x-build: &default-build
+  # Dockerfile: my.Dockerfile
+  args:
+    ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
+
+x-build-debian: &default-build-debian
+  # Dockerfile: my.Dockerfile
+  args:
+    DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
+    DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
+
+services:
+  registry:
+    build:
+      << : *default-build
+      # << : *default-build-debian
+      context: ./config/registry
+      dockerfile: Dockerfile
+    volumes:
+      - registry-data:/var/lib/registry
+    deploy:
+      << :
+        - *default-deploy
+        - *default-labels
+      placement:
+        constraints: [node.role == manager]
+    configs:
+      - source: registy_yml
+        target: /etc/docker/registry/config.yml
+
+configs:
+  registy_yml:
+    file: ./config/registry/config.production.yml
+    << : *default-labels

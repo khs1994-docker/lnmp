@@ -5,6 +5,7 @@
 !minio
 !minio-old
 !mariadb
+!memcached
 !pcit
 !php7
 !kong
@@ -13,6 +14,7 @@
 !rabbitmq
 !nginx-unit
 !registry
+!swoole
 !workspace
 !README.md
 !example

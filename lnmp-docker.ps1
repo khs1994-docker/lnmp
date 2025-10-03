@@ -98,6 +98,30 @@ Function getEnvFile() {
   return $LNMP_ENV_FILE, $LNMP_ENV_FILE_PS1
 }
 
+if ($args[0] -eq "swarm-config") {
+  if (Test-Path env:LNMP_ENV) {
+    $env:LNMP_ENV_BACKUP = $env:LNMP_ENV
+  }
+
+  $env:LNMP_ENV = "swarm"
+}
+
+if ($args[0] -eq "swarm-build") {
+  if (Test-Path env:LNMP_ENV) {
+    $env:LNMP_ENV_BACKUP = $env:LNMP_ENV
+  }
+
+  $env:LNMP_ENV = "swarm"
+}
+
+if ($args[0] -eq "swarm-push") {
+  if (Test-Path env:LNMP_ENV) {
+    $env:LNMP_ENV_BACKUP = $env:LNMP_ENV
+  }
+
+  $env:LNMP_ENV = "swarm"
+}
+
 $LNMP_ENV_FILE, $LNMP_ENV_FILE_PS1 = getEnvFile
 
 if ($args[0] -eq "env-file") {
@@ -923,24 +947,36 @@ switch -regex ($command) {
   }
 
   swarm-config {
-    $env:LNMP_ENV = 'swarm'
     Get-ComposeOptions "docker-lnmp.yml" ""
     docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} config > docker-lnmp.swarm.deploy.yml
-    Remove-Item env:LNMP_ENV
+    if (Test-Path env:LNMP_ENV_BACKUP) {
+      $env:LNMP_ENV = $env:LNMP_ENV_BACKUP
+    }
+    else {
+      remove-item env:LNMP_ENV -ErrorAction SilentlyContinue
+    }
   }
 
   swarm-build {
-    $env:LNMP_ENV = 'swarm'
     Get-ComposeOptions "docker-lnmp.yml" ""
     docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} build $other
-    Remove-Item env:LNMP_ENV
+    if (Test-Path env:LNMP_ENV_BACKUP) {
+      $env:LNMP_ENV = $env:LNMP_ENV_BACKUP
+    }
+    else {
+      remove-item env:LNMP_ENV -ErrorAction SilentlyContinue
+    }
   }
 
   swarm-push {
-    $env:LNMP_ENV = 'swarm'
     Get-ComposeOptions "docker-lnmp.yml" ""
     docker compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} push $other
-    Remove-Item env:LNMP_ENV
+    if (Test-Path env:LNMP_ENV_BACKUP) {
+      $env:LNMP_ENV = $env:LNMP_ENV_BACKUP
+    }
+    else {
+      remove-item env:LNMP_ENV -ErrorAction SilentlyContinue
+    }
   }
 
   restart {

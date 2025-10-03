@@ -1,0 +1,29 @@
+x-common:
+  &common
+  restart: always
+  env_file: ./scripts/cli/timezone.env
+  networks:
+    - backend
+  # dns:
+  #   - ${DNS:-114.114.114.114}
+
+x-common-label:
+  &common-labels
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-development}
+
+services:
+  memcached:
+    << : [*common,*common-labels]
+    image: ${LNMP_LIBRARY_NS:-library}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.15}-alpine
+    ports:
+      - "${LNMP_MEMCACHED_PORT:-127.0.0.1:11211}:11211"
+    volumes:
+      - type: volume
+        source: zoneinfo-data
+        target: /usr/share/zoneinfo
+        volume:
+          nocopy: true
+      - type: tmpfs
+        target: /run

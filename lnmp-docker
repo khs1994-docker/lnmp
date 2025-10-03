@@ -61,6 +61,14 @@ fi
 
 LNMP_ENV_FILE=".env"
 
+if [ "$1" = 'swarm-deploy' ] || [ "$1" = 'swarm-config' ] || [ "$1" = 'swarm-build' ] || [ "$1" = 'swarm-pull' ] || [ "$1" = 'swarm-push' ];then
+  if [ -n "$LNMP_ENV" ]; then
+    export LNMP_ENV_BACKUP=$LNMP_ENV
+  fi
+
+  export LNMP_ENV='swarm'
+fi
+
 if [ -f ".env.$LNMP_ENV" ];then
   LNMP_ENV_FILE=".env.$LNMP_ENV"
 fi
@@ -1017,10 +1025,12 @@ main() {
 
   swarm-config )
     init
-    export LNMP_ENV=swarm
     _get_compose_options docker-lnmp.yml
     docker compose $options config > $PRODUCTION_COMPOSE_FILE
-    unset LNMP_ENV
+    if [ -n $LNMP_ENV_BACKUP ];then
+      export LNMP_ENV=$LNMP_ENV_BACKUP
+      unset LNMP_ENV_BACKUP
+    fi
     ;;
 
   swarm-pull )
@@ -1028,40 +1038,50 @@ main() {
     # 仅允许运行在 Linux x86_64
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       init; sleep 2
-      export LNMP_ENV=swarm
+
       _get_compose_options docker-lnmp.yml
-      exec docker compose $options pull "$@"
-      unset LNMP_ENV
+      docker compose $options pull "$@"
+      if [ -n $LNMP_ENV_BACKUP ];then
+        export LNMP_ENV=$LNMP_ENV_BACKUP
+        unset LNMP_ENV_BACKUP
+      fi
     else
       print_error "Production NOT Support ${OS} ${ARCH}"
     fi
     ;;
 
   swarm-build )
-    export LNMP_ENV=swarm
     _get_compose_options docker-lnmp.yml
     docker compose $options build "$@"
-    unset LNMP_ENV
+    if [ -n $LNMP_ENV_BACKUP ];then
+      export LNMP_ENV=$LNMP_ENV_BACKUP
+      unset LNMP_ENV_BACKUP
+    fi
     ;;
 
   swarm-push )
-    export LNMP_ENV=swarm
+
     _get_compose_options docker-lnmp.yml
     docker compose $options push "$@"
-    unset LNMP_ENV
+    if [ -n $LNMP_ENV_BACKUP ];then
+      export LNMP_ENV=$LNMP_ENV_BACKUP
+      unset LNMP_ENV_BACKUP
+    fi
     ;;
 
   swarm-deploy )
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       _docker_is_run
 
-      export LNMP_ENV=swarm
       _get_compose_options docker-lnmp.yml
       docker compose $options config > $PRODUCTION_COMPOSE_FILE
 
-      docker stack deploy -c $PRODUCTION_COMPOSE_FILE lnmp
+      if [ -n $LNMP_ENV_BACKUP ];then
+        export LNMP_ENV=$LNMP_ENV_BACKUP
+        unset LNMP_ENV_BACKUP
+      fi
 
-      unset LNMP_ENV
+      docker stack deploy -c $PRODUCTION_COMPOSE_FILE lnmp
 
       sleep 2; docker stack ps lnmp
 

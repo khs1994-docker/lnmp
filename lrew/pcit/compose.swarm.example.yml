@@ -1,0 +1,66 @@
+x-deploy: &default-deploy
+  restart_policy:
+    condition: any
+    delay: 25s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
+x-labels: &default-labels
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-swarm}
+
+services:
+  pcit:
+    deploy:
+      << :
+        - *default-deploy
+        - *default-labels
+      # replicas: 2
+      placement:
+        constraints: [node.role == manager]
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    volumes:
+      - ./pcit/.env.production:/app/pcit/.env.production
+      - ./pcit/key:/app/pcit/framework/storage/private_key
+      - pcit-tmp:/tmp
+      - ./app:/app
+      - type: volume
+        source: zoneinfo-data
+        target: /usr/share/zoneinfo
+        volume:
+          nocopy: false
+      # s6
+      - ./config/s6/s6-overlay/s6-rc.d:/etc/s6-overlay/s6-rc.d
+      - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
+      - ./config/crontabs/root:/etc/crontabs/root.s6
+      - php-var-log:/var/log
+    environment:
+      - APP_ENV=production
+    configs:
+      - source: php_ini
+        target: /usr/local/etc/php/php.ini
+      - source: php_ini_include
+        target: /usr/local/etc/php/conf.d/zz-docker-php.ini
+      - source: php_fpm_conf_d_zz_docker_conf
+        target: /usr/local/etc/php-fpm.d/zz-docker.conf
+    secrets:
+      - source: ssh_id_rsa
+        target: /root/.ssh/id_rsa
+        mode: 0600
+      - source: ssh_config
+        target: /root/.ssh/config
+
+volumes:
+  pcit-tmp:
+    << : *default-labels

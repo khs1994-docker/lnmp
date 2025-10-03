@@ -20,8 +20,8 @@ x-deploy: &default-deploy
 
 x-labels: &default-labels
   labels:
-    - lnmp.khs1994.com=true
-    - lnmp.khs1994.com.app.env=${APP_ENV:-swarm}
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-swarm}
 
 x-build: &default-build
   # Dockerfile: my.Dockerfile

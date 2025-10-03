@@ -1,0 +1,58 @@
+x-deploy: &default-deploy
+  restart_policy:
+    condition: any
+    delay: 25s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
+x-labels: &default-labels
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-swarm}
+
+x-build: &default-build
+  dockerfile: my.Dockerfile
+  args:
+    ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
+
+x-build-debian: &default-build-debian
+  dockerfile: my.Dockerfile
+  args:
+    DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
+    DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
+
+services:
+  mariadb:
+    build:
+      << : *default-build-debian
+      context: ./dockerfile/mariadb/
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      # MYSQL_DATABASE: test
+    volumes:
+      - ./scripts/backup/init.production:/docker-entrypoint-initdb.d:ro
+      - ./scripts/backup/mariadb:/backup
+    deploy:
+      << : [*default-deploy,*default-labels]
+      placement:
+        constraints: [node.role == manager]
+    secrets:
+      - db_root_password
+    configs:
+      - source: mariadb_conf_d_docker_cnf
+        target: /etc/mysql/conf.d/docker.cnf
+
+secrets:
+  db_root_password:
+    << : *default-labels
+    file: secrets/db_root_password.txt
+
+configs:
+  mariadb_conf_d_docker_cnf:
+    file: ./config/mariadb/docker.production.cnf
+    << : *default-labels

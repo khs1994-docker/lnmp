@@ -1,12 +1,3 @@
-
-#
-# @link https://www.ruanyifeng.com/blog/2016/07/yaml.html
-#
-# @link https://docs.docker.com/compose/
-# @link https://docs.docker.com/compose/compose-file/#extension-fields
-# @link https://github.com/docker-library/docs
-#
-
 x-common-labels:
   &common-labels
   labels:
@@ -35,38 +26,16 @@ services:
     << : [*common,*common-labels]
     image: "${LNMP_LIBRARY_NS:-library}/mysql:${LNMP_MYSQL_VERSION:-8.0.33}"
     environment:
-      # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
-      # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
-      # MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_ROOT_PASSWORD: ${LNMP_MYSQL_ROOT_PASSWORD:-mytest}
       MYSQL_DATABASE: ${LNMP_MYSQL_DATABASE:-test}
-      # MYSQL_USER:
-      # MYSQL_PASSWORD:
     ports:
       - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
       - "${LNMP_MYSQL_PORT_X:-127.0.0.1:33060}:33060"
     volumes:
-      - ./config/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
-      # @link https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
-      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro
       - type: volume
         source: mysql-data
         target: ${LNMP_MYSQL_DATA:-/var/lib/mysql}
-      - ./log/mysql:/var/log/mysql
-      - ./scripts/backup/mysql:/backup
       - type: tmpfs
         target: /var/run/mysqld
-    command:
-      - mysqld
-      - --character-set-server=utf8mb4
-      - --default-authentication-plugin=mysql_native_password
-    secrets:
-      - db_root_password
-      # - source: mysql_conf
-      #   target: /etc/mysql/conf.d/my.cnf
-      #   uid: "999"
-      #   gid: "999"
-      #   mode: 0644
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-p${LNMP_MYSQL_ROOT_PASSWORD:-mytest}"]
       retries: 3
@@ -78,16 +47,13 @@ services:
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
-      - ./config/redis/redis.conf:/redis.conf:ro
       # - redis-data:/data
       - type: volume
         source: redis-data
         target: /data
         volume:
           nocopy: true
-      - ./log/redis:/var/log/redis
       - << : *tmpfs
-    # set config by command
     command: [
       "redis-server",
       "/redis.conf",
@@ -108,24 +74,6 @@ services:
     << : [*common,*common-labels]
     image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.4.11}-fpm-alpine"
     volumes:
-      - &bind_app ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
-      # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
-      # fpm config
-      - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
-      # php.ini
-      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
-      # php.ini override
-      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
-      # log,etc
-      - ./log/php8:/var/log/php
-      # supervisord
-      # - ./log/supervisord.log:/var/log/supervisord.log
-      # - ./log/supervisord:/var/log/supervisord
-      # s6
-      - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
-      - ./config/s6/s6-overlay/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
-      - ./config/crontabs/root:/etc/crontabs/root.s6
-      - php8-var-log:/var/log
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo
@@ -143,51 +91,12 @@ services:
     tmpfs: /run:exec
     expose:
       - "9000"
-    # command: php-fpm -R -F
-    # command: php-fpm -F
     environment:
       - &lnmp_version LNMP_VERSION=${LNMP_VERSION:-v24.11} x86_64 With Pull Docker Image
       - APP_ENV=${APP_ENV:-development}
-      - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
-      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
       - PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       # - XDEBUG_MODE
-
-  composer:
-    << : [*common,*common-labels]
-    restart: "no"
-    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.4.11}-composer-alpine"
-    volumes:
-      - *bind_app
-      # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
-      - type: volume
-        source: composer-cache-data
-        target: /tmp/composer/cache
-      - type: volume
-        source: composer-home-data
-        target: /tmp/composer
-      - ./config/composer/config.json:/tmp/composer/config.json
-      # - ./config/composer/auth.json:/tmp/composer/auth.json
-
-  phpmyadmin:
-    << : [*common,*common-labels]
-    image: ${LNMP_LIBRARY_NS:-library}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.2.0}
-    environment:
-      - PMA_HOST=mysql
-    ports:
-      - ${LNMP_PHPMYADMIN_PORT:-127.0.0.1:8080}:80
-    volumes:
-      - type: volume
-        source: phpmyadmin-data
-        target: /sessions
-      - << : *tmpfs
-    networks:
-      - backend
-      - frontend
-    healthcheck:
-      test: ["CMD","curl","-sf","127.0.0.1:80"]
-      # test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
 
   nginx:
     << : [*common,*common-labels]
@@ -197,20 +106,10 @@ services:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/tcp"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
-      # - ./config/nginx:/etc/nginx/conf.d:ro
-      - type: bind
-        source: ./config/${LNMP_NGINX_CONF_D:-nginx}
-        target: /etc/nginx/conf.d
-      - *bind_app
-      # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
-      - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
-      - ./log/nginx:/var/log/nginx
       - << : *tmpfs
     working_dir: /app
     networks:
       - frontend
-    # depends_on:
-    #   - php8
     healthcheck:
       test: ["CMD","nginx","-t"]
 
@@ -227,19 +126,3 @@ volumes:
     << : *common-labels
   zoneinfo-data:
     << : *common-labels
-  phpmyadmin-data:
-    << : *common-labels
-  composer-cache-data:
-    << : *common-labels
-  composer-home-data:
-    << : *common-labels
-  php8-var-log:
-    << : *common-labels
-
-secrets:
-  db_root_password:
-    << : *common-labels
-    file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
-  # mysql_conf:
-  #   << : *common-labels
-  #   file: ./config/mysql/conf.d/my.cnf

@@ -14,7 +14,7 @@ services:
     image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.4.11}-composer-alpine
     networks:
       - backend
-    envfile:
+    env_file:
       - ./config/composer/.env
     volumes:
       # https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls

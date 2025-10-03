@@ -1,0 +1,103 @@
+x-deploy: &default-deploy
+  restart_policy:
+    condition: any
+    delay: 25s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
+x-labels: &default-labels
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-swarm}
+
+x-build: &default-build
+  # Dockerfile: my.Dockerfile
+  args:
+    ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
+
+x-build-debian: &default-build-debian
+  # Dockerfile: my.Dockerfile
+  args:
+    DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
+    DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
+
+x-php-common:
+  &default-php
+  volumes:
+    - ./app:/app
+    - type: volume
+      source: zoneinfo-data
+      target: /usr/share/zoneinfo
+      volume:
+        nocopy: false
+    # s6
+    - ./config/s6/s6-overlay/s6-rc.d:/etc/s6-overlay/s6-rc.d
+    - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
+    - ./config/crontabs/root:/etc/crontabs/root.s6
+    - php-var-log:/var/log
+  environment:
+    - APP_ENV=production
+  configs:
+    - source: php_ini
+      target: /usr/local/etc/php/php.ini
+    - source: php_ini_include
+      target: /usr/local/etc/php/conf.d/zz-docker-php.ini
+    - source: php_fpm_conf_d_zz_docker_conf
+      target: /usr/local/etc/php-fpm.d/zz-docker.conf
+  secrets:
+    - source: ssh_id_rsa
+      target: /root/.ssh/id_rsa
+      mode: 0600
+    - source: ssh_config
+      target: /root/.ssh/config
+  depends_on:
+    - mysql
+    - redis
+  networks:
+    - backend
+
+services:
+  php7:
+    build:
+      << : *default-build
+      # << : *default-build-debian
+      # context: ./dockerfile/php/
+      context: ./app/demo/
+      dockerfile: Dockerfile
+      # args:
+      #   foo: bar
+    # entrypoint:
+    #   - /s6-init
+    # command: php-fpm -R -F
+    environment:
+      - APP_ENV=production
+      - LNMP_VERSION=v24.11 x86_64 Docker Swarm
+      - PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    deploy:
+      << :
+        - *default-deploy
+        - *default-labels
+      # replicas: 2
+      placement:
+        constraints: [node.role == manager]
+
+  # php7-laravel-queue:
+  #   << : *common
+  #   << : *default-labels
+  #   << : *default-php
+  #   command:
+  #     - php
+  #     - /app/laravel/artisan
+  #     - queue:work
+  #     - --tries=3
+  #   # logging: *default-logging
+  #   deploy:
+  #     << : *default-deploy
+  #     << : *default-labels
+  #     replicas: 1
+  #     placement:
+  #       constraints: [node.role == manager]

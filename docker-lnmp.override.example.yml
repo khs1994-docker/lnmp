@@ -1,12 +1,128 @@
 #
 # @link https://www.ruanyifeng.com/blog/2016/07/yaml.html
+# @link https://docs.docker.com/compose/
+# @link https://docs.docker.com/compose/compose-file/#extension-fields
+# @link https://github.com/docker-library/docs
 #
 
 x-common:
-  &common
+  &common-labels
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
   ## https://docs.docker.com/compose/how-tos/multiple-compose-files/extends/
+  mysql:
+    environment:
+      # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
+      # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
+      MYSQL_ROOT_PASSWORD: ${LNMP_MYSQL_ROOT_PASSWORD:-mytest}
+      # MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      # MYSQL_USER:
+      # MYSQL_PASSWORD:
+    volumes:
+      # @link https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
+      #   - ./config/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro
+      - ./scripts/backup/mysql:/backup
+      - ./log/mysql:/var/log/mysql
+    secrets:
+      - db_root_password
+      - source: mysql_conf
+        target: /etc/mysql/conf.d/my.cnf
+        uid: "999"
+        gid: "999"
+        mode: 0644
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+      - --default-authentication-plugin=mysql_native_password
+
+  redis:
+    volumes:
+      - ./config/redis/redis.conf:/redis.conf:ro
+      - ./log/redis:/var/log/redis
+
+  php8:
+    volumes:
+      - &bind_app ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
+      # fpm config
+      - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
+      # php.ini
+      - ./config/php8/php.ini:/usr/local/etc/php/php.ini:ro
+      # php.ini override
+      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
+      # log,etc
+      - ./log/php8:/var/log/php
+      # s6
+      - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
+      - ./config/s6/s6-overlay/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
+      - ./config/crontabs/root:/etc/crontabs/root.s6
+    environment:
+      - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
+      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
+      # - XDEBUG_MODE
+    # command: php-fpm -R -F
+    # command: php-fpm -F
+
+  nginx:
+    volumes:
+      - *bind_app
+      - type: bind
+        source: ./config/${LNMP_NGINX_CONF_D:-nginx}
+        target: /etc/nginx/conf.d
+      - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./log/nginx:/var/log/nginx
+    # depends_on:
+    #   - php8
+
+  composer:
+    << : [*common,*common-labels]
+    restart: "no"
+    image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.4.11}-composer-alpine"
+    volumes:
+      - *bind_app
+      - type: volume
+        source: composer-cache-data
+        target: /tmp/composer/cache
+      - type: volume
+        source: composer-home-data
+        target: /tmp/composer
+      - ./config/composer/config.json:/tmp/composer/config.json
+      # - ./config/composer/auth.json:/tmp/composer/auth.json
+
+  phpmyadmin:
+    << : [*common,*common-labels]
+    image: ${LNMP_LIBRARY_NS:-library}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.2.0}
+    environment:
+      - PMA_HOST=mysql
+    ports:
+      - ${LNMP_PHPMYADMIN_PORT:-127.0.0.1:8080}:80
+    volumes:
+      - type: volume
+        source: phpmyadmin-data
+        target: /sessions
+      - << : *tmpfs
+    networks:
+      - backend
+      - frontend
+    healthcheck:
+      test: ["CMD","curl","-sf","127.0.0.1:80"]
+      # test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+
+secrets:
+  mysql_conf:
+    << : *common-labels
+    file: ./config/mysql/conf.d/my.cnf
+  db_root_password:
+    << : *common-labels
+    file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
+
+volumes:
+  phpmyadmin-data:
+    << : *common-labels
+  composer-cache-data:
+    << : *common-labels
+  composer-home-data:
+    << : *common-labels

@@ -1,0 +1,88 @@
+x-deploy: &default-deploy
+  restart_policy:
+    condition: any
+    delay: 25s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
+x-labels: &default-labels
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-swarm}
+
+x-build: &default-build
+  # Dockerfile: my.Dockerfile
+  args:
+    ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
+
+x-build-debian: &default-build-debian
+  # Dockerfile: my.Dockerfile
+  args:
+    DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
+    DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
+
+
+services:
+  httpd:
+    build:
+      << : *default-build
+      # << : *default-build-debian
+      context: ./config/httpd
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/app
+      # - ./config/etc/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      # - ./config/httpd:/usr/local/apache2/conf.d
+      - zoneinfo-data:/usr/share/zoneinfo
+    working_dir: /app
+    networks:
+      - frontend
+    depends_on:
+      - php7
+    deploy:
+      << :
+        - *default-deploy
+        - *default-labels
+      placement:
+        constraints: [node.role == manager]
+    configs:
+      - source: httpd_conf
+        target: /usr/local/apache2/conf/httpd.conf
+      - source: vhost_khs1994_com_conf
+        target: /usr/local/apache2/conf.d/vhost.khs1994.com.conf
+      #
+      # Example Don't Edit
+      #
+      # - source: vhost_domain_com_conf
+      #   target: /usr/local/apache2/conf.d/vhost.domain.com.conf
+    secrets:
+      - source: khs1994_com_ssl_crt
+        target: /usr/local/apache2/conf.d/ssl/khs1994.com.crt
+      - source: khs1994_com_ssl_key
+        target: /usr/local/apache2/conf.d/ssl/khs1994.com.key
+      - source: developer_khs1994_com_ssl_crt
+        target: /usr/local/apache2/conf.d/ssl/developer.khs1994.com.crt
+      - source: developer_khs1994_com_ssl_key
+        target: /usr/local/apache2/conf.d/ssl/developer.khs1994.com.key
+      #
+      # Example Don’t Edit
+      #
+      # - source: domain_com_ssl_crt
+      #   target: /usr/local/apache2/conf.d/ssl/domain.com.crt
+      # - source: domain_com_ssl_key
+      #   target: /usr/local/apache2/conf.d/ssl/domain.com.key
+
+configs:
+    httpd_conf:
+      file: ./config/etc/httpd/httpd.production.conf
+      << : *default-labels
+    vhost_khs1994_com_conf:
+      file: ./config/httpd/khs1994.com.conf
+      << : *default-labels
+    vhost_domain_com_conf:
+      file: ./config/httpd/domain.com.conf
+      << : *default-labels

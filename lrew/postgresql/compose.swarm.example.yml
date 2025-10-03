@@ -1,0 +1,54 @@
+x-deploy: &default-deploy
+  restart_policy:
+    condition: any
+    delay: 25s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
+x-labels: &default-labels
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-swarm}
+
+x-build: &default-build
+  # Dockerfile: my.Dockerfile
+  args:
+    ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
+
+x-build-debian: &default-build-debian
+  # Dockerfile: my.Dockerfile
+  args:
+    DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
+    DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
+
+services:
+  postgresql:
+    build:
+      << : *default-build
+      # << : *default-build-debian
+      context: ./dockerfile/postgresql/
+      dockerfile: Dockerfile
+    image: postgres:12.0-alpine
+    # image: username/lnmp-postgresql:tag
+    # image: khs1994/lnmp-postgresql:12.0
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
+      - POSTGRES_DB=test
+    volumes:
+      - zoneinfo-data:/usr/share/zoneinfo
+      - postgresql-data:/var/lib/postgresql/data
+    # ports:
+    #   - "127.0.0.1:5432:5432"
+    deploy:
+      << : *default-deploy
+      << : *default-labels
+      placement:
+        constraints: [node.role == manager]
+    # logging: *default-logging
+    secrets:
+      # default is mysql password
+      - db_root_password
