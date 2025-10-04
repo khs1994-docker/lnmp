@@ -1,0 +1,12 @@
+version: "3"
+services:
+
+  tls:
+    build: ./alpine
+    image: khs1994/tls
+    volumes:
+      - ./ssl:/ssl
+    # command:
+    #   - root_ca
+    command:
+      - help

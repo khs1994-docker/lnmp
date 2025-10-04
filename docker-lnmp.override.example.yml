@@ -14,6 +14,9 @@ x-common:
 services:
   ## https://docs.docker.com/compose/how-tos/multiple-compose-files/extends/
   mysql:
+    ports:
+      - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
+      - "${LNMP_MYSQL_PORT_X:-127.0.0.1:33060}:33060"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
       # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
@@ -40,6 +43,8 @@ services:
       - --default-authentication-plugin=mysql_native_password
 
   redis:
+    ports:
+      - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
       - ./config/redis/redis.conf:/redis.conf:ro
       - ./log/redis:/var/log/redis
@@ -67,6 +72,10 @@ services:
     # command: php-fpm -F
 
   nginx:
+    ports:
+      - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/udp"
+      - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/tcp"
+      - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
       - *bind_app
       - type: bind

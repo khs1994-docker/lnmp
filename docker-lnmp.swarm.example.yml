@@ -128,6 +128,7 @@ services:
 
   php8:
     volumes:
+    - &bind_app ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
     # s6
     # - ./config/s6/s6-overlay/s6-rc.d:/etc/s6-overlay/s6-rc.d
     # - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
@@ -141,14 +142,14 @@ services:
     - source: php_fpm_conf_d_zz_docker_conf
       target: /usr/local/etc/php-fpm.d/zz-docker.conf
     secrets:
-    - source: ssh_id_rsa
-      target: /root/.ssh/id_rsa
+    - source: ssh_id_ed25519
+      target: /root/.ssh/id_ed25519
       mode: 0600
     - source: ssh_config
       target: /root/.ssh/config
-    depends_on:
-    - mysql
-    - redis
+    # depends_on:
+    # - mysql
+    # - redis
     # networks:
     # - backend
     deploy:
@@ -173,11 +174,12 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    # ports:
-    #   - "443:443/tcp"
-    #   - "443:443/udp"
-    #   - "80:80"
+    ports:
+      - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/udp"
+      - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/tcp"
+      - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
+      - *bind_app
       # - ./app:/app
       # - ./config/nginx:/etc/nginx/conf.d:ro
       - var-log-nginx:/var/log/nginx
@@ -203,12 +205,10 @@ services:
         # gid: '103'
         # mode: 0440
       # one domain one conf file
-      - source: nginx_80_conf
-        target: /etc/nginx/conf.d/80.conf
-      - source: nginx_301_conf
-        target: /etc/nginx/conf.d/301.conf
       - source: nginx_ssl_conf
-        target: /etc/nginx/conf.d/ssl.config
+        target: /etc/nginx/conf.d/demo-include-ssl.config
+      - source: nginx_php_conf
+        target: /etc/nginx/conf.d/demo-include-php.config
       - source: nginx_khs1994_com_conf
         target: /etc/nginx/conf.d/khs1994.com.conf
     secrets:
@@ -218,13 +218,13 @@ services:
       # @link https://github.com/khs1994-docker/lnmp/issues/239
       #
       - source: khs1994_com_ssl_crt
-        target: /etc/nginx/conf.d/ssl/khs1994.com.crt
+        target: /etc/nginx/conf.d/demo-ssl/t.khs1994.com.crt
       - source: khs1994_com_ssl_key
-        target: /etc/nginx/conf.d/ssl/khs1994.com.key
+        target: /etc/nginx/conf.d/demo-ssl/t.khs1994.com.key
       - source: khs1994_com_ssl_rsa_crt
-        target: /etc/nginx/conf.d/ssl/khs1994.com.rsa.crt
+        target: /etc/nginx/conf.d/demo-ssl/t.khs1994.com.rsa.crt
       - source: khs1994_com_ssl_rsa_key
-        target: /etc/nginx/conf.d/ssl/khs1994.com.rsa.key
+        target: /etc/nginx/conf.d/demo-ssl/t.khs1994.com.rsa.key
       # - source: developer_khs1994_com_ssl_crt
       #   target: /etc/nginx/conf.d/ssl/developer.khs1994.com.crt
       # - source: developer_khs1994_com_ssl_key
@@ -251,14 +251,6 @@ networks:
     attachable: true
 
 volumes:
-  mysql-data:
-    << : *default-labels
-  redis-data:
-    << : *default-labels
-  zoneinfo-data:
-    << : *default-labels
-  minio-data:
-    << : *default-labels
   var-log-php:
     << : *default-labels
   var-log-nginx:
@@ -275,16 +267,16 @@ secrets:
   # ECC + RSA
   khs1994_com_ssl_key:
     << : *default-labels
-    file: ./config/nginx/ssl/khs1994.com.key
+    file: ./config/nginx/demo-ssl/t.khs1994.com.key
   khs1994_com_ssl_crt:
     << : *default-labels
-    file: ./config/nginx/ssl/khs1994.com.crt
+    file: ./config/nginx/demo-ssl/t.khs1994.com.crt
   khs1994_com_ssl_rsa_key:
     << : *default-labels
-    file: ./config/nginx/ssl/khs1994.com.rsa.key
+    file: ./config/nginx/demo-ssl/t.khs1994.com.rsa.key
   khs1994_com_ssl_rsa_crt:
     << : *default-labels
-    file: ./config/nginx/ssl/khs1994.com.rsa.crt
+    file: ./config/nginx/demo-ssl/t.khs1994.com.rsa.crt
   #
   # developer_khs1994_com_ssl_crt:
   #   file: ./config/nginx/ssl/developer.khs1994.com.crt
@@ -306,12 +298,12 @@ secrets:
   #   file: ./config/nginx/auth/nginx.htpasswd
   #   << : *default-labels
   # SSH use in  CI/CD
-  ssh_id_rsa:
-    file: /root/.ssh/id_rsa
+  ssh_id_ed25519:
+    file: ./secrets/.ssh/id_ed25519.demo
     << : *default-labels
   # SSH config
   ssh_config:
-    file: ./secrets/ssh_config
+    file: ./secrets/.ssh/config
     << : *default-labels
 
 configs:
@@ -321,17 +313,14 @@ configs:
   nginx_conf:
     file: ./config/etc/nginx/nginx.production.conf
     << : *default-labels
-  nginx_80_conf:
-    file: ./config/nginx/80.conf
-    << : *default-labels
-  nginx_301_conf:
-    file: ./config/nginx/301.conf
-    << : *default-labels
   nginx_ssl_conf:
-    file: ./config/nginx/ssl.config
+    file: ./config/nginx/demo-include-ssl-swarm.config
+    << : *default-labels
+  nginx_php_conf:
+    file: ./config/nginx/demo-include-php.config
     << : *default-labels
   nginx_khs1994_com_conf:
-    file: ./config/nginx/khs1994.com.conf
+    file: ./config/nginx/demo-www.conf
     << : *default-labels
   php_ini:
     file: ./config/php8/php.production.ini

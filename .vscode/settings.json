@@ -18,7 +18,7 @@
     "https://raw.fastgit.org/coreos/ignition/main/config/v3_4_experimental/schema/ignition.json":[
       "*.ign"
     ],
-    "https://raw.fastgit.org/compose-spec/compose-spec/master/schema/compose-spec.json":[
+    "https://raw.githubusercontent.com/compose-spec/compose-spec/refs/heads/main/schema/compose-spec.json":[
        "docker-lnmp.yml",
        "docker-lnmp.*.yml",
        "docker-production.yml",

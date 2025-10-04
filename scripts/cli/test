@@ -112,8 +112,8 @@ server {
 }
 " > config/nginx/khs1994.com.conf
 
-  sed -i "s!file: /root/.ssh/id_rsa!file: ./secrets/ssh_config!g" docker-production.yml
-  sed -i "s#driver: journald#driver: json-file#g" docker-production.yml
+  # sed -i "s!file: /root/.ssh/id_rsa!file: ./secrets/ssh_config!g" docker-production.yml
+  # sed -i "s#driver: journald#driver: json-file#g" docker-production.yml
 
   docker node ls > /dev/null 2>&1 || docker swarm init
 
@@ -127,7 +127,6 @@ server {
 
   cp lrew/pcit/.env.example lrew/pcit/.env.production
 
-  export LNMP_ENV=swarm
   # ./lnmp-docker config > docker-lnmp.swarm.yml
 
   # docker stack deploy -c docker-lnmp.swarm.yml lnmp

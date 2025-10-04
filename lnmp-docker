@@ -114,6 +114,8 @@ fi
 
 chmod +x -R       config/s6/s6-overlay || true
 
+_cp_only_not_exists docker-lnmp.swarm.example.yml docker-lnmp.swarm.yml
+
 _cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
 _cp_only_not_exists config/php8/php-cli.example.ini config/php8/php-cli.ini
 _cp_only_not_exists config/php8/docker-php.example.ini config/php8/docker-php.ini
@@ -756,7 +758,11 @@ $ ./lnmp-docker acme.sh
 }
 
 ssl_self(){
-  docker run --init -i ${tty} --rm -v $PWD/config/${LNMP_NGINX_CONF_D:-nginx}/ssl:/ssl khs1994/tls "$@"
+  docker run \
+  --init -i ${tty} --rm \
+  -v $PWD/config/${LNMP_NGINX_CONF_D:-nginx}/ssl:/ssl \
+  -v $PWD/dockerfile/tls/alpine/docker-entrypoint.sh:/docker-entrypoint.sh \
+  ${LNMP_DOCKER_IMAGE_PREFIX}/tls "$@"
 }
 
 # 快捷开始 PHP 项目开发
@@ -1027,6 +1033,20 @@ main() {
     init
     _get_compose_options docker-lnmp.yml
     docker compose $options config > $PRODUCTION_COMPOSE_FILE
+
+    sed -i '1d' $PRODUCTION_COMPOSE_FILE
+    sed -i '/host_ip: 0.0.0.0/d' $PRODUCTION_COMPOSE_FILE
+
+    for item in $(sed -n '/published: "[[:digit:]]/='  $PRODUCTION_COMPOSE_FILE);do
+      sed -i "${item}s/\"//g" $PRODUCTION_COMPOSE_FILE
+    done
+
+    for item in $(sed -n '/mode: "[[:digit:]]/='  $PRODUCTION_COMPOSE_FILE);do
+      sed -i "${item}s/\"//g" $PRODUCTION_COMPOSE_FILE
+    done
+
+    sed -i '/cpus: [[:digit:]]/d'  docker-lnmp.swarm.deploy.yml
+
     if [ -n $LNMP_ENV_BACKUP ];then
       export LNMP_ENV=$LNMP_ENV_BACKUP
       unset LNMP_ENV_BACKUP
@@ -1076,12 +1096,27 @@ main() {
       _get_compose_options docker-lnmp.yml
       docker compose $options config > $PRODUCTION_COMPOSE_FILE
 
+      sed -i '1d' $PRODUCTION_COMPOSE_FILE
+      sed -i '/host_ip: 0.0.0.0/d' $PRODUCTION_COMPOSE_FILE
+
+      for item in $(sed -n '/published: "[[:digit:]]/='  $PRODUCTION_COMPOSE_FILE);do
+        sed -i "${item}s/\"//g" $PRODUCTION_COMPOSE_FILE
+      done
+
+      for item in $(sed -n '/mode: "[[:digit:]]/='  $PRODUCTION_COMPOSE_FILE);do
+        sed -i "${item}s/\"//g" $PRODUCTION_COMPOSE_FILE
+      done
+
+      sed -i '/cpus: [[:digit:]]/d'  docker-lnmp.swarm.deploy.yml
+
       if [ -n $LNMP_ENV_BACKUP ];then
         export LNMP_ENV=$LNMP_ENV_BACKUP
         unset LNMP_ENV_BACKUP
       fi
 
-      docker stack deploy -c $PRODUCTION_COMPOSE_FILE lnmp
+      # docker stack deploy -c $PRODUCTION_COMPOSE_FILE lnmp
+
+      docker stack config --compose-file $PRODUCTION_COMPOSE_FILE | docker stack deploy --compose-file - lnmp
 
       sleep 2; docker stack ps lnmp
 
@@ -1467,7 +1502,7 @@ if [ "$debug" = 'true' -o "$DEBUG" = 'true' ];then set -x; fi
 if [ -n "${LNMP_SERVICES}" ];then LNMP_SERVICES_SYSTEM_ENV=$LNMP_SERVICES;fi
 if [ -n "${LREW_INCLUDE}" ];then LREW_INCLUDE_SYSTEM_ENV=$LREW_INCLUDE;fi
 
-env_status && . ./.env && . scripts/cli/.env
+env_status && . ./${LNMP_ENV_FILE} && . scripts/cli/.env
 
 if [ -n "${LNMP_SERVICES_SYSTEM_ENV}" ];then export LNMP_SERVICES=$LNMP_SERVICES_SYSTEM_ENV;fi
 if [ -n "${LREW_INCLUDE_SYSTEM_ENV}" ];then export LREW_INCLUDE=$LREW_INCLUDE_SYSTEM_ENV;fi

@@ -27,9 +27,6 @@ services:
     image: "${LNMP_LIBRARY_NS:-library}/mysql:${LNMP_MYSQL_VERSION:-8.0.33}"
     environment:
       MYSQL_DATABASE: ${LNMP_MYSQL_DATABASE:-test}
-    ports:
-      - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
-      - "${LNMP_MYSQL_PORT_X:-127.0.0.1:33060}:33060"
     volumes:
       - type: volume
         source: mysql-data
@@ -44,8 +41,6 @@ services:
   redis:
     << : [*common,*common-labels]
     image: "${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-7.0.0}-alpine"
-    ports:
-      - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
       # - redis-data:/data
       - type: volume
@@ -101,10 +96,6 @@ services:
   nginx:
     << : [*common,*common-labels]
     image: "${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.29.1}-alpine"
-    ports:
-      - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/udp"
-      - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443/tcp"
-      - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
       - << : *tmpfs
     working_dir: /app

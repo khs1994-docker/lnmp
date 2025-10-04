@@ -988,8 +988,10 @@ switch -regex ($command) {
   }
 
   ssl-self {
+    $LNMP_DOCKER_IMAGE_PREFIX=$(Get-Env LNMP_DOCKER_IMAGE_PREFIX $LNMP_ENV_FILE '')
+
     docker run --init -it --rm `
-      -v $pwd/config/nginx/ssl-self:/ssl khs1994/tls $other
+      -v $pwd/config/nginx/ssl-self:/ssl ${LNMP_DOCKER_IMAGE_PREFIX}/tls $other
 
     printInfo `
       'Import ./config/nginx/ssl-self/root-ca.crt to Browsers,then set hosts in C:\Windows\System32\drivers\etc\hosts'
