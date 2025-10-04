@@ -35,31 +35,42 @@ _command(){
 
   cd app/demo
 
+  echo ::group::Test php
   lnmp-php
+  echo ::endgroup::
 
+  echo ::group::Test php -v
   lnmp-php -v
+  echo ::endgroup::
 
+  echo ::group::Test composer
   lnmp-composer -V
   # lnmp-composer global config github-oauth.github.com ${GITHUB_TOKEN}
   lnmp-composer config -g --unset repos.packagist
   lnmp-composer install
+  echo ::endgroup::
 
+  echo ::group::Test phpunit
   lnmp-phpunit
+  echo ::endgroup::
 
   cd ..
 
   date
-  lnmp-laravel new laravel_8 8.*
-  date
-
+  echo ::group::Test new laravel
   lnmp-laravel new laravel
+  echo ::endgroup::
   date
 
   ls -la
 
+  echo ::group::Test mysql
   lnmp-mysql mysql -V
+  echo ::endgroup::
 
+  echo ::group::Test npm
   lnmp-npm -v
+  echo ::endgroup::
 
   print_info "测试 PHPer command 完毕"
 }
@@ -139,14 +150,13 @@ server {
     docker ps -a
     echo "Wait nginx service start"
     sleep 60
+    echo ::endgroup::
 
     for item in $(docker container ls -a --format "{{.ID}}");do
       echo ::group::cat container $item logs
       docker logs $item
       echo ::endgroup::
     done
-
-    echo ::endgroup::
   done
 
   sleep 120
@@ -157,6 +167,4 @@ server {
   docker stack rm lnmp
 }
 
-echo ::group::Test "$1"
 if [ ! -z "$1" ];then $1; else development; swarm; fi
-echo ::endgroup::
