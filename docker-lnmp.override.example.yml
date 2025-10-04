@@ -5,11 +5,28 @@
 # @link https://github.com/docker-library/docs
 #
 
-x-common:
+x-service-common:
+  &common
+  restart: ${LNMP_RESTART:-always}
+  env_file: ./scripts/cli/timezone.env
+  networks:
+    - backend
+  read_only: ${LNMP_ROOT_FILESYSTEM_READ_ONLY:-false}
+  # dns:
+  #   - ${DNS:-114.114.114.114}
+
+x-common-labels:
   &common-labels
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+
+x-tmpfs:
+  &tmpfs
+  type: tmpfs
+  target: /run
+  # tmpfs:
+  #   size: 1000
 
 services:
   ## https://docs.docker.com/compose/how-tos/multiple-compose-files/extends/

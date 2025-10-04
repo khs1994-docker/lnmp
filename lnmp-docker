@@ -269,32 +269,24 @@ _get_compose_options(){
       fi
     fi
 
-    if [ -f "$LREW_INCLUDE_ROOT/.env.compose.default" ];then
-      COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.compose.default,"
-    fi
-
-    if [ -f "$LREW_INCLUDE_ROOT/.env.compose.default" ] && [ ! -f "$LREW_INCLUDE_ROOT/.env.compose" ];then
-      cp "$LREW_INCLUDE_ROOT/.env.compose.default" "$LREW_INCLUDE_ROOT/.env.compose"
-    fi
-
-    if [ -f "$LREW_INCLUDE_ROOT/.env.compose" ];then
-      COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.compose,"
-    fi
-
-    if [ -n "$LNMP_ENV" ] && [ -f "$LREW_INCLUDE_ROOT/.env.compose.default" ] && [ ! -f "$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV}" ];then
-      cp "$LREW_INCLUDE_ROOT/.env.compose.default" "$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV}"
-    fi
-
-    if [ -n "$LNMP_ENV" ] && [ -f "$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV}" ];then
-      COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.compose.${LNMP_ENV},"
+    if [ -f "$LREW_INCLUDE_ROOT/.env.example" ];then
+      COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.example,"
     fi
 
     if [ -f "$LREW_INCLUDE_ROOT/.env.example" ] && [ ! -f "$LREW_INCLUDE_ROOT/.env" ];then
       cp "$LREW_INCLUDE_ROOT/.env.example" "$LREW_INCLUDE_ROOT/.env"
     fi
 
+    if [ -f "$LREW_INCLUDE_ROOT/.env" ];then
+      COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env,"
+    fi
+
     if [ -n "$LNMP_ENV" ] && [ -f "$LREW_INCLUDE_ROOT/.env.example" ] && [ ! -f "$LREW_INCLUDE_ROOT/.env.${LNMP_ENV}" ];then
       cp "$LREW_INCLUDE_ROOT/.env.example" "$LREW_INCLUDE_ROOT/.env.${LNMP_ENV}"
+    fi
+
+    if [ -n "$LNMP_ENV" ] && [ -f "$LREW_INCLUDE_ROOT/.env.${LNMP_ENV}" ];then
+      COMPOSE_ENV_FILES+="$LREW_INCLUDE_ROOT/.env.${LNMP_ENV},"
     fi
   done
 

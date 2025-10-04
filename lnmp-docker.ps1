@@ -526,32 +526,24 @@ Function Get-ComposeOptions($compose_file_base, $compose_files) {
       }
     }
 
-    if (Test-Path $LREW_INCLUDE_ROOT/.env.compose.default) {
-      $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.compose.default"
+    if (Test-Path $LREW_INCLUDE_ROOT/.env.example) {
+      $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.example"
     }
 
-    if ((Test-Path $LREW_INCLUDE_ROOT/.env.compose.default) -and !(Test-Path $LREW_INCLUDE_ROOT/.env.compose)) {
-      Copy-Item "$LREW_INCLUDE_ROOT/.env.compose.default" "$LREW_INCLUDE_ROOT/.env.compose"
+    if ((Test-Path $LREW_INCLUDE_ROOT/.env.example) -and !(Test-Path $LREW_INCLUDE_ROOT/.env)) {
+      Copy-Item "$LREW_INCLUDE_ROOT/.env.example" "$LREW_INCLUDE_ROOT/.env"
     }
 
-    if (Test-Path $LREW_INCLUDE_ROOT/.env.compose) {
-      $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.compose"
+    if (Test-Path $LREW_INCLUDE_ROOT/.env) {
+      $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env"
     }
 
-    if ((Test-Path env:LNMP_ENV) -and (Test-Path $LREW_INCLUDE_ROOT/.env.compose.default) -and !(Test-Path $LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV})) {
-      Copy-Item "$LREW_INCLUDE_ROOT/.env.compose.default" "$LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV}"
+    if ((Test-Path env:LNMP_ENV) -and (Test-Path $LREW_INCLUDE_ROOT/.env.example) -and !(Test-Path $LREW_INCLUDE_ROOT/.env.${env:LNMP_ENV})) {
+      Copy-Item "$LREW_INCLUDE_ROOT/.env.example" "$LREW_INCLUDE_ROOT/.env.${env:LNMP_ENV}"
     }
 
-    if ((Test-Path env:LNMP_ENV) -and (Test-Path $LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV})) {
-      $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.compose.${env:LNMP_ENV}"
-    }
-
-    if ((Test-Path $LREW_INCLUDE_ROOT/.env.example) -and !(Test-PATH $LREW_INCLUDE_ROOT/.env)) {
-      cp $LREW_INCLUDE_ROOT/.env.example $LREW_INCLUDE_ROOT/.env
-    }
-
-    if ((Test-Path env:LNMP_ENV) -and (Test-Path $LREW_INCLUDE_ROOT/.env.example) -and !(Test-PATH $LREW_INCLUDE_ROOT/.env.${env:LNMP_ENV})) {
-      Copy-Item $LREW_INCLUDE_ROOT/.env.example $LREW_INCLUDE_ROOT/.env.${env:LNMP_ENV}
+    if ((Test-Path env:LNMP_ENV) -and (Test-Path $LREW_INCLUDE_ROOT/.env.${env:LNMP_ENV})) {
+      $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.${env:LNMP_ENV}"
     }
   }
 
@@ -988,7 +980,7 @@ switch -regex ($command) {
   }
 
   ssl-self {
-    $LNMP_DOCKER_IMAGE_PREFIX=$(Get-Env LNMP_DOCKER_IMAGE_PREFIX $LNMP_ENV_FILE '')
+    $LNMP_DOCKER_IMAGE_PREFIX = $(Get-Env LNMP_DOCKER_IMAGE_PREFIX $LNMP_ENV_FILE '')
 
     docker run --init -it --rm `
       -v $pwd/config/nginx/ssl-self:/ssl ${LNMP_DOCKER_IMAGE_PREFIX}/tls $other
