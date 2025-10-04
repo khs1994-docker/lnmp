@@ -134,12 +134,14 @@ server {
   ./lnmp-docker swarm-deploy
 
   until curl 127.0.0.1; do
+    echo ::group::Wait swarm nginx start
     docker stack ps lnmp --no-trunc
     docker ps -a
     echo "Wait nginx service start"
     sleep 10
 
-    for item in $(docker container ls --format "{{.ID}}");do docker logs $item; done
+    for item in $(docker container ls -a --format "{{.ID}}");do docker logs $item; done
+    echo ::endgroup::
   done
 
   sleep 120
