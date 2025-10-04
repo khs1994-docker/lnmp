@@ -5,7 +5,9 @@
 
   // The order of the files is important since later files override previous ones
   "dockerComposeFile": [
-    "../docker-workspace.yml"
+    // "../lrew/workspace/docker-compose.yml",
+    // "../lrew/workspace/compose.override.yml"
+    "../compose-up.yaml"
   ],
 
   // fix me
@@ -16,10 +18,11 @@
   // fix me 与 docker-workspace.yml 中的路径一致
   "workspaceFolder": "/app",
   "shutdownAction": "stopCompose", // none stopCompose
-  "features": {
-    "ghcr.io/devcontainers/features/git": {
-    }
-  },
+  // 配置 features 可能由于网络问题，无法完成镜像 build 而导致失败
+  // "features": {
+  //   "ghcr.io/devcontainers/features/git": {
+  //   }
+  // },
   "customizations": {
     "vscode": {
       "extensions": [

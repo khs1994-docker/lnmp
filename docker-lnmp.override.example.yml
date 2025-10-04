@@ -58,6 +58,10 @@ services:
       - mysqld
       - --character-set-server=utf8mb4
       - --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${LNMP_MYSQL_ROOT_PASSWORD:-mytest}"]
+      retries: 3
+      timeout: 5s
 
   redis:
     ports:
@@ -102,6 +106,7 @@ services:
       - ./log/nginx:/var/log/nginx
     # depends_on:
     #   - php8
+    working_dir: /app
 
   composer:
     << : [*common,*common-labels]

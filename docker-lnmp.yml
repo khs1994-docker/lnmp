@@ -33,10 +33,6 @@ services:
         target: ${LNMP_MYSQL_DATA:-/var/lib/mysql}
       - type: tmpfs
         target: /var/run/mysqld
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-p${LNMP_MYSQL_ROOT_PASSWORD:-mytest}"]
-      retries: 3
-      timeout: 5s
 
   redis:
     << : [*common,*common-labels]
@@ -84,8 +80,6 @@ services:
         aliases:
         - php
     tmpfs: /run:exec
-    expose:
-      - "9000"
     environment:
       - &lnmp_version LNMP_VERSION=${LNMP_VERSION:-v24.11} x86_64 With Pull Docker Image
       - APP_ENV=${APP_ENV:-development}
@@ -98,7 +92,6 @@ services:
     image: "${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.29.1}-alpine"
     volumes:
       - << : *tmpfs
-    working_dir: /app
     networks:
       - frontend
     healthcheck:
