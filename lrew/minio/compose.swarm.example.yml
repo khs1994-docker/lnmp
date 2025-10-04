@@ -1,0 +1,47 @@
+x-deploy: &default-deploy
+  restart_policy:
+    condition: any
+    delay: 25s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
+x-labels: &default-labels
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-swarm}
+
+x-build: &default-build
+  Dockerfile: my.Dockerfile
+  args:
+    ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
+
+x-build-debian: &default-build-debian
+  Dockerfile: my.Dockerfile
+  args:
+    DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
+    DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
+
+services:
+  minio:
+    environment:
+      # https://github.com/minio/minio/blob/master/docs/config/README.md
+      MINIO_ROOT_USER_FILE: minio-root-user
+      MINIO_ROOT_PASSWORD_FILE: minio-root-password
+    secrets:
+      - minio-root-user
+      - minio-root-password
+    ports:
+      - "29000:9000"
+      - "29090:9090"
+
+secrets:
+  minio-root-user:
+    file: ./secrets/minio/root-user.txt
+    << : *default-labels
+  minio-root-password:
+    file: ./secrets/minio/root-password.txt
+    << : *default-labels

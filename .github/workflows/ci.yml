@@ -50,9 +50,14 @@ jobs:
     - run: |
         echo 'LNMP_DOCKER_IMAGE_PREFIX=ghcr.io/khs1994' > .env.GITHUB_ACTIONS
         echo 'LNMP_LIBRARY_NS=ghcr.io/khs1994-docker/docker.io/library' >> .env.GITHUB_ACTIONS
+        echo 'LNMP_NODE_IMAGE=ghcr.io/khs1994-docker/docker.io/library/node:alpine' >> .env.GITHUB_ACTIONS
+        echo 'APP_ENV=GITHUB_ACTIONS' >> .env.GITHUB_ACTIONS
 
         echo 'LNMP_DOCKER_IMAGE_PREFIX=ghcr.io/khs1994' > .env.swarm
         echo 'LNMP_LIBRARY_NS=ghcr.io/khs1994-docker/docker.io/library' >> .env.swarm
+        echo 'APP_ENV=swarm' >> .env.swarm
+
+        echo 'LNMP_NODE_IMAGE=ghcr.io/khs1994-docker/docker.io/library/node:alpine' > .env.development
     - uses: douglascamata/setup-docker-macos-action@v1.0.0
       if: |
         startsWith(matrix.os, 'macos' )

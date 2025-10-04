@@ -1,0 +1,9 @@
+services:
+  minio:
+    environment:
+      # https://github.com/minio/minio/blob/master/docs/config/README.md
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    ports:
+      - "29000:9000"
+      - "29090:9090"

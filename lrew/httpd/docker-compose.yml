@@ -29,8 +29,5 @@ services:
       - ./config/etc/httpd/${LNMP_HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
       - ./config/${LNMP_HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d
       - ./log/httpd:/usr/local/apache2/logs
-    working_dir: /app
     networks:
       - frontend
-    depends_on:
-      - php8

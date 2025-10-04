@@ -54,9 +54,9 @@ x-php-common:
       mode: 0600
     - source: ssh_config
       target: /root/.ssh/config
-  depends_on:
-    - mysql
-    - redis
+  # depends_on:
+  #   - mysql
+  #   - redis
   networks:
     - backend
 

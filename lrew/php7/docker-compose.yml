@@ -21,22 +21,6 @@ services:
     image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.33}-fpm-alpine"
     volumes:
       - &bind_app ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
-      # fpm config
-      - ./config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
-      # php.ini
-      - ./config/php/php.ini:/usr/local/etc/php/php.ini:ro
-      # php.ini override
-      - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
-      # log,etc
-      - ./log/php:/var/log/php
-      # supervisord
-      - ./log/supervisord.log:/var/log/supervisord.log
-      - ./log/supervisord:/var/log/supervisord
-      # s6
-      - ./config/s6/s6-overlay/scripts:/etc/s6-overlay/scripts
-      - ./config/s6/s6-overlay/${S6_RC_D:-s6-rc.d}:/etc/s6-overlay/s6-rc.d
-      - ./config/crontabs/root:/etc/crontabs/root.s6
-      - php7-var-log:/var/log
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo
@@ -54,16 +38,11 @@ services:
     tmpfs: /run:exec
     expose:
       - "9000"
-    # command: php-fpm -R -F
-    # command: php-fpm -F
     environment:
       - &lnmp_version LNMP_VERSION=${LNMP_VERSION:-v24.11} x86_64 With Pull Docker Image
       - APP_ENV=${APP_ENV:-development}
-      - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
-      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
       - PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      # - PHP_INI_SCAN_DIR=:/usr/local/etc/php/conf.d
 
   # https://docs.docker.com/config/containers/multi-service_container/
   # http://supervisord.org/running.html

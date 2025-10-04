@@ -34,6 +34,9 @@ services:
     secrets:
       - minio-root-user
       - minio-root-password
+    ports:
+      - "19000:9000"
+      - "19090:9090"
 
 secrets:
   minio-root-user:

@@ -154,6 +154,7 @@ server {
 
     for item in $(docker container ls -a --format "{{.ID}}");do
       echo ::group::cat container $item logs
+      docker container ls -a --filter id=$item
       docker logs $item
       echo ::endgroup::
     done

@@ -1,0 +1,16 @@
+services:
+  mariadb:
+    healthcheck:
+      # test: ["CMD", "mysqladmin", "ping", "-p${LNMP_MYSQL_ROOT_PASSWORD:-mytest}"]
+      test: ["CMD-SHELL", "mysqladmin ping -p`cat /run/secrets/mariadb_db_root_password`"]
+    environment:
+      # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
+      MYSQL_ROOT_PASSWORD: ${LNMP_MYSQL_ROOT_PASSWORD:-mytest}
+      # MYSQL_USER:
+      # MYSQL_PASSWORD:
+    volumes:
+      - ./config/mariadb/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
+      # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
+      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro
+      - ./log/mariadb:/var/log/mysql
+      - ./scripts/backup/mariadb:/backup

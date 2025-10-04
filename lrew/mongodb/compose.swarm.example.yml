@@ -15,12 +15,12 @@ x-labels: &default-labels
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=${APP_ENV:-swarm}
 
 x-build: &default-build
-  # Dockerfile: my.Dockerfile
+  dockerfile: my.Dockerfile
   args:
     ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
 
 x-build-debian: &default-build-debian
-  # Dockerfile: my.Dockerfile
+  dockerfile: my.Dockerfile
   args:
     DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
     DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
@@ -43,7 +43,14 @@ services:
     configs:
       - source: mongod_conf
         target: /etc/mongod.conf
+    volumes:
+      - var-log-mongodb:/var/log/mongodb
+
 configs:
   mongod_conf:
     file: ./config/mongodb/mongod.production.conf
+    << : *default-labels
+
+volumes:
+  var-log-mongodb:
     << : *default-labels

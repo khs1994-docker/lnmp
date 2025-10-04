@@ -37,6 +37,7 @@ services:
     volumes:
       - ./scripts/backup/init.production:/docker-entrypoint-initdb.d:ro
       - ./scripts/backup/mariadb:/backup
+      - var-log-mariadb:/var/log/mysql
     deploy:
       << : [*default-deploy,*default-labels]
       placement:
@@ -46,6 +47,9 @@ services:
     configs:
       - source: mariadb_conf_d_docker_cnf
         target: /etc/mysql/conf.d/docker.cnf
+        mode: 0644
+        uid: "999"
+        gid: "999"
 
 secrets:
   db_root_password:
@@ -55,4 +59,8 @@ secrets:
 configs:
   mariadb_conf_d_docker_cnf:
     file: ./config/mariadb/docker.production.cnf
+    << : *default-labels
+
+volumes:
+  var-log-mariadb:
     << : *default-labels

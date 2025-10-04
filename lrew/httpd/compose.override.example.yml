@@ -1,0 +1,5 @@
+services:
+  httpd:
+    depends_on:
+      - php8
+    working_dir: /app
