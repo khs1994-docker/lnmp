@@ -137,7 +137,9 @@ server {
     docker stack ps lnmp --no-trunc
     docker ps -a
     echo "Wait nginx service start"
-    sleep 5
+    sleep 10
+
+    for item in $(docker container ls --format "{{.ID}}");do docker logs $item; done
   done
 
   sleep 120

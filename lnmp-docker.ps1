@@ -468,7 +468,7 @@ Function satis() {
 
 Function Get-ComposeOptions($compose_file_base, $compose_files) {
   $COMPOSE_FILE_ARRAY = @($compose_file_base)
-  $COMPOSE_ENV_FILES_ARRAY = @()
+  $COMPOSE_ENV_FILES_ARRAY = @('.env.example')
 
   Foreach ($item in $LREW_INCLUDE) {
     if (!$item) {
@@ -546,8 +546,6 @@ Function Get-ComposeOptions($compose_file_base, $compose_files) {
       $COMPOSE_ENV_FILES_ARRAY += "$LREW_INCLUDE_ROOT/.env.${env:LNMP_ENV}"
     }
   }
-
-  $COMPOSE_ENV_FILES_ARRAY += '.env.example'
 
   if (($LNMP_ENV_FILE -ne '.env') -and (Test-Path .env)) {
     $COMPOSE_ENV_FILES_ARRAY += '.env'
