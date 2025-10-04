@@ -17,11 +17,11 @@ source $ScriptRoot/.init
 
 if [ "$debug" = 'true' ];then set -x; fi
 
-image=mysql:${LNMP_MYSQL_VERSION:-8.0.33}
+image=${LNMP_LIBRARY_NS:-library}/mysql:${LNMP_MYSQL_VERSION:-8.0.33}
 
-if ! [ $(uname -s) = 'x86_64' ];then
-  image=mariadb:${LNMP_MARIADB_VERSION:-10.11.5}
-fi
+# if ! [ $(uname -m) = 'x86_64' ];then
+#   image=mariadb:${LNMP_MARIADB_VERSION:-10.11.5}
+# fi
 
 exec docker run -i ${tty} --rm \
     --network $network \

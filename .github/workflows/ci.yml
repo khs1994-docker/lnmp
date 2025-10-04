@@ -27,8 +27,8 @@ jobs:
         matrix:
           os:
           - ubuntu-latest
-          - macos-13
-          - ubuntu-latest-arm
+          # - macos-13
+          - ubuntu-22.04-arm
     needs: skip
     runs-on: ${{ matrix.os }}
     defaults:
@@ -36,6 +36,7 @@ jobs:
         shell: bash --noprofile --norc -exo pipefail {0}
     env:
       LNMP_ENV: GITHUB_ACTIONS
+      LNMP_NODE_IMAGE: ghcr.io/khs1994-docker/docker.io/library/node:alpine
     steps:
     - uses: actions/checkout@main
       with:
@@ -44,8 +45,8 @@ jobs:
       if: |
         startsWith(matrix.os, 'ubuntu' )
       with:
-        docker_channel: test
-        docker_version: "20.10"
+        docker_channel: stable
+        docker_version: "28.5"
     - run: |
         echo 'LNMP_DOCKER_IMAGE_PREFIX=ghcr.io/khs1994' > .env.GITHUB_ACTIONS
         echo 'LNMP_LIBRARY_NS=ghcr.io/khs1994-docker/docker.io/library' >> .env.GITHUB_ACTIONS

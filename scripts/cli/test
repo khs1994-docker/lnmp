@@ -138,9 +138,14 @@ server {
     docker stack ps lnmp --no-trunc
     docker ps -a
     echo "Wait nginx service start"
-    sleep 10
+    sleep 60
 
-    for item in $(docker container ls -a --format "{{.ID}}");do docker logs $item; done
+    for item in $(docker container ls -a --format "{{.ID}}");do
+      echo ::group::cat container $item logs
+      docker logs $item
+      echo ::endgroup::
+    done
+
     echo ::endgroup::
   done
 
@@ -152,4 +157,6 @@ server {
   docker stack rm lnmp
 }
 
+echo ::group::Test "$1"
 if [ ! -z "$1" ];then $1; else development; swarm; fi
+echo ::endgroup::
