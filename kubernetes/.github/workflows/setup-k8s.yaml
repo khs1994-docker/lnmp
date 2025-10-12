@@ -52,11 +52,13 @@ jobs:
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
          LNMP_K8S_NEXT_VERSION: "true"
+         GOARCH: amd64
        - os: ubuntu
          dist: 22.04-arm
          CI_KUBERNETES_VERSION: 1.35.0-alpha.1
          LNMP_K8S_GET: --url
         #  GENERATE_CLI_HELP: "true"
+         GOARCH: arm64
 
        # current stable version
        - os: ubuntu
@@ -65,12 +67,14 @@ jobs:
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --crio
          K8S_IMAGE_NS: khs1994
          K8S_IMAGE_REGISTRY: useccr.ccs.tencentyun.com
+         GOARCH: amd64
        - os: ubuntu
          dist: 22.04
          CI_KUBERNETES_VERSION: 1.34.0
          LNMP_K8S_GET: --url
 
          GENERATE_CLI_HELP: "true"
+         GOARCH: amd64
        # ipv6
        # - os: ubuntu
        #  dist: 22.04
@@ -82,20 +86,30 @@ jobs:
          CI_KUBERNETES_VERSION: 1.34.0
          LNMP_K8S_GET: --url
          CNI_CALICO_EBPF: 'true'
+         GOARCH: amd64
+       - os: ubuntu
+         dist: 22.04-arm
+         CI_KUBERNETES_VERSION: 1.34.0
+         LNMP_K8S_GET: --url
+         CNI_CALICO_EBPF: 'true'
+         GOARCH: arm64
        - os: ubuntu
          dist: 22.04
          CI_KUBERNETES_VERSION: 1.33.5
          LNMP_K8S_GET: --url
          K8S_ROOT: /opt/k8s-custom
+         GOARCH: amd64
        # old version
        - os: ubuntu
          dist: 22.04
          CI_KUBERNETES_VERSION: 1.32.9
          LNMP_K8S_GET: --url
+         GOARCH: amd64
        - os: ubuntu
          dist: 22.04
          CI_KUBERNETES_VERSION: 1.31.13
          LNMP_K8S_GET: --url
+         GOARCH: amd64
      fail-fast: true
    steps:
      - uses: actions/checkout@v3
@@ -109,7 +123,7 @@ jobs:
        name: k8s-files-caches
        with:
          path: |
-           kubernetes-release/release/v${{matrix.CI_KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin
+           kubernetes-release/release/v${{matrix.CI_KUBERNETES_VERSION}}-linux-${{matrix.GOARCH}}/kubernetes/server/bin
          key: ${{matrix.CI_KUBERNETES_VERSION}}
      - uses: actions/cache@v3
        name: khs1994-docker-lnmp-caches
@@ -194,8 +208,20 @@ jobs:
 
          docker compose up cfssl-local
          docker compose down
+
+         case `uname -m` in
+          x86_64 )
+          GOARCH=amd64
+          ;;
+          armv7l )
+          GOARCH=arm
+          ;;
+          aarch64 )
+          GOARCH=arm64
+         esac
+
          # source .env
-         ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
+         ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-${GOARCH}/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-${GOARCH}
 
          sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=false#g" ./.env
 
@@ -205,7 +231,7 @@ jobs:
          ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
          # debug=1 ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
-         tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes
+         tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-${GOARCH}/kubernetes
        env:
         CODING_USERNAME: cnb
         CODING_TOKEN: ${{secrets.CODING_DOCKER_PASSWORD}}
