@@ -1,11 +1,11 @@
 name: cni
-version: 1.7.1
+version: 1.8.0
 url: "https://github.com/containernetworking/plugins/releases/download/v${VERSION}/cni-plugins-${env:lwpm_os}-${env:lwpm_architecture}-v${VERSION}.tgz"
 scripts:
   dist: |
     _mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}
 
-    # https://github.com/containernetworking/plugins/releases/download/v1.7.1/cni-plugins-linux-amd64-v1.7.1.tgz
+    # https://github.com/containernetworking/plugins/releases/download/v1.8.0/cni-plugins-linux-amd64-v1.8.0.tgz
     curl -L `
       $url `
       -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename

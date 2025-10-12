@@ -1,5 +1,5 @@
 name: crun
-version: "1.23.1"
+version: "1.24"
 url: "https://github.com/containers/crun/releases/download/${VERSION}/crun-${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}"
 scripts:
   platform-reqs: if(!$IsLinux){echo $False}
