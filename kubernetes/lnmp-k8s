@@ -604,10 +604,10 @@ _containerd_install(){
   fi
 
   if [ -f ${K8S_ROOT}/bin/cri-containerd -a ! "$1" = "--dry-run" ];then \
-    print_info "containerd 2.1 already install"; \
+    print_info "containerd 2.2 already install"; \
     ${K8S_ROOT}/bin/cri-containerd --version;return; fi
 
-  print_info "install containerd 2.1 ..."
+  print_info "install containerd 2.2 ..."
 
   local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
 
@@ -655,7 +655,7 @@ _containerd_install(){
   # $(_sudo) $(_curl) ${sha256sum_url} -o ${TMP_ROOT}/${TAR_FILE}.sha256sum
 
   if [ -n "$WSL2_SYSTEMD" ];then
-    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@2.1.service
+    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@2.2.service
     _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
 
     $(_sudo) rm -rf /etc/systemd/system/wsl-k8s.target.wants/cri-o.service
@@ -923,7 +923,7 @@ _crio_install(){
       _enable_wsl_k8s_systemd_target cri-o.service cri-o.service
       _enable_wsl_k8s_systemd_target kubelet@.service kubelet@crio.service
 
-      $(_sudo) rm -rf /etc/systemd/system/wsl-k8s.target.wants/cri-containerd@2.1.service
+      $(_sudo) rm -rf /etc/systemd/system/wsl-k8s.target.wants/cri-containerd@2.2.service
       $(_sudo) rm -rf /etc/systemd/system/wsl-k8s.target.wants/kubelet@cri-containerd.service
     fi
 
@@ -1080,14 +1080,14 @@ _crio_config(){
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
   print_info "config containerd ..."
-  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/2.1
+  local CONTAINERD_CONF_ROOT=${K8S_ROOT}/etc/cri-containerd/2.2
   $(_sudo) mkdir -p $CONTAINERD_CONF_ROOT/certs.d
   # containerd config default > ${K8S_ROOT}/etc/cri-containerd/config.toml
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/2.1/config.toml \
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/2.2/config.toml \
     | $(_sudo) tee $CONTAINERD_CONF_ROOT/config.toml
 
   # if ! [ "${LNMP_CN_ENV}" = 'false' ];then
-  #   $(_sudo) cp -r systemd/etc/cri-containerd/2.1/certs.d $CONTAINERD_CONF_ROOT
+  #   $(_sudo) cp -r systemd/etc/cri-containerd/2.2/certs.d $CONTAINERD_CONF_ROOT
   # fi
 
   if [ -n "$GITHUB_ACTIONS" ];then
@@ -1565,7 +1565,7 @@ $ $(_sudo) systemctl start kubelet@cri-containerd
 $ $(_sudo) systemctl start kubelet@crio
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
-$ $(_sudo) systemctl start cri-containerd@2.1 (Containerd runtime only)
+$ $(_sudo) systemctl start cri-containerd@2.2 (Containerd runtime only)
 $ $(_sudo) systemctl start cri-o (CRI-O runtime only)
 "
 }
@@ -1574,7 +1574,7 @@ _local_cleanup(){
   $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
-    docker cri-containerd@2.1 crio || true
+    docker cri-containerd@2.2 crio || true
 
   set +e
   $(_sudo) rm -rf ${K8S_ROOT}

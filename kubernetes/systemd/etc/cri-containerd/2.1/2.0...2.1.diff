@@ -1,0 +1,32 @@
+5d4
+< plugin_dir = ''
+43a43
+>     concurrent_layer_fetch_buffer = 0
+46a47
+>     use_local_image_pull = false
+89a91
+>           cgroup_writable = false
+108c110,111
+<       bin_dir = '/opt/cni/bin'
+---
+>       bin_dir = ''
+>       bin_dirs = ['/opt/cni/bin']
+115a119,121
+>   [plugins.'io.containerd.differ.v1.erofs']
+>     mkfs_options = []
+> 
+145a152
+>     no_sync = false
+194a202,207
+>   [plugins.'io.containerd.snapshotter.v1.erofs']
+>     root_path = ''
+>     ovl_mount_options = []
+>     enable_fsverity = false
+>     set_immutable = false
+> 
+211a225
+>     concurrent_layer_fetch_buffer = 0
+212a227
+>     check_platform_supported = false
+219a235
+>   'io.containerd.timeout.cri.defercleanup' = '1m0s'

@@ -16,7 +16,8 @@ cri-containerd@1.5.service \
 cri-containerd@1.6.service \
 cri-containerd@1.7.service \
 cri-containerd@2.0.service \
-cri-containerd@2.1.service
+cri-containerd@2.1.service \
+cri-containerd@2.2.service
 
 After=cri-o.service
 

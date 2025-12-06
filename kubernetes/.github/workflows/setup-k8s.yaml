@@ -48,14 +48,14 @@ jobs:
       # next version
        - os: ubuntu
          dist: 22.04
-         CI_KUBERNETES_VERSION: 1.35.0-alpha.1
+         CI_KUBERNETES_VERSION: 1.35.0-rc.0
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
          LNMP_K8S_NEXT_VERSION: "true"
          GOARCH: amd64
        - os: ubuntu
          dist: 22.04-arm
-         CI_KUBERNETES_VERSION: 1.35.0-alpha.1
+         CI_KUBERNETES_VERSION: 1.35.0-rc.0
          LNMP_K8S_GET: --url
         #  GENERATE_CLI_HELP: "true"
          GOARCH: arm64
@@ -280,7 +280,7 @@ jobs:
 
          sudo systemctl cat docker
 
-         sudo systemctl cat cri-containerd@2.1
+         sudo systemctl cat cri-containerd@2.2
 
          sudo systemctl cat cri-o || true
          sudo cat /etc/sysconfig/crio || true
@@ -296,7 +296,7 @@ jobs:
          sudo rm -rf /etc/crio/crio.conf.d/00-default.conf || true
 
          test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
-           && (sudo systemctl daemon-reload ; sudo systemctl start cri-containerd@2.1) || true
+           && (sudo systemctl daemon-reload ; sudo systemctl start cri-containerd@2.2) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" \
            && (sudo systemctl restart docker || sudo journalctl -u docker) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
@@ -345,7 +345,7 @@ jobs:
 
          sudo journalctl -u kube-proxy
          sudo journalctl -u kubelet${KUBELET_SERVICE}
-         sudo journalctl -u cri-containerd@2.1 || true
+         sudo journalctl -u cri-containerd@2.2 || true
          sudo journalctl -u cri-o || true
 
          kubectl get csr
