@@ -1,6 +1,6 @@
 services:
   mysql:
-    image: mysql:8.0.33
+    image: mysql:9.7.1
 
   mariadb:
     image: mariadb:10.11.5
