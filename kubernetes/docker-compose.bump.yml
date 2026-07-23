@@ -3,7 +3,7 @@ services:
     image: registry.k8s.io/kube-apiserver:v1.34.0
 
   etcd:
-    image: quay.io/coreos/etcd:v3.6.1
+    image: quay.io/coreos/etcd:v3.7.1
 
   k8s_dashboard:
     image: kubernetesui/dashboard:v2.7.0
