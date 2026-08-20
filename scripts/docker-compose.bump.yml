@@ -6,7 +6,7 @@ services:
     image: mariadb:10.11.5
 
   redis:
-    image: redis:7.0.0-alpine
+    image: redis:8.10.1-alpine
 
   memcached:
     image: memcached:1.6.15-alpine
