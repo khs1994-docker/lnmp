@@ -111,7 +111,7 @@ jobs:
         if: matrix.os == 'windows' &&
             ( contains( github.event.head_commit.message, '[k8s]') || github.event_name == 'workflow_dispatch')
         env:
-          VERSION: 1.4.0
+          VERSION: 1.5.2
         run: |
           $env:LWPM_DOCKER_USERNAME=$env:LWPM_DOCKER_USERNAME_
           $env:LWPM_DOCKER_PASSWORD=$env:LWPM_DOCKER_PASSWORD_
@@ -183,7 +183,7 @@ jobs:
         if: matrix.os == 'windows' &&
             ( contains( github.event.head_commit.message, '[k8s]') || github.event_name == 'workflow_dispatch')
         env:
-          VERSION: 1.8.0
+          VERSION: 1.9.1
         run: |
           $env:LWPM_DOCKER_USERNAME=$env:LWPM_DOCKER_USERNAME_
           $env:LWPM_DOCKER_PASSWORD=$env:LWPM_DOCKER_PASSWORD_
