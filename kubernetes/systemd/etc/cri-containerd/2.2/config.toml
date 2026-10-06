@@ -105,6 +105,8 @@ imports = []
             NoNewKeyring = false
             Root = ''
             ShimCgroup = ''
+            SystemdCgroup = false
+
         [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.crun]
           runtime_type = "io.containerd.runc.v2"
 
@@ -121,6 +123,10 @@ imports = []
       conf_template = ''
       ip_pref = ''
       use_internal_loopback = false
+
+  [plugins.'io.containerd.differ.v1.erofs']
+    mkfs_options = []
+    enable_tar_index = false
 
   [plugins.'io.containerd.gc.v1.scheduler']
     pause_threshold = 0.02
@@ -160,6 +166,8 @@ imports = []
   [plugins.'io.containerd.monitor.task.v1.cgroups']
     no_prometheus = false
 
+  [plugins.'io.containerd.mount-handler.v1.erofs']
+
   [plugins.'io.containerd.nri.v1.nri']
     disable = false
     socket_path = '/var/run/nri/nri.sock'
@@ -168,6 +176,17 @@ imports = []
     plugin_registration_timeout = '5s'
     plugin_request_timeout = '2s'
     disable_connections = false
+
+    [plugins.'io.containerd.nri.v1.nri'.default_validator]
+      enable = false
+      reject_oci_hook_adjustment = false
+      reject_runtime_default_seccomp_adjustment = false
+      reject_unconfined_seccomp_adjustment = false
+      reject_custom_seccomp_adjustment = false
+      reject_namespace_adjustment = false
+      reject_sysctl_adjustment = false
+      required_plugins = []
+      tolerate_missing_plugins_annotation = ''
 
   [plugins.'io.containerd.runtime.v2.task']
     platforms = ['linux/amd64']
