@@ -143,6 +143,8 @@ jobs:
          docker system prune -a -f
          docker system df
 
+         sudo sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf || true
+
          sudo apt install -y tree net-tools
 
          sudo update-alternatives --display iptables || true
@@ -404,6 +406,20 @@ jobs:
          kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
          sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
          for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
+     - name: debug
+       if: ${{ failure() }}
+       run: |
+         echo ::group::journalctl
+         sudo journalctl -u cri-containerd@2.1 || true
+         echo ::endgroup::
+         echo ::group::systemctl
+         sudo systemctl cat cri-containerd@2.1 || true
+         echo ::endgroup::
+         echo ::group::cat config
+         sudo cat /opt/k8s/etc/cri-containerd/2.1/config.toml || true
+         echo ::endgroup::
+
+         ls -la /opt/k8s/etc/cri-containerd/2.1/
      - name: Show port
        run: |
          sudo netstat -nlpt || true
