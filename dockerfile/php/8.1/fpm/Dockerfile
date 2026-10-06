@@ -1,5 +1,5 @@
 # syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
-ARG PHP_VERSION=8.1.33
+ARG PHP_VERSION=8.1.34
 
 FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/php:${PHP_VERSION}-fpm-alpine3.22 AS php
 
