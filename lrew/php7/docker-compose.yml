@@ -39,7 +39,7 @@ services:
     expose:
       - "9000"
     environment:
-      - &lnmp_version LNMP_VERSION=${LNMP_VERSION:-v24.11} x86_64 With Pull Docker Image
+      - &lnmp_version LNMP_VERSION=${LNMP_VERSION:-v25.11} x86_64 With Pull Docker Image
       - APP_ENV=${APP_ENV:-development}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
       - PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
