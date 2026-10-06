@@ -228,7 +228,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
     --with-mhash \
     \
 # https://github.com/docker-library/php/issues/822
-    --with-pic \
+    --enable-pic \
     \
 # --enable-ftp is included here because ftp_ssl_connect() needs ftp to be compiled statically (see https://github.com/docker-library/php/issues/236)
     --enable-ftp=shared \

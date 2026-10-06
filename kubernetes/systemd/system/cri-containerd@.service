@@ -52,7 +52,7 @@ OOMScoreAdjust=-999
 
 Restart=on-failure
 RestartSec=5
-
+TimeoutStartSec=0
 [Install]
 WantedBy=multi-user.target
 WantedBy=wsl-k8s.target

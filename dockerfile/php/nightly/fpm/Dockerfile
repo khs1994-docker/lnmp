@@ -96,7 +96,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-bz2=shared \
         # --with-tidy=shared \
         --with-gmp=shared \
-        --with-pic \
+        --enable-pic \
         --with-enchant=shared \
         --enable-fileinfo=shared \
         --with-ldap=shared \

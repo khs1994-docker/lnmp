@@ -348,7 +348,9 @@ jobs:
          sudo journalctl -u cri-containerd@2.2 || true
          sudo journalctl -u cri-o || true
 
-         sudo /opt/k8s/bin/cri-containerd --config /opt/k8s/etc/cri-containerd/2.2/config.toml
+         # sudo /opt/k8s/bin/cri-containerd --config /opt/k8s/etc/cri-containerd/2.2/config.toml
+
+         # sudo systemctl start cri-containerd@2.2 || true
 
          kubectl get csr
          CSR_NAME=`kubectl get csr | grep system:node:node1 | awk '{print $1}' | head -1`
