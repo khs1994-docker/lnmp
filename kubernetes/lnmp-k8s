@@ -461,8 +461,8 @@ _gvisor_install(){
   fi
 
   print_info "install gvisor(runsc) ..."
-  local url_official="https://github.com/docker-practice/gvisor-mirror/releases/download/nightly"
-  local TAR_FILE="runsc-${GOOS}-${GOARCH}.tar.gz"
+  local url_official="https://storage.googleapis.com/gvisor/releases/release/latest/x86_64/"
+  local TAR_FILE="gvisor.tar.zstd"
   local RUNSC_VERSION='nightly'
 
   if [ "$1" = '-f' ];then $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}; fi
@@ -478,25 +478,25 @@ _gvisor_install(){
           "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
     $(_sudo) mkdir -p ${TMP_ROOT}/runsc_dist
     $(_sudo) tar -zxf $rootfs -C ${TMP_ROOT}/runsc_dist
-
-    $(_sudo) cp ${TMP_ROOT}/runsc_dist/runsc/dist/runsc ${TMP_ROOT}/runsc
+    $(_sudo) cp ${TMP_ROOT}/runsc_dist/runsc/dist/${TAR_FILE} ${TMP_ROOT}
   else
     url=${url_official}/${TAR_FILE}
 
     if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
       $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
     fi
-
-    $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
   fi
+
+  $(_sudo) tar --zstd -xf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
 
   if [ "$1" = "--dry-run" ];then
     print_info "download gvisor(runsc) success"
     return
   fi
 
-  $(_sudo) chmod +x ${TMP_ROOT}/runsc
+  $(_sudo) chmod +x ${TMP_ROOT}/runsc ${TMP_ROOT}/containerd-shim-runsc-v1
   $(_sudo) cp ${TMP_ROOT}/runsc /usr/local/bin/runsc
+  $(_sudo) cp ${TMP_ROOT}/containerd-shim-runsc-v1 /usr/local/bin/containerd-shim-runsc-v1
 
   runsc --version
 }
