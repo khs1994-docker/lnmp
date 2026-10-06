@@ -47,14 +47,14 @@ jobs:
 
       # next version
        - os: ubuntu
-         dist: 22.04
+         dist: 26.04
          CI_KUBERNETES_VERSION: 1.35.0
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
          LNMP_K8S_NEXT_VERSION: "true"
          GOARCH: amd64
        - os: ubuntu
-         dist: 22.04-arm
+         dist: 26.04-arm
          CI_KUBERNETES_VERSION: 1.35.0
          LNMP_K8S_GET: --url
         #  GENERATE_CLI_HELP: "true"
