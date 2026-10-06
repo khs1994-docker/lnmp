@@ -1,9 +1,9 @@
 # syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
-ARG PHP_VERSION=8.5.0
+ARG PHP_VERSION=8.5.11
 
 ARG REGISTRY_PREFIX=ghcr.io/khs1994-docker/docker.io
 
-FROM --platform=$TARGETPLATFORM ${REGISTRY_PREFIX}/library/php:${PHP_VERSION}-fpm-alpine3.22 as php
+FROM --platform=$TARGETPLATFORM ${REGISTRY_PREFIX}/library/php:${PHP_VERSION}-fpm-alpine3.24 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

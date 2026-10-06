@@ -1,5 +1,5 @@
 # syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
-FROM --platform=$TARGETPLATFORM alpine:3.22
+FROM --platform=$TARGETPLATFORM alpine:3.24
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
