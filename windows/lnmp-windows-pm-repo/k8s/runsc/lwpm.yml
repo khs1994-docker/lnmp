@@ -8,12 +8,8 @@ scripts:
     _mkdir $env:LWPM_PKG_ROOT/dist
 
     curl -L `
-      https://storage.googleapis.com/gvisor/releases/master/latest/x86_64/containerd-shim-runsc-v1 `
-      -o $env:LWPM_PKG_ROOT/dist/containerd-shim-runsc-v1
-
-    curl -L `
-      https://storage.googleapis.com/gvisor/releases/master/latest/x86_64/runsc `
-      -o $env:LWPM_PKG_ROOT/dist/runsc
+      https://storage.googleapis.com/gvisor/releases/master/latest/x86_64/gvisor.tar.zstd `
+      -o $env:LWPM_PKG_ROOT/dist/gvisor.tar.zstd
 platform:
   - architecture: amd64
     os: linux

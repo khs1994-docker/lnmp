@@ -7,7 +7,7 @@
     }
   ],
   "scripts": {
-    "dist": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  https://storage.googleapis.com/gvisor/releases/master/latest/x86_64/containerd-shim-runsc-v1 `\n  -o $env:LWPM_PKG_ROOT/dist/containerd-shim-runsc-v1\n\ncurl -L `\n  https://storage.googleapis.com/gvisor/releases/master/latest/x86_64/runsc `\n  -o $env:LWPM_PKG_ROOT/dist/runsc\n",
+    "dist": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  https://storage.googleapis.com/gvisor/releases/master/latest/x86_64/gvisor.tar.zstd `\n  -o $env:LWPM_PKG_ROOT/dist/gvisor.tar.zstd\n",
     "platform-reqs": "if(!$IsLinux){echo $False}"
   },
   "url": "https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz",
