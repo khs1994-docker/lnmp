@@ -142,7 +142,7 @@
     "source": "khs1994/tls"
   },
   {
-    "source": "khs1994/kube-nginx:1.29.1"
+    "source": "khs1994/kube-nginx:1.31.6"
   },
   {
     "source": "khs1994/kube-nginx"
@@ -157,7 +157,7 @@
     "source": "khs1994/nginx:alpine"
   },
   {
-    "source": "khs1994/nginx:1.29.1-alpine"
+    "source": "khs1994/nginx:1.31.6-alpine"
   },
   {
     "source": "khs1994/docker-image-sync:latest"

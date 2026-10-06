@@ -12,13 +12,13 @@ services:
     image: memcached:1.6.15-alpine
 
   php:
-    image: php:8.4.11-fpm-alpine
+    image: php:8.5.11-fpm-alpine
 
   composer:
     image: composer:2.8.11
 
   nginx:
-    image: nginx:1.29.1-alpine
+    image: nginx:1.31.6-alpine
 
   nginx-unit:
     image: docker.io/nginx/unit:1.35.0-minimal
@@ -33,7 +33,7 @@ services:
     image: mongo:5.0.3
 
   phpmyadmin:
-    image: phpmyadmin:5.2.0
+    image: phpmyadmin:5.2.3
 
   httpd:
     image: httpd:2.4.53-alpine
