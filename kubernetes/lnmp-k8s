@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-KUBECTL_URL="https://cdn.dl.k8s.io/release"
+KUBECTL_URL="https://dl.k8s.io/release"
 
 # copy .env
 if ! [ -f .env ];then cp .env.example .env; fi
@@ -217,9 +217,9 @@ _get_kubernetes_server_by_docker_image(){
 }
 
 _get_kubernetes_server_by_url(){
-  curl https://cdn.dl.k8s.io/release/stable.txt > /dev/null \
+  curl https://dl.k8s.io/release/stable.txt > /dev/null \
     && ( \
-      curl -A "curl" -L https://cdn.dl.k8s.io/release/v${KUBERNETES_VERSION}/kubernetes-${TYPE:-server}-${GOOS}-${GOARCH}.tar.gz \
+      curl -A "curl" -L https://dl.k8s.io/release/v${KUBERNETES_VERSION}/kubernetes-${TYPE:-server}-${GOOS}-${GOARCH}.tar.gz \
         -o kubernetes-release/release/kubernetes-${TYPE:-server}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz \
     ) && return 0 || return 1
 }
@@ -298,7 +298,7 @@ kubectl_install(){
       return
   fi
 
-  KUBECTL_VERSION=$(curl https://cdn.dl.k8s.io/release/stable.txt)
+  KUBECTL_VERSION=$(curl https://dl.k8s.io/release/stable.txt)
 
   $(_curl) ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/${GOOS}/${GOARCH}/kubectl \
       -o ${TMP_ROOT}/kubectl-${GOOS}-${GOARCH}
@@ -311,7 +311,7 @@ kubectl_install(){
 kubectl_info(){
   print_info "kubectl latest version is"
 
-  local url=https://cdn.dl.k8s.io/release/stable.txt
+  local url=https://dl.k8s.io/release/stable.txt
   if [ "${LNMP_CN_ENV}" != 'false' ];then
     url=https://mirror.azure.cn/kubernetes/kubectl/stable.txt
   fi

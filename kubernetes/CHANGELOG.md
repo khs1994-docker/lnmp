@@ -4,6 +4,10 @@
 
 * Kubernetes `1.22.0`
 
+## v1.35.0
+
+* kubelet `--pod-infra-container-image` removed
+
 ## v1.29.0
 
 * Kube-scheduler component config (`KubeSchedulerConfiguration`) `kubescheduler.config.k8s.io/v1beta3` is removed in v1.29. Migrate kube-scheduler configuration files to `kubescheduler.config.k8s.io/v1`

@@ -1,18 +1,18 @@
 # syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
-ARG PHP_VERSION=8.4.11
+ARG PHP_VERSION=8.4.25
 
 FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/php:${PHP_VERSION}-alpine AS upstream
 
 FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/golang:1.24-alpine AS go
 
-FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/alpine:3.22
+FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/alpine:3.24
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=8.4.11
+ARG PHP_VERSION=8.4.25
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -233,7 +233,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
   # && rm -rf 1.diff \
   # && ./buildconf --force \
   \
-  # https://github.com/php/php-src/issues/18743 "Incompatibility in Inline TLS Assembly on Alpine 3.22 with zend_jit_ir.c"
+  # https://github.com/php/php-src/issues/18743 "Incompatibility in Inline TLS Assembly on Alpine 3.24 with zend_jit_ir.c"
 	# https://github.com/docker-library/php/pull/1580
 	# curl -fL 'https://github.com/php/php-src/commit/4c7220322bc74b0fc8416e1958cadd7bc51fe1b7.diff?full_index=1' -o 18743.patch; \
 	# echo 'a19e795b24c52d4d1aa3d45b67339e1b62a5365b37cf4418b83e2709fc98bcb5 *18743.patch' | sha256sum -c -; \

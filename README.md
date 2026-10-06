@@ -9,7 +9,7 @@ LNMP_DOCKER_IMAGE_PREFIX=docker.cnb.cool/khs1994-docker/khs1994
 LNMP_LIBRARY_NS=ccr.ccs.tencentyun.com/library-mirror
 ```
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=24.11)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=25.11)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
 
 [![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers)
 
@@ -17,10 +17,10 @@ LNMP_LIBRARY_NS=ccr.ccs.tencentyun.com/library-mirror
 
 | Platform | Status |
 | -- | -- |
-| Windows | [![Build status](https://ci.appveyor.com/api/projects/status/itgp61n808n80b8m/branch/24.11?svg=true)](https://ci.appveyor.com/project/khs1994-docker/lnmp/branch/24.11) |
-| Linux |  [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=24.11)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
-| macOS | ![CI](https://github.com/khs1994-docker/lnmp/workflows/CI/badge.svg?branch=24.11) |
-| Linux arm64v8 | [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=24.11)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
+| Windows | [![Build status](https://ci.appveyor.com/api/projects/status/itgp61n808n80b8m/branch/25.11?svg=true)](https://ci.appveyor.com/project/khs1994-docker/lnmp/branch/25.11) |
+| Linux |  [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=25.11)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
+| macOS | ![CI](https://github.com/khs1994-docker/lnmp/workflows/CI/badge.svg?branch=25.11) |
+| Linux arm64v8 | [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=25.11)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
 
 <p align="center">
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
@@ -101,7 +101,7 @@ $ ./lnmp-docker up
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v24.11 x86_64 With Pull Docker Image
+Welcome use khs1994-docker/lnmp v25.11 x86_64 With Pull Docker Image
 
 development
 
@@ -205,14 +205,14 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:3.1.0`           | **3.1.0**           |`alpine:3.20`    |
-|[NGINX](https://github.com/docker-library/docs/tree/master/nginx)         |`nginx:1.29.1-alpine`           | **1.29.1**          |`alpine:3.22`    |
-|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.4.11-unit-alpine`| **1.35.0**          |`alpine:3.22`    |
+|[NGINX](https://github.com/docker-library/docs/tree/master/nginx)         |`nginx:1.31.6-alpine`           | **1.31.6**          |`alpine:3.22`    |
+|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.5.11-unit-alpine`| **1.35.0**          |`alpine:3.22`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.53-alpine`           | **2.4.53**          |`alpine:3.16`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.33`                  | **8.0.33**          |`oraclelinux:8-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.11.5`                | **10.11.5**          |`ubuntu:jammy`  |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:7.0.0-alpine`            | **7.0.0**           |`alpine:3.16`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.4.11-fpm-alpine`     | **8.4.11**       |`alpine:3.22`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.4.11-composer-alpine`| **2.8.11**      |`alpine:3.22`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.5.11-fpm-alpine`     | **8.5.11**       |`alpine:3.22`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.5.11-composer-alpine`| **2.8.11**      |`alpine:3.22`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.15-alpine`           | **1.6.15**       |`alpine:3.16`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.9.0-management-alpine` | **3.9.0**       |`alpine:3.13`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:14.0-alpine`             | **14.0**        |`alpine:3.14`    |
