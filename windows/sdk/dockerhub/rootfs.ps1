@@ -7,6 +7,7 @@ Import-Module $PSScriptRoot/auth/auth.psm1 -Force
 Import-Module $PSScriptRoot/registry/registry.psm1
 
 . $PSScriptRoot/DockerImageSpec/DockerImageSpec.ps1
+. $PSScriptRoot/OCIImageSpec/OCIImageSpec.ps1
 
 # $env:DOCKER_ROOTFS_PHASE="tag"
 # $env:DOCKER_ROOTFS_PHASE="manifest"
@@ -129,7 +130,9 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
 
   $result = Get-Manifest $token $image $ref $null $registry
 
-  if (!$result) {
+  $result_oci = Get-Manifest $token $image $ref $([OCIImageSpec]::manifest_list) $registry
+
+  if (!$result -and !$result_oci) {
     Write-Host "==> Manifest list not found" -ForegroundColor Red
 
     if ($env:DOCKER_ROOTFS_PHASE -eq "manifest list") {
@@ -198,6 +201,13 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
     return $dests
   }
 
+  $is_oci = $false
+
+  if (!$result) {
+    $result = $result_oci
+    $is_oci = $true
+  }
+
   if ($env:DOCKER_ROOTFS_PHASE -eq "manifest list") {
     write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest list', exit" -ForegroundColor Blue
 
@@ -213,7 +223,12 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
     if ($current_arch -eq $arch -and ($current_os -eq $os)) {
       $digest = $manifest.digest
 
-      $result = Get-Manifest $token $image $digest $([DockerImageSpec]::manifest) $registry
+      if ($is_oci) {
+        $result = Get-Manifest $token $image $digest $([OCIImageSpec]::manifest) $registry
+      }
+      else {
+        $result = Get-Manifest $token $image $digest $([DockerImageSpec]::manifest) $registry
+      }
 
       if ($env:DOCKER_ROOTFS_PHASE -eq "manifest") {
         write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest', exit" -ForegroundColor Blue
@@ -247,7 +262,12 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
           continue
         }
 
-        $dest = Get-Blob $token $image $digest $registry $dest
+        if($is_oci) {
+          $dest = Get-Blob $token $image $digest $([OCIImageSpec]::layer) $registry $dest
+        }
+        else {
+          $dest = Get-Blob $token $image $digest null $registry $dest
+        }
 
         if ($dest -eq $false) {
           write-host "==> Download failed" -ForegroundColor Red

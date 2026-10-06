@@ -44,7 +44,7 @@ $ $env:WSL_K8S_WSL2_InstallLocation="$env:LOCALAPPDATA\wsl-k8s"
 
 $ wsl --import wsl-k8s `
     $env:WSL_K8S_WSL2_InstallLocation `
-    $(rootfs library-mirror/debian sid-slim -registry ccr.ccs.tencentyun.com) `
+    $(rootfs khs1994-docker/library/debian sid-slim -registry docker.cnb.cool) `
     --version 2
 $ wsl.exe --shutdown
 $ wsl.exe --manage wsl-k8s --set-sparse true --allow-unsafe
@@ -54,8 +54,8 @@ $ wsl -d wsl-k8s -- uname -a
 ### 修改 APT 源并安装必要软件
 
 ```powershell
-$ wsl -d wsl-k8s -- sh -c 'test -f /etc/apt/sources.list && sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sources.list || true'
-$ wsl -d wsl-k8s -- sh -c 'test -f /etc/apt/sources.list.d/debian.sources && sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sources.list.d/debian.sources || true'
+$ wsl -d wsl-k8s -- sh -c 'test -f /etc/apt/sources.list && sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list || true'
+$ wsl -d wsl-k8s -- sh -c 'test -f /etc/apt/sources.list.d/debian.sources && sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list.d/debian.sources || true'
 # $ wsl -d wsl-k8s -- sed -i "s/archive.ubuntu.com/mirrors.tencent.com/g" /etc/apt/sources.list
 # $ wsl -d wsl-k8s -- sed -i "s/security.ubuntu.com/mirrors.tencent.com/g" /etc/apt/sources.list
 

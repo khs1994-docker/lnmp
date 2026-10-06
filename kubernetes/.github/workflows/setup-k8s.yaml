@@ -112,7 +112,7 @@ jobs:
          GOARCH: amd64
      fail-fast: false
    steps:
-     - uses: actions/checkout@v3
+     - uses: actions/checkout@main
        with:
          fetch-depth: 2
      - uses: docker-practice/actions-setup-docker@master
@@ -585,7 +585,7 @@ jobs:
          && git push origin $(git branch --show-current):v${CI_KUBERNETES_VERSION}-config -f \
          || true
 
-    #  - name: Setup tmate session
-    #    uses: mxschmitt/action-tmate@v3
-    #    if: ${{ failure() }}
-    #    timeout-minutes: 60
+     - name: Setup tmate session
+       uses: mxschmitt/action-tmate@v3
+       if: ${{ failure() }}
+       timeout-minutes: 60

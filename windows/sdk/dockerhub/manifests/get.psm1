@@ -143,3 +143,22 @@ Export-ModuleMember -Function Get-Manifest
 #       }
 #    ]
 # }
+
+
+# {
+#   "schemaVersion": 2,
+#   "mediaType": "application/vnd.oci.image.manifest.v1+json",
+#   "config": {
+#     "mediaType": "application/vnd.oci.image.config.v1+json",
+#     "digest": "sha256:6e8aca117d2edaca3e07438f3130753c91d106f98ead008c1c7d1a5925d78dbf",
+#     "size": 448,
+#     "data": "eyJjb25maWciOnsiRW52IjpbIlBBVEg9L3Vzci9sb2NhbC9zYmluOi91c3IvbG9jYWwvYmluOi91c3Ivc2JpbjovdXNyL2Jpbjovc2JpbjovYmluIl0sIkVudHJ5cG9pbnQiOltdLCJDbWQiOlsiYmFzaCJdfSwiY3JlYXRlZCI6IjIwMjYtMTAtMDVUMDA6MDA6MDBaIiwiaGlzdG9yeSI6W3siY3JlYXRlZCI6IjIwMjYtMTAtMDVUMDA6MDA6MDBaIiwiY3JlYXRlZF9ieSI6IiMgZGViaWFuLnNoIC0tYXJjaCAnYW1kNjQnIG91dC8gJ3NpZCcgJ0AxNzkxMTU4NDAwJyIsImNvbW1lbnQiOiJkZWJ1ZXJyZW90eXBlIDAuMTcifV0sInJvb3RmcyI6eyJ0eXBlIjoibGF5ZXJzIiwiZGlmZl9pZHMiOlsic2hhMjU2Ojc2OGRiYjQyMzZkMGY5NjA4YWU5MTZmMzA2MzgwYzQ4ZDZlNmU4NDIzNjYzZTI3NjJjY2MwMjlkZTYyNzZiOWYiXX0sIm9zIjoibGludXgiLCJhcmNoaXRlY3R1cmUiOiJhbWQ2NCJ9Cg=="
+#   },
+#   "layers": [
+#     {
+#       "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+#       "digest": "sha256:3a86a893412c5e936c0cc39ada45b42d1af83b7c8cb3595a49c24aed89510eed",
+#       "size": 30864442
+#     }
+#   ]
+# }

@@ -37,7 +37,7 @@ jobs:
             pkg: "kubernetes-server"
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@main
         with:
           repository: khs1994-docker/lnmp
           fetch-depth: 1
