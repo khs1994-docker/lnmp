@@ -68,6 +68,22 @@
     "dest": "php:8.5.11-alpine"
   },
   {
+    "source": "library/php:8.4.25-fpm-alpine3.24",
+    "dest": "php:8.4.25-fpm-alpine3.24"
+  },
+  {
+    "source": "library/php:8.4.25-cli-alpine3.24",
+    "dest": "php:8.4.25-cli-alpine3.24"
+  },
+  {
+    "source": "library/php:8.4.25-zts-alpine3.24",
+    "dest": "php:8.4.25-zts-alpine3.24"
+  },
+  {
+    "source": "library/php:8.4.25-alpine",
+    "dest": "php:8.4.25-alpine"
+  },
+  {
     "source": "library/php:8.3.33-alpine",
     "dest": "php:8.3.33-alpine"
   },
