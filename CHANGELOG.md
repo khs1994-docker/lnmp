@@ -10,7 +10,7 @@
 
 ### Changes:
 
-* Kuberentes `v1.35.0`
+* Kuberentes `v1.36.0`
 
 ### Updates:
 

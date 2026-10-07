@@ -1,5 +1,5 @@
 name: kubernetes-node
-version: 1.35.0
+version: 1.36.0
 url: "https://dl.k8s.io/release/v${VERSION}/kubernetes-node-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz"
 scripts:
   platform-reqs: if($IsMacOS){echo $False}

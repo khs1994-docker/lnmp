@@ -8,31 +8,31 @@
     "append": true
   },
   {
-    "source": "kube-proxy:v1.35.0",
+    "source": "kube-proxy:v1.36.0",
     "registry": "registry.k8s.io",
     "image": "kube-proxy",
-    "ref": "v1.35.0",
+    "ref": "v1.36.0",
     "append": true
   },
   {
-    "source": "kube-controller-manager:v1.35.0",
+    "source": "kube-controller-manager:v1.36.0",
     "registry": "registry.k8s.io",
     "image": "kube-controller-manager",
-    "ref": "v1.35.0",
+    "ref": "v1.36.0",
     "append": true
   },
   {
-    "source": "kube-apiserver:v1.35.0",
+    "source": "kube-apiserver:v1.36.0",
     "registry": "registry.k8s.io",
     "image": "kube-apiserver",
-    "ref": "v1.35.0",
+    "ref": "v1.36.0",
     "append": true
   },
   {
-    "source": "kube-scheduler:v1.35.0",
+    "source": "kube-scheduler:v1.36.0",
     "registry": "registry.k8s.io",
     "image": "kube-scheduler",
-    "ref": "v1.35.0",
+    "ref": "v1.36.0",
     "append": true
   },
   {

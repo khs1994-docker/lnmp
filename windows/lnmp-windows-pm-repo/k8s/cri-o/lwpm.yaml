@@ -1,6 +1,6 @@
 name: cri-o
-version: 1.35.0
-pre-version: 1.35.0
+version: 1.36.0
+pre-version: 1.36.0
 url: "https://storage.googleapis.com/cri-o/artifacts/cri-o.${env:lwpm_architecture}.v${VERSION}.tar.gz"
 scripts:
   platform-reqs: if($IsMacOs){echo $False}
