@@ -147,7 +147,7 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
         && docker-php-ext-configure igbinary \
         && docker-php-ext-install $PHP_EXTENSION gd zip igbinary \
         && docker-php-source delete \
-        && docker-php-ext-enable opcache \
+        # && docker-php-ext-enable opcache \
         && export PATH=$PATH:/opt/bin:/opt/bin2 \
         && export PIE_CONFIG="--with-php-config=/usr/local/bin/php-config \
                             --with-php-path=/usr/local/bin/php \

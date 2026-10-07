@@ -300,7 +300,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
                            # tidy \
                            # xsl \
                            # opcache 已默认安装，需要自行载入
-                           opcache \
+                          #  opcache \
                            ctype \
                            dom \
                            pdo_sqlite \
