@@ -49,10 +49,7 @@ ExecStart=/opt/k8s/bin/kubelet \
 --v=2 \
 $KUBELET_CRI
 
-# --container-runtime=docker \
 # --container-runtime-endpoint=unix:///var/run/dockershim.sock \
-# --pod-infra-container-image=gcr.mirror/google-containers/pause:3.2 \
-# --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 \
 # --image-pull-progress-deadline=15m \
 
 ; ExecStopPost=-/usr/bin/env umount /var/lib/kubelet

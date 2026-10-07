@@ -13,8 +13,8 @@ kubeadm 默认运行时为 docker,这里简要介绍如何改为 `containerd`
 6. 编辑 `/var/lib/kubelet/kubeadm-flags.env`
 
 ```diff
-- KUBELET_KUBEADM_ARGS="--cgroup-driver=systemd --network-plugin=cni --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2"
-+ KUBELET_KUBEADM_ARGS="--cgroup-driver=systemd --container-runtime=remote --container-runtime-endpoint=unix:///run/kubeadm-containerd/containerd.sock"
+- KUBELET_KUBEADM_ARGS="--cgroup-driver=systemd"
++ KUBELET_KUBEADM_ARGS="--cgroup-driver=systemd --container-runtime-endpoint=unix:///run/kubeadm-containerd/containerd.sock"
 ```
 
 7. 重启机器

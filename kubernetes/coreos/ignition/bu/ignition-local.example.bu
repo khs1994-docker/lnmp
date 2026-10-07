@@ -362,7 +362,6 @@ systemd:
         ExecStart=${K8S_ROOT}/bin/kubelet \
         --bootstrap-kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig \
         --cert-dir=${K8S_ROOT}/etc/kubernetes/pki \
-        --container-runtime=${CONTAINER_RUNTIME} \
         --container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT} \
         --root-dir=/opt/k8s/var/lib/kubelet \
         --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
