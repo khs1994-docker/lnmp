@@ -1,6 +1,6 @@
 FROM --platform=${TARGETPLATFORM} ghcr.io/khs1994-docker/docker.io/library/alpine:edge as tool
 
-ENV KUBECTL_VERSION=v1.34.0
+ENV KUBECTL_VERSION=v1.35.0
 
 ARG TARGETARCH
 
