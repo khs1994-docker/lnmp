@@ -26,7 +26,6 @@ ExecStart=/opt/k8s/bin/kube-controller-manager \
 --kube-api-burst=2000 \
 --leader-elect \
 --use-service-account-credentials \
---concurrent-service-syncs=2 \
 --bind-address=${K8S_CM_HOST} \
 --secure-port=10257 \
 --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/kube-controller-manager.pem \

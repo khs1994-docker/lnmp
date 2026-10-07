@@ -4,6 +4,10 @@
 
 * Kubernetes `1.22.0`
 
+## v1.37.0
+
+* kube-controller-manager `--concurrent-service-syncs` removed
+
 ## v1.35.0
 
 * kubelet `--pod-infra-container-image` removed
