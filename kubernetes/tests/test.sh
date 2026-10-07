@@ -13,12 +13,12 @@ sudo cp lnmp/app/index.php /var/lib/k8s/nfs/lnmp/app/laravel/public/
 
 echo "==> Up nfs server"
 # replace nfs-server image on arm64
-if ! [ $(go env GOARCH) = 'amd64' ];then
+# if ! [ $(go env GOARCH) = 'amd64' ];then
 #   sudo sed -i "s/erichough/klutchell/g" nfs-server/docker-compose.yml
 # fi
 sudo modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
 sudo modprobe nfsd || true
-fi
+# fi
 # ./lnmp-k8s nfs
 # sleep 30
 # docker ps -a

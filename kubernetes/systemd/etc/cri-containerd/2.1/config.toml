@@ -1,6 +1,6 @@
 version = 3
 root = '/opt/k8s/var/lib/cri-containerd'
-state = '/run/containerd'
+state = '/run/cri-containerd'
 temp = ''
 disabled_plugins = []
 required_plugins = []

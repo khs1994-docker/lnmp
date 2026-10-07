@@ -41,7 +41,7 @@ RUN --mount=type=bind,from=ghcr.io/khs1994-docker/docker.io/library/php:alpine,s
     && mkdir -p /usr/src/php/ext/swoole \
     && touch /usr/src/php/.docker-extracted \
     && tar -zxvf /tmp/swoole.tar.gz -C /usr/src/php/ext/swoole --strip 1 \
-    && docker-php-ext-configure swoole --enable-openssl \
+    && docker-php-ext-configure swoole \
     && docker-php-ext-install swoole \
     && apk del --no-network .pecl_build_deps \
     && rm -rf /tmp/* \
