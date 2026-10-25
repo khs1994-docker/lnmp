@@ -128,6 +128,5 @@ test_script:
   - ps: |
       if($APPVEYOR_REPO_TAG){
         & $HOME\lnmp\windows\lnmp-windows-pm install php composer nginx node
-        & $HOME\lnmp\windows\lnmp-windows-pm install deno
         & $HOME\lnmp\windows\lnmp-windows-pm install python
       }

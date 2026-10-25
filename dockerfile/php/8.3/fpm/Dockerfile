@@ -123,6 +123,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          icu-dev \
                          zstd-dev \
                          libavif-dev \
+                         libtool \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \

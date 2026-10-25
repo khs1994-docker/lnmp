@@ -124,6 +124,7 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:nightly-bin,source=/,target=/opt/bin2
                          icu-dev \
                          zstd-dev \
                          libavif-dev \
+                         libtool \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \

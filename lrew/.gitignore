@@ -22,7 +22,6 @@
 !lrew
 !Dockerfile
 !.dockerignore
-!deno
 docker-compose.override.yml
 docker-compose.*.yml
 .env.compose
