@@ -281,9 +281,6 @@ Function New-LogFile() {
     New-Item log\nginx\access.log -type file | Out-Null
     New-Item log\nginx\error.log -type file | Out-Null
   }
-  if (! (Test-Path log\nginx-unit)) {
-    New-Item log\nginx-unit -type directory | Out-Null
-  }
   if (! (Test-Path log\php)) {
     New-Item log\php -type directory | Out-Null
     New-Item log\php\error.log -type file | Out-Null
@@ -398,7 +395,6 @@ Function cleanup() {
   Remove-Item -Recurse -Force log\mysql | Out-Null
   Remove-Item -Recurse -Force log\mariadb  | Out-Null
   Remove-Item -Recurse -Force log\nginx | Out-Null
-  Remove-Item -Recurse -Force log\nginx-unit | Out-Null
   Remove-Item -Recurse -Force log\php | Out-Null
   Remove-Item -Recurse -Force log\redis | Out-Null
   Remove-Item -Recurse -Force log\supervisord | Out-Null

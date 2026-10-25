@@ -7,7 +7,6 @@
 !mongodb
 !mysql
 !nginx
-!nginx-unit
 !npm
 !php
 !php8

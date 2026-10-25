@@ -1,6 +1,6 @@
 # syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
 
-ARG PHP_VERSION=8.6.0RC2
+ARG PHP_VERSION=8.6.0RC4
 ARG USERNAME=khs1994
 ARG BASE=fpm
 

@@ -9,7 +9,7 @@ on:
       PHP_VERSION:
         description: php version
         required: true
-        default: "8.5.11"
+        default: "8.5.12"
 
 name: PHP_8.4
 
@@ -26,8 +26,8 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
-        TYPE: [ZTS, CLI, FPM, COMPOSER, S6, UNIT, SWOOLE]
+        # TYPE: [CLI, FPM, COMPOSER, SWOOLE, PPM, SUPERVISORD]
+        TYPE: [ZTS, CLI, FPM, COMPOSER, S6, SWOOLE]
         DIST: ["24.04-arm","24.04"]
     runs-on: ubuntu-${{ matrix.DIST }}
     steps:
@@ -121,16 +121,6 @@ jobs:
           echo ::endgroup::
         fi
 
-        if [ "$TYPE" = "UNIT" ];then
-          echo ::group::Build $TYPE
-          docker buildx build $options \
-          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
-          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine \
-          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-unit-alpine ";done) \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/unit
-          echo ::endgroup::
-        fi
-
         if [ "$TYPE" = "SUPERVISORD" ];then
           echo ::group::Build $TYPE
           docker buildx build $options \
@@ -217,7 +207,7 @@ jobs:
         PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v7
         PHP_VERSION: 8_4_X
         FOLDER: "8.4"
-        PHP_TAG_VERSION: "8.5.11"
+        PHP_TAG_VERSION: "8.5.12"
         TYPE: ${{ matrix.TYPE }}
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php docker.cnb.cool/khs1994-docker/khs1994/php ghcr.io/khs1994/php
         add_mirror2: ghcr.io/lrew/php docker.cnb.cool/khs1994-docker/lrew/php

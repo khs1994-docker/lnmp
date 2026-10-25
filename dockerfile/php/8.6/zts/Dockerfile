@@ -1,5 +1,5 @@
 # syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
-ARG PHP_VERSION=8.6.0RC2
+ARG PHP_VERSION=8.6.0RC4
 
 ARG REGISTRY_PREFIX=ghcr.io/khs1994-docker/docker.io
 
@@ -14,7 +14,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=8.6.0RC2
+ARG PHP_VERSION=8.6.0RC4
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -250,7 +250,7 @@ RUN --mount=type=bind,from=upstream,source=/usr/src,target=/usr/local/src,rw \
     --with-mhash \
     \
 # https://github.com/docker-library/php/issues/822
-    --enable-pic \
+#   --enable-pic \
     \
 # --enable-ftp is included here because ftp_ssl_connect() needs ftp to be compiled statically (see https://github.com/docker-library/php/issues/236)
     --enable-ftp=shared \

@@ -145,8 +145,6 @@ $redis = new \Redis();
 
 * `lnmp-composer`
 
-* `lnmp-phpunit`
-
 * `lnmp-laravel`
 
 * `...`
@@ -206,13 +204,12 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:3.1.0`           | **3.1.0**           |`alpine:3.20`    |
 |[NGINX](https://github.com/docker-library/docs/tree/master/nginx)         |`nginx:1.31.6-alpine`           | **1.31.6**          |`alpine:3.22`    |
-|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:8.5.11-unit-alpine`| **1.35.0**          |`alpine:3.22`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.53-alpine`           | **2.4.53**          |`alpine:3.16`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.33`                  | **8.0.33**          |`oraclelinux:8-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.11.5`                | **10.11.5**          |`ubuntu:jammy`  |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:7.0.0-alpine`            | **7.0.0**           |`alpine:3.16`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.5.11-fpm-alpine`     | **8.5.11**       |`alpine:3.22`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.5.11-composer-alpine`| **2.8.11**      |`alpine:3.22`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.5.12-fpm-alpine`     | **8.5.12**       |`alpine:3.22`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.5.12-composer-alpine`| **2.10.3**      |`alpine:3.22`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.15-alpine`           | **1.6.15**       |`alpine:3.16`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.9.0-management-alpine` | **3.9.0**       |`alpine:3.13`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:14.0-alpine`             | **14.0**        |`alpine:3.14`    |

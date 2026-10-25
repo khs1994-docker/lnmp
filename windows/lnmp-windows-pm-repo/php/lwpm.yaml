@@ -1,7 +1,7 @@
 name: "php"
 description: "PHP is a popular general-purpose scripting language that is especially suited to web development"
-version: "8.5.11"
-pre-version: "8.5.11"
+version: "8.5.12"
+pre-version: "8.5.12"
 homepage: "https://www.php.net/"
 bug: "https://www.php.net/"
 github: "php/php-src"
@@ -124,16 +124,18 @@ scripts:
     $VERSION=$stable_version
     }
     if($isPre){
-    $VC_VERSION="nts-Win32-vs16"
+    $VC_VERSION="nts-Win32-vs17"
+    $VC_VERSION_OLD="nts-Win32-vs16"
     $VERSION=$pre_version
-    $url="https://windows.php.net/downloads/qa/php-${VERSION}-${VC_VERSION}-x64.zip"
-    $url_mirror="https://windows.php.net/downloads/qa/archives/php-${VERSION}-${VC_VERSION}-x64.zip"
+    $url="https://downloads.php.net/~windows/releases/archives/php-${VERSION}-${VC_VERSION}-x64.zip"
+    $url_mirror="https://downloads.php.net/~windows/releases/archives/php-${VERSION}-${VC_VERSION_OLD}-x64.zip"
     $unzipDesc="php-pre"
     $global:PHP_PREFIX="C:\php-pre"
     }else{
-    $VC_VERSION="nts-Win32-vs16"
-    $url="https://windows.php.net/downloads/releases/php-${VERSION}-${VC_VERSION}-x64.zip"
-    $url_mirror="https://windows.php.net/downloads/releases/archives/php-${VERSION}-${VC_VERSION}-x64.zip"
+    $VC_VERSION="nts-Win32-vs17"
+    $VC_VERSION_OLD="nts-Win32-vs16"
+    $url="https://downloads.php.net/~windows/releases/archives/php-${VERSION}-${VC_VERSION}-x64.zip"
+    $url_mirror="https://downloads.php.net/~windows/releases/archives/php-${VERSION}-${VC_VERSION_OLD}-x64.zip"
     $unzipDesc="php"
     $global:PHP_PREFIX="C:\php"
     }

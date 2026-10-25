@@ -1,5 +1,5 @@
 # syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
-ARG PHP_VERSION=8.4.25
+ARG PHP_VERSION=8.4.27
 ARG USERNAME=khs1994
 ARG BASE=cli
 
@@ -24,7 +24,7 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-ENV SWOOLE_VERSION=v6.0.2
+ENV SWOOLE_VERSION=v6.2.3
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 

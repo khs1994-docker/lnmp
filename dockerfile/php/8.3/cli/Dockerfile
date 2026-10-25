@@ -1,5 +1,5 @@
 # syntax=ghcr.io/khs1994-docker/docker.io/docker/dockerfile-upstream:master-labs
-ARG PHP_VERSION=8.3.33
+ARG PHP_VERSION=8.3.36
 
 FROM --platform=$TARGETPLATFORM ghcr.io/khs1994-docker/docker.io/library/php:${PHP_VERSION}-alpine AS upstream
 
@@ -10,7 +10,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=8.3.33
+ARG PHP_VERSION=8.3.36
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 

@@ -232,15 +232,6 @@ jobs:
       --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
       echo $options
 
-      if [ "$TYPE" = "UNIT" ];then
-        docker buildx build $options \
-        --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
-        -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine \
-        $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-unit-alpine ";done) \
-        --platform ${PLATFORM} \
-        ${IS_PUSH} ${FOLDER}/unit
-      fi
-
       if [ "$TYPE" = "SUPERVISORD" ];then
         docker buildx build $options \
         --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
