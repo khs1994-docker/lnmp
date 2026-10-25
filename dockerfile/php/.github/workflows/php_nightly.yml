@@ -20,8 +20,8 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        # TYPE: [CLI, FPM, COMPOSER, SWOOLE, PPM, SUPERVISORD]
-        TYPE: [CLI, FPM, COMPOSER, S6, SWOOLE]
+        # TYPE: [CLI, FPM, COMPOSER, SWOOLE, PPM]
+        TYPE: [CLI, FPM, COMPOSER, S6]
         DIST: ["24.04-arm","24.04"]
     runs-on: ubuntu-${{ matrix.DIST }}
     steps:

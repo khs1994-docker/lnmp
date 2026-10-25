@@ -118,7 +118,6 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
                          bzip2-dev \
                          enchant2-dev \
                          gettext-dev \
-                         libwebp-dev \
                          icu-dev \
                          zstd-dev \
                          libavif-dev \

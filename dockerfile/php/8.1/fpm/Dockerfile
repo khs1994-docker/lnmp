@@ -120,7 +120,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          enchant2-dev \
                          imap-dev \
                          gettext-dev \
-                         libwebp-dev \
                          icu-dev \
                          zstd-dev \
                          libavif-dev \

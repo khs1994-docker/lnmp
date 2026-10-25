@@ -106,7 +106,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          enchant-dev \
                          imap-dev \
                          gettext-dev \
-                         libwebp-dev \
                          icu-dev \
                          nghttp2-dev \
                          ${APK_DEV_EXTRA:-} \

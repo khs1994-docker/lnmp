@@ -120,7 +120,6 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:nightly-bin,source=/,target=/opt/bin2
                          bzip2-dev \
                          enchant2-dev \
                          gettext-dev \
-                         libwebp-dev \
                          icu-dev \
                          zstd-dev \
                          libavif-dev \
