@@ -21,7 +21,7 @@ services:
     image: nginx:1.31.6-alpine
 
   rabbitmq:
-    image: rabbitmq:3.9.0-management-alpine
+    image: rabbitmq:3.13.7-management-alpine
 
   postgresql:
     image: postgres:14.0-alpine
