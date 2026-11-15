@@ -27,7 +27,7 @@ jobs:
       max-parallel: 1
       matrix:
         # TYPE: [CLI, FPM, COMPOSER, SWOOLE]
-        TYPE: [ZTS, CLI, FPM, COMPOSER, S6, SWOOLE]
+        TYPE: [CLI, FPM, COMPOSER, S6, SWOOLE, ZTS]
         DIST: ["24.04-arm","24.04"]
     runs-on: ubuntu-${{ matrix.DIST }}
     steps:
