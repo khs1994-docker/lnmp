@@ -37,9 +37,9 @@ RUN --mount=type=bind,from=upstream,source=/usr/local/bin,target=/opt/bin,rw \
                                     openssl-dev \
                                     pcre2-dev \
     && export PATH=$PATH:/opt/bin \
-    && echo " \
-           --enable-openssl \
-           " > /tmp/swoole.configure.options \
+    # && echo " \
+    #        --enable-openssl \
+    #        " > /tmp/swoole.configure.options \
     && pickle install https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz \
          -n --defaults --strip --cleanup \
     && apk del --no-network .pecl_build_deps \
