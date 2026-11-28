@@ -197,6 +197,7 @@ jobs:
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php docker.cnb.cool/khs1994-docker/khs1994/php ghcr.io/khs1994/php
         PHP_VCS_REF: ${{ github.event.inputs.PHP_VCS_REF }}
         ARM: ${{ matrix.DIST == '24.04-arm' }}
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       name: 'Build Image'
       id: build
       continue-on-error: ${{ matrix.TYPE == 'swoole' }}
