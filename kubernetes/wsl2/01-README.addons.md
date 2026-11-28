@@ -2,8 +2,6 @@
 
 ### 1. 部署 CNI -- calico
 
-请提前切换 iptables，请查看 [README.switch.iptables.md](README.switch.iptables.md)
-
 ```powershell
 # $ kubectl apply -k addons/cni/calico-custom
 

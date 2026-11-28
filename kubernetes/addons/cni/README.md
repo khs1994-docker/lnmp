@@ -1,4 +1,4 @@
-* https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/calico.yaml
+* https://raw.githubusercontent.com/projectcalico/calico/v3.33.1/manifests/calico.yaml
 * https://projectcalico.docs.tigera.io/manifests/csi-driver.yaml
 
 ## 环境变量
