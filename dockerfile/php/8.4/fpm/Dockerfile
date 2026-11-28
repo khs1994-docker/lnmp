@@ -60,8 +60,11 @@ ENV PECL_EXTENSION \
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
+    --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    --mount=type=cache,target=/root/.composer \
     sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
+      && echo '{"github-oauth":{"github.com": "'"${GITHUB_TOKEN:-}"'"}}' > /root/.composer/auth.json \
       \
       # && apk add --no-cache patch \
       # && cd / \

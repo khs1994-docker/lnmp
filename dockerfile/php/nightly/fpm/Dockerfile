@@ -395,7 +395,10 @@ RUN --mount=type=bind,from=ghcr.io/khs1994-docker/docker.io/library/php:alpine,s
     --mount=type=cache,target=/usr/local/lib/php/test \
     --mount=type=cache,target=/usr/local/lib/php/doc \
     --mount=type=bind,from=ghcr.io/php/pie:nightly-bin,source=/,target=/opt/bin2,rw \
+    --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    --mount=type=cache,target=/root/.composer \
       set -x \
+      && echo '{"github-oauth":{"github.com": "'"${GITHUB_TOKEN:-}"'"}}' > /root/.composer/auth.json \
       && export PATH=$PATH:/opt/bin:/opt/bin2 \
       && curl -fsSL -o /tmp/igbinary.tar.gz https://github.com/igbinary/igbinary/archive/master.tar.gz \
       && tar -zxvf /tmp/igbinary.tar.gz -C /tmp \

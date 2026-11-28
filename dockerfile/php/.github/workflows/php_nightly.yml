@@ -87,6 +87,7 @@ jobs:
           --build-arg VCS_REF=$VCS_REF \
           --build-arg PHP_VCS_REF=$PHP_VCS_REF \
           --build-arg PHP_VERSION=$PHP_TAG_VERSION \
+          --secret id=GITHUB_TOKEN \
           --cache-from=${CACHE_IMAGE_ARM}:${FOLDER}-${TYPE,,}-cache \
           --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
         else
@@ -96,6 +97,7 @@ jobs:
           --build-arg VCS_REF=$VCS_REF \
           --build-arg PHP_VCS_REF=$PHP_VCS_REF \
           --build-arg PHP_VERSION=$PHP_TAG_VERSION \
+          --secret id=GITHUB_TOKEN \
           --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
           --cache-from=${CACHE_IMAGE_ARM}:${FOLDER}-${TYPE,,}-cache \
           --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
