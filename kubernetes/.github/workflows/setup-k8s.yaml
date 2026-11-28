@@ -188,8 +188,8 @@ jobs:
 
          ip addr
          hostnamectl
-         ifconfig eth0
-         export SERVER_IP=`ifconfig eth0 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
+         ifconfig eth0 && export SERVER_IP=`ifconfig eth0 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2` || true
+         ifconfig enp39s0 && export SERVER_IP=`ifconfig enp39s0 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2` || true
          ./lnmp-k8s > /dev/null
          echo $SERVER_IP > .server_ip
      - run: |
