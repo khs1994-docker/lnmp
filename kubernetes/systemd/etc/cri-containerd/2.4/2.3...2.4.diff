@@ -1,0 +1,18 @@
+51d50
+<     enable_cdi = true
+56a56
+>     enable_criu = true
+76a77
+>           disable_pause_image_pull = false
+91d91
+<       bin_dir = ''
+131,132d130
+<   [plugins.'io.containerd.internal.v1.tracing']
+<
+147d144
+<
+237a235
+>     layer_content_caches = []
+251,252d248
+<
+<   [plugins.'io.containerd.tracing.processor.v1.otlp']

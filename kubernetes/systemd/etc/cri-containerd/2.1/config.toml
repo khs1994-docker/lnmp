@@ -122,6 +122,9 @@ imports = []
       ip_pref = ''
       use_internal_loopback = false
 
+  [plugins.'io.containerd.differ.v1.erofs']
+    mkfs_options = []
+
   [plugins.'io.containerd.gc.v1.scheduler']
     pause_threshold = 0.02
     deletion_threshold = 0

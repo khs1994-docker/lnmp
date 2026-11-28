@@ -1,0 +1,83 @@
+1c1
+< version = 3
+---
+> version = 4
+10,26d9
+< [grpc]
+<   address = '/run/containerd/containerd.sock'
+<   tcp_address = ''
+<   tcp_tls_ca = ''
+<   tcp_tls_cert = ''
+<   tcp_tls_key = ''
+<   uid = 0
+<   gid = 0
+<   max_recv_message_size = 16777216
+<   max_send_message_size = 16777216
+<   tcp_tls_common_name = ''
+<
+< [ttrpc]
+<   address = ''
+<   uid = 0
+<   gid = 0
+<
+28,30d10
+<   address = ''
+<   uid = 0
+<   gid = 0
+33,36c13
+<
+< [metrics]
+<   address = ''
+<   grpc_histogram = false
+---
+>   log_trace_id = false
+51c28
+<       sandbox = 'registry.k8s.io/pause:3.10.1'
+---
+>       sandbox = 'registry.k8s.io/pause:3.10.2'
+78,79c55,56
+<     enable_criu = true
+<     enable_experimental_restore_via_create = false
+---
+>     stats_collect_period = ''
+>     stats_retention_period = ''
+125a103
+>     enable_dmverity = false
+158a137,139
+>   [plugins.'io.containerd.metrics.v1.grpc-prometheus']
+>     grpc_histogram = false
+>
+189a171,199
+>   [plugins.'io.containerd.server.v1.debug']
+>     address = ''
+>     uid = 0
+>     gid = 0
+>
+>   [plugins.'io.containerd.server.v1.grpc']
+>     address = '/run/containerd/containerd.sock'
+>     uid = 0
+>     gid = 0
+>     max_recv_message_size = 16777216
+>     max_send_message_size = 16777216
+>
+>   [plugins.'io.containerd.server.v1.grpc-tcp']
+>     address = ''
+>     tls_ca = ''
+>     tls_cert = ''
+>     tls_key = ''
+>     tls_common_name = ''
+>     max_recv_message_size = 16777216
+>     max_send_message_size = 16777216
+>
+>   [plugins.'io.containerd.server.v1.metrics']
+>     address = ''
+>
+>   [plugins.'io.containerd.server.v1.ttrpc']
+>     address = '/run/containerd/containerd.sock.ttrpc'
+>     uid = 0
+>     gid = 0
+>
+199a210
+>     socket_dir = ''
+225a237
+>     dmverity_mode = ''

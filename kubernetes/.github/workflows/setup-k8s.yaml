@@ -143,9 +143,11 @@ jobs:
          docker system prune -a -f
          docker system df
 
+         sudo modprobe erofs || true
+
          sudo sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf || true
          sudo apt remove needrestart
-         sudo apt install -y tree net-tools
+         sudo apt install -y tree net-tools erofs-utils
 
          sudo update-alternatives --display iptables || true
          sudo update-alternatives --list    iptables || true
