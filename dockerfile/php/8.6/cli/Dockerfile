@@ -181,7 +181,6 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:nightly-bin,source=/,target=/opt/bin2
         && strip --strip-all $(php-config --extension-dir)/xdebug.so \
         && rm -rf /tmp/* \
         && rm -rf /root/.pie \
-        && rm -rf /root/.composer \
         && rm -rf /usr/src/php \
         && apk del --no-network .phpize-deps .php-cli-build-deps \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \

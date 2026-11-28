@@ -178,7 +178,6 @@ RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/,target=/opt/bin2,rw \
         && strip --strip-all $(php-config --extension-dir)/xdebug.so \
         && rm -rf /tmp/* \
         && rm -rf /root/.pie \
-        && rm -rf /root/.composer \
         && rm -rf /usr/src/php \
         && apk del --no-network .phpize-deps .php-fpm-build-deps \
 # 创建日志文件夹

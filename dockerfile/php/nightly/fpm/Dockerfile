@@ -450,7 +450,6 @@ RUN --mount=type=bind,from=ghcr.io/khs1994-docker/docker.io/library/php:alpine,s
       && apk del --no-network .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /root/.pie \
-      && rm -rf /root/.composer \
       && rm -rf /usr/src/php \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \

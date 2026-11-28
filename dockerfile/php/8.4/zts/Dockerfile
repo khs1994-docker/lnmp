@@ -430,7 +430,6 @@ RUN --mount=type=bind,from=upstream,source=/usr/local/bin,target=/opt/bin,rw \
       && apk del --no-network .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /root/.pie \
-      && rm -rf /root/.composer \
       && rm -rf /usr/src/php \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \
