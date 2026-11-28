@@ -282,7 +282,7 @@ jobs:
 
          sudo systemctl cat docker
 
-         sudo systemctl cat cri-containerd@2.1
+         sudo systemctl cat cri-containerd@2.4
 
          sudo systemctl cat cri-o || true
          sudo cat /etc/sysconfig/crio || true
@@ -298,7 +298,7 @@ jobs:
          sudo rm -rf /etc/crio/crio.conf.d/00-default.conf || true
 
          test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
-           && (sudo systemctl daemon-reload ; sudo systemctl start cri-containerd@2.1) || true
+           && (sudo systemctl daemon-reload ; sudo systemctl start cri-containerd@2.4) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" \
            && (sudo systemctl restart docker || sudo journalctl -u docker) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
@@ -347,12 +347,12 @@ jobs:
 
          sudo journalctl -u kube-proxy
          sudo journalctl -u kubelet${KUBELET_SERVICE}
-         sudo journalctl -u cri-containerd@2.1 || true
+         sudo journalctl -u cri-containerd@2.4 || true
          sudo journalctl -u cri-o || true
 
-         # sudo /opt/k8s/bin/cri-containerd --config /opt/k8s/etc/cri-containerd/2.1/config.toml
+         # sudo /opt/k8s/bin/cri-containerd --config /opt/k8s/etc/cri-containerd/2.4/config.toml
 
-         # sudo systemctl start cri-containerd@2.1 || true
+         # sudo systemctl start cri-containerd@2.4 || true
 
          kubectl get csr
          CSR_NAME=`kubectl get csr | grep system:node:node1 | awk '{print $1}' | head -1`
@@ -410,18 +410,18 @@ jobs:
        if: ${{ failure() }}
        run: |
          echo ::group::journalctl
-         sudo journalctl -u cri-containerd@2.1 || true
+         sudo journalctl -u cri-containerd@2.4 || true
          echo ::endgroup::
 
          echo ::group::systemctl
-         sudo systemctl cat cri-containerd@2.1 || true
+         sudo systemctl cat cri-containerd@2.4 || true
          echo ::endgroup::
 
          echo ::group::cat config
-         sudo cat /opt/k8s/etc/cri-containerd/2.1/config.toml || true
+         sudo cat /opt/k8s/etc/cri-containerd/2.4/config.toml || true
          echo ::endgroup::
 
-         ls -la /opt/k8s/etc/cri-containerd/2.1/ || true
+         ls -la /opt/k8s/etc/cri-containerd/2.4/ || true
      - name: Show port
        run: |
          sudo netstat -nlpt || true
